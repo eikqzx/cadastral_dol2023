@@ -53,7 +53,7 @@ export default function SignIn({ providers, csrfToken }) {
         await setIserrorLoginMsg("กรุณาตรวจสอบชื่อผู้ใช้งานและรหัสผ่าน !!")
       }
     });
-    console.log(res);
+    console.log(res,"res");
   }
 
   return (
