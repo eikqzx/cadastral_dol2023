@@ -63,6 +63,10 @@ export default function Search(props) {
     const dataUrl = useRouter().query
     const { data } = useSession();
 
+    const [cadastralNo, setCadastralNo] = React.useState("");
+    const [sheetcode, setSheetcode] = React.useState("");
+    const [boxNo, setBoxNo] = React.useState("");
+
     React.useEffect(() => {
         if (isNotEmpty(dataUrl)) {
             let seq = decode(dataUrl?.PROCESS_SEQ);
@@ -133,54 +137,16 @@ export default function Search(props) {
 
     const _checkIsValid = () => {
         let errorArray = []
-        if (props?.printplateTypeSeq != 10 && props?.printplateTypeSeq != 20) {
-            console.log(props?.printplateTypeSeq, "if");
-            if (amphur == null) {
-                errorArray.push("amphur")
-            }
-            if (tambol == null) {
-                errorArray.push("tambol")
-            }
-        } else {
-            console.log("else");
-        }
-
-        if (moo == null) {
-            errorArray.push("moo")
-        }
-        if (parcelNO == null) {
-            errorArray.push("parcelNO")
-        }
-        if (landNo == null) {
-            errorArray.push("landNo")
-        }
-        if (condoYears == null) {
-            errorArray.push("condoYears")
-        }
-        if (condoID == null) {
-            errorArray.push("condoID")
-        }
-        if (condoRoomNO == null) {
-            errorArray.push("condoRoomNO")
-        }
-        // if (startPage == null || startPage == "") {
-        //     errorArray.push("startPage")
-        // }
-        // if (endPage == null || endPage == "") {
-        //     errorArray.push("endPage")
-        // }
-        // if (fileNo == null || fileNo == "") {
-        //     errorArray.push("fileNo")
-        // }
-        if (!disabled.includes("licensePage")) {
-            if (startLicenseDoc == null || startLicenseDoc == "") {
-                errorArray.push("startLicenseDoc")
-            }
-            if (endLicenseDoc == null || endLicenseDoc == "") {
-                errorArray.push("endLicenseDoc")
-            }
-        }
         // console.log(errorArray,props?.printplateTypeSeq);
+        if(cadastralNo == ""){
+            errorArray.push("cadastralNo")
+        }
+        if(sheetcode == ""){
+            errorArray.push("sheetcode")
+        }
+        if(boxNo == ""){
+            errorArray.push("boxNo")
+        }
         setIsErrorField(errorArray);
         if (errorArray.length > 0) {
             return false;
@@ -199,70 +165,8 @@ export default function Search(props) {
             // SnackbarSet("ไม่สามารถค้นหาได้ กรุณากรอกข้อมูลให้ครบถ้วน", "error")
             return;
         }
-        if (props?.printplateTypeSeq == 1) {
-            let obj = {
-                PRINTPLATE_TYPE_SEQ: printPlateType != null ? Number(printPlateType) : Number(props?.printplateTypeSeq) ?? null,
-                LANDOFFICE_SEQ: props?.landOfficeSeq,
-                PROVINCE_SEQ: props?.provinceSeq ?? null,
-                AMPHUR_SEQ: amphur ? amphur.AMPHUR_SEQ : null,
-                TAMBOL_SEQ: tambol ? tambol.TAMBOL_SEQ : null,
-                PARCEL_NO: parcelNO ? parcelNO : null,
-                PARCEL_LAND_NO: landNo ? landNo : null,
-                PARCEL_FOLDER: fileNo ? Number(fileNo) : null,
-                PARCEL_SURVEY_NO: startPage == "" && endPage == "" ? null : newStartPage,
-                PARCEL_SURVEY_NO_: startPage == "" && endPage == "" ? null : newEndPage,
-            }
-            console.log("handleSearch_if_1", obj)
-            props.onSearch(obj);
-        } else if (props?.printplateTypeSeq == 2 || props?.printplateTypeSeq == 3) {
-            let obj = {
-                PRINTPLATE_TYPE_SEQ: printPlateType != null ? Number(printPlateType) : Number(props?.printplateTypeSeq) ?? null,
-                LANDOFFICE_SEQ: props?.landOfficeSeq,
-                PROVINCE_SEQ: props?.provinceSeq ?? null,
-                AMPHUR_SEQ: amphur ? amphur.AMPHUR_SEQ : null,
-                TAMBOL_SEQ: tambol ? tambol.TAMBOL_SEQ : null,
-                PARCEL_NO: parcelNO ? parcelNO : null,
-                PARCEL_LAND_NO: landNo ? landNo : null,
-                PARCEL_FOLDER: fileNo ? Number(fileNo) : null,
-                PARCEL_LAND_SURVEY_NO: startPage == "" && endPage == "" ? null : newStartPage,
-                PARCEL_LAND_SURVEY_NO_: startPage == "" && endPage == "" ? null : newEndPage,
-            }
-            console.log("handleSearch_else_if_2_3", obj)
-            props.onSearch(obj);
-        } else if (props?.printplateTypeSeq == 4 || props?.printplateTypeSeq == 5) {
-            console.log(moo, "moohandleSearch_else_if_4_5");
-            let obj = {
-                PRINTPLATE_TYPE_SEQ: printPlateType != null ? Number(printPlateType) : Number(props?.printplateTypeSeq) ?? null,
-                LANDOFFICE_SEQ: props?.landOfficeSeq,
-                PROVINCE_SEQ: props?.provinceSeq ?? null,
-                AMPHUR_SEQ: amphur ? amphur.AMPHUR_SEQ : null,
-                TAMBOL_SEQ: tambol ? tambol.TAMBOL_SEQ : null,
-                PARCEL_LAND_MOO: moo ? moo : null,
-                PARCEL_FOLDER: fileNo ? Number(fileNo) : null,
-                PARCEL_LAND_NO: startPage == "" && endPage == "" ? null : newStartPage,
-                PARCEL_LAND_NO_: startPage == "" && endPage == "" ? null : newEndPage,
-            }
-            console.log("handleSearch_else_if_4_5", obj)
-            props.onSearch(obj);
-        }
-        else {
-            let obj = {
-                PRINTPLATE_TYPE_SEQ: printPlateType != null ? Number(printPlateType) : Number(props?.printplateTypeSeq) ?? null,
-                LANDOFFICE_SEQ: props?.landOfficeSeq,
-                PROVINCE_SEQ: props?.provinceSeq ?? null,
-                CONDO_REG_YEAR: condoYears != "" ? Number(condoYears) : null,
-                CONDO_SEQ: condoProject?.CONDO_SEQ ?? null,
-                CONDO_ID: condoProject?.CONDO_DATA_OBJ?.CONDO_ID ?? null,
-                CONDOROOM_RNO: condoRoomNO ? condoRoomNO : null,
-                // BLD_SEQ: null,
-                PARCEL_FOLDER: fileNo ? Number(fileNo) : null,
-                CONDOROOM_RNO_: condoRoomStart ? Number(condoRoomStart) : null,
-                CONDOROOM_SNO: condoRoomFirst == "" && condoRoomFirst == "" ? null : Number(condoRoomFirst),
-                CONDOROOM_ENO: condoRoomLast == "" && condoRoomLast == "" ? null : Number(condoRoomLast),
-            }
-            console.log("handleSearch_else", obj)
-            props.onSearch(obj);
-        }
+        
+
     }
     const handleReset = () => {
         props?.onReset([])
@@ -320,177 +224,31 @@ export default function Search(props) {
                         <Typography>ค้นหารายการ</Typography>
                     </Grid>
                     <Divider sx={{ my: 0.5 }} />
-                    <Grid item xs={12} px={2}>
+                    <Grid item xs={12} px={1} py={1}>
                         {
                             props.printplateTypeSeq != 10 && props.printplateTypeSeq != 20 ?
                                 (
                                     <Grid container>
-                                        {disabled.includes("amphur") ? null : (
+                                        {disabled.includes("cadastralNo") ? null : (
                                             <Grid item xs={12} md={2} px={1} py={1}>
-                                                <Typography >อำเภอ</Typography>
-                                                <AutoAmphur
-                                                    error={isErrorField.includes("amphur")}
-                                                    disabled={props?.provinceSeq == undefined}
-                                                    province={props?.provinceSeq}
-                                                    onChange={_changeAmphur}
-                                                    value={amphur}
-                                                />
+                                                <Typography >เลขที่ต้นร่าง</Typography>
+                                                <TextField error={isErrorField.includes("cadastralNo")}  fullWidth size={'small'} value={cadastralNo} onChange={(e) => setCadastralNo(e.target.value)} type="number" />
                                             </Grid>
                                         )}
-                                        {disabled.includes("tambol") ? null : (
+                                        {disabled.includes("sheetcode") ? null : (
+                                            <Grid item xs={12} md={3} px={1} py={1}>
+                                                <Typography >หมายเลขรหัสแทนระวาง(เลขแฟ้ม)</Typography>
+                                                <TextField error={isErrorField.includes("sheetcode")} fullWidth size={'small'} value={sheetcode} onChange={(e) => setSheetcode(e.target.value)} type="number" />
+                                            </Grid>
+                                        )}
+                                        {disabled.includes("cadastralNo") ? null : (
                                             <Grid item xs={12} md={2} px={1} py={1}>
-                                                <Typography>ตำบล</Typography>
-                                                <AutoTambol error={isErrorField.includes("tambol")} amphur={amphur?.AMPHUR_SEQ} onChange={_changeTambol} value={tambol} />
+                                                <Typography >เลขที่กล่อง</Typography>
+                                                <TextField error={isErrorField.includes("boxNo")} fullWidth size={'small'} value={boxNo} onChange={(e) => setBoxNo(e.target.value)} type="number" />
                                             </Grid>
                                         )}
-                                        {disabled.includes("fileNo") ? null : (
-                                            <Grid item xs={12} md={2} px={1} py={1}>
-                                                <Typography >เลขที่แฟ้ม</Typography>
-                                                <TextField fullWidth size={'small'} value={fileNo} onChange={(e) => setFileNo(e.target.value)}
-                                                />
-                                            </Grid>
-                                        )
-                                        }
-                                        {
-                                            props.printplateTypeSeq == 5 &&
-                                            (disabled.includes("moo") ? null : (
-                                                <Grid item xs={12} md={1} px={1} py={1}>
-                                                    <Typography >หมู่ที่</Typography>
-                                                    <TextField fullWidth size={'small'} value={moo} onChange={(e) => setMoo(e.target.value)}
-                                                    />
-                                                </Grid>
-                                            ))
-                                        }
-                                        {
-                                            props.printplateTypeSeq > 3 &&
-                                            (disabled.includes("landNo") ? null : (
-                                                <Grid item xs={12} md={2} px={1} py={1}>
-                                                    <Typography >เลขที่เอกสารสิทธิ์</Typography>
-                                                    <TextField fullWidth size={'small'} value={landNo} onChange={(e) => setLandNo(e.target.value)}
-                                                    />
-                                                </Grid>
-                                            ))
-
-                                        }
-                                        {disabled.includes("licensePage") ? null : (
-                                            <Grid item xs={12} md={3}>
-                                                <Stack direction={'row'}>
-                                                    <Grid item xs={12} px={1} py={1}>
-                                                        <Typography>ช่วงเลขที่เอกสารสิทธิ์</Typography>
-                                                        <TextField error={isErrorField.includes("startLicenseDoc")} label={""} fullWidth size={'small'} value={startLicenseDoc} onChange={(e) => setStartLicenseDoc(e.target.value)} />
-                                                    </Grid>
-                                                    <Grid item xs={2} px={1} py={1}>
-                                                        <Typography>ถึง</Typography>
-                                                    </Grid>
-                                                    <Grid item xs={12} px={1} py={1}>
-                                                        <Typography> &nbsp;</Typography>
-                                                        <TextField error={isErrorField.includes("endLicenseDoc")} label={""} fullWidth size={'small'} value={endLicenseDoc} onChange={(e) => setEndLicenseDoc(e.target.value)} />
-                                                    </Grid>
-                                                </Stack>
-                                            </Grid>
-                                        )}
-                                        {
-                                            props.printplateTypeSeq == 1 &&
-                                            (disabled.includes("parcelNO") ? null : (
-                                                <Grid item xs={12} md={3} py={1}>
-                                                    <Typography >เลขที่โฉนด</Typography>
-                                                    <TextField fullWidth size={'small'} value={parcelNO} onChange={(e) => setParcelNO(e.target.value)}
-                                                    />
-                                                </Grid>
-                                            ))
-                                        }
-                                        {disabled.includes("surveyPage") ? null : (
-                                            <Grid item xs={12} md={4}>
-                                                <Stack direction={'row'}>
-                                                    <Grid item xs={5} md={5} py={1}>
-                                                        <Typography >{props.printplateTypeSeq == 4 || props.printplateTypeSeq == 5 ? "ช่วงหน้าเลขที่เอกสารสิทธิ์" : "ช่วงหน้าเลขที่สำรวจ"}</Typography>
-                                                        <TextField error={isErrorField.includes("startPage")} label={""} type={"number"} fullWidth size={'small'} value={startPage} onChange={(e) => setStartPage(e.target.value)} />
-                                                    </Grid>
-                                                    <Grid item px={1} py={1}>
-                                                        <Typography > &nbsp;</Typography>
-                                                        <Typography > ถึง</Typography>
-                                                    </Grid>
-                                                    <Grid item xs={5} md={5} px={1} py={1}>
-                                                        <Typography> &nbsp;</Typography>
-                                                        <TextField error={isErrorField.includes("endPage")} label={""} type={"number"} fullWidth size={'small'} value={endPage} onChange={(e) => setEndPage(e.target.value)} />
-                                                    </Grid>
-                                                </Stack>
-                                            </Grid>
-                                        )}
-                                        {(disabled.includes("register") ? null : (
-                                            <Grid item xs={12} md={2} py={1}>
-                                                <Typography >รายการจดทะเบียน</Typography>
-                                                <TextField fullWidth size={'small'} value={register} onChange={(e) => setRegister(e.target.value)}
-                                                />
-                                            </Grid>
-                                        ))}
                                     </Grid>
-                                )
-                                :
-                                (
-                                    <Grid container>
-                                        {(disabled.includes("condoYears") ? null : props.printplateTypeSeq == 20 &&
-                                            (<Grid item xs={12} md={3} px={1} py={1}>
-                                                <Typography >ปีโครงการ</Typography>
-                                                <TextField fullWidth size={'small'} value={condoYears} onChange={(e) => setCondoYears(e.target.value)} />
-                                            </Grid>)
-                                        )}
-                                        {(disabled.includes("condoProject") ? null : (
-                                            <Grid item xs={12} md={3} px={1} py={1}>
-                                                <Typography >โครงการ</Typography>
-                                                {/* <TextField fullWidth size={'small'} value={condoYears} onChange={(e) => setCondoYears(e.target.value)} */}
-                                                <AutoCondoProject landofficeSeq={data?.user?.LANDOFFICE_SEQ} error={isErrorField.includes("condoProject")} onChange={_changeCondoProject} value={condoProject} />
-                                            </Grid>
-                                        ))}
-
-                                        {/* {(disabled.includes("condoID") ? null : (
-                                            <Grid item xs={12} md={3} px={1} py={1}>
-                                                <Typography >ตึก</Typography>
-                                                <TextField fullWidth size={'small'} value={condoID} onChange={(e) => setCondoID(e.target.value)} />
-                                                <DropdownCondoBuild condoSeq={condoYears} onChange={(e) => setCondoID(JSON.parse(e.target.value))} />
-                                            </Grid>
-                                        ))} */}
-                                        {/* {(disabled.includes("moo") ? null : (
-                                            <Grid item xs={12} md={3} px={1} py={1}>
-                                                <Typography >ห้อง</Typography>
-                                                <DropdownCondoRoom condoSeq={condoYears} condoBuildSeq={condoID} onChange={(e) => setCondoRoomNO(JSON.parse(e.target.value))} />
-                                            </Grid>
-                                        ))} */}
-                                        {(disabled.includes("condoRoom") ? null : (
-                                            <Grid item xs={12} md={3}>
-                                                <Stack direction={'row'}>
-                                                    <Grid item xs={5} px={1} py={1}>
-                                                        <Typography >{"เลขที่ห้อง"}</Typography>
-                                                        <TextField error={isErrorField.includes("condoRoomStart")} label={""} type={"number"} fullWidth size={'small'} value={condoRoomStart} onChange={(e) => setCondoRoomStart(e.target.value)} />
-                                                    </Grid>
-                                                    <Grid item px={1} py={1}>
-                                                        <Typography > &nbsp;</Typography>
-                                                        <Typography >/</Typography>
-                                                    </Grid>
-                                                    <Grid item xs={5} px={1} py={1}>
-                                                        <Typography> &nbsp;</Typography>
-                                                        <TextField error={isErrorField.includes("condoRoomLast")} label={""} type={"number"} fullWidth size={'small'} value={condoRoomFirst} onChange={(e) => setCondoRoomFirst(e.target.value)} />
-                                                    </Grid>
-                                                    <Grid item px={1} py={1}>
-                                                        <Typography > &nbsp;</Typography>
-                                                        <Typography >-</Typography>
-                                                    </Grid>
-                                                    <Grid item xs={5} px={1} py={1}>
-                                                        <Typography> &nbsp;</Typography>
-                                                        <TextField error={isErrorField.includes("condoRoomLast")} label={""} type={"number"} fullWidth size={'small'} value={condoRoomLast} onChange={(e) => setCondoRoomLast(e.target.value)} />
-                                                    </Grid>
-                                                </Stack>
-                                            </Grid>
-                                        ))}
-                                        {(disabled.includes("register") ? null : (
-                                            <Grid item xs={12} md={2} p={1}>
-                                                <Typography >รายการจดทะเบียน</Typography>
-                                                <TextField fullWidth size={'small'} value={register} onChange={(e) => setRegister(e.target.value)}
-                                                />
-                                            </Grid>
-                                        ))}
-                                    </Grid>
-                                )
+                                ) : null
                         }
                     </Grid>
                     <Grid item xs={12} px={1} py={1}>
