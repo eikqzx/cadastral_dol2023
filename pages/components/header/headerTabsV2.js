@@ -48,9 +48,6 @@ import * as jobRedux from "./../../../store/feature/job"
 dayjs.extend(buddhistEra);
 dayjs.locale(thdate);
 
-var disPacth
-var state
-
 export default function HeaderTabs(props) {
     const { data } = useSession();
     const [value, setValue] = React.useState(0);
@@ -58,11 +55,6 @@ export default function HeaderTabs(props) {
     const [openDialog, setOpenDialog] = React.useState(false);
     const [tabData, setTabData] = React.useState([]);
     const dataRouter = useRouter().query
-    const [job, setJob] = React.useState(1);
-    disPacth = useDispatch();
-    state = useSelector(state => state.job.value);
-
-    console.log(state, "state");
 
     React.useEffect(() => {
         let start = async () => {
@@ -161,10 +153,6 @@ export default function HeaderTabs(props) {
         console.log(res, "onSingout");
     }
 
-    const onChangeJobType = (event, newJob) => {
-        setJob(newJob);
-        disPacth(jobRedux.setValue(newJob));
-    }
 
     return (
         <Box sx={{ flexGrow: 1, width: '100%', maxWidth: 360, bgcolor: 'background.paper' }} >
@@ -234,26 +222,6 @@ export default function HeaderTabs(props) {
                                     }
                                 })
                                 }
-                                <Grid container justifyContent={'flex-end'}>
-                                    <ToggleButtonGroup
-                                        value={job}
-                                        exclusive
-                                        // defaultValue={1}
-                                        onChange={onChangeJobType}
-                                        size="small"
-                                        aria-label="job"
-                                        sx={{
-                                            '& .Mui-selected': { color: "#5BB318 !important" },
-                                        }}
-                                    >
-                                        <ToggleButton value={1} aria-label="left aligned">
-                                            สารบบ
-                                        </ToggleButton>
-                                        <ToggleButton value={2} aria-label="centered">
-                                            เอกสารสิทธิ์
-                                        </ToggleButton>
-                                    </ToggleButtonGroup>
-                                </Grid>
                             </Tabs>
                         </Box>
                         <Grid item p={1} textAlign={"end"}>

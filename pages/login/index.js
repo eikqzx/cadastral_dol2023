@@ -41,12 +41,7 @@ export default function SignIn({ providers, csrfToken }) {
     }).then(async ({ ok, error }) => {
       if (ok) {
         console.log(ok);
-        if(data?.user?.USER_LIST_TYPE == 8){
-          router.push("/checkImage?PROCESS_SEQ=MTA2");
-        }else{
-          router.push("/accountControl?PROCESS_SEQ=MTAx");
-        }
-
+        router.push("/");
       } else {
         console.log(error)
         await setIserrorLogin(true)

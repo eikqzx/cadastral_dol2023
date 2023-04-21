@@ -37,13 +37,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as jobRedux from "./../../store/feature/job"
 import { getCondoHSFSByCondition } from "@/service/evd/condoHSFS";
 import Tab1 from "./tab/tab1";
+import { cadastralImageByCondition } from "@/service/evd/cadastral";
 
-var disPacth
-var state
 
 export default function IndexAccountControl(props) {
-    const [valueTab, setValueTab] = React.useState('1');
-    const [docType, setDocType] = React.useState(1);
     const [searchData, setSearchData] = React.useState([]);
     const [createDataList, setCreateDataList] = React.useState([]);
     const [tabData, setTapData] = React.useState([]);
@@ -55,13 +52,8 @@ export default function IndexAccountControl(props) {
     const [userData, setUserData] = React.useState(null);
     const [landOffice, setLandOffice] = React.useState(null);
     const [pdfData, setPdfData] = React.useState();
-    const [condoObj, setCondoObj] = React.useState(null);
     const { data } = useSession();
 
-    disPacth = useDispatch();
-    state = useSelector(state => state.job.value);
-
-    console.log(state, "state Tab");
 
     // console.log(landOffice, "landOffice");
     // console.log(userData, "userData");
@@ -84,11 +76,6 @@ export default function IndexAccountControl(props) {
             setProcessSeq(seq);
         }
     }, [])
-
-    React.useEffect(() => {
-        setTapData([]);
-        setSearchData([])
-    }, [state])
 
     React.useEffect(() => {
         setUserData(data?.user);
@@ -117,11 +104,10 @@ export default function IndexAccountControl(props) {
         console.log(obj, "obj_onSearch");
         setPdfData(obj)
         let data = null;
-        if (state == 1) {
-
-        } else {
-
-        }
+        data = await cadastralImageByCondition(obj);
+        data = data.rows
+        console.log(data,"onSearchNew");
+        setSearchData(data)
     }
 
     React.useEffect(() => {
@@ -131,98 +117,32 @@ export default function IndexAccountControl(props) {
     return (
         <Grid container spacing={0.5} py={7.5}>
             <SnackBarDiaLog open={open} message={message} type={type} handleClose={() => setOpen(false)} />
-            <TabContext value={valueTab}>
+            {/* ==================================Search===================== */}
+            {
                 <Grid item xs={12}>
-                    <Paper>
-                        <TabList
-                            onChange={handleChange}
-                            scrollButtons="auto"
-                            allowScrollButtonsMobile
+                    <Accordion defaultExpanded={true}>
+                        <AccordionSummary
+                            expandIcon={<ExpandMoreIcon />}
                             sx={{
-                                '& .MuiTabs-indicator': { backgroundColor: "#5BB318 !important" },
-                                '& .Mui-selected': { color: "#5BB318 !important" },
                                 background: 'linear-gradient(26deg, rgba(255,255,232,1) 20%, rgba(188,243,176,1) 100%) !important',
                             }}
                         >
-                            {
-                                printplateTypeData.length !== 0 && printplateTypeData.map((item, index) => {
-                                    return <Tab key={index} label={item.PRINTPLATE_TYPE_ABBR} value={String(item.PRINTPLATE_TYPE_SEQ)} />
-                                })
-                            }
-                        </TabList>
-                    </Paper>
+                            <Typography >ค้นหารายการบัญชีคุม เบิก-จ่าย</Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <Search provinceSeq={landOffice?.PROVINCE_SEQ} landOfficeSeq={landOffice?.LANDOFFICE_SEQ} disabled={['licensePage', 'fileNo', 'parcelNO', 'landNo']} onSearch={onSearchNew} onReset={setSearchData} />
+                        </AccordionDetails>
+                    </Accordion>
                 </Grid>
-                {/* ==================================Search===================== */}
-                {
-                    state == 1 &&
-                    <Grid item xs={12}>
-                        <Accordion defaultExpanded={true}>
-                            <AccordionSummary
-                                expandIcon={<ExpandMoreIcon />}
-                                sx={{
-                                    background: 'linear-gradient(26deg, rgba(255,255,232,1) 20%, rgba(188,243,176,1) 100%) !important',
-                                }}
-                            >
-                                <Typography >ค้นหารายการบัญชีคุม เบิก-จ่าย</Typography>
-                            </AccordionSummary>
-                            <AccordionDetails>
-                                <Search provinceSeq={landOffice?.PROVINCE_SEQ} landOfficeSeq={landOffice?.LANDOFFICE_SEQ} disabled={['licensePage', 'fileNo', 'parcelNO', 'landNo']} printplateTypeSeq={docType} onSearch={onSearchNew} onReset={setSearchData} />
-                            </AccordionDetails>
-                        </Accordion>
-                    </Grid>
-                }
-                {
-                    state == 2 &&
-                    <Grid item xs={12}>
-                        <Accordion defaultExpanded={true}>
-                            <AccordionSummary
-                                expandIcon={<ExpandMoreIcon />}
-                                sx={{
-                                    background: 'linear-gradient(26deg, rgba(255,255,232,1) 20%, rgba(188,243,176,1) 100%) !important',
-                                }}
-                            >
-                                <Typography >ค้นหารายการบัญชีคุม เบิก-จ่าย เอกสารสิทธิ์</Typography>
-                            </AccordionSummary>
-                            <AccordionDetails>
-                                <SearchJob2 provinceSeq={landOffice?.PROVINCE_SEQ} landOfficeSeq={landOffice?.LANDOFFICE_SEQ} disabled={['licensePage', 'fileNo', 'parcelNO', 'landNo']} printplateTypeSeq={docType} onSearch={onSearchNew} onReset={setSearchData} />
-                            </AccordionDetails>
-                        </Accordion>
-                    </Grid>
-                }
-                <Grid item xs={2} md={2}>
-                    <SideTreeView data={searchData} setTapData={setTapData} process={processSeq} state={state} />
-                </Grid>
-                {
-                    state == 1 && <Grid item xs={10} md={10}>
-                        <Paper>
-                        <TabPanel sx={{ height: "100vh", flexGrow: 1, overflowY: 'auto' }} value="1"><Tab1/></TabPanel>
-                            {/* <TabPanel sx={{ height: "100vh", flexGrow: 1, overflowY: 'auto' }} value="1"><Tab01 tabData={tabData} searchData={searchData} onSearch={onSearchNew} pdfData={pdfData} /></TabPanel>
-                            <TabPanel sx={{ height: "100vh", flexGrow: 1, overflowY: 'auto' }} value="2"><Tab02 tabData={tabData} searchData={searchData} onSearch={onSearchNew} pdfData={pdfData} /></TabPanel>
-                            <TabPanel sx={{ height: "100vh", flexGrow: 1, overflowY: 'auto' }} value="3"><Tab03 tabData={tabData} searchData={searchData} onSearch={onSearchNew} pdfData={pdfData} /></TabPanel>
-                            <TabPanel sx={{ height: "100vh", flexGrow: 1, overflowY: 'auto' }} value="4"><Tab04 tabData={tabData} searchData={searchData} onSearch={onSearchNew} pdfData={pdfData} /></TabPanel>
-                            <TabPanel sx={{ height: "100vh", flexGrow: 1, overflowY: 'auto' }} value="5"><Tab05 tabData={tabData} searchData={searchData} onSearch={onSearchNew} pdfData={pdfData} /></TabPanel>
-                            <TabPanel sx={{ height: "100vh", flexGrow: 1, overflowY: 'auto' }} value="10"><Tab06 tabData={tabData} searchData={searchData} onSearch={onSearchNew} pdfData={pdfData} /></TabPanel>
-                            <TabPanel sx={{ height: "100vh", flexGrow: 1, overflowY: 'auto' }} value="20"><Tab07 tabData={tabData} searchData={searchData} onSearch={onSearchNew} pdfData={pdfData} /></TabPanel> */}
-                        </Paper>
-                    </Grid>
-                }
-                {
-                    state == 2 &&
-                    <Grid item xs={10} md={10}>
-                        <Paper>
-                            {/* <TabPanel sx={{ height: "100vh", flexGrow: 1, overflowY: 'auto' }} value="1"><Tab01_2 tabData={tabData} searchData={searchData} onSearch={onSearchNew} pdfData={pdfData} /></TabPanel>
-                            <TabPanel sx={{ height: "100vh", flexGrow: 1, overflowY: 'auto' }} value="2"><Tab02_2 tabData={tabData} searchData={searchData} onSearch={onSearchNew} pdfData={pdfData} /></TabPanel>
-                            <TabPanel sx={{ height: "100vh", flexGrow: 1, overflowY: 'auto' }} value="3"><Tab03_2 tabData={tabData} searchData={searchData} onSearch={onSearchNew} pdfData={pdfData} /></TabPanel>
-                            <TabPanel sx={{ height: "100vh", flexGrow: 1, overflowY: 'auto' }} value="4"><Tab04_2 tabData={tabData} searchData={searchData} onSearch={onSearchNew} pdfData={pdfData} /></TabPanel>
-                            <TabPanel sx={{ height: "100vh", flexGrow: 1, overflowY: 'auto' }} value="5"><Tab05_2 tabData={tabData} searchData={searchData} onSearch={onSearchNew} pdfData={pdfData} /></TabPanel>
-                            <TabPanel sx={{ height: "100vh", flexGrow: 1, overflowY: 'auto' }} value="10"><Tab06_2 tabData={tabData} searchData={searchData} onSearch={onSearchNew} pdfData={pdfData} /></TabPanel>
-                            <TabPanel sx={{ height: "100vh", flexGrow: 1, overflowY: 'auto' }} value="20"><Tab07_2 tabData={tabData} searchData={searchData} onSearch={onSearchNew} pdfData={pdfData} /></TabPanel> */}
-                        </Paper>
-                    </Grid>
-                }
-            </TabContext>
-
-            {/* ====================================================================== */}
+            }
+            <Grid item xs={2} md={2}>
+                <SideTreeView data={searchData} setTapData={setTapData} process={processSeq} />
+            </Grid>
+            <Grid item xs={10} md={10}>
+                <Paper sx={{ height: "100vh", flexGrow: 1, overflowY: 'auto' }}>
+                    <Tab1 tabData={tabData} searchData={searchData} onSearch={onSearchNew} pdfData={pdfData}/>
+                </Paper>
+            </Grid>
         </Grid>
     )
 }

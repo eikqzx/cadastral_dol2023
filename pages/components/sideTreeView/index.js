@@ -80,19 +80,6 @@ export default function SideTreeView(props) {
         setProcessSeq(props?.process);
     }, [props]);
 
-    React.useEffect(() => {
-        onCreateObject();
-    }, [onSearchData]);
-
-    const onCreateObject = async () => {
-        let masStatus = await getStatus();
-        masStatus = filterRecordStatus(masStatus.rows, "N");
-        console.log(onSearchData, "onSearchData treeview");
-        console.log(processSeq, "onSearchData processSeq");
-        let onSearchDataFiltered = onSearchData.filter(item => item.PROCESS_SEQ_ == processSeq)
-        console.log(onSearchDataFiltered, "onSearchDataFiltered");
-    }
-
     const onClickChange = (data) => {
         // console.log(data);
         props.setTapData(data)
@@ -137,24 +124,12 @@ export default function SideTreeView(props) {
                             defaultExpandIcon={<ArrowRightIcon />}
                             sx={{ height: "95vh", flexGrow: 1, overflowY: 'auto' }}
                         >
-
-                            <TreeItem nodeId="1" label={labelByprintplate()}>
+                            <TreeItem nodeId="1" label={"เลขที่ต้นร่าง"}>
                                 {onSearchData.length != 0 && onSearchData.map((number, index) => {
                                     let numberStr = index + 2;
                                     // console.log(number.PRINTPLATE_TYPE_SEQ == 10,"numbernumber");
-                                    if (number.PARCEL_HSFS_SEQ != null || number.PARCEL_LAND_HSFS_SEQ != null || number.CONDOROOM_HSFS_SEQ != null) {
-                                        if (number.PRINTPLATE_TYPE_SEQ == 1) {
-                                            return <TreeItem nodeId={String(numberStr)} key={index} label={number.PARCEL_SURVEY_NO} onClick={() => { onClickChange(number) }} />
-                                        }
-                                        if (number.PRINTPLATE_TYPE_SEQ == 2 || number.PRINTPLATE_TYPE_SEQ == 3) {
-                                            return <TreeItem nodeId={String(numberStr)} key={index} label={number.PARCEL_LAND_SURVEY_NO} onClick={() => { onClickChange(number) }} />
-                                        }
-                                        if (number.PRINTPLATE_TYPE_SEQ == 4 || number.PRINTPLATE_TYPE_SEQ == 5) {
-                                            return <TreeItem nodeId={String(numberStr)} key={index} label={number.PARCEL_LAND_NO} onClick={() => { onClickChange(number) }} />
-                                        }
-                                        if (number.PRINTPLATE_TYPE_SEQ == 10) {
-                                            return <TreeItem nodeId={String(numberStr)} key={index} label={number.CONDOROOM_RNO} onClick={() => { onClickChange(number) }} />
-                                        }
+                                    if (number.CADASTRAL_IMAGE_SEQ != null) {
+                                            return <TreeItem nodeId={String(numberStr)} key={index} label={number.CADASTRAL_NO} onClick={() => { onClickChange(number) }} />
                                     }
                                 })
                                 }
