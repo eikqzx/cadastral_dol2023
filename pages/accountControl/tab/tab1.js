@@ -56,6 +56,14 @@ export default function Tab1(props) {
     };
 
     React.useEffect(() => {
+        if (isNotEmpty(dataUrl)) {
+            let seq = decode(dataUrl?.PROCESS_SEQ);
+            console.log(seq, "seq");
+            setProcessSeq(seq);
+        }
+    }, [])
+
+    React.useEffect(() => {
         Array.isArray(props?.searchData) && numbers(props?.searchData);
         Array.isArray(props?.searchData) && setCadastralNo(props?.searchData.length != 0 ? props?.searchData[0].CADASTRAL_NO + " ถึง " + props?.searchData[props?.searchData.length - 1].CADASTRAL_NO : "-");
         Array.isArray(props?.searchData) && getMasterData(props?.pdfData);
@@ -70,7 +78,7 @@ export default function Tab1(props) {
             let landOfficeFiltered = getLandOfficeData.rows.filter(item => item.LANDOFFICE_SEQ == data?.LANDOFFICE_SEQ);
             setSheetcode(data.SHEETCODE);
             setBoxNo(data.BOX_NO);
-            console.log(landOfficeFiltered.rows, "getLandOfficeData");
+            console.log(landOfficeFiltered, "getLandOfficeData");
             setOffice(landOfficeFiltered[0]?.LANDOFFICE_NAME_TH ?? "-");
         }
     }
@@ -118,8 +126,9 @@ export default function Tab1(props) {
             item.CREATE_USER = data?.user?.USER_LIST_PID;
             item.RECORD_STATUS = "N";
             item.PROCESS_SEQ_ = processSeq;
-            item.CADASTRAL_IMAGE_NO_ = cadastralNo.rows[0].CADASTRAL_IMAGE_NO_
-            let res = mrgCadastralImage(item);
+            item.CADASTRAL_NO_ = cadastralNo.rows[0].CADASTRAL_IMAGE_NO_
+            let res = await mrgCadastralImage(item);
+            console.log(res,"resCADASTRAL_IMAGE");
             if (i == (dataObj.length - 1)) {
                 if (typeof res == "object") {
                     setOpenAlert(true);
