@@ -21,7 +21,7 @@ export default function SideTreeView(props) {
     const [onSearchData, setOnSearchData] = React.useState([]);
     const [treeViewData, setTreeViewData] = React.useState([]);
     const [expanded, setExpanded] = React.useState([]);
-    const [processSeq, setProcessSeq] = React.useState(0)
+    const [processSeq, setProcessSeq] = React.useState(102)
     const [open, setOpen] = React.useState(false);
     const [message, setMessage] = React.useState("");
     const [type, setType] = React.useState("success");
@@ -146,7 +146,7 @@ export default function SideTreeView(props) {
             await setTreeViewData(masStatus.sort((a, b) => b.STATUS_SEQ - a.STATUS_SEQ));
         }
     }
-    console.log(treeViewData, "treeViewData");
+    console.log(treeViewData, "treeViewDatatreeViewData");
     return (
         <div>
             <Grid component={Paper} p={1} style={{ background: '#FFFFE8' }} sx={{ height: "100vh", flexGrow: 1, overflowY: 'auto' }}>

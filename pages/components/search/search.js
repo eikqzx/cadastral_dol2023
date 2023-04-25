@@ -101,10 +101,10 @@ export default function Search(props) {
         }
         let obj = {
             "LANDOFFICE_SEQ": props?.landOfficeSeq,
-            "SHEETCODE":Number(sheetcode),
+            "SHEETCODE": Number(sheetcode),
             "BOX_NO": Number(boxNo),
             "CADASTRAL_NO": cadastralNo1 == "" && cadastralNo2 == "" ? null : newStart,
-            "CADASTRAL_NO_":cadastralNo1 == "" && cadastralNo2 == "" ? null : newEnd,
+            "CADASTRAL_NO_": cadastralNo1 == "" && cadastralNo2 == "" ? null : newEnd,
         }
         props.onSearch(obj);
     }
@@ -142,6 +142,18 @@ export default function Search(props) {
                             props.printplateTypeSeq != 10 && props.printplateTypeSeq != 20 ?
                                 (
                                     <Grid container>
+                                        {disabled.includes("sheetcode") ? null : (
+                                            <Grid item xs={12} md={3} px={1} py={1}>
+                                                <Typography >หมายเลขรหัสแทนระวาง(เลขแฟ้ม)</Typography>
+                                                <TextField error={isErrorField.includes("sheetcode")} fullWidth size={'small'} value={sheetcode} onChange={(e) => setSheetcode(e.target.value)} type="number" />
+                                            </Grid>
+                                        )}
+                                        {disabled.includes("boxNo") ? null : (
+                                            <Grid item xs={12} md={2} px={1} py={1}>
+                                                <Typography >เลขที่กล่อง</Typography>
+                                                <TextField error={isErrorField.includes("boxNo")} fullWidth size={'small'} value={boxNo} onChange={(e) => setBoxNo(e.target.value)} type="number" />
+                                            </Grid>
+                                        )}
                                         {disabled.includes("cadastralNo") ? null : (
                                             <Grid item xs={12} md={4}>
                                                 <Stack direction={'row'}>
@@ -158,18 +170,6 @@ export default function Search(props) {
                                                         <TextField label={""} type={"number"} fullWidth size={'small'} value={cadastralNo2} onChange={(e) => setCadastralNo2(e.target.value)} />
                                                     </Grid>
                                                 </Stack>
-                                            </Grid>
-                                        )}
-                                        {disabled.includes("sheetcode") ? null : (
-                                            <Grid item xs={12} md={3} px={1} py={1}>
-                                                <Typography >หมายเลขรหัสแทนระวาง(เลขแฟ้ม)</Typography>
-                                                <TextField error={isErrorField.includes("sheetcode")} fullWidth size={'small'} value={sheetcode} onChange={(e) => setSheetcode(e.target.value)} type="number" />
-                                            </Grid>
-                                        )}
-                                        {disabled.includes("boxNo") ? null : (
-                                            <Grid item xs={12} md={2} px={1} py={1}>
-                                                <Typography >เลขที่กล่อง</Typography>
-                                                <TextField error={isErrorField.includes("boxNo")} fullWidth size={'small'} value={boxNo} onChange={(e) => setBoxNo(e.target.value)} type="number" />
                                             </Grid>
                                         )}
                                     </Grid>
