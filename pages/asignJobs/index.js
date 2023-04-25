@@ -48,13 +48,12 @@ export default function IndexAccountControl(props) {
     const [open, setOpen] = React.useState(false);
     const [message, setMessage] = React.useState('');
     const [type, setType] = React.useState('');
-    const [printplateTypeData, setPrintplateTypeData] = React.useState([]);
-    const [processSeq, setProcessSeq] = React.useState(101)
+    const [processSeq, setProcessSeq] = React.useState(102)
     const [userData, setUserData] = React.useState(null);
     const [landOffice, setLandOffice] = React.useState(null);
     const [pdfData, setPdfData] = React.useState();
+    const [searchParameter, setSearchParameter] = React.useState(null);
     const { data } = useSession();
-
 
     // console.log(landOffice, "landOffice");
     // console.log(userData, "userData");
@@ -73,10 +72,16 @@ export default function IndexAccountControl(props) {
     React.useEffect(() => {
         if (isNotEmpty(dataUrl)) {
             let seq = decode(dataUrl?.PROCESS_SEQ);
-            console.log(seq, "seq");
+            console.log(seq, "seq dataUrl");
             setProcessSeq(seq);
         }
     }, [])
+
+    React.useEffect(() => {
+        if (searchData.length == 0) {
+            setTapData([]);
+        }
+    }, [searchData])
 
     React.useEffect(() => {
         setUserData(data?.user);
@@ -88,32 +93,16 @@ export default function IndexAccountControl(props) {
     // console.log(userData,"userData");
     // console.log(processSeq, "processSeq");
 
-    const reqPrintplateType = async () => {
-        let res = await getPrintPlateType();
-        console.log(res, "reqPrintplateType");
-        setPrintplateTypeData(filterRecordStatus(res.rows));
-    }
-
-    const handleChange = (event, newValue) => {
-        setValueTab(newValue);
-        setDocType(newValue);
-        setTapData([]);
-        setSearchData([]);
-    };
-
     const onSearchNew = async (obj) => {
         console.log(obj, "obj_onSearch");
+        setSearchParameter(obj);
         setPdfData(obj)
         let data = null;
         data = await cadastralImage102ByConditionParcelNoTo(obj);
         data = data.rows
-        console.log(data,"onSearchNew");
+        console.log(data, "onSearchNew");
         setSearchData(data)
     }
-
-    React.useEffect(() => {
-        reqPrintplateType();
-    }, [])
 
     return (
         <Grid container spacing={0.5} py={7.5}>
@@ -128,7 +117,7 @@ export default function IndexAccountControl(props) {
                                 background: 'linear-gradient(26deg, rgba(255,255,232,1) 20%, rgba(188,243,176,1) 100%) !important',
                             }}
                         >
-                            <Typography >ค้นหารายการบัญชีคุม เบิก-จ่าย</Typography>
+                            <Typography >ค้นหารับงานสแกน</Typography>
                         </AccordionSummary>
                         <AccordionDetails>
                             <Search provinceSeq={landOffice?.PROVINCE_SEQ} landOfficeSeq={landOffice?.LANDOFFICE_SEQ} disabled={['licensePage', 'fileNo', 'parcelNO', 'landNo']} onSearch={onSearchNew} onReset={setSearchData} />
@@ -136,12 +125,9 @@ export default function IndexAccountControl(props) {
                     </Accordion>
                 </Grid>
             }
-            <Grid item xs={2} md={2}>
-                <SideTreeView data={searchData} setTapData={setTapData} process={processSeq} />
-            </Grid>
-            <Grid item xs={10} md={10}>
+            <Grid item xs={10} md={12}>
                 <Paper sx={{ height: "100vh", flexGrow: 1, overflowY: 'auto' }}>
-                    <Tab1 tabData={tabData} searchData={searchData} onSearch={onSearchNew} pdfData={pdfData}/>
+                    <Tab1 searchData={searchData} process={processSeq} onSearch={onSearchNew} pdfData={pdfData} searchParameter={searchParameter} />
                 </Paper>
             </Grid>
         </Grid>
