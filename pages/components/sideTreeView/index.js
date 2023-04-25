@@ -142,7 +142,7 @@ export default function SideTreeView(props) {
                     item.DATA = statusSeq104
                 }
             })
-            console.log(masStatus, "onSearchData masStatus");
+            console.log(masStatus, "masStatus");
             await setTreeViewData(masStatus.sort((a, b) => b.STATUS_SEQ - a.STATUS_SEQ));
         }
     }
