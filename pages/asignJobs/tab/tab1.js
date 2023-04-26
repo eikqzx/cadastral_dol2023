@@ -32,7 +32,7 @@ import {
 import { confirmDialog } from "@/pages/components/confirmDialog";
 import AddCad from '../components/addCadastral';
 import { useSession } from 'next-auth/react';
-import { insertCadastral } from '@/service/sva';
+import { getCadastralImage, insertCadastral, mrgCadastralImage } from '@/service/sva';
 import { getLandOffice } from '@/service/mas/landOffice';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -61,10 +61,6 @@ export default function Tab1(props) {
   const [datagroupC, setDataGroupC] = React.useState([]);
   const [datagroupD, setDataGroupD] = React.useState([]);
   const [count, setCount] = React.useState(0);
-  console.log(datagroupA, "datagroupA");
-  console.log(datagroupB, "datagroupB");
-  console.log(datagroupC, "datagroupC");
-  console.log(datagroupD, "datagroupD");
   const handleOpen = (type, name) => {
     setAddRegType(!addRegType)
     setTypeRegisterSts(type);
@@ -91,8 +87,7 @@ export default function Tab1(props) {
 
   React.useEffect(() => {
     if (typeof props?.tabData == "object" && props?.tabData.length !== 0 && props?.tabData != undefined) {
-      changeTapValue();
-      // createSurveyData(); /***** solution 1******/
+      createSurveyData(); /***** solution 1******/
       if (props?.tabData?.CADASTRAL_SEQ == null) {
         confirmDialog.createDialog(
           `ไม่พบข้อมูลทะเบียนของต้นร่างเลขที่ ${props?.tabData?.CADASTRAL_NO} ต้องการเพิ่มข้อมูลทะเบียน หรือไม่ ?`,
@@ -133,39 +128,8 @@ export default function Tab1(props) {
     }
   }
 
-  const changeTapValue = () =>{
-    let newA = []
-    let newB = []
-    let newC = []
-    let newD = []
-    for(let i in datagroupA){
-      let item = datagroupA[i];
-      item.COUNT_DOC = 0
-      newA.push(item);
-    }
-    for(let i in datagroupB){
-      let item = datagroupB[i];
-      item.COUNT_DOC = 0
-      newB.push(item);
-    }
-    for(let i in datagroupC){
-      let item = datagroupC[i];
-      item.COUNT_DOC = 0
-      newC.push(item);
-    }
-    for(let i in datagroupD){
-      let item = datagroupD[i];
-      item.COUNT_DOC = 0
-      newD.push(item);
-    }
-    setDataGroupA(newA);
-    setDataGroupB(newB);
-    setDataGroupC(newC);
-    setDataGroupD(newD);
-  }
-
   const handleCountChange = (type, index, obj, value) => {
-    console.log(obj, "handleCountChange");
+    // console.log(obj, "handleCountChange");
     // console.log(obj["COUNT_DOC"], "handleCountChange");
 
     const parcelHsfsPno = obj["SURVEYDOCTYPE_PNO_SEQ"];
@@ -182,7 +146,7 @@ export default function Tab1(props) {
       obj["COUNT_DOC"] = 1;
       obj["SURVEYDOCTYPE_PNO_SEQ"] = 0;
     }
-    console.log(obj, "handleCountChange");
+    // console.log(obj, "handleCountChange");
   };
 
   const getMasterData = async (data) => {
@@ -200,6 +164,10 @@ export default function Tab1(props) {
   }
 
   const createSurveyData = async () => {
+    let res = await getCadastralImage();
+    res = filterRecordStatus(res.rows, "N");
+    res = res.filter(item => item.CADASTRAL_SEQ == props?.tabData?.CADASTRAL_SEQ);
+    console.log(res, "res createSurveyData");
     let resGroupA = await surveyDocTypeBySurveyDocTypeGroup("A");
     let dataA = filterRecordStatus(resGroupA.rows, "N");
     let resGroupB = await surveyDocTypeBySurveyDocTypeGroup("B");
@@ -208,22 +176,284 @@ export default function Tab1(props) {
     let dataC = filterRecordStatus(resGroupC.rows, "N");
     let resGroupD = await surveyDocTypeBySurveyDocTypeGroup("D");
     let dataD = filterRecordStatus(resGroupD.rows, "N");
+    for (let i in dataA) {
+      let item = dataA[i];
+      for (let x in res) {
+        let itemX = res[x];
+        if (item.SURVEYDOCTYPE_SEQ == itemX.SURVEYDOCTYPE_SEQ) {
+          item["COUNT_DOC"] = itemX.IMAGE_PNO;
+        }
+      }
+    }
+    for (let i in dataB) {
+      let item = dataB[i];
+      for (let x in res) {
+        let itemX = res[x];
+        if (item.SURVEYDOCTYPE_SEQ == itemX.SURVEYDOCTYPE_SEQ) {
+          item["COUNT_DOC"] = itemX.IMAGE_PNO;
+        }
+      }
+    }
+    for (let i in dataC) {
+      let item = dataC[i];
+      for (let x in res) {
+        let itemX = res[x];
+        if (item.SURVEYDOCTYPE_SEQ == itemX.SURVEYDOCTYPE_SEQ) {
+          item["COUNT_DOC"] = itemX.IMAGE_PNO;
+        }
+      }
+    }
+    for (let i in dataD) {
+      let item = dataD[i];
+      for (let x in res) {
+        let itemX = res[x];
+        if (item.SURVEYDOCTYPE_SEQ == itemX.SURVEYDOCTYPE_SEQ) {
+          item["COUNT_DOC"] = itemX.IMAGE_PNO;
+        }
+      }
+    }
+
     setDataGroupA(dataA);
     setDataGroupB(dataB);
     setDataGroupC(dataC);
     setDataGroupD(dataD);
-    console.log(dataA, "createSurveyData A");
+    console.log(dataA, "createSurveyData dataAAA");
     console.log(dataB, "createSurveyData B");
     console.log(dataC, "createSurveyData C");
     console.log(dataD, "createSurveyData D");
   }
 
+
   const handleClose = () => {
     setOpen(false)
   }
 
-  const onSubmit = () => {
-    console.log("submit");
+  const onSubmit = async () => {
+    if (datagroupA.length != 0 && datagroupB.length != 0 && datagroupC.length != 0 && datagroupD.length != 0) {
+      let arrAll = []
+      for (let i in datagroupA) {
+        let item = datagroupA[i];
+        if (item.COUNT_DOC != undefined && item.COUNT_DOC != 0) {
+          let objInsert = {
+            "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
+            "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ,
+            "SURVEYDOCTYPE_PNO_SEQ": item.COUNT_DOC,
+            "PROCESS_SEQ_": 102,
+            "STATUS_SEQ_": 101,
+            "RECORD_STATUS": "N",
+            "CREATE_USER": data?.user?.USER_LIST_PID
+          }
+          console.log(objInsert, "submit");
+          arrAll.push(objInsert);
+        }
+      }
+      for (let i in datagroupB) {
+        let item = datagroupB[i];
+        if (item.COUNT_DOC != undefined && item.COUNT_DOC != 0) {
+          console.log(item, "submit");
+          let objInsert = {
+            "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
+            "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ,
+            "SURVEYDOCTYPE_PNO_SEQ": item.COUNT_DOC,
+            "PROCESS_SEQ_": 102,
+            "STATUS_SEQ_": 101,
+            "RECORD_STATUS": "N",
+            "CREATE_USER": data?.user?.USER_LIST_PID
+          }
+          arrAll.push(objInsert);
+        }
+      }
+      for (let i in datagroupC) {
+        let item = datagroupC[i];
+        if (item.COUNT_DOC != undefined && item.COUNT_DOC != 0) {
+          let objInsert = {
+            "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
+            "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ,
+            "SURVEYDOCTYPE_PNO_SEQ": item.COUNT_DOC,
+            "PROCESS_SEQ_": 102,
+            "STATUS_SEQ_": 101,
+            "RECORD_STATUS": "N",
+            "CREATE_USER": data?.user?.USER_LIST_PID
+          }
+          arrAll.push(objInsert);
+        }
+      }
+      for (let i in datagroupD) {
+        let item = datagroupD[i];
+        if (item.COUNT_DOC != undefined && item.COUNT_DOC != 0) {
+          console.log(item, "submit");
+          let objInsert = {
+            "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
+            "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ,
+            "SURVEYDOCTYPE_PNO_SEQ": item.COUNT_DOC,
+            "PROCESS_SEQ_": 102,
+            "STATUS_SEQ_": 101,
+            "RECORD_STATUS": "N",
+            "CREATE_USER": data?.user?.USER_LIST_PID
+          }
+          arrAll.push(objInsert);
+        }
+      }
+      console.log(arrAll, "onSubmit");
+      let currentIndex = 0;
+      for (let z in arrAll) {
+        let objInsert = arrAll[z];
+        try {
+          let resInsert = await mrgCadastralImage(objInsert);
+          console.log(resInsert, "onSubmit");
+          if (currentIndex === Object.keys(arrAll).length - 1) {
+            await setMessage("บันทึกสำเร็จ");
+            await setOpen(true);
+            await setType("success");
+          }
+          currentIndex++;
+        } catch (error) {
+          await setMessage("เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้งหรือติดต่อเจ้าหน้าที่");
+          await setOpen(true);
+          await setType("error");
+          console.log(error, "onSubmit");
+          currentIndex++;
+        }
+      }
+      console.log(currentIndex,"onSubmit");
+    }
+  }
+
+  const saveList = async (group) => {
+    let currentIndex = 0;
+    if (datagroupA.length != 0 && datagroupB.length != 0 && datagroupC.length != 0 && datagroupD.length != 0) {
+      if (group == "A") {
+        for (let i in datagroupA) {
+          let item = datagroupA[i];
+          if (item.COUNT_DOC != undefined && item.COUNT_DOC != 0) {
+            let objInsert = {
+              "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
+              "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ,
+              "SURVEYDOCTYPE_PNO_SEQ": item.COUNT_DOC,
+              "PROCESS_SEQ_": 102,
+              "STATUS_SEQ_": 101,
+              "RECORD_STATUS": "N",
+              "CREATE_USER": data?.user?.USER_LIST_PID
+            }
+            console.log(objInsert, "submit");
+            try {
+              let resInsert = await mrgCadastralImage(objInsert);
+              console.log(resInsert, "resInsert");
+              if (currentIndex === Object.keys(datagroupA).length - 1) {
+                await setMessage("บันทึกสำเร็จ");
+                await setOpen(true);
+                await setType("success");
+              }
+              currentIndex++;
+            } catch (error) {
+              await setMessage("เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้งหรือติดต่อเจ้าหน้าที่");
+              await setOpen(true);
+              await setType("error");
+              console.log(error, "insertParcelHSFS");
+              currentIndex++;
+            }
+          }
+        }
+      }
+      if (group == "B") {
+        for (let i in datagroupB) {
+          let item = datagroupB[i];
+          if (item.COUNT_DOC != undefined && item.COUNT_DOC != 0) {
+            console.log(item, "submit");
+            let objInsert = {
+              "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
+              "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ,
+              "SURVEYDOCTYPE_PNO_SEQ": item.COUNT_DOC,
+              "PROCESS_SEQ_": 102,
+              "STATUS_SEQ_": 101,
+              "RECORD_STATUS": "N",
+              "CREATE_USER": data?.user?.USER_LIST_PID
+            }
+            try {
+              let resInsert = await mrgCadastralImage(objInsert);
+              console.log(resInsert, "resInsert");
+              if (currentIndex === Object.keys(datagroupB).length - 1) {
+                await setMessage("บันทึกสำเร็จ");
+                await setOpen(true);
+                await setType("success");
+              }
+              currentIndex++;
+            } catch (error) {
+              await setMessage("เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้งหรือติดต่อเจ้าหน้าที่");
+              await setOpen(true);
+              await setType("error");
+              console.log(error, "insertParcelHSFS");
+              currentIndex++;
+            }
+          }
+        }
+      }
+      if (group == "C") {
+        for (let i in datagroupC) {
+          let item = datagroupC[i];
+          if (item.COUNT_DOC != undefined && item.COUNT_DOC != 0) {
+            let objInsert = {
+              "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
+              "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ,
+              "SURVEYDOCTYPE_PNO_SEQ": item.COUNT_DOC,
+              "PROCESS_SEQ_": 102,
+              "STATUS_SEQ_": 101,
+              "RECORD_STATUS": "N",
+              "CREATE_USER": data?.user?.USER_LIST_PID
+            }
+            try {
+              let resInsert = await mrgCadastralImage(objInsert);
+              console.log(resInsert, "resInsert");
+              if (currentIndex === Object.keys(datagroupC).length - 1) {
+                await setMessage("บันทึกสำเร็จ");
+                await setOpen(true);
+                await setType("success");
+              }
+              currentIndex++;
+            } catch (error) {
+              await setMessage("เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้งหรือติดต่อเจ้าหน้าที่");
+              await setOpen(true);
+              await setType("error");
+              console.log(error, "insertParcelHSFS");
+              currentIndex++;
+            }
+          }
+        }
+      }
+      if (group == "D") {
+        for (let i in datagroupD) {
+          let item = datagroupD[i];
+          if (item.COUNT_DOC != undefined && item.COUNT_DOC != 0) {
+            console.log(item, "submit");
+            let objInsert = {
+              "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
+              "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ,
+              "SURVEYDOCTYPE_PNO_SEQ": item.COUNT_DOC,
+              "PROCESS_SEQ_": 102,
+              "STATUS_SEQ_": 101,
+              "RECORD_STATUS": "N",
+              "CREATE_USER": data?.user?.USER_LIST_PID
+            }
+            try {
+              let resInsert = await mrgCadastralImage(objInsert);
+              console.log(resInsert, "resInsert");
+              if (currentIndex === Object.keys(datagroupD).length - 1) {
+                await setMessage("บันทึกสำเร็จ");
+                await setOpen(true);
+                await setType("success");
+              }
+              currentIndex++;
+            } catch (error) {
+              await setMessage("เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้งหรือติดต่อเจ้าหน้าที่");
+              await setOpen(true);
+              await setType("error");
+              console.log(error, "insertParcelHSFS");
+              currentIndex++;
+            }
+          }
+        }
+      }
+    }
   }
 
   return (
@@ -316,9 +546,14 @@ export default function Tab1(props) {
                   background: ' rgba(255,255,232,1) !important',
                 }}
               >
-                <Grid container spacing={2}>
+                <Grid container spacing={2} justifyContent={"space-between"}>
                   <Grid item xs={4} md={4}><Typography fontSize={18}>ต้นร่าง (A)</Typography></Grid>
                   {/* <Grid item xs={6} md={6}  ><Button size="small" variant="contained" onClick={() => { handleOpen(1, "ต้นร่าง") }}>เพิ่มเอกสารต้นร่าง</Button></Grid> */}
+                  <Grid item md={2}>
+                    <Tooltip title="บันทึก">
+                      <IconButton size="small" onClick={() => { saveList("A") }} variant="contained"><Save /></IconButton>
+                    </Tooltip>
+                  </Grid>
                 </Grid>
               </AccordionSummary>
               <Divider />
@@ -396,16 +631,21 @@ export default function Tab1(props) {
                   background: ' rgba(255,255,232,1) !important',
                 }}
               >
-                <Grid container spacing={2}>
+                <Grid container spacing={2} justifyContent={"space-between"}>
                   <Grid item xs={4} md={4}><Typography fontSize={18}>รายการรังวัด (B)</Typography></Grid>
                   {/* <Grid item xs={6} md={6}  ><Button size="small" variant="contained" onClick={() => { handleOpen(1, "ต้นร่าง") }}>เพิ่มเอกสารต้นร่าง</Button></Grid> */}
+                  <Grid item md={2}>
+                    <Tooltip title="บันทึก">
+                      <IconButton size="small" onClick={() => { saveList("B") }} variant="contained"><Save /></IconButton>
+                    </Tooltip>
+                  </Grid>
                 </Grid>
               </AccordionSummary>
               <Divider />
               <AccordionDetails>
                 {datagroupB.length != 0 && <TableContainer>
                   <Table size="small" >
-                    <TableBody container>
+                    <TableBody>
                       {
                         datagroupB.map((item, index) =>
                           <TableRow key={item.SURVEYDOCTYPE_SEQ}
@@ -476,9 +716,14 @@ export default function Tab1(props) {
                   background: ' rgba(255,255,232,1) !important',
                 }}
               >
-                <Grid container spacing={2}>
+                <Grid container spacing={2} justifyContent={"space-between"}>
                   <Grid item xs={4} md={4}><Typography fontSize={18}>รายการคำนวณ (C)</Typography></Grid>
                   {/* <Grid item xs={6} md={6}  ><Button size="small" variant="contained" onClick={() => { handleOpen(1, "ต้นร่าง") }}>เพิ่มเอกสารต้นร่าง</Button></Grid> */}
+                  <Grid item md={2}>
+                    <Tooltip title="บันทึก">
+                      <IconButton size="small" onClick={() => { saveList("C") }} variant="contained"><Save /></IconButton>
+                    </Tooltip>
+                  </Grid>
                 </Grid>
               </AccordionSummary>
               <Divider />
@@ -556,9 +801,14 @@ export default function Tab1(props) {
                   background: ' rgba(255,255,232,1) !important',
                 }}
               >
-                <Grid container spacing={2}>
+                <Grid container spacing={2} justifyContent={"space-between"}>
                   <Grid item xs={4} md={4}><Typography fontSize={18}>อื่นๆ(D)</Typography></Grid>
                   {/* <Grid item xs={6} md={6}  ><Button size="small" variant="contained" onClick={() => { handleOpen(1, "ต้นร่าง") }}>เพิ่มเอกสารต้นร่าง</Button></Grid> */}
+                  <Grid item md={2}>
+                    <Tooltip title="บันทึก">
+                      <IconButton size="small" onClick={() => { saveList("D") }} variant="contained"><Save /></IconButton>
+                    </Tooltip>
+                  </Grid>
                 </Grid>
               </AccordionSummary>
               <Divider />

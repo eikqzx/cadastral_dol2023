@@ -79,3 +79,33 @@ export async function insertCadastral(dataSend) {
         return false
     }
 }
+
+export async function mrgCadastralImage(dataSend) {
+    let url = `/api/sva/mrgCadastralImage`
+    AddLoading();
+    try {
+        let res = await axios.post(url, dataSend)
+        let data = res.data
+        //console.log(data)
+        RemoveLoading()
+        return data
+    } catch (err) {
+        console.log(err)
+        return false
+    }
+}
+
+export async function getCadastralImage() {
+    let url = `/api/sva/getCadastralImage`
+    AddLoading()
+    try {
+        let res = await axios.get(url)
+        let data = res.data
+        //console.log(data)
+        RemoveLoading()
+        return data
+    } catch (err) {
+        console.log(err)
+        return false
+    }
+}
