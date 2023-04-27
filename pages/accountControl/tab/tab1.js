@@ -77,7 +77,7 @@ export default function Tab1(props) {
             let getLandOfficeData = await getLandOffice();
             let landOfficeFiltered = getLandOfficeData.rows.filter(item => item.LANDOFFICE_SEQ == data?.LANDOFFICE_SEQ);
             setSheetcode(data.SHEETCODE);
-            setBoxNo(data.BOX_NO);
+            setBoxNo(data.BOX_NO.toString().padStart(2, '0'));
             console.log(landOfficeFiltered, "getLandOfficeData");
             setOffice(landOfficeFiltered[0]?.LANDOFFICE_NAME_TH ?? "-");
         }
@@ -216,7 +216,7 @@ export default function Tab1(props) {
                                     <Table sx={{ minWidth: 200 }} size="small">
                                         <TableHead>
                                             <TableRow>
-                                                <TableCell align="center">หน้าสำรวจเลขที่</TableCell>
+                                                <TableCell align="center">เลขที่ต้นร่าง</TableCell>
                                                 <TableCell align="center">มี</TableCell>
                                                 <TableCell align="center">ไม่มี</TableCell>
                                             </TableRow>
@@ -247,7 +247,7 @@ export default function Tab1(props) {
                                     <Table sx={{ minWidth: 200 }} size="small">
                                         <TableHead>
                                             <TableRow>
-                                                <TableCell align="center">หน้าสำรวจเลขที่</TableCell>
+                                                <TableCell align="center">เลขที่ต้นร่าง</TableCell>
                                                 <TableCell align="center">มี</TableCell>
                                                 <TableCell align="center">ไม่มี</TableCell>
                                             </TableRow>
