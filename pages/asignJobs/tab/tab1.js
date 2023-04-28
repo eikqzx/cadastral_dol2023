@@ -182,6 +182,7 @@ export default function Tab1(props) {
         let itemX = res[x];
         if (item.SURVEYDOCTYPE_SEQ == itemX.SURVEYDOCTYPE_SEQ) {
           item["COUNT_DOC"] = itemX.IMAGE_PNO;
+          item["IMAGE_PNO"] = itemX.IMAGE_PNO;
         }
       }
     }
@@ -191,6 +192,7 @@ export default function Tab1(props) {
         let itemX = res[x];
         if (item.SURVEYDOCTYPE_SEQ == itemX.SURVEYDOCTYPE_SEQ) {
           item["COUNT_DOC"] = itemX.IMAGE_PNO;
+          item["IMAGE_PNO"] = itemX.IMAGE_PNO;
         }
       }
     }
@@ -200,6 +202,7 @@ export default function Tab1(props) {
         let itemX = res[x];
         if (item.SURVEYDOCTYPE_SEQ == itemX.SURVEYDOCTYPE_SEQ) {
           item["COUNT_DOC"] = itemX.IMAGE_PNO;
+          item["IMAGE_PNO"] = itemX.IMAGE_PNO;
         }
       }
     }
@@ -209,6 +212,7 @@ export default function Tab1(props) {
         let itemX = res[x];
         if (item.SURVEYDOCTYPE_SEQ == itemX.SURVEYDOCTYPE_SEQ) {
           item["COUNT_DOC"] = itemX.IMAGE_PNO;
+          item["IMAGE_PNO"] = itemX.IMAGE_PNO;
         }
       }
     }
@@ -315,7 +319,7 @@ export default function Tab1(props) {
           currentIndex++;
         }
       }
-      console.log(currentIndex,"onSubmit");
+      console.log(currentIndex, "onSubmit");
     }
   }
 
@@ -560,6 +564,13 @@ export default function Tab1(props) {
               <AccordionDetails>
                 {datagroupA.length != 0 && <TableContainer>
                   <Table size="small" >
+                    <TableHead>
+                      <TableCell style={{ width: "5%" }} align="left">ลำดับ</TableCell>
+                      <TableCell style={{ width: "5%" }} align="left">ตัวย่อ</TableCell>
+                      <TableCell style={{ width: "25%" }} align="left">ชื่อเอกสาร</TableCell>
+                      <TableCell style={{ width: "5%" }} align="left">จำนวนที่รับงานแล้ว</TableCell>
+                      <TableCell style={{ width: "25%" }} align="left"></TableCell>
+                    </TableHead>
                     <TableBody container>
                       {
                         datagroupA.map((item, index) =>
@@ -572,8 +583,10 @@ export default function Tab1(props) {
                             }}
                           >
                             <TableCell style={{ width: "5%" }} align="left">{item.SURVEYDOCTYPE_SYS_}</TableCell>
-                            <TableCell style={{ width: "50%" }} align="left">{item.SURVEYDOCTYPE_NAME_TH}</TableCell>
-                            <TableCell style={{ width: "50%" }}>
+                            <TableCell style={{ width: "5%" }} align="left">{item.SURVEYDOCTYPE_GROUP}</TableCell>
+                            <TableCell style={{ width: "25%" }} align="left">{item.SURVEYDOCTYPE_NAME_TH}</TableCell>
+                            <TableCell style={{ width: "5%" }} align="left">{item?.IMAGE_PNO ?? 0}</TableCell>
+                            <TableCell style={{ width: "25%" }}>
                               <Stack direction={'row'}>
                                 <Grid item xs={12} md={2}>
                                   <Tooltip title={"ลดเลข"}>
@@ -645,6 +658,13 @@ export default function Tab1(props) {
               <AccordionDetails>
                 {datagroupB.length != 0 && <TableContainer>
                   <Table size="small" >
+                    <TableHead>
+                      <TableCell style={{ width: "5%" }} align="left">ลำดับ</TableCell>
+                      <TableCell style={{ width: "5%" }} align="left">ตัวย่อ</TableCell>
+                      <TableCell style={{ width: "25%" }} align="left">ชื่อเอกสาร</TableCell>
+                      <TableCell style={{ width: "5%" }} align="left">จำนวนที่รับงานแล้ว</TableCell>
+                      <TableCell style={{ width: "25%" }} align="left"></TableCell>
+                    </TableHead>
                     <TableBody>
                       {
                         datagroupB.map((item, index) =>
@@ -657,7 +677,9 @@ export default function Tab1(props) {
                             }}
                           >
                             <TableCell style={{ width: "5%" }} align="left">{item.SURVEYDOCTYPE_SYS_}</TableCell>
-                            <TableCell style={{ width: "50%" }} align="left">{item.SURVEYDOCTYPE_NAME_TH}</TableCell>
+                            <TableCell style={{ width: "5%" }} align="left">{item.SURVEYDOCTYPE_GROUP}</TableCell>
+                            <TableCell style={{ width: "25%" }} align="left">{item.SURVEYDOCTYPE_NAME_TH}</TableCell>
+                            <TableCell style={{ width: "5%" }} align="left">{item?.IMAGE_PNO ?? 0}</TableCell>
                             <TableCell style={{ width: "25%" }}>
                               <Stack direction={'row'}>
                                 <Grid item xs={12} md={2}>
@@ -730,6 +752,13 @@ export default function Tab1(props) {
               <AccordionDetails>
                 {datagroupC.length != 0 && <TableContainer>
                   <Table size="small" >
+                    <TableHead>
+                      <TableCell style={{ width: "5%" }} align="left">ลำดับ</TableCell>
+                      <TableCell style={{ width: "5%" }} align="left">ตัวย่อ</TableCell>
+                      <TableCell style={{ width: "25%" }} align="left">ชื่อเอกสาร</TableCell>
+                      <TableCell style={{ width: "5%" }} align="left">จำนวนที่รับงานแล้ว</TableCell>
+                      <TableCell style={{ width: "25%" }} align="left"></TableCell>
+                    </TableHead>
                     <TableBody container>
                       {
                         datagroupC.map((item, index) =>
@@ -742,8 +771,10 @@ export default function Tab1(props) {
                             }}
                           >
                             <TableCell style={{ width: "5%" }} align="left">{item.SURVEYDOCTYPE_SYS_}</TableCell>
-                            <TableCell style={{ width: "50%" }} align="left">{item.SURVEYDOCTYPE_NAME_TH}</TableCell>
-                            <TableCell style={{ width: "50%" }}>
+                            <TableCell style={{ width: "5%" }} align="left">{item.SURVEYDOCTYPE_GROUP}</TableCell>
+                            <TableCell style={{ width: "25%" }} align="left">{item.SURVEYDOCTYPE_NAME_TH}</TableCell>
+                            <TableCell style={{ width: "5%" }} align="left">{item?.IMAGE_PNO ?? 0}</TableCell>
+                            <TableCell style={{ width: "25%" }}>
                               <Stack direction={'row'}>
                                 <Grid item xs={12} md={2}>
                                   <Tooltip title={"ลดเลข"}>
@@ -815,6 +846,13 @@ export default function Tab1(props) {
               <AccordionDetails>
                 {datagroupD.length != 0 && <TableContainer>
                   <Table size="small" >
+                    <TableHead>
+                      <TableCell style={{ width: "5%" }} align="left">ลำดับ</TableCell>
+                      <TableCell style={{ width: "5%" }} align="left">ตัวย่อ</TableCell>
+                      <TableCell style={{ width: "25%" }} align="left">ชื่อเอกสาร</TableCell>
+                      <TableCell style={{ width: "5%" }} align="left">จำนวนที่รับงานแล้ว</TableCell>
+                      <TableCell style={{ width: "25%" }} align="left"></TableCell>
+                    </TableHead>
                     <TableBody container>
                       {
                         datagroupD.map((item, index) =>
@@ -827,8 +865,10 @@ export default function Tab1(props) {
                             }}
                           >
                             <TableCell style={{ width: "5%" }} align="left">{item.SURVEYDOCTYPE_SYS_}</TableCell>
-                            <TableCell style={{ width: "50%" }} align="left">{item.SURVEYDOCTYPE_NAME_TH}</TableCell>
-                            <TableCell style={{ width: "50%" }}>
+                            <TableCell style={{ width: "5%" }} align="left">{item.SURVEYDOCTYPE_GROUP}</TableCell>
+                            <TableCell style={{ width: "25%" }} align="left">{item.SURVEYDOCTYPE_NAME_TH}</TableCell>
+                            <TableCell style={{ width: "5%" }} align="left">{item?.IMAGE_PNO ?? 0}</TableCell>
+                            <TableCell style={{ width: "25%" }}>
                               <Stack direction={'row'}>
                                 <Grid item xs={12} md={2}>
                                   <Tooltip title={"ลดเลข"}>

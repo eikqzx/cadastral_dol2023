@@ -42,7 +42,6 @@ export default function Search(props) {
     const [sheetcode, setSheetcode] = React.useState("");
     const [boxNo, setBoxNo] = React.useState("");
     //################printPlateType=10-20#######################//
-    const [openAlert, setOpenAlert] = React.useState(false);
     const [isErrorField, setIsErrorField] = React.useState([]);
     const [processSeq, setProcessSeq] = React.useState(null);
     const dataUrl = useRouter().query
@@ -70,35 +69,11 @@ export default function Search(props) {
         handleReset()
     }, [props?.printplateTypeSeq])
 
-    const _checkIsValid = () => {
-        let errorArray = []
-        // console.log(errorArray,props?.printplateTypeSeq);
-        if (cadastralNo1 == "") {
-            errorArray.push("cadastralNo")
-        }
-        if (sheetcode == "") {
-            errorArray.push("sheetcode")
-        }
-        if (boxNo == "") {
-            errorArray.push("boxNo")
-        }
-        setIsErrorField(errorArray);
-        if (errorArray.length > 0) {
-            return false;
-        } else {
-            return true;
-        }
-    };
+
 
     const handleSearch = () => {
-        let isValid = _checkIsValid();
         let newStart = cadastralNo1 ? Number(cadastralNo1) : Number(cadastralNo2)
         let newEnd = cadastralNo2 ? Number(cadastralNo2) : Number(cadastralNo1)
-        if (!isValid) {
-            setOpenAlert(true);
-            // SnackbarSet("ไม่สามารถค้นหาได้ กรุณากรอกข้อมูลให้ครบถ้วน", "error")
-            return;
-        }
         let obj = {
             "LANDOFFICE_SEQ": props?.landOfficeSeq,
             "SHEETCODE": Number(sheetcode),
@@ -122,15 +97,6 @@ export default function Search(props) {
 
     return (
         <Grid container p={1}>
-            <Snackbar open={openAlert} autoHideDuration={3000} onClose={handleClose}
-                anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'center',
-                }}>
-                <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
-                    ไม่สามารถค้นหาได้ กรุณากรอกข้อมูลให้ครบถ้วน
-                </Alert>
-            </Snackbar>
             <Grid item xs={12}>
                 <Paper elevation={0}>
                     <Grid item xs={12} px={1} py={1}>
