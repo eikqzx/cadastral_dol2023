@@ -22,6 +22,23 @@ export async function uploadFileMulti(file) {
     }
 }
 
+export async function uploadFileSingle(file) {
+    // let url = "api/upload/uploadFile"
+    let url = `${process.env.hostUploadAPI}/api/single`
+    AddLoading()
+    try {
+        let res = await axios.post(url, file)
+        let data = res.data
+        //console.log(data)
+        RemoveLoading()
+        return data
+    } catch (err) {
+        console.log(err)
+        RemoveLoading()
+        return false
+    }
+}
+
 export async function getFile(path) {
     let url = "api/upload/getFile"
     let dataPut = {

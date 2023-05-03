@@ -15,6 +15,11 @@ import SnackBarDiaLog from "../components/snackbarV2";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useSession } from "next-auth/react";
 import TabScanner from "./tab/tab1";
+import { cadastralImage10XByConditionParcelNoTo } from "@/service/sva";
+import { getLandOfficeByPK } from "@/service/mas/landOffice";
+import { isNotEmpty } from "@/lib/datacontrol";
+import { useRouter } from "next/router";
+import { decode } from "next-base64";
 
 export default function IndexScanner() {
     const [searchData, setSearchData] = React.useState([]);
@@ -24,23 +29,53 @@ export default function IndexScanner() {
     const [message, setMessage] = React.useState('');
     const [type, setType] = React.useState('');
     const [printplateTypeData, setPrintplateTypeData] = React.useState([]);
-    const [processSeq, setProcessSeq] = React.useState(102)
+    const [processSeq, setProcessSeq] = React.useState(103)
     const [userData, setUserData] = React.useState(null);
     const [landOffice, setLandOffice] = React.useState(null);
     const [pdfData, setPdfData] = React.useState();
     const [searchParameter, setSearchParameter] = React.useState(null);
     const { data } = useSession();
+    const dataUrl = useRouter().query
+
+    React.useEffect(() => {
+        if (isNotEmpty(dataUrl)) {
+            let seq = decode(dataUrl?.PROCESS_SEQ);
+            console.log(seq, "seq");
+            setProcessSeq(seq);
+        }
+    }, [])
+
+    React.useEffect(() => {
+        setUserData(data?.user);
+    }, [data])
+
+    React.useEffect(() => {
+        _reqLandOffice(userData?.LANDOFFICE_SEQ);
+    }, [userData])
+
+    const _reqLandOffice = async (seq) => {
+        try {
+            let res = await getLandOfficeByPK(seq);
+            console.log(res.rows, "getLandOfficeByPK");
+            await setLandOffice(res.rows[0]);
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     const onSearchNew = async (obj) => {
         console.log(obj, "obj_onSearch");
+        obj.PROCESS_SEQ_ = processSeq;
         setPdfData(obj)
         setSearchParameter(obj)
         let data = null;
-        // data = await cadastralImage102ByConditionParcelNoTo(obj);
-        // data = data.rows
-        // console.log(data,"onSearchNew");
+        data = await cadastralImage10XByConditionParcelNoTo(obj);
+        data = data.rows
+        console.log(data,"onSearchNew");
         setSearchData(data)
     }
+
+    console.log(landOffice,"landOffice");
 
 
     return (
@@ -64,12 +99,12 @@ export default function IndexScanner() {
                     </Accordion>
                 </Grid>
             }
-            <Grid item xs={2} md={2}>
+            <Grid item xs={2} md={1}>
                 <SideTreeView data={searchData} setTapData={setTapData} process={processSeq} />
             </Grid>
-            <Grid item xs={10} md={10}>
+            <Grid item xs={10} md={11}>
                 <Paper sx={{ height: "100vh", flexGrow: 1, overflowY: 'auto' }}>
-                    <TabScanner />
+                    <TabScanner tabData={tabData} searchData={searchData} onSearch={onSearchNew} pdfData={pdfData} searchParameter={searchParameter}/>
                 </Paper>
             </Grid>
         </Grid>

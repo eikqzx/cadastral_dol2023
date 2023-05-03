@@ -231,7 +231,7 @@ export default function SideTreeView(props) {
                             <Grid item xs={12}>
                                 <Stack direction={'row'}>
                                     <Grid item xs={10}>
-                                        <Typography fontSize={16}>{labelByprintplate()}</Typography>
+                                        <Typography fontSize={16}>{"เลขที่ต้นร่าง (" + onSearchData.length + ")"}</Typography>
                                     </Grid>
                                     <Grid item xs={2}>
                                         <Tooltip title="เปิด / ปิด แสดงทั้งหมด">
@@ -257,65 +257,15 @@ export default function SideTreeView(props) {
                                     onNodeToggle={(event, nodeIds) => setExpanded(nodeIds)}
                                 >
                                     {
-                                        treeViewData.map((node, index) => (
-                                            node.DATA != 0 && <TreeItem nodeId={String(node.STATUS_SEQ)} label={node.STATUS_NAME_TH + " (" + node.DATA.length + ")"} key={index}>
+                                        treeViewData.map((node, index) => (node.DATA != 0 &&
+                                            <TreeItem nodeId={String(node.STATUS_SEQ)} label={node.STATUS_NAME_TH + " (" + node.DATA.length + ")"} key={index}>
                                                 {node.DATA.map((childNode, indexy) => {
-                                                    if (childNode.PRINTPLATE_TYPE_SEQ == 1) {
-                                                        return <TreeItem
-                                                            nodeId={String(childNode.PARCEL_SEQ)}
-                                                            label={childNode.PARCEL_SURVEY_NO}
-                                                            key={indexy}
-                                                            onClick={() => { onClickChange(childNode) }}
-                                                        />
-                                                    }
-                                                    if (childNode.PRINTPLATE_TYPE_SEQ == 2) {
-                                                        return <TreeItem
-                                                            nodeId={String(childNode.PARCEL_LAND_SEQ)}
-                                                            label={childNode.PARCEL_LAND_SURVEY_NO}
-                                                            key={indexy}
-                                                            onClick={() => { onClickChange(childNode) }}
-                                                        />
-                                                    }
-                                                    if (childNode.PRINTPLATE_TYPE_SEQ == 3) {
-                                                        return <TreeItem
-                                                            nodeId={String(childNode.PARCEL_LAND_SEQ)}
-                                                            label={childNode.PARCEL_LAND_SURVEY_NO}
-                                                            key={indexy}
-                                                            onClick={() => { onClickChange(childNode) }}
-                                                        />
-                                                    }
-                                                    if (childNode.PRINTPLATE_TYPE_SEQ == 4) {
-                                                        return <TreeItem
-                                                            nodeId={String(childNode.PARCEL_LAND_SEQ)}
-                                                            label={childNode.PARCEL_LAND_NO}
-                                                            key={indexy}
-                                                            onClick={() => { onClickChange(childNode) }}
-                                                        />
-                                                    }
-                                                    if (childNode.PRINTPLATE_TYPE_SEQ == 5) {
-                                                        return <TreeItem
-                                                            nodeId={String(childNode.PARCEL_LAND_SEQ)}
-                                                            label={childNode.PARCEL_LAND_NO}
-                                                            key={indexy}
-                                                            onClick={() => { onClickChange(childNode) }}
-                                                        />
-                                                    }
-                                                    if (childNode.PRINTPLATE_TYPE_SEQ == 10) {
-                                                        return <TreeItem
-                                                            nodeId={String(childNode.CONDOROOM_SEQ)}
-                                                            label={childNode.CONDOROOM_RNO}
-                                                            key={indexy}
-                                                            onClick={() => { onClickChange(childNode) }}
-                                                        />
-                                                    }
-                                                    if (childNode.PRINTPLATE_TYPE_SEQ == 20) {
-                                                        return <TreeItem
-                                                            nodeId={String(childNode.PARCEL_LAND_SEQ)}
-                                                            label={childNode.PARCEL_LAND_SURVEY_NO}
-                                                            key={indexy}
-                                                            onClick={() => { onClickChange(childNode) }}
-                                                        />
-                                                    }
+                                                    return <TreeItem
+                                                        nodeId={String(childNode.CADASTRAL_SEQ)}
+                                                        label={childNode.CADASTRAL_NO}
+                                                        key={indexy}
+                                                        onClick={() => { onClickChange(childNode) }}
+                                                    />
                                                 }
                                                 )}
                                             </TreeItem>

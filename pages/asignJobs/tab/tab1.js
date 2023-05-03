@@ -571,7 +571,7 @@ export default function Tab1(props) {
                       <TableCell style={{ width: "5%" }} align="left">จำนวนที่รับงานแล้ว</TableCell>
                       <TableCell style={{ width: "25%" }} align="left"></TableCell>
                     </TableHead>
-                    <TableBody container>
+                    <TableBody>
                       {
                         datagroupA.map((item, index) =>
                           <TableRow key={item.SURVEYDOCTYPE_SEQ}
@@ -759,7 +759,7 @@ export default function Tab1(props) {
                       <TableCell style={{ width: "5%" }} align="left">จำนวนที่รับงานแล้ว</TableCell>
                       <TableCell style={{ width: "25%" }} align="left"></TableCell>
                     </TableHead>
-                    <TableBody container>
+                    <TableBody>
                       {
                         datagroupC.map((item, index) =>
                           <TableRow key={item.SURVEYDOCTYPE_SEQ}
@@ -853,7 +853,7 @@ export default function Tab1(props) {
                       <TableCell style={{ width: "5%" }} align="left">จำนวนที่รับงานแล้ว</TableCell>
                       <TableCell style={{ width: "25%" }} align="left"></TableCell>
                     </TableHead>
-                    <TableBody container>
+                    <TableBody>
                       {
                         datagroupD.map((item, index) =>
                           <TableRow key={item.SURVEYDOCTYPE_SEQ}

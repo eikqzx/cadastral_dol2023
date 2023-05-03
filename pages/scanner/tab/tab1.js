@@ -18,6 +18,15 @@ import {
     CardMedia,
     Backdrop,
     Tooltip,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Chip,
+    Snackbar,
+    Alert
 } from "@mui/material";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
@@ -30,12 +39,17 @@ import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import "yet-another-react-lightbox/plugins/captions.css";
 import "yet-another-react-lightbox/plugins/thumbnails.css";
 import "yet-another-react-lightbox/styles.css";
-import { getCadastralImage } from "@/service/sva";
+import { cadastralImageByCadastralSeq, getCadastralImage } from "@/service/sva";
 import { filterRecordStatus } from "@/lib/datacontrol";
 import { surveyDocTypeBySurveyDocTypeGroup } from "@/service/mas/surveyDocTypeGroup";
 import CheckIcon from "@mui/icons-material/Check";
+import { useRouter } from "next/router";
+import { getFile, uploadFileMulti, uploadFileSingle } from "@/service/upload";
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CloseIcon from '@mui/icons-material/Close';
 
 export default function Tab1(props) {
+    console.log(props, "propsTab1");
     const [selectedFiles, setSelectedFiles] = React.useState([]);
     const [office, setOffice] = React.useState("-");
     const [sheetcode, setSheetcode] = React.useState("-");
@@ -45,19 +59,85 @@ export default function Tab1(props) {
     const [advancedExampleOpen, setAdvancedExampleOpen] = React.useState(false);
     const [imageObj, setImageObj] = React.useState([]);
     const [cadDoc, setCadDoc] = React.useState([]);
+    const [cadastralImageData, setCadastralImageData] = React.useState([]);
     const { data } = useSession();
     const [selectedImage, setSelectedImage] = React.useState([]);
+    const [open, setOpen] = React.useState(false);
+    const [message, setMessage] = React.useState("");
+    const [type, setType] = React.useState("success");
 
-    const handleImageClick = (image) => {
-        if (selectedImage.includes(image)) {
-            setSelectedImage(
-                selectedImage.filter((selectedImage) => selectedImage !== image)
-            );
-        } else {
-            setSelectedImage([...selectedImage, image]);
+    const handleClose = () => {
+        setOpen(false)
+    }
+
+    const _req_getCadastralImage = async (seq) => {
+        let res = await cadastralImageByCadastralSeq(seq);
+        res = filterRecordStatus(res.rows, "N");
+        // res = res.filter(item => item.CADASTRAL_SEQ == props?.tabData?.CADASTRAL_SEQ);
+        console.log(res, "res createSurveyData");
+        for (let i in res) {
+            let item = res[i];
+            let resGetFile = await getFile(item.IMAGE_PATH);
+            console.log(resGetFile, "resGetFile");
+            item['FILE_STATUS'] = resGetFile.status;
+            if (resGetFile.status) {
+                item['FILE_DATA'] = `data:image/*;base64,${resGetFile.fileAsBase64}`;
+            } else {
+                item['FILE_DATA'] = "/img_not_found.png"
+            }
         }
+        await setCadastralImageData([]);
+        await setCadastralImageData(res);
+    }
+
+    const handleImageClick = async (image, obj) => {
+        console.log(image, "handleImageClick");
+        console.log(obj, "handleImageClick");
+        const filePath = obj.IMAGE_PATH;
+        const fileName = filePath.substring(filePath.lastIndexOf('/') + 1);
+        const directoryPath = filePath.substring(0, filePath.lastIndexOf('/') + 1);
+        console.log(fileName, "handleImageClick");
+        console.log(directoryPath, "handleImageClick");
+        let objData = new Object();
+        objData.PATH = directoryPath;
+        objData.FILE_NAME = fileName;
+        objData.FILE = image;
+        console.log(objData, "handleImageClick");
+        const formData = new FormData();
+        for (const key in objData) {
+            console.log(key, "handleImageClick");
+            if (objData.hasOwnProperty(key)) {
+                formData.append("scanFile", objData[key]);
+            }
+        }
+        console.log(Object.fromEntries(formData), "handleImageClick");
+        // return
+        try {
+            let resUpload = await uploadFileMulti(formData);
+            console.log(resUpload, "handleImageClick");
+            if (resUpload.status) {
+                _req_getCadastralImage(props?.tabData?.CADASTRAL_SEQ);
+                await setMessage("บันทึกสำเร็จ");
+                await setOpen(true);
+                await setType("success");
+            } else {
+                await setMessage("เกิดข้อผิดพลาดขณะอัปโหลด กรุณาลองใหม่อีกครั้งหรือติดต่อเจ้าหน้าที่");
+                await setOpen(true);
+                await setType("error");
+            }
+        } catch (error) {
+            console.log(error, "handleImageClick");
+        }
+        // if (selectedImage.includes(image)) {
+        //     setSelectedImage(
+        //         selectedImage.filter((selectedImage) => selectedImage !== image)
+        //     );
+        // } else {
+        //     setSelectedImage([...selectedImage, image]);
+        // }
     };
 
+    console.log(cadastralImageData, "cadastralImageData");
     console.log(selectedImage, "selectedImage");
 
     const createDoc = async () => {
@@ -90,9 +170,9 @@ export default function Tab1(props) {
     };
     console.log(cadDoc, "cadDoc");
 
-    React.useEffect(() => {
-        createDoc();
-    }, []);
+    // React.useEffect(() => {
+    //     createDoc();
+    // }, []);
 
     React.useEffect(() => {
         if (Array.isArray(props?.searchData)) {
@@ -115,6 +195,7 @@ export default function Tab1(props) {
             props?.tabData != undefined
         ) {
             getMasterData(props?.tabData);
+            _req_getCadastralImage(props?.tabData?.CADASTRAL_SEQ);
         }
     }, [props?.tabData]);
 
@@ -143,10 +224,6 @@ export default function Tab1(props) {
         setAdvancedExampleOpen(true);
     };
 
-    const handleLightboxOpen = (image) => {
-        console.log(image, "handleLightboxOpen");
-    };
-
     const getMasterData = async (data) => {
         console.log(data, "getMasterData");
         if (data != undefined) {
@@ -165,6 +242,14 @@ export default function Tab1(props) {
 
     return (
         <Box sx={{ flexGrow: 1 }}>
+            {open && <Snackbar open={open} autoHideDuration={3000} onClose={handleClose} anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'center',
+            }}>
+                <Alert onClose={handleClose} severity={type} sx={{ width: '100%' }}>
+                    {message}
+                </Alert>
+            </Snackbar>}
             {imageObj.length != 0 && (
                 <Lightbox
                     open={advancedExampleOpen}
@@ -280,140 +365,191 @@ export default function Tab1(props) {
                     <Divider />
                 </Grid>
             </Grid>
-            <Grid p={1} container spacing={1}>
-                <Grid item xs={6}>
-                    <Paper
-                        style={{ textAlign: "center" }}
-                        sx={{
-                            height: "85vh",
-                            border: 1,
-                            borderColor: "grey.500",
-                            flexGrow: 1,
-                            overflowY: "auto",
-                        }}
-                    >
-                        <Grid container justifyContent={"space-between"} p={1} spacing={1}>
-                            <Grid item xs={6}>
-                                <Grid container direction={"column"} spacing={2}>
-                                    <Grid item>
-                                        <Button variant="contained" component="label">
-                                            เลือกไฟล์
-                                            <input
-                                                hidden
-                                                accept="image/jpeg"
-                                                multiple
-                                                type="file"
-                                                onChange={handleFileChange}
-                                            />
-                                        </Button>
-                                    </Grid>
-                                    {selectedFiles?.length != 0 &&
-                                        selectedFiles?.map((image) => (
-                                            <Grid key={image.name} sx={{ mx: "auto" }} p={1}>
-                                                <Card
-                                                    sx={{
-                                                        position: "relative",
-                                                        "&:hover": {
-                                                            "&::before": {
-                                                                content: '""',
-                                                                position: "absolute",
-                                                                top: 0,
-                                                                left: 0,
-                                                                width: "100%",
-                                                                height: "100%",
-                                                                backgroundColor: "rgba(0, 0, 0, 0.5)",
-                                                            },
-                                                        },
-                                                    }}
-                                                    className={`image ${selectedImage === image ? "selected" : ""
-                                                        }`}
-                                                    onClick={() => handleImageClick(image)}
-                                                >
-                                                    <CardActionArea>
-                                                        <CardMedia
-                                                            width={200}
-                                                            height={200}
-                                                            component="img"
-                                                            image={URL.createObjectURL(image)}
-                                                            alt={image.name}
-                                                        />
-                                                    </CardActionArea>
-                                                    {selectedImage.includes(image) && (
-                                                        <React.Fragment>
-                                                            <Backdrop
-                                                                sx={{
-                                                                    position: "absolute",
-                                                                    top: 0,
-                                                                    left: 0,
-                                                                    zIndex: 1,
-                                                                    backgroundColor: "rgba(255, 255, 255, 0.5)",
-                                                                    width: "100%",
-                                                                    height: "100%",
-                                                                }}
-                                                                open={selectedImage.includes(image)}
-                                                            />
-                                                            <CheckIcon
-                                                                style={{ fontSize: 100 }}
-                                                                sx={{
-                                                                    position: "absolute",
-                                                                    top: "50%",
-                                                                    left: "50%",
-                                                                    transform: "translate(-50%, -50%)",
-                                                                    color: "#5BB318",
-                                                                    fontSize: "2rem",
-                                                                    zIndex: 2,
-                                                                }}
-                                                            />
-                                                        </React.Fragment>
+            {
+                (props?.tabData != null || props?.tabData != undefined) &&
+                <Grid p={1} container spacing={1}>
+                    <Grid item xs={9}>
+                        <Paper
+                            style={{ textAlign: "center" }}
+                            sx={{
+                                height: "85vh",
+                                border: 1,
+                                borderColor: "grey.500",
+                                flexGrow: 1,
+                                overflowY: "auto",
+                            }}
+                        >
+                            <Grid container justifyContent={"space-between"} p={1} spacing={1}>
+                                <Grid item xs={12}>
+                                    <Grid container direction={"column"} spacing={2}>
+                                        <Grid item>
+                                            <Button variant="contained" component="label">
+                                                เลือกไฟล์
+                                                <input
+                                                    hidden
+                                                    accept="image/jpeg"
+                                                    multiple
+                                                    type="file"
+                                                    onChange={handleFileChange}
+                                                />
+                                            </Button>
+                                        </Grid>
+                                        {selectedFiles?.length != 0 &&
+                                            selectedFiles?.map((image) => (
+                                                <React.Fragment key={image.name}>
+                                                    <Grid p={1}>
+                                                        <Card
+                                                            sx={{
+                                                                position: "relative",
+                                                                "&:hover": {
+                                                                    "&::before": {
+                                                                        content: '""',
+                                                                        position: "absolute",
+                                                                        top: 0,
+                                                                        left: 0,
+                                                                        width: "100%",
+                                                                        height: "100%",
+                                                                        backgroundColor: "rgba(0, 0, 0, 0.5)",
+                                                                    },
+                                                                },
+                                                            }}
+                                                            className={`image ${selectedImage === image ? "selected" : ""
+                                                                }`}
+                                                        >
+                                                            <CardActionArea>
+                                                                <CardMedia
+                                                                    sx={{
+                                                                        objectFit: 'cover',
+                                                                        objectPosition: 'top',
+                                                                        height: 200,
+                                                                        width: '100%',
+                                                                    }}
+                                                                    component="img"
+                                                                    image={URL.createObjectURL(image)}
+                                                                    alt={image.name}
+                                                                />
+                                                            </CardActionArea>
+                                                            {selectedImage.includes(image) && (
+                                                                <React.Fragment>
+                                                                    <Backdrop
+                                                                        sx={{
+                                                                            position: "absolute",
+                                                                            top: 0,
+                                                                            left: 0,
+                                                                            zIndex: 1,
+                                                                            backgroundColor: "rgba(255, 255, 255, 0.5)",
+                                                                            width: "100%",
+                                                                            height: "100%",
+                                                                        }}
+                                                                        open={selectedImage.includes(image)}
+                                                                    />
+                                                                    <CheckIcon
+                                                                        style={{ fontSize: 100 }}
+                                                                        sx={{
+                                                                            position: "absolute",
+                                                                            top: "50%",
+                                                                            left: "50%",
+                                                                            transform: "translate(-50%, -50%)",
+                                                                            color: "#5BB318",
+                                                                            fontSize: "2rem",
+                                                                            zIndex: 2,
+                                                                        }}
+                                                                    />
+                                                                </React.Fragment>
 
-                                                    )}
-                                                </Card>
-                                                <Button
-                                                        className="lightbox-button"
-                                                        variant="contained"
-                                                    onClick={() => handleLightboxOpen(image)}
-                                                    >
-                                                        ขยายรูป
-                                                    </Button>
-                                            </Grid>
-                                            // <Grid item key={file.name}>
-                                            //     <IconButton onClick={() => { openImage(file) }}>
-                                            //         <Image
-                                            //             src={URL.createObjectURL(file)}
-                                            //             alt={file.name}
-                                            //             width={200}
-                                            //             height={200}
-                                            //         />
-                                            //     </IconButton>
-                                            // </Grid>
-                                        ))}
+                                                            )}
+                                                        </Card>
+                                                        <Button
+                                                            className="lightbox-button"
+                                                            onClick={() => openImage(image)}
+                                                        >
+                                                            ขยายรูป
+                                                        </Button>
+                                                    </Grid>
+                                                    <Grid item xs={12}>
+                                                        {(cadastralImageData?.length != 0 || cadastralImageData != null) &&
+                                                            <Paper>
+                                                                <MenuList sx={{
+                                                                    maxHeight: 150,
+                                                                    overflowY: 'auto',
+                                                                }}>
+                                                                    {cadastralImageData.map((item, index) => (
+                                                                        <MenuItem
+                                                                            onClick={() => handleImageClick(image, item)}
+                                                                            style={{ whiteSpace: "normal" }}
+                                                                            disabled={item.FILE_STATUS}
+                                                                            key={item.CADASTRAL_IMAGE_SEQ}
+                                                                        >
+                                                                            {`${item.IMAGE_PNAME} (${item.IMAGE_PNO})`}
+                                                                        </MenuItem>
+                                                                    ))}
+                                                                </MenuList>
+                                                            </Paper>
+                                                        }
+                                                    </Grid>
+                                                </React.Fragment>
+                                                // <Grid item key={file.name}>
+                                                //     <IconButton onClick={() => { openImage(file) }}>
+                                                //         <Image
+                                                //             src={URL.createObjectURL(file)}
+                                                //             alt={file.name}
+                                                //             width={200}
+                                                //             height={200}
+                                                //         />
+                                                //     </IconButton>
+                                                // </Grid>
+                                            ))}
+                                    </Grid>
                                 </Grid>
                             </Grid>
-                            <Grid item xs={6}>
-                                <Paper>
-                                    <MenuList>
-                                        {cadDoc?.length != 0 &&
-                                            cadDoc.map((item) => (
-                                                <MenuItem
-                                                    style={{ whiteSpace: "normal" }}
-                                                    key={item.SURVEYDOCTYPE_SEQ}
-                                                >
-                                                    {item.SURVEYDOCTYPE_NAME_TH}
-                                                </MenuItem>
-                                            ))}
-                                        {/* <MenuItem>Profile</MenuItem>
-                                        <MenuItem>My account</MenuItem>
-                                        <MenuItem>Logout</MenuItem> */}
-                                    </MenuList>
-                                </Paper>
+                        </Paper>
+                    </Grid>
+                    <Grid item xs={3}>
+                        <Paper
+                            sx={{
+                                height: "85vh",
+                                border: 1,
+                                borderColor: "grey.500",
+                                flexGrow: 1,
+                                overflowY: "auto",
+                            }}
+                        >
+                            <Grid container justifyContent={"space-between"} p={1} spacing={1}>
+                                <Grid item xs={12}>
+                                    <TableContainer>
+                                        <Table size="small" >
+                                            <TableHead>
+                                                <TableRow>
+                                                    <TableCell style={{ width: "25%" }} align="left">ตัวย่อ</TableCell>
+                                                    <TableCell style={{ width: "25%" }} align="left">ชื่อเอกสาร</TableCell>
+                                                    <TableCell style={{ width: "25%" }} align="left">สถานะ</TableCell>
+                                                </TableRow>
+                                            </TableHead>
+                                            <TableBody>
+                                                {
+                                                    cadastralImageData?.map((item, index) => (
+                                                        <TableRow key={index} sx={{
+                                                            '&:last-child td, &:last-child th': { border: 0 },
+                                                            '&:hover': {
+                                                                backgroundColor: '#ECF2FF !important',
+                                                            },
+                                                        }}>
+                                                            <TableCell style={{ width: "25%" }} align="left">{item.CADASTRAL_IMAGE_ORDER}</TableCell>
+                                                            <TableCell style={{ width: "25%" }} align="left">{`${item.IMAGE_PNAME} (${item.IMAGE_PNO})`}</TableCell>
+                                                            <TableCell style={{ width: "25%" }} align="left">{
+                                                                item.FILE_STATUS ? <Chip icon={<CheckCircleIcon />} label="อัปโหลดแล้ว" color="success" /> : <Chip icon={<CloseIcon />} label="ไม่ได้อัปโหลด" color="error" />
+                                                            }</TableCell>
+                                                        </TableRow>
+                                                    ))
+                                                }
+                                            </TableBody>
+                                        </Table>
+                                    </TableContainer>
+                                </Grid>
                             </Grid>
-                        </Grid>
-                    </Paper>
-                </Grid>
-                <Grid item xs={6}>
-                    <Paper>www</Paper>
-                </Grid>
-                {/*
+                        </Paper>
+                    </Grid>
+                    {/*
             <Typography>{selectedFiles.length} files selected</Typography>
             <Grid style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                 {selectedFiles.map((file) => (
@@ -427,7 +563,8 @@ export default function Tab1(props) {
                     </IconButton>
                 ))}
             </Grid> */}
-            </Grid>
+                </Grid>
+            }
         </Box>
     );
 }

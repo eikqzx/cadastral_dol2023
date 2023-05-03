@@ -109,3 +109,22 @@ export async function getCadastralImage() {
         return false
     }
 }
+
+export async function cadastralImageByCadastralSeq(seq) {
+    let url = `/api/sva/cadastralImageByCadastralSeq`
+    let dataSend = {
+        seq: seq
+    }
+    AddLoading();
+    try {
+        let res = await axios.post(url, dataSend)
+        let data = res.data
+        //console.log(data)
+        RemoveLoading();
+        return data
+    } catch (err) {
+        console.log(err)
+        RemoveLoading();
+        return false
+    }
+}
