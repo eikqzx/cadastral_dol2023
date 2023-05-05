@@ -185,16 +185,16 @@ export default function Tab1(props) {
                         </Grid>
                     </Grid>
                 </Grid>
-                <Grid item xs={3} md={3}>
+                {/* <Grid item xs={3} md={3}>
                     <Grid container>
-                        {/* <Grid item >
+                        <Grid item >
                             <Typography>ครั้งที่รังวัด:</Typography>
-                        </Grid> */}
+                        </Grid>
                         <Grid item>
                             <Typography color={"darkblue"} fontWeight={"bold"} sx={{ textDecoration: 'underline' }} display="inline">&nbsp;{numofsurveyQty}&nbsp;</Typography>
                         </Grid>
                     </Grid>
-                </Grid>
+                </Grid> */}
                 <Grid item xs={3} md={4}>
                     <Grid container>
                         <Grid item >

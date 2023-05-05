@@ -26,7 +26,8 @@ import {
     TableRow,
     Chip,
     Snackbar,
-    Alert
+    Alert,
+    Stack
 } from "@mui/material";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
@@ -93,7 +94,6 @@ export default function Tab1(props) {
     const handleImageClick = async (image, obj) => {
         console.log(image, "handleImageClick");
         console.log(obj, "handleImageClick");
-        return
         const filePath = obj.IMAGE_PATH;
         const fileName = filePath.substring(filePath.lastIndexOf('/') + 1);
         const directoryPath = filePath.substring(0, filePath.lastIndexOf('/') + 1);
@@ -111,7 +111,8 @@ export default function Tab1(props) {
                 formData.append("scanFile", objData[key]);
             }
         }
-
+        console.log(Object.fromEntries(formData), "handleImageClick");
+        // return
         try {
             let resUpload = await uploadFileMulti(formData);
             console.log(resUpload, "handleImageClick");
@@ -170,9 +171,9 @@ export default function Tab1(props) {
     };
     console.log(cadDoc, "cadDoc");
 
-    React.useEffect(() => {
-        createDoc();
-    }, []);
+    // React.useEffect(() => {
+    //     createDoc();
+    // }, []);
 
     React.useEffect(() => {
         if (Array.isArray(props?.searchData)) {
@@ -255,6 +256,23 @@ export default function Tab1(props) {
         }
     };
 
+    const onSubmit = () => {
+        let dataImage = cadastralImageData;
+        console.log(data, "submit");
+        for (let i in dataImage) {
+            let item = dataImage[i];
+            let objInsert = {
+                "CADASTRAL_SEQ": item?.CADASTRAL_SEQ,
+                "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ,
+                "PROCESS_SEQ_": 103,
+                "STATUS_SEQ_": 101,
+                "RECORD_STATUS": "N",
+                "CREATE_USER": data?.user?.USER_LIST_PID
+            }
+            console.log(objInsert,"submit");
+        }
+    }
+
     return (
         <Box sx={{ flexGrow: 1 }}>
             {open && <Snackbar open={open} autoHideDuration={3000} onClose={handleClose} anchorOrigin={{
@@ -292,6 +310,7 @@ export default function Tab1(props) {
                         preload: 1,
                         finite: true
                     }}
+
                 />
             )}
             <Grid container>
@@ -490,20 +509,20 @@ export default function Tab1(props) {
                                                                     </Button>
                                                                 </Grid>
                                                                 <Grid item xs={12}>
-                                                                    {(cadDoc?.length != 0 || cadDoc != null) &&
+                                                                    {(cadastralImageData?.length != 0 || cadastralImageData != null) &&
                                                                         <Paper>
                                                                             <MenuList sx={{
                                                                                 maxHeight: 150,
                                                                                 overflowY: 'auto',
                                                                             }}>
-                                                                                {cadDoc.map((item, index) => (
+                                                                                {cadastralImageData.map((item, index) => (
                                                                                     <MenuItem
                                                                                         onClick={() => handleImageClick(image, item)}
                                                                                         style={{ whiteSpace: "normal" }}
                                                                                         // disabled={item.FILE_STATUS}
-                                                                                        key={item.SURVEYDOCTYPE_SEQ}
+                                                                                        key={item.CADASTRAL_IMAGE_SEQ}
                                                                                     >
-                                                                                        {`${item.SURVEYDOCTYPE_NAME_TH} (${item.SURVEYDOCTYPE_GROUP})`}
+                                                                                        {`${item.IMAGE_PNAME} (${item.IMAGE_PNO})`}
                                                                                     </MenuItem>
                                                                                 ))}
                                                                             </MenuList>
@@ -595,6 +614,15 @@ export default function Tab1(props) {
                                 </Grid>
                             )
                     }
+                </Grid>
+                <Grid item p={1} xs={12}>
+                    <Stack alignContent={"flex-end"} xs={12}>
+                        <Grid container justifyContent={"flex-end"} spacing={2} xs={12}>
+                            <Grid item>
+                                <Button color="success" onClick={onSubmit} variant="contained">บันทึก</Button>
+                            </Grid>
+                        </Grid>
+                    </Stack>
                 </Grid>
             </Grid>
         </Box>

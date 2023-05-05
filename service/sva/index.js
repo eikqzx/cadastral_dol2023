@@ -65,6 +65,26 @@ export async function updateCadastral(seq, dataSend) {
     }
 }
 
+export async function updateCadastralImage(seq, dataSend) {
+    let url = `/api/sva/updateCadastralImage`
+    let dataput = {
+        seq: seq,
+        dataSend: dataSend
+    }
+    AddLoading()
+    try {
+        let res = await axios.post(url, dataput)
+        let data = res.data
+        RemoveLoading()
+        //console.log(data)
+        return data
+    } catch (err) {
+        RemoveLoading()
+        console.log(err)
+        return false
+    }
+}
+
 export async function insertCadastral(dataSend) {
     let url = `/api/sva/insertCadastral`
     AddLoading();

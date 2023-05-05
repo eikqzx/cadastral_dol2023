@@ -15,6 +15,8 @@ import { filterRecordStatus, isNotEmpty } from '@/lib/datacontrol';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+
+
 var state
 export default function SideTreeView(props) {
     console.log(props, "props SideTreeView");
@@ -25,6 +27,9 @@ export default function SideTreeView(props) {
     const [open, setOpen] = React.useState(false);
     const [message, setMessage] = React.useState("");
     const [type, setType] = React.useState("success");
+    const router = useRouter()
+    const { pathname, query } = router
+    console.log(pathname,"pathname");
     state = useSelector(state => state.job.value);
     const handleClose = () => {
         setOpen(false)
@@ -120,7 +125,7 @@ export default function SideTreeView(props) {
         masStatus = filterRecordStatus(masStatus.rows, "N");
         console.log(onSearchData, "onSearchData treeview");
         console.log(processSeq, "onSearchData processSeq");
-        let onSearchDataFiltered = onSearchData.filter(item => item.PROCESS_SEQ_ == processSeq)
+        let onSearchDataFiltered = onSearchData.filter(item => item.PROCESS_SEQ_ == processSeq || (item.PROCESS_SEQ_ == 102 && processSeq == 103))
         console.log(onSearchDataFiltered, "onSearchDataFiltered");
         if (onSearchDataFiltered.length != 0) {
             let statusSeq101 = onSearchDataFiltered.filter(item => item.STATUS_SEQ_ == 101);
@@ -129,16 +134,16 @@ export default function SideTreeView(props) {
             let statusSeq104 = onSearchDataFiltered.filter(item => item.STATUS_SEQ_ == 104 || item.STATUS_SEQ_ == null);
             masStatus.map(item => {
                 item.DATA = [];
-                if (item.STATUS_SEQ == 101) {
+                if (item.STATUS_SEQ == 101 || item.STATUS_SEQ_ == 101) {
                     item.DATA = statusSeq101
                 }
-                if (item.STATUS_SEQ == 102) {
+                if (item.STATUS_SEQ == 102 || item.STATUS_SEQ_ == 102) {
                     item.DATA = statusSeq102
                 }
-                if (item.STATUS_SEQ == 103) {
+                if (item.STATUS_SEQ == 103 || item.STATUS_SEQ_ == 103) {
                     item.DATA = statusSeq103
                 }
-                if (item.STATUS_SEQ == 104) {
+                if (item.STATUS_SEQ == 104 || item.STATUS_SEQ_ == 104) {
                     item.DATA = statusSeq104
                 }
             })
@@ -183,7 +188,7 @@ export default function SideTreeView(props) {
                                     </Grid>
                                     <Grid item xs={2}>
                                         <Tooltip title="เปิด / ปิด แสดงทั้งหมด">
-                                            <IconButton fullWidth size='small' onClick={handleExpandClick}
+                                            <IconButton size='small' onClick={handleExpandClick}
                                                 sx={{
                                                     '&:hover': {
                                                         background: 'linear-gradient(60deg, rgba(255,255,232,1) 40%, rgba(188,243,176,1) 80%) !important',
@@ -235,7 +240,7 @@ export default function SideTreeView(props) {
                                     </Grid>
                                     <Grid item xs={2}>
                                         <Tooltip title="เปิด / ปิด แสดงทั้งหมด">
-                                            <IconButton fullWidth size='small' onClick={handleExpandClick}
+                                            <IconButton size='small' onClick={handleExpandClick}
                                                 sx={{
                                                     '&:hover': {
                                                         background: 'linear-gradient(60deg, rgba(255,255,232,1) 40%, rgba(188,243,176,1) 80%) !important',
@@ -287,7 +292,7 @@ export default function SideTreeView(props) {
                                     </Grid>
                                     <Grid item xs={2}>
                                         <Tooltip title="เปิด / ปิด แสดงทั้งหมด">
-                                            <IconButton fullWidth size='small' onClick={handleExpandClick}
+                                            <IconButton size='small' onClick={handleExpandClick}
                                                 sx={{
                                                     '&:hover': {
                                                         background: 'linear-gradient(60deg, rgba(255,255,232,1) 40%, rgba(188,243,176,1) 80%) !important',
