@@ -256,22 +256,7 @@ export default function Tab1(props) {
             "CREATE_USER": data?.user?.USER_LIST_PID
           }
           console.log(objInsert, "submit");
-          try {
-            let resInsert = await mrgCadastralImage(objInsert);
-            console.log(resInsert, "resInsert");
-            if (currentIndex === Object.keys(datagroupA).length - 1) {
-              await setMessage("บันทึกสำเร็จ");
-              await setOpen(true);
-              await setType("success");
-            }
-            currentIndex++;
-          } catch (error) {
-            await setMessage("เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้งหรือติดต่อเจ้าหน้าที่");
-            await setOpen(true);
-            await setType("error");
-            console.log(error, "insertParcelHSFS");
-            currentIndex++;
-          }
+          arrAll.push(objInsert);
         }
       }
       for (let i in datagroupB) {
@@ -295,22 +280,7 @@ export default function Tab1(props) {
             "CREATE_USER": data?.user?.USER_LIST_PID
           }
           console.log(objInsert, "submit");
-          try {
-            let resInsert = await mrgCadastralImage(objInsert);
-            console.log(resInsert, "resInsert");
-            if (currentIndex === Object.keys(datagroupA).length - 1) {
-              await setMessage("บันทึกสำเร็จ");
-              await setOpen(true);
-              await setType("success");
-            }
-            currentIndex++;
-          } catch (error) {
-            await setMessage("เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้งหรือติดต่อเจ้าหน้าที่");
-            await setOpen(true);
-            await setType("error");
-            console.log(error, "insertParcelHSFS");
-            currentIndex++;
-          }
+          arrAll.push(objInsert);
         }
       }
       for (let i in datagroupC) {
@@ -334,22 +304,7 @@ export default function Tab1(props) {
             "CREATE_USER": data?.user?.USER_LIST_PID
           }
           console.log(objInsert, "submit");
-          try {
-            let resInsert = await mrgCadastralImage(objInsert);
-            console.log(resInsert, "resInsert");
-            if (currentIndex === Object.keys(datagroupA).length - 1) {
-              await setMessage("บันทึกสำเร็จ");
-              await setOpen(true);
-              await setType("success");
-            }
-            currentIndex++;
-          } catch (error) {
-            await setMessage("เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้งหรือติดต่อเจ้าหน้าที่");
-            await setOpen(true);
-            await setType("error");
-            console.log(error, "insertParcelHSFS");
-            currentIndex++;
-          }
+          arrAll.push(objInsert);
         }
       }
       for (let i in datagroupD) {
@@ -373,22 +328,7 @@ export default function Tab1(props) {
             "CREATE_USER": data?.user?.USER_LIST_PID
           }
           console.log(objInsert, "submit");
-          try {
-            let resInsert = await mrgCadastralImage(objInsert);
-            console.log(resInsert, "resInsert");
-            if (currentIndex === Object.keys(datagroupA).length - 1) {
-              await setMessage("บันทึกสำเร็จ");
-              await setOpen(true);
-              await setType("success");
-            }
-            currentIndex++;
-          } catch (error) {
-            await setMessage("เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้งหรือติดต่อเจ้าหน้าที่");
-            await setOpen(true);
-            await setType("error");
-            console.log(error, "insertParcelHSFS");
-            currentIndex++;
-          }
+          arrAll.push(objInsert);
         }
       }
       console.log(arrAll, "onSubmit");

@@ -748,7 +748,7 @@ export default function Tab1(props) {
                             )
                     }
                 </Grid>
-                <Grid item p={1} xs={12}>
+                {/* <Grid item p={1} xs={12}>
                     <Stack alignContent={"flex-end"} xs={12}>
                         <Grid container justifyContent={"flex-end"} spacing={2} xs={12}>
                             <Grid item>
@@ -756,7 +756,7 @@ export default function Tab1(props) {
                             </Grid>
                         </Grid>
                     </Stack>
-                </Grid>
+                </Grid> */}
             </Grid>
         </Box>
     );
