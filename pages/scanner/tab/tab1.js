@@ -118,16 +118,17 @@ export default function Tab1(props) {
         console.log(objInsert, "resSaveList");
         // return
         let resSaveList = await saveScanCadastralImage(objInsert);
+        console.log(resSaveList, "resSaveList");
         let searchScanObj = {
             "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
             "SURVEYDOCTYPE_SEQ": obj.SURVEYDOCTYPE_SEQ,
             "PROCESS_SEQ_": 102
         };
         let resSearchPath = await cadastralImageByCadastralSeqSurveyDocTypeSeq(searchScanObj);
-        resSearchPath = filterRecordStatus(resSearchPath.rows,"N");
-        console.log(resSearchPath,"resSaveList");
+        resSearchPath = filterRecordStatus(resSearchPath.rows, "N");
+        console.log(resSearchPath, "resSaveList");
         // return
-        const filePath = resSearchPath[resSearchPath.length-1].IMAGE_PATH;
+        const filePath = resSearchPath[resSearchPath.length - 1].IMAGE_PATH;
         const fileName = filePath.substring(filePath.lastIndexOf('/') + 1);
         const directoryPath = filePath.substring(0, filePath.lastIndexOf('/') + 1);
         console.log(fileName, "handleImageClick");
@@ -149,10 +150,22 @@ export default function Tab1(props) {
             let resUpload = await uploadFileMulti(formData);
             console.log(resUpload, "handleImageClick");
             if (resUpload.status) {
-                _req_getCadastralImage(props?.tabData?.CADASTRAL_SEQ);
-                await setMessage("บันทึกสำเร็จ");
-                await setOpen(true);
-                await setType("success");
+                resSearchPath[resSearchPath.length - 1].PROCESS_SEQ_ = 103;
+                resSearchPath[resSearchPath.length - 1].STATUS_SEQ_ = 101;
+                resSearchPath[resSearchPath.length - 1].LAST_UPD_USER = data?.user?.USER_LIST_PID;
+                try {
+                    let resUpd = await updateCadastralImage(resSearchPath[resSearchPath.length - 1].CADASTRAL_IMAGE_SEQ,resSearchPath[resSearchPath.length - 1]);
+                    console.log(resUpd ,"udate 103 uploadFile");
+                    _req_getCadastralImage(props?.tabData?.CADASTRAL_SEQ);
+                    await setMessage("บันทึกสำเร็จ");
+                    await setOpen(true);
+                    await setType("success");
+                } catch (error) {
+                    console.log(error,"udate 103 uploadFile");
+                    await setMessage("เกิดข้อผิดพลาดขณะอัปโหลด กรุณาลองใหม่อีกครั้งหรือติดต่อเจ้าหน้าที่");
+                    await setOpen(true);
+                    await setType("error");
+                }
             } else {
                 await setMessage("เกิดข้อผิดพลาดขณะอัปโหลด กรุณาลองใหม่อีกครั้งหรือติดต่อเจ้าหน้าที่");
                 await setOpen(true);
@@ -333,7 +346,6 @@ export default function Tab1(props) {
             item.PROCESS_SEQ_ = 103;
             item.STATUS_SEQ_ = 101;
             item.LAST_UPD_USER = data?.user?.USER_LIST_PID;
-            return
             try {
                 let resUpd = await updateCadastralImage(item);
                 console.log(resUpd, "onSubmit");
@@ -379,10 +391,22 @@ export default function Tab1(props) {
             let resUpload = await uploadFileMulti(formData);
             console.log(resUpload, "handleImageClick");
             if (resUpload.status) {
-                _req_getCadastralImage(props?.tabData?.CADASTRAL_SEQ);
-                await setMessage("บันทึกสำเร็จ");
-                await setOpen(true);
-                await setType("success");
+                obj.PROCESS_SEQ_ = 103;
+                obj.STATUS_SEQ_ = 101;
+                obj.LAST_UPD_USER = data?.user?.USER_LIST_PID;
+                try {
+                    let resUpd = await updateCadastralImage(obj.CADASTRAL_IMAGE_SEQ,obj);
+                    console.log(resUpd ,"udate 103 uploadFile");
+                    _req_getCadastralImage(props?.tabData?.CADASTRAL_SEQ);
+                    await setMessage("บันทึกสำเร็จ");
+                    await setOpen(true);
+                    await setType("success");
+                } catch (error) {
+                    console.log(error,"udate 103 uploadFile");
+                    await setMessage("เกิดข้อผิดพลาดขณะอัปโหลด กรุณาลองใหม่อีกครั้งหรือติดต่อเจ้าหน้าที่");
+                    await setOpen(true);
+                    await setType("error");
+                }
             } else {
                 await setMessage("เกิดข้อผิดพลาดขณะอัปโหลด กรุณาลองใหม่อีกครั้งหรือติดต่อเจ้าหน้าที่");
                 await setOpen(true);

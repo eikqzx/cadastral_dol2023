@@ -32,14 +32,15 @@ import {
 import { confirmDialog } from "@/pages/components/confirmDialog";
 import AddCad from '../components/addCadastral';
 import { useSession } from 'next-auth/react';
-import { cadastralImageDocumentPNoByCadastralSeq, cadastralImagePNoByCadastralSeq, getCadastralImage, insertCadastral, mrgCadastralImage } from '@/service/sva';
+import { cadastralImageDocumentPNoByCadastralSeq, cadastralImagePNoByCadastralSeq, getCadastralImage, insertCadastral, mrgCadastralImage, updateCadastral } from '@/service/sva';
 import { getLandOffice } from '@/service/mas/landOffice';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Add, Remove, Save } from "@mui/icons-material";
+import { Add, Edit, Remove, Save } from "@mui/icons-material";
 import AddDocDialog from '../components/addDocDialog';
 import { surveyDocTypeBySurveyDocTypeGroup } from '@/service/mas/surveyDocTypeGroup';
 import { filterRecordStatus } from '@/lib/datacontrol';
+import EditCad from '../components/editCadastral';
 
 export default function Tab1(props) {
   console.log(props, "Tab1Tab1");
@@ -60,7 +61,10 @@ export default function Tab1(props) {
   const [datagroupB, setDataGroupB] = React.useState([]);
   const [datagroupC, setDataGroupC] = React.useState([]);
   const [datagroupD, setDataGroupD] = React.useState([]);
+  const [openEdit,setOpenEdit] = React.useState(null);
   const [count, setCount] = React.useState(0);
+  const [checkCanEdit,setCheckCanEdit] = React.useState(false);
+  const [haveCadImg,setHaveCadImg] = React.useState(false);
   const handleOpen = (type, name) => {
     setAddRegType(!addRegType)
     setTypeRegisterSts(type);
@@ -88,6 +92,8 @@ export default function Tab1(props) {
   React.useEffect(() => {
     if (typeof props?.tabData == "object" && props?.tabData.length !== 0 && props?.tabData != undefined) {
       createSurveyData(); /***** solution 1******/
+      setCheckCanEdit(false);
+      setHaveCadImg(false);
       if (props?.tabData?.CADASTRAL_SEQ == null) {
         confirmDialog.createDialog(
           `ไม่พบข้อมูลทะเบียนของต้นร่างเลขที่ ${props?.tabData?.CADASTRAL_NO} ต้องการเพิ่มข้อมูลทะเบียน หรือไม่ ?`,
@@ -118,6 +124,28 @@ export default function Tab1(props) {
       if (res) {
         await props?.onSearch(props?.searchParameter);
         await setMessage("เพิ่มทะเบียนสำเร็จ");
+        await setOpen(true);
+        await setType("success");
+      }
+    } catch (error) {
+      await setMessage("เกิดข้อผิดพลาด");
+      await setOpen(true);
+      await setType("error");
+    }
+  }
+
+  const editCad = async (inputData) => {
+    console.log(inputData, "inputData");
+    // return
+    try {
+      let res = await updateCadastral(inputData.CADASTRAL_SEQ,inputData);
+      console.log(res,"updateCadastral");
+      if (res) {
+        if (haveCadImg) {
+          await onSubmit();
+        }
+        await props?.onSearch(props?.searchParameter);
+        await setMessage("แก้ไขทะเบียนสำเร็จ");
         await setOpen(true);
         await setType("success");
       }
@@ -167,7 +195,15 @@ export default function Tab1(props) {
     let res = await getCadastralImage();
     res = filterRecordStatus(res.rows, "N");
     res = res.filter(item => item.CADASTRAL_SEQ == props?.tabData?.CADASTRAL_SEQ);
+    //
     console.log(res, "res createSurveyData");
+    if(res.length > 0){
+      setHaveCadImg(true);
+    }
+    if(typeof res.find(obj => obj.PROCESS_SEQ_ == 103 && obj.STATUS_SEQ_ == 101) == "object"){
+      console.log(res.find(obj => obj.PROCESS_SEQ_ == 103 && obj.STATUS_SEQ_ == 101),"isTrue");
+      setCheckCanEdit(true);
+    }
     let resGroupA = await surveyDocTypeBySurveyDocTypeGroup("A");
     let dataA = filterRecordStatus(resGroupA.rows, "N");
     let resGroupB = await surveyDocTypeBySurveyDocTypeGroup("B");
@@ -339,6 +375,7 @@ export default function Tab1(props) {
           let resInsert = await mrgCadastralImage(objInsert);
           console.log(resInsert, "onSubmit");
           if (currentIndex === Object.keys(arrAll).length - 1) {
+            createSurveyData();
             await setMessage("บันทึกสำเร็จ");
             await setOpen(true);
             await setType("success");
@@ -546,6 +583,7 @@ export default function Tab1(props) {
         />
       }
       {openAddData && <AddCad open={openAddData} close={() => (setOpenAddData(false))} data={props?.tabData} onSubmit={addCad} />}
+      {openEdit != null && <EditCad open={openEdit} close={() => (setOpenEdit(null))} data={props?.tabData} onSubmit={editCad} />}
       <Grid p={2} spacing={1} component={Paper} container>
         <Grid item xs={3} md={5}>
           <Grid container>
@@ -584,6 +622,7 @@ export default function Tab1(props) {
             </Grid>
             <Grid item>
               <Typography color={"darkblue"} fontWeight={"bold"} sx={{ textDecoration: 'underline' }} display="inline">&nbsp;{numofsurveyQty}&nbsp;</Typography>
+              <IconButton size='small' disabled={numofsurveyQty == "-" || checkCanEdit} onClick={()=>{setOpenEdit(props?.tabData)}}><Edit/></IconButton>
             </Grid>
           </Grid>
         </Grid>
