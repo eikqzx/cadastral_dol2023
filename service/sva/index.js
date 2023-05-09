@@ -148,3 +148,63 @@ export async function cadastralImageByCadastralSeq(seq) {
         return false
     }
 }
+
+export async function cadastralImageDocumentPNoByCadastralSeq(dataSend) {
+    let url = `/api/sva/cadastralImageDocumentPNoByCadastralSeq`
+    AddLoading();
+    try {
+        let res = await axios.post(url, dataSend)
+        let data = res.data
+        //console.log(data)
+        RemoveLoading()
+        return data
+    } catch (err) {
+        console.log(err)
+        return false
+    }
+}
+
+export async function cadastralImagePNoByCadastralSeq(dataSend) {
+    let url = `/api/sva/cadastralImagePNoByCadastralSeq`
+    AddLoading();
+    try {
+        let res = await axios.post(url, dataSend)
+        let data = res.data
+        //console.log(data)
+        RemoveLoading()
+        return data
+    } catch (err) {
+        console.log(err)
+        return false
+    }
+}
+
+export async function saveScanCadastralImage(dataSend) {
+    let url = `/api/sva/saveScanCadastralImage`
+    AddLoading();
+    try {
+        let res = await axios.post(url, dataSend)
+        let data = res.data
+        //console.log(data)
+        RemoveLoading()
+        return data
+    } catch (err) {
+        console.log(err)
+        return false
+    }
+}
+
+export async function cadastralImageByCadastralSeqSurveyDocTypeSeq(dataSend) {
+    let url = `/api/sva/cadastralImageByCadastralSeqSurveyDocTypeSeq`
+    AddLoading();
+    try {
+        let res = await axios.post(url, dataSend)
+        let data = res.data
+        //console.log(data)
+        RemoveLoading()
+        return data
+    } catch (err) {
+        console.log(err)
+        return false
+    }
+}

@@ -32,7 +32,7 @@ import {
 import { confirmDialog } from "@/pages/components/confirmDialog";
 import AddCad from '../components/addCadastral';
 import { useSession } from 'next-auth/react';
-import { getCadastralImage, insertCadastral, mrgCadastralImage } from '@/service/sva';
+import { cadastralImageDocumentPNoByCadastralSeq, cadastralImagePNoByCadastralSeq, getCadastralImage, insertCadastral, mrgCadastralImage } from '@/service/sva';
 import { getLandOffice } from '@/service/mas/landOffice';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -238,64 +238,157 @@ export default function Tab1(props) {
       for (let i in datagroupA) {
         let item = datagroupA[i];
         if (item.COUNT_DOC != undefined && item.COUNT_DOC != 0) {
+          let searchObj1 = {
+            "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
+            "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ
+          }
+          let resCadastralImagePNoByCadastralSeq = await cadastralImagePNoByCadastralSeq(searchObj1);
+          let resCadastralImageDocumentPNoByCadastralSeq = await cadastralImageDocumentPNoByCadastralSeq(searchObj1);
           let objInsert = {
             "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
             "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ,
             "SURVEYDOCTYPE_PNO_SEQ": item.COUNT_DOC,
+            "SURVEYDOCTYPE_PNO": resCadastralImageDocumentPNoByCadastralSeq.rows[0].IMAGE_PNO,
+            "CADASTRAL_IMAGE_PNO":resCadastralImagePNoByCadastralSeq.rows[0].CADASTRAL_IMAGE_PNO,
             "PROCESS_SEQ_": 102,
             "STATUS_SEQ_": 101,
             "RECORD_STATUS": "N",
             "CREATE_USER": data?.user?.USER_LIST_PID
           }
           console.log(objInsert, "submit");
-          arrAll.push(objInsert);
+          try {
+            let resInsert = await mrgCadastralImage(objInsert);
+            console.log(resInsert, "resInsert");
+            if (currentIndex === Object.keys(datagroupA).length - 1) {
+              await setMessage("บันทึกสำเร็จ");
+              await setOpen(true);
+              await setType("success");
+            }
+            currentIndex++;
+          } catch (error) {
+            await setMessage("เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้งหรือติดต่อเจ้าหน้าที่");
+            await setOpen(true);
+            await setType("error");
+            console.log(error, "insertParcelHSFS");
+            currentIndex++;
+          }
         }
       }
       for (let i in datagroupB) {
         let item = datagroupB[i];
         if (item.COUNT_DOC != undefined && item.COUNT_DOC != 0) {
-          console.log(item, "submit");
+          let searchObj1 = {
+            "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
+            "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ
+          }
+          let resCadastralImagePNoByCadastralSeq = await cadastralImagePNoByCadastralSeq(searchObj1);
+          let resCadastralImageDocumentPNoByCadastralSeq = await cadastralImageDocumentPNoByCadastralSeq(searchObj1);
           let objInsert = {
             "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
             "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ,
             "SURVEYDOCTYPE_PNO_SEQ": item.COUNT_DOC,
+            "SURVEYDOCTYPE_PNO": resCadastralImageDocumentPNoByCadastralSeq.rows[0].IMAGE_PNO,
+            "CADASTRAL_IMAGE_PNO":resCadastralImagePNoByCadastralSeq.rows[0].CADASTRAL_IMAGE_PNO,
             "PROCESS_SEQ_": 102,
             "STATUS_SEQ_": 101,
             "RECORD_STATUS": "N",
             "CREATE_USER": data?.user?.USER_LIST_PID
           }
-          arrAll.push(objInsert);
+          console.log(objInsert, "submit");
+          try {
+            let resInsert = await mrgCadastralImage(objInsert);
+            console.log(resInsert, "resInsert");
+            if (currentIndex === Object.keys(datagroupA).length - 1) {
+              await setMessage("บันทึกสำเร็จ");
+              await setOpen(true);
+              await setType("success");
+            }
+            currentIndex++;
+          } catch (error) {
+            await setMessage("เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้งหรือติดต่อเจ้าหน้าที่");
+            await setOpen(true);
+            await setType("error");
+            console.log(error, "insertParcelHSFS");
+            currentIndex++;
+          }
         }
       }
       for (let i in datagroupC) {
         let item = datagroupC[i];
         if (item.COUNT_DOC != undefined && item.COUNT_DOC != 0) {
+          let searchObj1 = {
+            "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
+            "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ
+          }
+          let resCadastralImagePNoByCadastralSeq = await cadastralImagePNoByCadastralSeq(searchObj1);
+          let resCadastralImageDocumentPNoByCadastralSeq = await cadastralImageDocumentPNoByCadastralSeq(searchObj1);
           let objInsert = {
             "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
             "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ,
             "SURVEYDOCTYPE_PNO_SEQ": item.COUNT_DOC,
+            "SURVEYDOCTYPE_PNO": resCadastralImageDocumentPNoByCadastralSeq.rows[0].IMAGE_PNO,
+            "CADASTRAL_IMAGE_PNO":resCadastralImagePNoByCadastralSeq.rows[0].CADASTRAL_IMAGE_PNO,
             "PROCESS_SEQ_": 102,
             "STATUS_SEQ_": 101,
             "RECORD_STATUS": "N",
             "CREATE_USER": data?.user?.USER_LIST_PID
           }
-          arrAll.push(objInsert);
+          console.log(objInsert, "submit");
+          try {
+            let resInsert = await mrgCadastralImage(objInsert);
+            console.log(resInsert, "resInsert");
+            if (currentIndex === Object.keys(datagroupA).length - 1) {
+              await setMessage("บันทึกสำเร็จ");
+              await setOpen(true);
+              await setType("success");
+            }
+            currentIndex++;
+          } catch (error) {
+            await setMessage("เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้งหรือติดต่อเจ้าหน้าที่");
+            await setOpen(true);
+            await setType("error");
+            console.log(error, "insertParcelHSFS");
+            currentIndex++;
+          }
         }
       }
       for (let i in datagroupD) {
         let item = datagroupD[i];
         if (item.COUNT_DOC != undefined && item.COUNT_DOC != 0) {
-          console.log(item, "submit");
+          let searchObj1 = {
+            "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
+            "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ
+          }
+          let resCadastralImagePNoByCadastralSeq = await cadastralImagePNoByCadastralSeq(searchObj1);
+          let resCadastralImageDocumentPNoByCadastralSeq = await cadastralImageDocumentPNoByCadastralSeq(searchObj1);
           let objInsert = {
             "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
             "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ,
             "SURVEYDOCTYPE_PNO_SEQ": item.COUNT_DOC,
+            "SURVEYDOCTYPE_PNO": resCadastralImageDocumentPNoByCadastralSeq.rows[0].IMAGE_PNO,
+            "CADASTRAL_IMAGE_PNO":resCadastralImagePNoByCadastralSeq.rows[0].CADASTRAL_IMAGE_PNO,
             "PROCESS_SEQ_": 102,
             "STATUS_SEQ_": 101,
             "RECORD_STATUS": "N",
             "CREATE_USER": data?.user?.USER_LIST_PID
           }
-          arrAll.push(objInsert);
+          console.log(objInsert, "submit");
+          try {
+            let resInsert = await mrgCadastralImage(objInsert);
+            console.log(resInsert, "resInsert");
+            if (currentIndex === Object.keys(datagroupA).length - 1) {
+              await setMessage("บันทึกสำเร็จ");
+              await setOpen(true);
+              await setType("success");
+            }
+            currentIndex++;
+          } catch (error) {
+            await setMessage("เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้งหรือติดต่อเจ้าหน้าที่");
+            await setOpen(true);
+            await setType("error");
+            console.log(error, "insertParcelHSFS");
+            currentIndex++;
+          }
         }
       }
       console.log(arrAll, "onSubmit");
@@ -330,10 +423,18 @@ export default function Tab1(props) {
         for (let i in datagroupA) {
           let item = datagroupA[i];
           if (item.COUNT_DOC != undefined && item.COUNT_DOC != 0) {
+            let searchObj1 = {
+              "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
+              "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ
+            }
+            let resCadastralImagePNoByCadastralSeq = await cadastralImagePNoByCadastralSeq(searchObj1);
+            let resCadastralImageDocumentPNoByCadastralSeq = await cadastralImageDocumentPNoByCadastralSeq(searchObj1);
             let objInsert = {
               "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
               "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ,
               "SURVEYDOCTYPE_PNO_SEQ": item.COUNT_DOC,
+              "SURVEYDOCTYPE_PNO": resCadastralImageDocumentPNoByCadastralSeq.rows[0].IMAGE_PNO,
+              "CADASTRAL_IMAGE_PNO":resCadastralImagePNoByCadastralSeq.rows[0].CADASTRAL_IMAGE_PNO,
               "PROCESS_SEQ_": 102,
               "STATUS_SEQ_": 101,
               "RECORD_STATUS": "N",
@@ -363,20 +464,28 @@ export default function Tab1(props) {
         for (let i in datagroupB) {
           let item = datagroupB[i];
           if (item.COUNT_DOC != undefined && item.COUNT_DOC != 0) {
-            console.log(item, "submit");
+            let searchObj1 = {
+              "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
+              "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ
+            }
+            let resCadastralImagePNoByCadastralSeq = await cadastralImagePNoByCadastralSeq(searchObj1);
+            let resCadastralImageDocumentPNoByCadastralSeq = await cadastralImageDocumentPNoByCadastralSeq(searchObj1);
             let objInsert = {
               "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
               "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ,
               "SURVEYDOCTYPE_PNO_SEQ": item.COUNT_DOC,
+              "SURVEYDOCTYPE_PNO": resCadastralImageDocumentPNoByCadastralSeq.rows[0].IMAGE_PNO,
+              "CADASTRAL_IMAGE_PNO":resCadastralImagePNoByCadastralSeq.rows[0].CADASTRAL_IMAGE_PNO,
               "PROCESS_SEQ_": 102,
               "STATUS_SEQ_": 101,
               "RECORD_STATUS": "N",
               "CREATE_USER": data?.user?.USER_LIST_PID
             }
+            console.log(objInsert, "submit");
             try {
               let resInsert = await mrgCadastralImage(objInsert);
               console.log(resInsert, "resInsert");
-              if (currentIndex === Object.keys(datagroupB).length - 1) {
+              if (currentIndex === Object.keys(datagroupA).length - 1) {
                 await setMessage("บันทึกสำเร็จ");
                 await setOpen(true);
                 await setType("success");
@@ -396,19 +505,28 @@ export default function Tab1(props) {
         for (let i in datagroupC) {
           let item = datagroupC[i];
           if (item.COUNT_DOC != undefined && item.COUNT_DOC != 0) {
+            let searchObj1 = {
+              "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
+              "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ
+            }
+            let resCadastralImagePNoByCadastralSeq = await cadastralImagePNoByCadastralSeq(searchObj1);
+            let resCadastralImageDocumentPNoByCadastralSeq = await cadastralImageDocumentPNoByCadastralSeq(searchObj1);
             let objInsert = {
               "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
               "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ,
               "SURVEYDOCTYPE_PNO_SEQ": item.COUNT_DOC,
+              "SURVEYDOCTYPE_PNO": resCadastralImageDocumentPNoByCadastralSeq.rows[0].IMAGE_PNO,
+              "CADASTRAL_IMAGE_PNO":resCadastralImagePNoByCadastralSeq.rows[0].CADASTRAL_IMAGE_PNO,
               "PROCESS_SEQ_": 102,
               "STATUS_SEQ_": 101,
               "RECORD_STATUS": "N",
               "CREATE_USER": data?.user?.USER_LIST_PID
             }
+            console.log(objInsert, "submit");
             try {
               let resInsert = await mrgCadastralImage(objInsert);
               console.log(resInsert, "resInsert");
-              if (currentIndex === Object.keys(datagroupC).length - 1) {
+              if (currentIndex === Object.keys(datagroupA).length - 1) {
                 await setMessage("บันทึกสำเร็จ");
                 await setOpen(true);
                 await setType("success");
@@ -428,20 +546,28 @@ export default function Tab1(props) {
         for (let i in datagroupD) {
           let item = datagroupD[i];
           if (item.COUNT_DOC != undefined && item.COUNT_DOC != 0) {
-            console.log(item, "submit");
+            let searchObj1 = {
+              "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
+              "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ
+            }
+            let resCadastralImagePNoByCadastralSeq = await cadastralImagePNoByCadastralSeq(searchObj1);
+            let resCadastralImageDocumentPNoByCadastralSeq = await cadastralImageDocumentPNoByCadastralSeq(searchObj1);
             let objInsert = {
               "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
               "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ,
               "SURVEYDOCTYPE_PNO_SEQ": item.COUNT_DOC,
+              "SURVEYDOCTYPE_PNO": resCadastralImageDocumentPNoByCadastralSeq.rows[0].IMAGE_PNO,
+              "CADASTRAL_IMAGE_PNO":resCadastralImagePNoByCadastralSeq.rows[0].CADASTRAL_IMAGE_PNO,
               "PROCESS_SEQ_": 102,
               "STATUS_SEQ_": 101,
               "RECORD_STATUS": "N",
               "CREATE_USER": data?.user?.USER_LIST_PID
             }
+            console.log(objInsert, "submit");
             try {
               let resInsert = await mrgCadastralImage(objInsert);
               console.log(resInsert, "resInsert");
-              if (currentIndex === Object.keys(datagroupD).length - 1) {
+              if (currentIndex === Object.keys(datagroupA).length - 1) {
                 await setMessage("บันทึกสำเร็จ");
                 await setOpen(true);
                 await setType("success");

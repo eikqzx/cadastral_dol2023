@@ -26,7 +26,8 @@ import {
     TableRow,
     Chip,
     Snackbar,
-    Alert
+    Alert,
+    Stack
 } from "@mui/material";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
@@ -39,7 +40,7 @@ import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import "yet-another-react-lightbox/plugins/captions.css";
 import "yet-another-react-lightbox/plugins/thumbnails.css";
 import "yet-another-react-lightbox/styles.css";
-import { cadastralImageByCadastralSeq, getCadastralImage } from "@/service/sva";
+import { cadastralImageByCadastralSeq, cadastralImageByCadastralSeqSurveyDocTypeSeq, cadastralImageDocumentPNoByCadastralSeq, getCadastralImage, insertCadastral, saveScanCadastralImage, updateCadastralImage } from "@/service/sva";
 import { filterRecordStatus } from "@/lib/datacontrol";
 import { surveyDocTypeBySurveyDocTypeGroup } from "@/service/mas/surveyDocTypeGroup";
 import CheckIcon from "@mui/icons-material/Check";
@@ -47,7 +48,11 @@ import { useRouter } from "next/router";
 import { getFile, uploadFileMulti, uploadFileSingle } from "@/service/upload";
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CloseIcon from '@mui/icons-material/Close';
-
+import { confirmDialog } from "@/pages/components/confirmDialog";
+import AddCad from "@/pages/asignJobs/components/addCadastral";
+import { Edit } from "@mui/icons-material";
+import ImageMui from "@mui/icons-material/Image"
+import DialogEditUpolad from "../components/dialogEditUpolad";
 export default function Tab1(props) {
     console.log(props, "propsTab1");
     const [selectedFiles, setSelectedFiles] = React.useState([]);
@@ -65,6 +70,8 @@ export default function Tab1(props) {
     const [open, setOpen] = React.useState(false);
     const [message, setMessage] = React.useState("");
     const [type, setType] = React.useState("success");
+    const [openAddData, setOpenAddData] = React.useState(false);
+    const [openEdit, setOpenEdit] = React.useState(null);
 
     const handleClose = () => {
         setOpen(false)
@@ -74,7 +81,7 @@ export default function Tab1(props) {
         let res = await cadastralImageByCadastralSeq(seq);
         res = filterRecordStatus(res.rows, "N");
         // res = res.filter(item => item.CADASTRAL_SEQ == props?.tabData?.CADASTRAL_SEQ);
-        console.log(res, "res createSurveyData");
+        console.log(res, "res _req_getCadastralImage");
         for (let i in res) {
             let item = res[i];
             let resGetFile = await getFile(item.IMAGE_PATH);
@@ -93,8 +100,34 @@ export default function Tab1(props) {
     const handleImageClick = async (image, obj) => {
         console.log(image, "handleImageClick");
         console.log(obj, "handleImageClick");
-        return
-        const filePath = obj.IMAGE_PATH;
+        let searchObj = {
+            "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
+            "SURVEYDOCTYPE_SEQ": obj.SURVEYDOCTYPE_SEQ
+        }
+        let resCadIngPno = await cadastralImageDocumentPNoByCadastralSeq(searchObj);
+        let objInsert = {
+            "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
+            "SURVEYDOCTYPE_SEQ": obj.SURVEYDOCTYPE_SEQ,
+            "CADASTRAL_IMAGE_PNO": resCadIngPno.rows[0].IMAGE_PNO, // http://127.0.0.1:8011/SVA_/cadastralImageDocumentPNoByCadastralSeq
+            "PROCESS_SEQ_": 102,
+            "STATUS_SEQ_": 101,
+            "CADASTRAL_IMAGE_NOTE": null,
+            "RECORD_STATUS": "N",
+            "CREATE_USER": data?.user?.USER_LIST_PID
+        }
+        console.log(objInsert, "resSaveList");
+        // return
+        let resSaveList = await saveScanCadastralImage(objInsert);
+        let searchScanObj = {
+            "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
+            "SURVEYDOCTYPE_SEQ": obj.SURVEYDOCTYPE_SEQ,
+            "PROCESS_SEQ_": 102
+        };
+        let resSearchPath = await cadastralImageByCadastralSeqSurveyDocTypeSeq(searchScanObj);
+        resSearchPath = filterRecordStatus(resSearchPath.rows,"N");
+        console.log(resSearchPath,"resSaveList");
+        // return
+        const filePath = resSearchPath[resSearchPath.length-1].IMAGE_PATH;
         const fileName = filePath.substring(filePath.lastIndexOf('/') + 1);
         const directoryPath = filePath.substring(0, filePath.lastIndexOf('/') + 1);
         console.log(fileName, "handleImageClick");
@@ -196,6 +229,13 @@ export default function Tab1(props) {
         ) {
             getMasterData(props?.tabData);
             _req_getCadastralImage(props?.tabData?.CADASTRAL_SEQ);
+            setSelectedFiles([]);
+            if (props?.tabData?.CADASTRAL_SEQ == null) {
+                confirmDialog.createDialog(
+                    `ไม่พบข้อมูลทะเบียนของต้นร่างเลขที่ ${props?.tabData?.CADASTRAL_NO} ต้องการเพิ่มข้อมูลทะเบียน หรือไม่ ?`,
+                    () => { setOpenAddData(true) }
+                );
+            }
         }
     }, [props?.tabData]);
 
@@ -255,6 +295,104 @@ export default function Tab1(props) {
         }
     };
 
+    const addCad = async (inputData) => {
+        console.log(inputData, "inputData");
+        let objInsert = {
+            "SHEETCODE": props?.tabData.SHEETCODE,
+            "BOX_NO": props?.tabData.BOX_NO,
+            "CADASTRAL_NO": props?.tabData.CADASTRAL_NO,
+            "NUMOFSURVEY_QTY": inputData,
+            "LANDOFFICE_SEQ": props?.tabData?.LANDOFFICE_SEQ,
+            "PROCESS_SEQ_": props?.processSeq ?? 102,
+            "STATUS_SEQ_": 104,
+            "RECORD_STATUS": "N",
+            "CREATE_USER": data?.user?.USER_LIST_PID
+        }
+        console.log(objInsert, "inputData");
+        try {
+            let res = await insertCadastral(objInsert);
+            console.log(res);
+            if (res) {
+                await props?.onSearch(props?.searchParameter);
+                await setMessage("เพิ่มทะเบียนสำเร็จ");
+                await setOpen(true);
+                await setType("success");
+            }
+        } catch (error) {
+            await setMessage("เกิดข้อผิดพลาด");
+            await setOpen(true);
+            await setType("error");
+        }
+    }
+
+    const onSubmit = async () => {
+        let dataImage = cadastralImageData;
+        let currentIndex = 0;
+        for (let i in dataImage) {
+            let item = dataImage[i];
+            item.PROCESS_SEQ_ = 103;
+            item.STATUS_SEQ_ = 101;
+            item.LAST_UPD_USER = data?.user?.USER_LIST_PID;
+            return
+            try {
+                let resUpd = await updateCadastralImage(item);
+                console.log(resUpd, "onSubmit");
+                if (currentIndex === Object.keys(dataImage).length - 1) {
+                    await setMessage("บันทึกสำเร็จ");
+                    await setOpen(true);
+                    await setType("success");
+                }
+                currentIndex++;
+            } catch (error) {
+                await setMessage("เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้งหรือติดต่อเจ้าหน้าที่");
+                await setOpen(true);
+                await setType("error");
+                console.log(error, "onSubmit");
+                currentIndex++;
+            }
+        }
+        console.log(dataImage, "submit");
+    }
+
+    const editImage = async (image, obj) => {
+        console.log(image, "editImage");
+        console.log(obj, "editImage");
+        const filePath = obj.IMAGE_PATH;
+        const fileName = filePath.substring(filePath.lastIndexOf('/') + 1);
+        const directoryPath = filePath.substring(0, filePath.lastIndexOf('/') + 1);
+        console.log(fileName, "handleImageClick");
+        console.log(directoryPath, "handleImageClick");
+        let objData = new Object();
+        objData.PATH = directoryPath;
+        objData.FILE_NAME = fileName;
+        objData.FILE = image[0];
+        console.log(objData, "handleImageClick");
+        const formData = new FormData();
+        for (const key in objData) {
+            console.log(key, "handleImageClick");
+            if (objData.hasOwnProperty(key)) {
+                formData.append("scanFile", objData[key]);
+            }
+        }
+
+        try {
+            let resUpload = await uploadFileMulti(formData);
+            console.log(resUpload, "handleImageClick");
+            if (resUpload.status) {
+                _req_getCadastralImage(props?.tabData?.CADASTRAL_SEQ);
+                await setMessage("บันทึกสำเร็จ");
+                await setOpen(true);
+                await setType("success");
+            } else {
+                await setMessage("เกิดข้อผิดพลาดขณะอัปโหลด กรุณาลองใหม่อีกครั้งหรือติดต่อเจ้าหน้าที่");
+                await setOpen(true);
+                await setType("error");
+            }
+        } catch (error) {
+            console.log(error, "handleImageClick");
+        }
+    }
+
     return (
         <Box sx={{ flexGrow: 1 }}>
             {open && <Snackbar open={open} autoHideDuration={3000} onClose={handleClose} anchorOrigin={{
@@ -265,6 +403,8 @@ export default function Tab1(props) {
                     {message}
                 </Alert>
             </Snackbar>}
+            {openAddData && <AddCad open={openAddData} close={() => (setOpenAddData(false))} data={props?.tabData} onSubmit={addCad} />}
+            {openEdit != null && <DialogEditUpolad open={openEdit != null} close={() => (setOpenEdit(null))} data={openEdit} onSubmit={editImage} />}
             {imageObj.length != 0 && (
                 <Lightbox
                     open={advancedExampleOpen}
@@ -500,7 +640,7 @@ export default function Tab1(props) {
                                                                                     <MenuItem
                                                                                         onClick={() => handleImageClick(image, item)}
                                                                                         style={{ whiteSpace: "normal" }}
-                                                                                        // disabled={item.FILE_STATUS}
+                                                                                        // disabled={isItemSelected(item.SURVEYDOCTYPE_SEQ)}
                                                                                         key={item.SURVEYDOCTYPE_SEQ}
                                                                                     >
                                                                                         {`${item.SURVEYDOCTYPE_NAME_TH} (${item.SURVEYDOCTYPE_GROUP})`}
@@ -535,6 +675,7 @@ export default function Tab1(props) {
                                             borderColor: "grey.500",
                                             flexGrow: 1,
                                             overflowY: "auto",
+                                            overflowX: "auto"
                                         }}
                                     >
                                         <Grid container justifyContent={"space-between"} p={1} spacing={1}>
@@ -543,25 +684,36 @@ export default function Tab1(props) {
                                                     <Table size="small" >
                                                         <TableHead>
                                                             <TableRow>
-                                                                <TableCell style={{ width: "25%" }} align="left">ตัวย่อ</TableCell>
                                                                 <TableCell style={{ width: "25%" }} align="left">ชื่อเอกสาร</TableCell>
                                                                 <TableCell style={{ width: "25%" }} align="left">สถานะ</TableCell>
+                                                                <TableCell style={{ width: "25%" }} align="left">จัดการ</TableCell>
                                                             </TableRow>
                                                         </TableHead>
                                                         <TableBody>
                                                             {
                                                                 cadastralImageData?.map((item, index) => (
-                                                                    <TableRow onClick={() => { openImageUrl(item) }} key={index} sx={{
+                                                                    <TableRow key={index} sx={{
                                                                         '&:last-child td, &:last-child th': { border: 0 },
                                                                         '&:hover': {
                                                                             backgroundColor: '#ECF2FF !important',
                                                                         },
                                                                     }}>
-                                                                        <TableCell style={{ width: "25%" }} align="left">{item.CADASTRAL_IMAGE_ORDER}</TableCell>
                                                                         <TableCell style={{ width: "25%" }} align="left">{`${item.IMAGE_PNAME} (${item.IMAGE_PNO})`}</TableCell>
                                                                         <TableCell style={{ width: "25%" }} align="left">{
                                                                             item.FILE_STATUS ? <Chip icon={<CheckCircleIcon />} label="อัปโหลดแล้ว" color="success" /> : <Chip icon={<CloseIcon />} label="ไม่ได้อัปโหลด" color="error" />
                                                                         }</TableCell>
+                                                                        <TableCell style={{ width: "40%" }} align="left">
+                                                                            <Tooltip title="ดูรูปภาพ">
+                                                                                <IconButton onClick={() => { openImageUrl(item) }}>
+                                                                                    <ImageMui />
+                                                                                </IconButton>
+                                                                            </Tooltip>
+                                                                            <Tooltip title="แก้ไขรูปภาพ">
+                                                                                <IconButton onClick={() => { setOpenEdit(item) }}>
+                                                                                    <Edit />
+                                                                                </IconButton>
+                                                                            </Tooltip>
+                                                                        </TableCell>
                                                                     </TableRow>
                                                                 ))
                                                             }
@@ -595,6 +747,15 @@ export default function Tab1(props) {
                                 </Grid>
                             )
                     }
+                </Grid>
+                <Grid item p={1} xs={12}>
+                    <Stack alignContent={"flex-end"} xs={12}>
+                        <Grid container justifyContent={"flex-end"} spacing={2} xs={12}>
+                            <Grid item>
+                                <Button color="success" onClick={onSubmit} variant="contained">บันทึก</Button>
+                            </Grid>
+                        </Grid>
+                    </Stack>
                 </Grid>
             </Grid>
         </Box>
