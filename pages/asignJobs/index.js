@@ -126,7 +126,7 @@ export default function IndexAccountControl(props) {
             </Grid>
             <Grid item xs={10} md={10}>
                 <Paper sx={{ height: "100vh", flexGrow: 1, overflowY: 'auto' }}>
-                    <Tab1 tabData={tabData} searchData={searchData} onSearch={onSearchNew} pdfData={pdfData} searchParameter={searchParameter}/>
+                    <Tab1 tabData={tabData} searchData={searchData} onSearch={onSearchNew} pdfData={pdfData} searchParameter={searchParameter} processSeq={processSeq}/>
                 </Paper>
             </Grid>
         </Grid>

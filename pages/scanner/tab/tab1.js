@@ -154,14 +154,14 @@ export default function Tab1(props) {
                 resSearchPath[resSearchPath.length - 1].STATUS_SEQ_ = 101;
                 resSearchPath[resSearchPath.length - 1].LAST_UPD_USER = data?.user?.USER_LIST_PID;
                 try {
-                    let resUpd = await updateCadastralImage(resSearchPath[resSearchPath.length - 1].CADASTRAL_IMAGE_SEQ,resSearchPath[resSearchPath.length - 1]);
-                    console.log(resUpd ,"udate 103 uploadFile");
+                    let resUpd = await updateCadastralImage(resSearchPath[resSearchPath.length - 1].CADASTRAL_IMAGE_SEQ, resSearchPath[resSearchPath.length - 1]);
+                    console.log(resUpd, "udate 103 uploadFile");
                     _req_getCadastralImage(props?.tabData?.CADASTRAL_SEQ);
                     await setMessage("บันทึกสำเร็จ");
                     await setOpen(true);
                     await setType("success");
                 } catch (error) {
-                    console.log(error,"udate 103 uploadFile");
+                    console.log(error, "udate 103 uploadFile");
                     await setMessage("เกิดข้อผิดพลาดขณะอัปโหลด กรุณาลองใหม่อีกครั้งหรือติดต่อเจ้าหน้าที่");
                     await setOpen(true);
                     await setType("error");
@@ -395,14 +395,14 @@ export default function Tab1(props) {
                 obj.STATUS_SEQ_ = 101;
                 obj.LAST_UPD_USER = data?.user?.USER_LIST_PID;
                 try {
-                    let resUpd = await updateCadastralImage(obj.CADASTRAL_IMAGE_SEQ,obj);
-                    console.log(resUpd ,"udate 103 uploadFile");
+                    let resUpd = await updateCadastralImage(obj.CADASTRAL_IMAGE_SEQ, obj);
+                    console.log(resUpd, "udate 103 uploadFile");
                     _req_getCadastralImage(props?.tabData?.CADASTRAL_SEQ);
                     await setMessage("บันทึกสำเร็จ");
                     await setOpen(true);
                     await setType("success");
                 } catch (error) {
-                    console.log(error,"udate 103 uploadFile");
+                    console.log(error, "udate 103 uploadFile");
                     await setMessage("เกิดข้อผิดพลาดขณะอัปโหลด กรุณาลองใหม่อีกครั้งหรือติดต่อเจ้าหน้าที่");
                     await setOpen(true);
                     await setType("error");
@@ -569,7 +569,7 @@ export default function Tab1(props) {
                                         <Grid container justifyContent={"space-between"} p={1} spacing={1}>
                                             <Grid item xs={12}>
                                                 <Grid container direction={"column"} spacing={2}>
-                                                    <Grid item>
+                                                    <Grid item xs={12}>
                                                         <Button variant="contained" component="label">
                                                             เลือกไฟล์
                                                             <input
@@ -583,98 +583,140 @@ export default function Tab1(props) {
                                                     </Grid>
                                                     {selectedFiles?.length != 0 &&
                                                         selectedFiles?.map((image) => (
-                                                            <React.Fragment key={image.name}>
-                                                                <Grid p={1}>
-                                                                    <Card
-                                                                        sx={{
-                                                                            position: "relative",
-                                                                            "&:hover": {
-                                                                                "&::before": {
-                                                                                    content: '""',
-                                                                                    position: "absolute",
-                                                                                    top: 0,
-                                                                                    left: 0,
-                                                                                    width: "100%",
-                                                                                    height: "100%",
-                                                                                    backgroundColor: "rgba(0, 0, 0, 0.5)",
-                                                                                },
-                                                                            },
-                                                                        }}
-                                                                        className={`image ${selectedImage === image ? "selected" : ""
-                                                                            }`}
-                                                                    >
-                                                                        <CardActionArea>
-                                                                            <CardMedia
-                                                                                sx={{
-                                                                                    objectFit: 'cover',
-                                                                                    objectPosition: 'top',
-                                                                                    height: 200,
-                                                                                    width: '100%',
-                                                                                }}
-                                                                                component="img"
-                                                                                image={URL.createObjectURL(image)}
-                                                                                alt={image.name}
-                                                                            />
-                                                                        </CardActionArea>
-                                                                        {selectedImage.includes(image) && (
-                                                                            <React.Fragment>
-                                                                                <Backdrop
-                                                                                    sx={{
+                                                            <Grid item xs={12} key={image.name}>
+                                                                <Grid container>
+                                                                    <Grid xs={12} p={1}>
+                                                                        <Card
+                                                                            sx={{
+                                                                                position: "relative",
+                                                                                "&:hover": {
+                                                                                    "&::before": {
+                                                                                        content: '""',
                                                                                         position: "absolute",
                                                                                         top: 0,
                                                                                         left: 0,
-                                                                                        zIndex: 1,
-                                                                                        backgroundColor: "rgba(255, 255, 255, 0.5)",
                                                                                         width: "100%",
                                                                                         height: "100%",
-                                                                                    }}
-                                                                                    open={selectedImage.includes(image)}
-                                                                                />
-                                                                                <CheckIcon
-                                                                                    style={{ fontSize: 100 }}
+                                                                                        backgroundColor: "rgba(0, 0, 0, 0.5)",
+                                                                                    },
+                                                                                },
+                                                                            }}
+                                                                            className={`image ${selectedImage === image ? "selected" : ""
+                                                                                }`}
+                                                                        >
+                                                                            <CardActionArea>
+                                                                                <CardMedia
                                                                                     sx={{
-                                                                                        position: "absolute",
-                                                                                        top: "50%",
-                                                                                        left: "50%",
-                                                                                        transform: "translate(-50%, -50%)",
-                                                                                        color: "#5BB318",
-                                                                                        fontSize: "2rem",
-                                                                                        zIndex: 2,
+                                                                                        objectFit: 'cover',
+                                                                                        objectPosition: 'top',
+                                                                                        height: 200,
+                                                                                        width: '100%',
                                                                                     }}
+                                                                                    component="img"
+                                                                                    image={URL.createObjectURL(image)}
+                                                                                    alt={image.name}
                                                                                 />
-                                                                            </React.Fragment>
+                                                                            </CardActionArea>
+                                                                            {selectedImage.includes(image) && (
+                                                                                <React.Fragment>
+                                                                                    <Backdrop
+                                                                                        sx={{
+                                                                                            position: "absolute",
+                                                                                            top: 0,
+                                                                                            left: 0,
+                                                                                            zIndex: 1,
+                                                                                            backgroundColor: "rgba(255, 255, 255, 0.5)",
+                                                                                            width: "100%",
+                                                                                            height: "100%",
+                                                                                        }}
+                                                                                        open={selectedImage.includes(image)}
+                                                                                    />
+                                                                                    <CheckIcon
+                                                                                        style={{ fontSize: 100 }}
+                                                                                        sx={{
+                                                                                            position: "absolute",
+                                                                                            top: "50%",
+                                                                                            left: "50%",
+                                                                                            transform: "translate(-50%, -50%)",
+                                                                                            color: "#5BB318",
+                                                                                            fontSize: "2rem",
+                                                                                            zIndex: 2,
+                                                                                        }}
+                                                                                    />
+                                                                                </React.Fragment>
 
-                                                                        )}
-                                                                    </Card>
-                                                                    <Button
-                                                                        className="lightbox-button"
-                                                                        onClick={() => openImage(image)}
-                                                                    >
-                                                                        ขยายรูป
-                                                                    </Button>
-                                                                </Grid>
-                                                                <Grid item xs={12}>
-                                                                    {(cadDoc?.length != 0 || cadDoc != null) &&
-                                                                        <Paper>
+                                                                            )}
+                                                                        </Card>
+                                                                        <Button
+                                                                            className="lightbox-button"
+                                                                            onClick={() => openImage(image)}
+                                                                        >
+                                                                            ขยายรูป
+                                                                        </Button>
+                                                                    </Grid>
+                                                                    <Grid item xs={3} md={4}>
+                                                                        {(cadDoc?.length != 0 || cadDoc != null) &&
                                                                             <MenuList sx={{
                                                                                 maxHeight: 150,
                                                                                 overflowY: 'auto',
                                                                             }}>
                                                                                 {cadDoc.map((item, index) => (
+                                                                                    item.SURVEYDOCTYPE_GROUP == "A" &&
                                                                                     <MenuItem
+                                                                                        key={item.SURVEYDOCTYPE_SEQ}
                                                                                         onClick={() => handleImageClick(image, item)}
                                                                                         style={{ whiteSpace: "normal" }}
-                                                                                        // disabled={isItemSelected(item.SURVEYDOCTYPE_SEQ)}
-                                                                                        key={item.SURVEYDOCTYPE_SEQ}
+                                                                                    // disabled={isItemSelected(item.SURVEYDOCTYPE_SEQ)}
                                                                                     >
                                                                                         {`${item.SURVEYDOCTYPE_NAME_TH} (${item.SURVEYDOCTYPE_GROUP})`}
                                                                                     </MenuItem>
                                                                                 ))}
                                                                             </MenuList>
-                                                                        </Paper>
-                                                                    }
+                                                                        }
+                                                                    </Grid>
+                                                                    <Grid item xs={3} md={4}>
+                                                                        {(cadDoc?.length != 0 || cadDoc != null) &&
+                                                                            <MenuList sx={{
+                                                                                maxHeight: 150,
+                                                                                overflowY: 'auto',
+                                                                            }}>
+                                                                                {cadDoc.map((item, index) => (
+                                                                                    item.SURVEYDOCTYPE_GROUP == "B" &&
+                                                                                    <MenuItem
+                                                                                        key={item.SURVEYDOCTYPE_SEQ}
+                                                                                        onClick={() => handleImageClick(image, item)}
+                                                                                        style={{ whiteSpace: "normal" }}
+                                                                                    // disabled={isItemSelected(item.SURVEYDOCTYPE_SEQ)}
+                                                                                    >
+                                                                                        {`${item.SURVEYDOCTYPE_NAME_TH} (${item.SURVEYDOCTYPE_GROUP})`}
+                                                                                    </MenuItem>
+                                                                                ))}
+                                                                            </MenuList>
+                                                                        }
+                                                                    </Grid>
+                                                                    <Grid item xs={3} md={4}>
+                                                                        {(cadDoc?.length != 0 || cadDoc != null) &&
+                                                                            <MenuList sx={{
+                                                                                maxHeight: 150,
+                                                                                overflowY: 'auto',
+                                                                            }}>
+                                                                                {cadDoc.map((item, index) => (
+                                                                                    (item.SURVEYDOCTYPE_GROUP == "C" || item.SURVEYDOCTYPE_GROUP == "D") ?
+                                                                                    <MenuItem
+                                                                                        key={item.SURVEYDOCTYPE_SEQ}
+                                                                                        onClick={() => handleImageClick(image, item)}
+                                                                                        style={{ whiteSpace: "normal" }}
+                                                                                    // disabled={isItemSelected(item.SURVEYDOCTYPE_SEQ)}
+                                                                                    >
+                                                                                        {`${item.SURVEYDOCTYPE_NAME_TH} (${item.SURVEYDOCTYPE_GROUP})`}
+                                                                                    </MenuItem> :
+                                                                                    null
+                                                                                ))}
+                                                                            </MenuList>
+                                                                        }
+                                                                    </Grid>
                                                                 </Grid>
-                                                            </React.Fragment>
+                                                            </Grid>
                                                             // <Grid item key={file.name}>
                                                             //     <IconButton onClick={() => { openImage(file) }}>
                                                             //         <Image

@@ -61,10 +61,10 @@ export default function Tab1(props) {
   const [datagroupB, setDataGroupB] = React.useState([]);
   const [datagroupC, setDataGroupC] = React.useState([]);
   const [datagroupD, setDataGroupD] = React.useState([]);
-  const [openEdit,setOpenEdit] = React.useState(null);
+  const [openEdit, setOpenEdit] = React.useState(null);
   const [count, setCount] = React.useState(0);
-  const [checkCanEdit,setCheckCanEdit] = React.useState(false);
-  const [haveCadImg,setHaveCadImg] = React.useState(false);
+  const [checkCanEdit, setCheckCanEdit] = React.useState(false);
+  const [haveCadImg, setHaveCadImg] = React.useState(false);
   const handleOpen = (type, name) => {
     setAddRegType(!addRegType)
     setTypeRegisterSts(type);
@@ -138,8 +138,8 @@ export default function Tab1(props) {
     console.log(inputData, "inputData");
     // return
     try {
-      let res = await updateCadastral(inputData.CADASTRAL_SEQ,inputData);
-      console.log(res,"updateCadastral");
+      let res = await updateCadastral(inputData.CADASTRAL_SEQ, inputData);
+      console.log(res, "updateCadastral");
       if (res) {
         if (haveCadImg) {
           await onSubmit();
@@ -197,11 +197,11 @@ export default function Tab1(props) {
     res = res.filter(item => item.CADASTRAL_SEQ == props?.tabData?.CADASTRAL_SEQ);
     //
     console.log(res, "res createSurveyData");
-    if(res.length > 0){
+    if (res.length > 0) {
       setHaveCadImg(true);
     }
-    if(typeof res.find(obj => obj.PROCESS_SEQ_ == 103 && obj.STATUS_SEQ_ == 101) == "object"){
-      console.log(res.find(obj => obj.PROCESS_SEQ_ == 103 && obj.STATUS_SEQ_ == 101),"isTrue");
+    if (typeof res.find(obj => obj.PROCESS_SEQ_ == 103 && obj.STATUS_SEQ_ == 101) == "object") {
+      console.log(res.find(obj => obj.PROCESS_SEQ_ == 103 && obj.STATUS_SEQ_ == 101), "isTrue");
       setCheckCanEdit(true);
     }
     let resGroupA = await surveyDocTypeBySurveyDocTypeGroup("A");
@@ -276,7 +276,8 @@ export default function Tab1(props) {
         if (item.COUNT_DOC != undefined && item.COUNT_DOC != 0) {
           let searchObj1 = {
             "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
-            "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ
+            "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ,
+            "PROCESS_SEQ_": props?.processSeq ?? 102
           }
           let resCadastralImagePNoByCadastralSeq = await cadastralImagePNoByCadastralSeq(searchObj1);
           let resCadastralImageDocumentPNoByCadastralSeq = await cadastralImageDocumentPNoByCadastralSeq(searchObj1);
@@ -285,7 +286,7 @@ export default function Tab1(props) {
             "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ,
             "SURVEYDOCTYPE_PNO_SEQ": item.COUNT_DOC,
             "SURVEYDOCTYPE_PNO": resCadastralImageDocumentPNoByCadastralSeq.rows[0].IMAGE_PNO,
-            "CADASTRAL_IMAGE_PNO":resCadastralImagePNoByCadastralSeq.rows[0].CADASTRAL_IMAGE_PNO,
+            "CADASTRAL_IMAGE_PNO": resCadastralImagePNoByCadastralSeq.rows[0].CADASTRAL_IMAGE_PNO,
             "PROCESS_SEQ_": 102,
             "STATUS_SEQ_": 101,
             "RECORD_STATUS": "N",
@@ -300,7 +301,8 @@ export default function Tab1(props) {
         if (item.COUNT_DOC != undefined && item.COUNT_DOC != 0) {
           let searchObj1 = {
             "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
-            "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ
+            "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ,
+            "PROCESS_SEQ_": props?.processSeq ?? 102
           }
           let resCadastralImagePNoByCadastralSeq = await cadastralImagePNoByCadastralSeq(searchObj1);
           let resCadastralImageDocumentPNoByCadastralSeq = await cadastralImageDocumentPNoByCadastralSeq(searchObj1);
@@ -309,7 +311,7 @@ export default function Tab1(props) {
             "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ,
             "SURVEYDOCTYPE_PNO_SEQ": item.COUNT_DOC,
             "SURVEYDOCTYPE_PNO": resCadastralImageDocumentPNoByCadastralSeq.rows[0].IMAGE_PNO,
-            "CADASTRAL_IMAGE_PNO":resCadastralImagePNoByCadastralSeq.rows[0].CADASTRAL_IMAGE_PNO,
+            "CADASTRAL_IMAGE_PNO": resCadastralImagePNoByCadastralSeq.rows[0].CADASTRAL_IMAGE_PNO,
             "PROCESS_SEQ_": 102,
             "STATUS_SEQ_": 101,
             "RECORD_STATUS": "N",
@@ -324,7 +326,8 @@ export default function Tab1(props) {
         if (item.COUNT_DOC != undefined && item.COUNT_DOC != 0) {
           let searchObj1 = {
             "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
-            "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ
+            "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ,
+            "PROCESS_SEQ_": props?.processSeq ?? 102
           }
           let resCadastralImagePNoByCadastralSeq = await cadastralImagePNoByCadastralSeq(searchObj1);
           let resCadastralImageDocumentPNoByCadastralSeq = await cadastralImageDocumentPNoByCadastralSeq(searchObj1);
@@ -333,7 +336,7 @@ export default function Tab1(props) {
             "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ,
             "SURVEYDOCTYPE_PNO_SEQ": item.COUNT_DOC,
             "SURVEYDOCTYPE_PNO": resCadastralImageDocumentPNoByCadastralSeq.rows[0].IMAGE_PNO,
-            "CADASTRAL_IMAGE_PNO":resCadastralImagePNoByCadastralSeq.rows[0].CADASTRAL_IMAGE_PNO,
+            "CADASTRAL_IMAGE_PNO": resCadastralImagePNoByCadastralSeq.rows[0].CADASTRAL_IMAGE_PNO,
             "PROCESS_SEQ_": 102,
             "STATUS_SEQ_": 101,
             "RECORD_STATUS": "N",
@@ -348,7 +351,8 @@ export default function Tab1(props) {
         if (item.COUNT_DOC != undefined && item.COUNT_DOC != 0) {
           let searchObj1 = {
             "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
-            "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ
+            "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ,
+            "PROCESS_SEQ_": props?.processSeq ?? 102
           }
           let resCadastralImagePNoByCadastralSeq = await cadastralImagePNoByCadastralSeq(searchObj1);
           let resCadastralImageDocumentPNoByCadastralSeq = await cadastralImageDocumentPNoByCadastralSeq(searchObj1);
@@ -357,7 +361,7 @@ export default function Tab1(props) {
             "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ,
             "SURVEYDOCTYPE_PNO_SEQ": item.COUNT_DOC,
             "SURVEYDOCTYPE_PNO": resCadastralImageDocumentPNoByCadastralSeq.rows[0].IMAGE_PNO,
-            "CADASTRAL_IMAGE_PNO":resCadastralImagePNoByCadastralSeq.rows[0].CADASTRAL_IMAGE_PNO,
+            "CADASTRAL_IMAGE_PNO": resCadastralImagePNoByCadastralSeq.rows[0].CADASTRAL_IMAGE_PNO,
             "PROCESS_SEQ_": 102,
             "STATUS_SEQ_": 101,
             "RECORD_STATUS": "N",
@@ -402,7 +406,8 @@ export default function Tab1(props) {
           if (item.COUNT_DOC != undefined && item.COUNT_DOC != 0) {
             let searchObj1 = {
               "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
-              "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ
+              "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ,
+              "PROCESS_SEQ_": props?.processSeq ?? 102
             }
             let resCadastralImagePNoByCadastralSeq = await cadastralImagePNoByCadastralSeq(searchObj1);
             let resCadastralImageDocumentPNoByCadastralSeq = await cadastralImageDocumentPNoByCadastralSeq(searchObj1);
@@ -411,7 +416,7 @@ export default function Tab1(props) {
               "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ,
               "SURVEYDOCTYPE_PNO_SEQ": item.COUNT_DOC,
               "SURVEYDOCTYPE_PNO": resCadastralImageDocumentPNoByCadastralSeq.rows[0].IMAGE_PNO,
-              "CADASTRAL_IMAGE_PNO":resCadastralImagePNoByCadastralSeq.rows[0].CADASTRAL_IMAGE_PNO,
+              "CADASTRAL_IMAGE_PNO": resCadastralImagePNoByCadastralSeq.rows[0].CADASTRAL_IMAGE_PNO,
               "PROCESS_SEQ_": 102,
               "STATUS_SEQ_": 101,
               "RECORD_STATUS": "N",
@@ -443,7 +448,8 @@ export default function Tab1(props) {
           if (item.COUNT_DOC != undefined && item.COUNT_DOC != 0) {
             let searchObj1 = {
               "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
-              "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ
+              "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ,
+              "PROCESS_SEQ_": props?.processSeq ?? 102
             }
             let resCadastralImagePNoByCadastralSeq = await cadastralImagePNoByCadastralSeq(searchObj1);
             let resCadastralImageDocumentPNoByCadastralSeq = await cadastralImageDocumentPNoByCadastralSeq(searchObj1);
@@ -452,7 +458,7 @@ export default function Tab1(props) {
               "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ,
               "SURVEYDOCTYPE_PNO_SEQ": item.COUNT_DOC,
               "SURVEYDOCTYPE_PNO": resCadastralImageDocumentPNoByCadastralSeq.rows[0].IMAGE_PNO,
-              "CADASTRAL_IMAGE_PNO":resCadastralImagePNoByCadastralSeq.rows[0].CADASTRAL_IMAGE_PNO,
+              "CADASTRAL_IMAGE_PNO": resCadastralImagePNoByCadastralSeq.rows[0].CADASTRAL_IMAGE_PNO,
               "PROCESS_SEQ_": 102,
               "STATUS_SEQ_": 101,
               "RECORD_STATUS": "N",
@@ -484,7 +490,8 @@ export default function Tab1(props) {
           if (item.COUNT_DOC != undefined && item.COUNT_DOC != 0) {
             let searchObj1 = {
               "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
-              "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ
+              "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ,
+              "PROCESS_SEQ_": props?.processSeq ?? 102
             }
             let resCadastralImagePNoByCadastralSeq = await cadastralImagePNoByCadastralSeq(searchObj1);
             let resCadastralImageDocumentPNoByCadastralSeq = await cadastralImageDocumentPNoByCadastralSeq(searchObj1);
@@ -493,7 +500,7 @@ export default function Tab1(props) {
               "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ,
               "SURVEYDOCTYPE_PNO_SEQ": item.COUNT_DOC,
               "SURVEYDOCTYPE_PNO": resCadastralImageDocumentPNoByCadastralSeq.rows[0].IMAGE_PNO,
-              "CADASTRAL_IMAGE_PNO":resCadastralImagePNoByCadastralSeq.rows[0].CADASTRAL_IMAGE_PNO,
+              "CADASTRAL_IMAGE_PNO": resCadastralImagePNoByCadastralSeq.rows[0].CADASTRAL_IMAGE_PNO,
               "PROCESS_SEQ_": 102,
               "STATUS_SEQ_": 101,
               "RECORD_STATUS": "N",
@@ -525,7 +532,8 @@ export default function Tab1(props) {
           if (item.COUNT_DOC != undefined && item.COUNT_DOC != 0) {
             let searchObj1 = {
               "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
-              "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ
+              "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ,
+              "PROCESS_SEQ_": props?.processSeq ?? 102
             }
             let resCadastralImagePNoByCadastralSeq = await cadastralImagePNoByCadastralSeq(searchObj1);
             let resCadastralImageDocumentPNoByCadastralSeq = await cadastralImageDocumentPNoByCadastralSeq(searchObj1);
@@ -534,7 +542,7 @@ export default function Tab1(props) {
               "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ,
               "SURVEYDOCTYPE_PNO_SEQ": item.COUNT_DOC,
               "SURVEYDOCTYPE_PNO": resCadastralImageDocumentPNoByCadastralSeq.rows[0].IMAGE_PNO,
-              "CADASTRAL_IMAGE_PNO":resCadastralImagePNoByCadastralSeq.rows[0].CADASTRAL_IMAGE_PNO,
+              "CADASTRAL_IMAGE_PNO": resCadastralImagePNoByCadastralSeq.rows[0].CADASTRAL_IMAGE_PNO,
               "PROCESS_SEQ_": 102,
               "STATUS_SEQ_": 101,
               "RECORD_STATUS": "N",
@@ -622,7 +630,7 @@ export default function Tab1(props) {
             </Grid>
             <Grid item>
               <Typography color={"darkblue"} fontWeight={"bold"} sx={{ textDecoration: 'underline' }} display="inline">&nbsp;{numofsurveyQty}&nbsp;</Typography>
-              <IconButton size='small' disabled={numofsurveyQty == "-" || checkCanEdit} onClick={()=>{setOpenEdit(props?.tabData)}}><Edit/></IconButton>
+              <IconButton size='small' disabled={numofsurveyQty == "-" || checkCanEdit} onClick={() => { setOpenEdit(props?.tabData) }}><Edit /></IconButton>
             </Grid>
           </Grid>
         </Grid>
