@@ -104,7 +104,7 @@ export default function IndexScanner() {
             </Grid>
             <Grid item xs={10} md={11}>
                 <Paper sx={{ height: "100vh", flexGrow: 1, overflowY: 'auto' }}>
-                    <TabScanner tabData={tabData} searchData={searchData} onSearch={onSearchNew} pdfData={pdfData} searchParameter={searchParameter}/>
+                    <TabScanner tabData={tabData} searchData={searchData} onSearch={onSearchNew} pdfData={pdfData} searchParameter={searchParameter}  process={processSeq}/>
                 </Paper>
             </Grid>
         </Grid>

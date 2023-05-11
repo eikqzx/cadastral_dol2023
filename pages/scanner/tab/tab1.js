@@ -40,7 +40,7 @@ import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import "yet-another-react-lightbox/plugins/captions.css";
 import "yet-another-react-lightbox/plugins/thumbnails.css";
 import "yet-another-react-lightbox/styles.css";
-import { cadastralImageByCadastralSeq, cadastralImageByCadastralSeqSurveyDocTypeSeq, cadastralImageDocumentPNoByCadastralSeq, getCadastralImage, insertCadastral, saveScanCadastralImage, updateCadastralImage } from "@/service/sva";
+import { cadastralImageByCadastralSeq, cadastralImageByCadastralSeqSurveyDocTypeSeq, cadastralImagePNoByCadastralSeq, getCadastralImage, insertCadastral, saveScanCadastralImage, updateCadastralImage } from "@/service/sva";
 import { filterRecordStatus } from "@/lib/datacontrol";
 import { surveyDocTypeBySurveyDocTypeGroup } from "@/service/mas/surveyDocTypeGroup";
 import CheckIcon from "@mui/icons-material/Check";
@@ -102,13 +102,14 @@ export default function Tab1(props) {
         console.log(obj, "handleImageClick");
         let searchObj = {
             "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
-            "SURVEYDOCTYPE_SEQ": obj.SURVEYDOCTYPE_SEQ
+            "SURVEYDOCTYPE_SEQ": obj.SURVEYDOCTYPE_SEQ,
+            "PROCESS_SEQ_": 103
         }
-        let resCadIngPno = await cadastralImageDocumentPNoByCadastralSeq(searchObj);
+        let resCadIngPno = await cadastralImagePNoByCadastralSeq(searchObj);
         let objInsert = {
             "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
             "SURVEYDOCTYPE_SEQ": obj.SURVEYDOCTYPE_SEQ,
-            "CADASTRAL_IMAGE_PNO": resCadIngPno.rows[0].IMAGE_PNO, // http://127.0.0.1:8011/SVA_/cadastralImageDocumentPNoByCadastralSeq
+            "CADASTRAL_IMAGE_PNO": resCadIngPno.rows[0].CADASTRAL_IMAGE_PNO, // http://127.0.0.1:8011/SVA_/cadastralImageDocumentPNoByCadastralSeq
             "PROCESS_SEQ_": 102,
             "STATUS_SEQ_": 101,
             "CADASTRAL_IMAGE_NOTE": null,
