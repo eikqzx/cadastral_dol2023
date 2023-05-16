@@ -40,7 +40,7 @@ import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import "yet-another-react-lightbox/plugins/captions.css";
 import "yet-another-react-lightbox/plugins/thumbnails.css";
 import "yet-another-react-lightbox/styles.css";
-import { cadastralImageByCadastralSeq, cadastralImageByCadastralSeqSurveyDocTypeSeq, cadastralImagePNoByCadastralSeq, getCadastralImage, insertCadastral, saveScanCadastralImage, updateCadastralImage } from "@/service/sva";
+import { cadastralImageByCadastralSeq, cadastralImageByCadastralSeqSurveyDocTypeSeq, cadastralImagePNoByCadastralSeq, getCadastralImage, insertCadastral, saveScanCadastralImage, updateCadastral, updateCadastralImage } from "@/service/sva";
 import { filterRecordStatus } from "@/lib/datacontrol";
 import { surveyDocTypeBySurveyDocTypeGroup } from "@/service/mas/surveyDocTypeGroup";
 import CheckIcon from "@mui/icons-material/Check";
@@ -53,6 +53,7 @@ import AddCad from "@/pages/asignJobs/components/addCadastral";
 import { Edit } from "@mui/icons-material";
 import ImageMui from "@mui/icons-material/Image"
 import DialogEditUpolad from "../components/dialogEditUpolad";
+import EditCad from "@/pages/asignJobs/components/editCadastral";
 export default function Tab1(props) {
     console.log(props, "propsTab1");
     const [selectedFiles, setSelectedFiles] = React.useState([]);
@@ -72,6 +73,8 @@ export default function Tab1(props) {
     const [type, setType] = React.useState("success");
     const [openAddData, setOpenAddData] = React.useState(false);
     const [openEdit, setOpenEdit] = React.useState(null);
+    const [openEditNumQty, setOpenEditQty] = React.useState(null);
+    const [checkCanEdit, setCheckCanEdit] = React.useState(false);
 
     const handleClose = () => {
         setOpen(false)
@@ -241,6 +244,8 @@ export default function Tab1(props) {
             props?.tabData.length !== 0 &&
             props?.tabData != undefined
         ) {
+            createSurveyData(); /***** solution 1******/
+            setCheckCanEdit(false);
             getMasterData(props?.tabData);
             _req_getCadastralImage(props?.tabData?.CADASTRAL_SEQ);
             setSelectedFiles([]);
@@ -252,6 +257,19 @@ export default function Tab1(props) {
             }
         }
     }, [props?.tabData]);
+
+
+    const createSurveyData = async () => {
+        let res = await getCadastralImage();
+        res = filterRecordStatus(res.rows, "N");
+        res = res.filter(item => item.CADASTRAL_SEQ == props?.tabData?.CADASTRAL_SEQ);
+        //
+        console.log(res, "res createSurveyData");
+        if (typeof res.find(obj => obj.PROCESS_SEQ_ == 103 && obj.STATUS_SEQ_ == 101) == "object") {
+            console.log(res.find(obj => obj.PROCESS_SEQ_ == 103 && obj.STATUS_SEQ_ == 101), "isTrue");
+            setCheckCanEdit(true);
+        }
+    }
 
     const handleFileChange = (event) => {
         const files = event.target.files;
@@ -418,6 +436,26 @@ export default function Tab1(props) {
         }
     }
 
+    const editCad = async (inputData) => {
+        console.log(inputData, "inputData");
+        // return
+        try {
+            let res = await updateCadastral(inputData.CADASTRAL_SEQ, inputData);
+            console.log(res, "updateCadastral");
+            if (res) {
+                await props?.onSearch(props?.searchParameter);
+                await setMessage("แก้ไขทะเบียนสำเร็จ");
+                await setOpen(true);
+                await setType("success");
+            }
+        } catch (error) {
+            console.log(error,"editCad");
+            await setMessage("เกิดข้อผิดพลาด");
+            await setOpen(true);
+            await setType("error");
+        }
+    }
+
     return (
         <Box sx={{ flexGrow: 1 }}>
             {open && <Snackbar open={open} autoHideDuration={3000} onClose={handleClose} anchorOrigin={{
@@ -428,6 +466,7 @@ export default function Tab1(props) {
                     {message}
                 </Alert>
             </Snackbar>}
+            {openEditNumQty != null && <EditCad open={openEditNumQty} close={() => (setOpenEditQty(null))} data={props?.tabData} onSubmit={editCad} />}
             {openAddData && <AddCad open={openAddData} close={() => (setOpenAddData(false))} data={props?.tabData} onSubmit={addCad} />}
             {openEdit != null && <DialogEditUpolad open={openEdit != null} close={() => (setOpenEdit(null))} data={openEdit} onSubmit={editImage} />}
             {imageObj.length != 0 && (
@@ -516,17 +555,15 @@ export default function Tab1(props) {
                         <Grid item xs={3} md={3}>
                             <Grid container>
                                 <Grid item>
-                                    <Typography>ครั้งที่รังวัด:</Typography>
-                                </Grid>
-                                <Grid item>
-                                    <Typography
-                                        color={"darkblue"}
-                                        fontWeight={"bold"}
-                                        sx={{ textDecoration: "underline" }}
-                                        display="inline"
-                                    >
-                                        &nbsp;{numofsurveyQty}&nbsp;
-                                    </Typography>
+                                    <Grid container>
+                                        <Grid item >
+                                            <Typography>ครั้งที่รังวัด:</Typography>
+                                        </Grid>
+                                        <Grid item>
+                                            <Typography color={"darkblue"} fontWeight={"bold"} sx={{ textDecoration: 'underline' }} display="inline">&nbsp;{numofsurveyQty}&nbsp;</Typography>
+                                            <IconButton size='small' disabled={numofsurveyQty == "-" || checkCanEdit} onClick={() => { setOpenEditQty(props?.tabData) }}><Edit /></IconButton>
+                                        </Grid>
+                                    </Grid>
                                 </Grid>
                             </Grid>
                         </Grid>
@@ -703,15 +740,15 @@ export default function Tab1(props) {
                                                                             }}>
                                                                                 {cadDoc.map((item, index) => (
                                                                                     (item.SURVEYDOCTYPE_GROUP == "C" || item.SURVEYDOCTYPE_GROUP == "D") ?
-                                                                                    <MenuItem
-                                                                                        key={item.SURVEYDOCTYPE_SEQ}
-                                                                                        onClick={() => handleImageClick(image, item)}
-                                                                                        style={{ whiteSpace: "normal" }}
-                                                                                    // disabled={isItemSelected(item.SURVEYDOCTYPE_SEQ)}
-                                                                                    >
-                                                                                        {`${item.SURVEYDOCTYPE_NAME_TH} (${item.SURVEYDOCTYPE_GROUP})`}
-                                                                                    </MenuItem> :
-                                                                                    null
+                                                                                        <MenuItem
+                                                                                            key={item.SURVEYDOCTYPE_SEQ}
+                                                                                            onClick={() => handleImageClick(image, item)}
+                                                                                            style={{ whiteSpace: "normal" }}
+                                                                                        // disabled={isItemSelected(item.SURVEYDOCTYPE_SEQ)}
+                                                                                        >
+                                                                                            {`${item.SURVEYDOCTYPE_NAME_TH} (${item.SURVEYDOCTYPE_GROUP})`}
+                                                                                        </MenuItem> :
+                                                                                        null
                                                                                 ))}
                                                                             </MenuList>
                                                                         }
