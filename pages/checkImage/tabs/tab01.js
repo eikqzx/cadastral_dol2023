@@ -30,7 +30,11 @@ import {
     Chip,
     CardContent,
     CardHeader,
-    CardActions
+    CardActions,
+    RadioGroup,
+    TextField,
+    FormControlLabel,
+    Radio
 } from "@mui/material";
 import Lightbox from "yet-another-react-lightbox";
 import Captions from "yet-another-react-lightbox/plugins/captions";
@@ -42,11 +46,12 @@ import "yet-another-react-lightbox/plugins/thumbnails.css";
 import "yet-another-react-lightbox/styles.css";
 import { useSession } from 'next-auth/react';
 import { getLandOffice } from '@/service/mas/landOffice';
-import { cadastralImageByCadastralSeq } from '@/service/sva';
+import { cadastralImageByCadastralSeq, cadastralImageLogByCadastralSeq, getCadastralImageLog } from '@/service/sva';
 import { getFile } from '@/service/upload';
 import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
 import ReactImageMagnify from 'react-image-magnify';
+import { getStatus } from '@/service/mas/status';
 
 function Tab01(props) {
     const [imageObj, setImageObj] = React.useState([]);
@@ -59,8 +64,41 @@ function Tab01(props) {
     const [numofsurveyQty, setNumofsurveyQty] = React.useState("-");
     const [cadastralNo, setCadastralNo] = React.useState("-");
     const [imageArrData, setImageArrData] = React.useState([]);
+    const [options, setOptions] = React.useState(null);
+    const [note, setNote] = React.useState("");
+    const [isCheck, setIsCheck] = React.useState(0);
     const { data } = useSession();
     const [currentImageIndex, setCurrentImageIndex] = React.useState(0);
+
+    const req_options = async () => {
+        let res = await getStatus();
+        console.log(res, "req_options");
+        res = res.rows;
+        let newObj = []
+        for (let i in res) {
+            let item = res[i];
+            if (item.STATUS_SEQ == 101) {
+                let obj = {
+                    label: "ถูกต้อง",
+                    value: item.STATUS_SEQ
+                }
+                newObj.push(obj);
+            }
+            if (item.STATUS_SEQ == 103) {
+                let obj = {
+                    label: "ไม่ถูกต้อง",
+                    value: item.STATUS_SEQ
+                }
+                newObj.push(obj);
+            }
+        }
+        // console.log(newObj,"req_options");
+        await setOptions(newObj);
+    }
+
+    const handleOptionChange = (option) => {
+        setIsCheck(option);
+    };
 
     const handleNextImage = () => {
         setCurrentImageIndex((prevIndex) =>
@@ -98,7 +136,23 @@ function Tab01(props) {
     React.useEffect(() => {
         createData(props?.tabData);
         setCurrentImageIndex(0);
+        getLogData();
+        setNote("");
+        setIsCheck(0);
     }, [props?.tabData]);
+
+    React.useEffect(() => {
+        req_options();
+    }, []);
+
+    const getLogData = async () => {
+        let res = await getCadastralImageLog();
+        console.log(res, "getLogData");
+        let filtered = res?.rows.filter(item => item.CADASTRAL_SEQ == props?.tabData?.CADASTRAL_SEQ && item.PROCESS_SEQ_ == 106);
+        console.log(filtered, "getLogData filtered");
+        setNote(filtered[0]?.CADASTRAL_IMAGE_NOTE ?? "");
+        setIsCheck(filtered[0]?.STATUS_SEQ_ ?? 0);
+    }
 
     const getMasterData = async (data) => {
         console.log(data, "getMasterData");
@@ -134,6 +188,34 @@ function Tab01(props) {
         }
         setImageArrData([]);
         setImageArrData(arr);
+    }
+
+    const onSave = async () => {
+        // console.log("onSave");
+        let objInsert = {
+            "CADASTRAL_HSFS_SEQ": null,
+            "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
+            "PROCESS_SEQ_": Number(props?.process ?? 106),
+            "STATUS_SEQ_": isCheck,
+            "CADASTRAL_IMAGE_NOTE": note == "" ? null : note,
+            "RECORD_STATUS": "N",
+            "CREATE_USER": data?.user?.USER_LIST_PID
+        }
+        console.log(objInsert, "onSave");
+        try {
+            let resInsert = await cadastralImageLogByCadastralSeq(objInsert);
+            console.log(resInsert, "onSave");
+            if (typeof resInsert == "object") {
+                await setMessage("บันทึกสำเร็จ");
+                await setOpen(true);
+                await setType("success");
+            }
+        } catch (error) {
+            await setMessage("เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้งหรือติดต่อเจ้าหน้าที่");
+            await setOpen(true);
+            await setType("error");
+            console.log(error, "onSave");
+        }
     }
 
     return (
@@ -274,71 +356,110 @@ function Tab01(props) {
                         </Grid>
                     </Grid>
                 </Grid>
-                <Grid item xs={12} p={1}>
-                    {imageArrData?.length != 0 && <Grid container alignItems="center"
-                        justifyContent="center">
-                        <Grid item>
-                            <Card sx={{
-                                background: 'linear-gradient(26deg, rgba(255,255,232,1) 20%, rgba(188,243,176,1) 100%) !important',
-                            }}>
-                                <CardContent>
-                                    <Grid container alignItems="center"
-                                        justifyContent="center">
-                                        <Grid item>
-                                            <IconButton onClick={handlePreviousImage} disabled={currentImageIndex == 0} size='large' aria-label="previous">
-                                                <SkipPreviousIcon />
-                                            </IconButton>
-                                        </Grid>
-                                        <Grid item>
-                                            <Typography variant="h5">{imageArrData[currentImageIndex]?.IMAGE_PNAME + " (" + imageArrData[currentImageIndex]?.IMAGE_PNO + ")"}</Typography>
-                                        </Grid>
-                                        <Grid item>
-                                            <IconButton onClick={handleNextImage} disabled={currentImageIndex == (imageArrData.length - 1)} size='large' aria-label="next">
-                                                <SkipNextIcon />
-                                            </IconButton>
-                                        </Grid>
-                                    </Grid>
-                                </CardContent>
-                                <CardActions>
-                                    <Grid container alignItems="center"
-                                        justifyContent="center">
-                                        <Grid item xs={10}>
-                                            <CardActionArea>
-                                                {/* <CardMedia
-                                                    component="img"
-                                                    width={1000}
-                                                    height={1200}
-                                                    image={imageArrData[currentImageIndex]?.FILE_DATA}
-                                                /> */}
-                                                <CardMedia>
-                                                    <ReactImageMagnify
-                                                        {...{
-                                                            smallImage: {
-                                                                isFluidWidth: true,
-                                                                src: imageArrData[currentImageIndex]?.FILE_DATA,
-                                                            },
-                                                            largeImage: {
-                                                                src: imageArrData[currentImageIndex]?.FILE_DATA,
-                                                                width: 2000,
-                                                                height: 2000
-                                                            },
-                                                            enlargedImageContainerDimensions: {
-                                                                width: '400%',
-                                                                height: '100%'
-                                                            },
-                                                            enlargedImagePosition: 'over'
-                                                        }}
-                                                    />
-                                                </CardMedia>
-                                            </CardActionArea>
-                                        </Grid>
-                                    </Grid>
-                                </CardActions>
-                            </Card>
+                {props?.tabData.length != 0 &&
+                    <React.Fragment>
+                        <Grid item xs={12} p={1}>
+                            {imageArrData?.length != 0 && <Grid container alignItems="center"
+                                justifyContent="center">
+                                <Grid item>
+                                    <Card sx={{
+                                        background: 'linear-gradient(26deg, rgba(255,255,232,1) 20%, rgba(188,243,176,1) 100%) !important',
+                                    }}>
+                                        <CardContent>
+                                            <Grid container alignItems="center"
+                                                justifyContent="center">
+                                                <Grid item>
+                                                    <IconButton onClick={handlePreviousImage} disabled={currentImageIndex == 0} size='large' aria-label="previous">
+                                                        <SkipPreviousIcon />
+                                                    </IconButton>
+                                                </Grid>
+                                                <Grid item>
+                                                    <Typography variant="h5">{imageArrData[currentImageIndex]?.IMAGE_PNAME + " (" + imageArrData[currentImageIndex]?.IMAGE_PNO + ")"}</Typography>
+                                                </Grid>
+                                                <Grid item>
+                                                    <IconButton onClick={handleNextImage} disabled={currentImageIndex == (imageArrData.length - 1)} size='large' aria-label="next">
+                                                        <SkipNextIcon />
+                                                    </IconButton>
+                                                </Grid>
+                                            </Grid>
+                                        </CardContent>
+                                        <CardActions>
+                                            <Grid container alignItems="center"
+                                                justifyContent="center">
+                                                <Grid item xs={10}>
+                                                    <CardMedia
+                                                        sx={{ maxWidth: 1000 }}
+                                                    >
+                                                        <ReactImageMagnify
+                                                            {...{
+                                                                smallImage: {
+                                                                    isFluidWidth: true,
+                                                                    src: imageArrData[currentImageIndex]?.FILE_DATA,
+                                                                    width: 400,
+                                                                    height: 300,
+                                                                },
+                                                                largeImage: {
+                                                                    src: imageArrData[currentImageIndex]?.FILE_DATA,
+                                                                    width: 2500,
+                                                                    height: 2500
+                                                                },
+                                                                enlargedImagePosition: 'over'
+                                                            }}
+                                                        />
+                                                    </CardMedia>
+                                                </Grid>
+                                            </Grid>
+                                        </CardActions>
+                                        <CardContent>
+                                            <Grid container alignItems="center"
+                                                justifyContent="center">
+                                                <Grid item>
+                                                    <IconButton onClick={handlePreviousImage} disabled={currentImageIndex == 0} size='large' aria-label="previous">
+                                                        <SkipPreviousIcon />
+                                                    </IconButton>
+                                                </Grid>
+                                                <Grid item>
+                                                    <Typography variant="h5">{imageArrData[currentImageIndex]?.IMAGE_PNAME + " (" + imageArrData[currentImageIndex]?.IMAGE_PNO + ")"}</Typography>
+                                                </Grid>
+                                                <Grid item>
+                                                    <IconButton onClick={handleNextImage} disabled={currentImageIndex == (imageArrData.length - 1)} size='large' aria-label="next">
+                                                        <SkipNextIcon />
+                                                    </IconButton>
+                                                </Grid>
+                                            </Grid>
+                                        </CardContent>
+                                    </Card>
+                                </Grid>
+                            </Grid>
+                            }
                         </Grid>
-                    </Grid>
-                    }
-                </Grid>
+                        <Grid item xs={12}>
+                            <Grid container justifyContent="flex-start" xs={12}>
+                                <Grid item xs={12} p={2}>
+                                    <TextField inputProps={{ maxLength: 100 }}
+                                        helperText={isCheck == 103 ? 'กรุณาใส่หมายเหตุ' : ' '}
+                                        error={isCheck == 103} fullWidth type="textarea" size="small" label={"หมายเหตุ"} value={note} onChange={(e) => { setNote(e.target.value) }} />
+                                </Grid>
+                                {options != null && options?.map((option, index) => (
+                                    <Grid item xs={6} p={2} key={index} md={3}>
+                                        <RadioGroup
+                                            aria-labelledby="radio-buttons"
+                                            name="radio-buttons-group"
+                                        >
+                                            <FormControlLabel control={<Radio checked={isCheck == option.value} value={isCheck} onChange={() => handleOptionChange(option.value)} />} label={option.label} />
+                                        </RadioGroup>
+                                    </Grid>
+                                ))}
+                                <Grid item xs={12} p={2}>
+                                    <Button variant="contained"
+                                        disabled={isCheck == 103 && note == "" || isCheck == 0}
+                                        onClick={onSave}
+                                        color="success">บันทึก</Button>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                    </React.Fragment>
+                }
             </Grid>
         </div>
     )

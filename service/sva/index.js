@@ -208,3 +208,33 @@ export async function cadastralImageByCadastralSeqSurveyDocTypeSeq(dataSend) {
         return false
     }
 }
+
+export async function getCadastralImageLog() {
+    let url = `/api/sva/getCadastralImageLog`
+    AddLoading()
+    try {
+        let res = await axios.get(url)
+        let data = res.data
+        //console.log(data)
+        RemoveLoading()
+        return data
+    } catch (err) {
+        console.log(err)
+        return false
+    }
+}
+
+export async function cadastralImageLogByCadastralSeq(dataSend) {
+    let url = `/api/sva/cadastralImageLogByCadastralSeq`
+    AddLoading();
+    try {
+        let res = await axios.post(url, dataSend)
+        let data = res.data
+        //console.log(data)
+        RemoveLoading()
+        return data
+    } catch (err) {
+        console.log(err)
+        return false
+    }
+}
