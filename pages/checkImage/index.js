@@ -29,7 +29,7 @@ export default function IndexCheckImage() {
     const [message, setMessage] = React.useState('');
     const [type, setType] = React.useState('');
     const [printplateTypeData, setPrintplateTypeData] = React.useState([]);
-    const [processSeq, setProcessSeq] = React.useState(103)
+    const [processSeq, setProcessSeq] = React.useState(106)
     const [userData, setUserData] = React.useState(null);
     const [landOffice, setLandOffice] = React.useState(null);
     const [pdfData, setPdfData] = React.useState();
@@ -39,8 +39,9 @@ export default function IndexCheckImage() {
 
     React.useEffect(() => {
         if (isNotEmpty(dataUrl)) {
+            console.log(dataUrl?.PROCESS_SEQ,"dataUrl?.PROCESS_SEQ");
             let seq = decode(dataUrl?.PROCESS_SEQ);
-            console.log(seq, "seq");
+            console.log(seq, "seq dataUrl?.PROCESS_SEQ");
             setProcessSeq(seq);
         }
     }, [])

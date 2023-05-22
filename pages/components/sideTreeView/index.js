@@ -15,6 +15,7 @@ import { filterRecordStatus, isNotEmpty } from '@/lib/datacontrol';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import { getCadastralImageLog } from '@/service/sva';
 
 
 var state
@@ -29,7 +30,7 @@ export default function SideTreeView(props) {
     const [type, setType] = React.useState("success");
     const router = useRouter()
     const { pathname, query } = router
-    console.log(pathname,"pathname");
+    console.log(pathname, "pathname");
     state = useSelector(state => state.job.value);
     const handleClose = () => {
         setOpen(false)
@@ -93,62 +94,69 @@ export default function SideTreeView(props) {
         // console.log(data);
         props.setTapData(data)
     }
-    const labelByprintplate = () => {
-        if (state == 1) {
-            if (props.data) {
-                if (props.data[0]?.PRINTPLATE_TYPE_SEQ == 1 || props.data[0]?.PRINTPLATE_TYPE_SEQ == 2 || props.data[0]?.PRINTPLATE_TYPE_SEQ == 3) {
-                    return "หน้าสำรวจเลขที่" + " (" + onSearchData.filter(item => item.PROCESS_SEQ_ == processSeq).length + ")";
-                }
-                if (props.data[0]?.PRINTPLATE_TYPE_SEQ == 4 || props.data[0]?.PRINTPLATE_TYPE_SEQ == 5) {
-                    return "เอกสารสิทธิ์เลขที่" + " (" + onSearchData.filter(item => item.PROCESS_SEQ_ == processSeq).length + ")";
-                }
-                if (props.data[0]?.PRINTPLATE_TYPE_SEQ == 10 || props.data[0]?.PRINTPLATE_TYPE_SEQ == 20) {
-                    return "เลขที่ห้อง" + " (" + onSearchData.filter(item => item.PROCESS_SEQ_ == processSeq).length + ")";
-                }
-            }
-        } else {
-            if (props.data) {
-                if (props.data[0]?.PRINTPLATE_TYPE_SEQ == 1 || props.data[0]?.PRINTPLATE_TYPE_SEQ == 2 || props.data[0]?.PRINTPLATE_TYPE_SEQ == 3) {
-                    return "เอกสารสิทธิ์เลขที่" + " (" + onSearchData.filter(item => item.PROCESS_SEQ_ == processSeq).length + ")";
-                }
-                if (props.data[0]?.PRINTPLATE_TYPE_SEQ == 4 || props.data[0]?.PRINTPLATE_TYPE_SEQ == 5) {
-                    return "เอกสารสิทธิ์เลขที่" + " (" + onSearchData.filter(item => item.PROCESS_SEQ_ == processSeq).length + ")";
-                }
-                if (props.data[0]?.PRINTPLATE_TYPE_SEQ == 10 || props.data[0]?.PRINTPLATE_TYPE_SEQ == 20) {
-                    return "เลขที่ห้อง" + " (" + onSearchData.filter(item => item.PROCESS_SEQ_ == processSeq).length + ")";
-                }
-            }
-        }
-    }
+
     const onCreateObject = async () => {
         let masStatus = await getStatus();
+        let logData = await getCadastralImageLog();
         masStatus = filterRecordStatus(masStatus.rows, "N");
+        console.log(logData, "logData");
         console.log(onSearchData, "onSearchData treeview");
         console.log(processSeq, "onSearchData processSeq");
         let onSearchDataFiltered = onSearchData.filter(item => item.PROCESS_SEQ_ == processSeq || (item.PROCESS_SEQ_ == 102 && processSeq == 103))
         console.log(onSearchDataFiltered, "onSearchDataFiltered");
+        for (let i in onSearchDataFiltered) {
+            let itemSearch = onSearchDataFiltered[i];
+            itemSearch["CADASTRAL_IMAGE_DATA"] = logData.rows.filter(item => item.CADASTRAL_SEQ == itemSearch.CADASTRAL_SEQ && item.PROCESS_SEQ_ == processSeq)[0];
+            console.log(itemSearch, "itemSearch");
+        }
+        console.log(onSearchDataFiltered,"onSearchDataFilteredCADASTRAL_IMAGE");
+
         if (onSearchDataFiltered.length != 0) {
-            let statusSeq101 = onSearchDataFiltered.filter(item => item.STATUS_SEQ_ == 101);
-            let statusSeq102 = onSearchDataFiltered.filter(item => item.STATUS_SEQ_ == 102);
-            let statusSeq103 = onSearchDataFiltered.filter(item => item.STATUS_SEQ_ == 103);
-            let statusSeq104 = onSearchDataFiltered.filter(item => item.STATUS_SEQ_ == 104 || item.STATUS_SEQ_ == null);
-            masStatus.map(item => {
-                item.DATA = [];
-                if (item.STATUS_SEQ == 101 || item.STATUS_SEQ_ == 101) {
-                    item.DATA = statusSeq101
-                }
-                if (item.STATUS_SEQ == 102 || item.STATUS_SEQ_ == 102) {
-                    item.DATA = statusSeq102
-                }
-                if (item.STATUS_SEQ == 103 || item.STATUS_SEQ_ == 103) {
-                    item.DATA = statusSeq103
-                }
-                if (item.STATUS_SEQ == 104 || item.STATUS_SEQ_ == 104) {
-                    item.DATA = statusSeq104
-                }
-            })
-            console.log(masStatus, "onSearchData masStatus");
-            await setTreeViewData(masStatus.sort((a, b) => b.STATUS_SEQ - a.STATUS_SEQ));
+            if (processSeq == 106) {
+                let statusSeq101 = onSearchDataFiltered.filter(item => item?.CADASTRAL_IMAGE_DATA?.STATUS_SEQ_ == 101);
+                let statusSeq102 = onSearchDataFiltered.filter(item => item?.CADASTRAL_IMAGE_DATA?.STATUS_SEQ_ == 102);
+                let statusSeq103 = onSearchDataFiltered.filter(item => item?.CADASTRAL_IMAGE_DATA?.STATUS_SEQ_ == 103);
+                let statusSeq104 = onSearchDataFiltered.filter(item => item?.CADASTRAL_IMAGE_DATA?.STATUS_SEQ_ == 104 || item?.CADASTRAL_IMAGE_DATA?.STATUS_SEQ_ == null);
+                masStatus.map(item => {
+                    item.DATA = [];
+                    if (item.STATUS_SEQ == 101 || item.STATUS_SEQ_ == 101) {
+                        item.DATA = statusSeq101
+                    }
+                    if (item.STATUS_SEQ == 102 || item.STATUS_SEQ_ == 102) {
+                        item.DATA = statusSeq102
+                    }
+                    if (item.STATUS_SEQ == 103 || item.STATUS_SEQ_ == 103) {
+                        item.DATA = statusSeq103
+                    }
+                    if (item.STATUS_SEQ == 104 || item.STATUS_SEQ_ == 104) {
+                        item.DATA = statusSeq104
+                    }
+                })
+                console.log(masStatus, "onSearchData masStatus");
+                await setTreeViewData(masStatus.sort((a, b) => b.STATUS_SEQ - a.STATUS_SEQ));
+            } else {
+                let statusSeq101 = onSearchDataFiltered.filter(item => item.STATUS_SEQ_ == 101);
+                let statusSeq102 = onSearchDataFiltered.filter(item => item.STATUS_SEQ_ == 102);
+                let statusSeq103 = onSearchDataFiltered.filter(item => item.STATUS_SEQ_ == 103);
+                let statusSeq104 = onSearchDataFiltered.filter(item => item.STATUS_SEQ_ == 104 || item.STATUS_SEQ_ == null);
+                masStatus.map(item => {
+                    item.DATA = [];
+                    if (item.STATUS_SEQ == 101 || item.STATUS_SEQ_ == 101) {
+                        item.DATA = statusSeq101
+                    }
+                    if (item.STATUS_SEQ == 102 || item.STATUS_SEQ_ == 102) {
+                        item.DATA = statusSeq102
+                    }
+                    if (item.STATUS_SEQ == 103 || item.STATUS_SEQ_ == 103) {
+                        item.DATA = statusSeq103
+                    }
+                    if (item.STATUS_SEQ == 104 || item.STATUS_SEQ_ == 104) {
+                        item.DATA = statusSeq104
+                    }
+                })
+                console.log(masStatus, "onSearchData masStatus");
+                await setTreeViewData(masStatus.sort((a, b) => b.STATUS_SEQ - a.STATUS_SEQ));
+            }
         }
     }
     console.log(treeViewData, "treeViewDatatreeViewData");
