@@ -238,3 +238,103 @@ export async function cadastralImageLogByCadastralSeq(dataSend) {
         return false
     }
 }
+
+export async function getCadastralLand() {
+    let url = `/api/sva/getCadastralLand`
+    AddLoading()
+    try {
+        let res = await axios.get(url)
+        let data = res.data
+        //console.log(data)
+        RemoveLoading()
+        return data
+    } catch (err) {
+        console.log(err)
+        return false
+    }
+}
+
+export async function updCadastralLand(seq, dataSend) {
+    let url = `/api/sva/updCadastralLand`
+    let dataput = {
+        seq: seq,
+        dataSend: dataSend
+    }
+    AddLoading()
+    try {
+        let res = await axios.post(url, dataput)
+        let data = res.data
+        RemoveLoading()
+        //console.log(data)
+        return data
+    } catch (err) {
+        RemoveLoading()
+        console.log(err)
+        return false
+    }
+}
+
+export async function insCadastralLand(dataSend) {
+    let url = `/api/sva/insCadastralLand`
+    AddLoading();
+    try {
+        let res = await axios.post(url, dataSend)
+        let data = res.data
+        //console.log(data)
+        RemoveLoading()
+        return data
+    } catch (err) {
+        console.log(err)
+        return false
+    }
+}
+
+export async function getCadastralOwner() {
+    let url = `/api/sva/getCadastralOwner`
+    AddLoading()
+    try {
+        let res = await axios.get(url)
+        let data = res.data
+        //console.log(data)
+        RemoveLoading()
+        return data
+    } catch (err) {
+        console.log(err)
+        return false
+    }
+}
+
+export async function updCadastralOwner(seq, dataSend) {
+    let url = `/api/sva/updCadastralOwner`
+    let dataput = {
+        seq: seq,
+        dataSend: dataSend
+    }
+    AddLoading()
+    try {
+        let res = await axios.post(url, dataput)
+        let data = res.data
+        RemoveLoading()
+        //console.log(data)
+        return data
+    } catch (err) {
+        RemoveLoading()
+        console.log(err)
+        return false
+    }
+}
+
+export async function insCadastralOwner(dataSend) {
+    let url = `/api/sva/insCadastralOwner`
+    AddLoading();
+    try {
+        let res = await axios.post(url, dataSend)
+        let data = res.data
+        //console.log(data)
+        RemoveLoading()
+        return data
+    } catch (err) {
+        console.log(err)
+        return false
+    }
+}
