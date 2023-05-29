@@ -34,7 +34,7 @@ import {
     RadioGroup,
     TextField,
     FormControlLabel,
-    Radio
+    Radio,
 } from "@mui/material";
 import Lightbox from "yet-another-react-lightbox";
 import Captions from "yet-another-react-lightbox/plugins/captions";
@@ -52,6 +52,9 @@ import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
 import ReactImageMagnify from 'react-image-magnify';
 import { getStatus } from '@/service/mas/status';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import ImageMui from "@mui/icons-material/Image"
+import CloseIcon from '@mui/icons-material/Close';
 
 function Tab01(props) {
     const [imageObj, setImageObj] = React.useState([]);
@@ -69,6 +72,7 @@ function Tab01(props) {
     const [isCheck, setIsCheck] = React.useState(0);
     const { data } = useSession();
     const [currentImageIndex, setCurrentImageIndex] = React.useState(0);
+    const [advancedExampleOpen, setAdvancedExampleOpen] = React.useState(false);
 
     const req_options = async () => {
         let res = await getStatus();
@@ -218,6 +222,21 @@ function Tab01(props) {
         }
     }
 
+    const openImageUrl = async (file) => {
+        console.log(file, "file");
+        // console.log("tesrt");
+        if (file.FILE_STATUS) {
+            let arr = [];
+            // { ...slides[0], title: "Puppy in sunglasses", description: "Mollie Sivaram" }
+            let obj = { src: file.FILE_DATA, title: `${file.IMAGE_PNAME} (${file.IMAGE_PNO})` };
+            console.log(obj, "file");
+            arr.push(obj);
+            console.log(arr, "imageObj");
+            setImageObj(arr);
+            setAdvancedExampleOpen(true);
+        }
+    };
+
     return (
         <div>
             <Snackbar open={open} autoHideDuration={3000} onClose={handleClose} anchorOrigin={{
@@ -263,7 +282,7 @@ function Tab01(props) {
                     finite: true
                 }}
             />}
-            <Grid container spacing={1}>
+            <Grid container spacing={1} p={1}>
                 <Grid item xs={12} p={1}>
                     <Grid p={1} spacing={1} container sx={{ height: "15vh" }}>
                         <Grid item xs={3} md={5}>
@@ -358,7 +377,55 @@ function Tab01(props) {
                 </Grid>
                 {props?.tabData.length != 0 &&
                     <React.Fragment>
-                        <Grid item xs={12} p={1}>
+                        <Grid item xs={12}>
+                            <Grid container justifyContent="flex-start" xs={12}>
+                                <Grid item xs={12} p={2}>
+                                    <Paper sx={{ textAlign: 'center' }}>
+                                        {imageArrData?.length != 0 &&
+                                            <TableContainer>
+                                                <Table size="small" >
+                                                    <TableHead>
+                                                        <TableRow>
+                                                            <TableCell style={{ width: "40%" }} align="left">ชื่อเอกสาร</TableCell>
+                                                            <TableCell style={{ width: "35%" }} align="left">สถานะ</TableCell>
+                                                            <TableCell style={{ width: "25%" }} align="left">จัดการ</TableCell>
+                                                        </TableRow>
+                                                    </TableHead>
+                                                    <TableBody>
+                                                        {
+                                                            imageArrData?.map((item, index) => (
+                                                                <TableRow key={index} sx={{
+                                                                    '&:last-child td, &:last-child th': { border: 0 },
+                                                                    '&:hover': {
+                                                                        backgroundColor: '#ECF2FF !important',
+                                                                    },
+                                                                }}>
+                                                                    <TableCell style={{ width: "40%" }} align="left">{`${item.IMAGE_PNAME} (${item.IMAGE_PNO})`}</TableCell>
+                                                                    <TableCell style={{ width: "35%" }} align="left">{
+                                                                        item.FILE_STATUS ? <Chip icon={<CheckCircleIcon />} label="อัปโหลดแล้ว" color="success" /> : <Chip icon={<CloseIcon />} label="ไม่ได้อัปโหลด" color="error" />
+                                                                    }</TableCell>
+                                                                    <TableCell style={{ width: "25%" }} align="left">
+                                                                        <Tooltip title="ดูรูปภาพ">
+                                                                            <IconButton onClick={() => { openImageUrl(item) }}>
+                                                                                <ImageMui />
+                                                                            </IconButton>
+                                                                        </Tooltip>
+                                                                    </TableCell>
+                                                                </TableRow>
+                                                            ))
+                                                        }
+                                                    </TableBody>
+                                                </Table>
+                                            </TableContainer>
+                                        }
+                                    </Paper>
+                                </Grid>
+                                {/* <Grid item xs={4} p={2}>
+                                    <Paper sx={{ textAlign: 'center' }}>xs=4</Paper>
+                                </Grid> */}
+                            </Grid>
+                        </Grid>
+                        {/* <Grid item xs={12} p={1}>
                             {imageArrData?.length != 0 && <Grid container alignItems="center"
                                 justifyContent="center">
                                 <Grid item>
@@ -432,7 +499,7 @@ function Tab01(props) {
                                 </Grid>
                             </Grid>
                             }
-                        </Grid>
+                        </Grid> */}
                         <Grid item xs={12}>
                             <Grid container justifyContent="flex-start" xs={12}>
                                 <Grid item xs={12} p={2}>
