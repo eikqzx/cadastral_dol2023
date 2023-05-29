@@ -116,7 +116,17 @@ export default function HeaderTabs(props) {
 
     const req_MasProcess = async () => {
         let res = await getMenu();
-        await setTabData(filterRecordStatus(res.rows, "N"));
+        let masMenuData = []
+        for (let i in res.rows) {
+            let dataItems = res.rows[i]
+            console.log(dataItems, "menumasdataItems");
+            if (dataItems.MENU_SEQ !== 122 && dataItems.MENU_SEQ !== 107) {
+                masMenuData.push(dataItems)
+            }
+        }
+        console.log(masMenuData, "menumas");
+        await setTabData(filterRecordStatus(masMenuData, "N"));
+        // await setTabData(filterRecordStatus(res.rows, "N"));
     }
 
     const stringName = (fName = null, mName = null, lName = null) => {
