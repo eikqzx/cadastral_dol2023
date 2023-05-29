@@ -109,7 +109,7 @@ export default function SideTreeView(props) {
             itemSearch["CADASTRAL_IMAGE_DATA"] = logData.rows.filter(item => item.CADASTRAL_SEQ == itemSearch.CADASTRAL_SEQ && item.PROCESS_SEQ_ == processSeq)[0];
             console.log(itemSearch, "itemSearch");
         }
-        console.log(onSearchDataFiltered,"onSearchDataFilteredCADASTRAL_IMAGE");
+        console.log(onSearchDataFiltered, "onSearchDataFilteredCADASTRAL_IMAGE");
 
         if (onSearchDataFiltered.length != 0) {
             if (processSeq == 106) {
@@ -291,6 +291,58 @@ export default function SideTreeView(props) {
                 }
                 {
                     props.process == 106 &&
+                    (
+                        <Grid container spacing={1}>
+                            <Grid item xs={12}>
+                                <Stack direction={'row'}>
+                                    <Grid item xs={10}>
+                                        <Typography fontSize={16}>{"เลขที่ต้นร่าง (" + onSearchData.length + ")"}</Typography>
+                                    </Grid>
+                                    <Grid item xs={2}>
+                                        <Tooltip title="เปิด / ปิด แสดงทั้งหมด">
+                                            <IconButton size='small' onClick={handleExpandClick}
+                                                sx={{
+                                                    '&:hover': {
+                                                        background: 'linear-gradient(60deg, rgba(255,255,232,1) 40%, rgba(188,243,176,1) 80%) !important',
+                                                    },
+                                                }}
+                                            >
+                                                {expanded.length === 0 ? <ArrowRightIcon /> : <ArrowDropDownIcon />}
+                                            </IconButton>
+                                        </Tooltip>
+                                    </Grid>
+                                </Stack>
+                            </Grid>
+                            <Grid item>
+                                <TreeView
+                                    defaultCollapseIcon={<ArrowDropDownIcon />}
+                                    defaultExpandIcon={<ArrowRightIcon />}
+                                    sx={{ height: "95vh", flexGrow: 1, overflowY: 'auto' }}
+                                    expanded={expanded}
+                                    onNodeToggle={(event, nodeIds) => setExpanded(nodeIds)}
+                                >
+                                    {
+                                        treeViewData.map((node, index) => (node.DATA != 0 &&
+                                            <TreeItem nodeId={String(node.STATUS_SEQ)} label={node.STATUS_NAME_TH + " (" + node.DATA.length + ")"} key={index}>
+                                                {node.DATA.map((childNode, indexy) => {
+                                                    return <TreeItem
+                                                        nodeId={String(childNode.CADASTRAL_SEQ)}
+                                                        label={childNode.CADASTRAL_NO}
+                                                        key={indexy}
+                                                        onClick={() => { onClickChange(childNode) }}
+                                                    />
+                                                }
+                                                )}
+                                            </TreeItem>
+                                        ))
+                                    }
+                                </TreeView>
+                            </Grid>
+                        </Grid>
+                    )
+                }
+                {
+                    props.process == 124 &&
                     (
                         <Grid container spacing={1}>
                             <Grid item xs={12}>

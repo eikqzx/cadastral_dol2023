@@ -23,7 +23,7 @@ import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 //SERVICE
 import { getLandOfficeByPK } from "@/service/mas/landOffice";
-import { cadastralImage102ByConditionParcelNoTo } from "@/service/sva";
+import { cadastralImage10XByConditionParcelNoTo } from "@/service/sva";
 export default function IndexConfigCadastral(props) {
     const [searchData, setSearchData] = React.useState([]);
     const [createDataList, setCreateDataList] = React.useState([]);
@@ -76,9 +76,9 @@ export default function IndexConfigCadastral(props) {
         setPdfData(obj)
         setSearchParameter(obj)
         let data = null;
-        data = await cadastralImage102ByConditionParcelNoTo(obj);
+        data = await cadastralImage10XByConditionParcelNoTo(obj);
         data = data.rows
-        console.log(data, "onSearchNew");
+        console.log(data, "onSearchNew124");
         setSearchData(data)
     }
     return (
