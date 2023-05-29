@@ -13,6 +13,7 @@ import {
 import Search from "../components/search/search";
 import SnackBarDiaLog from "../components/snackbarV2";
 import SideTreeView from "../components/sideTreeView";
+import Tab01 from "./tabs/Tab01";
 //LIBRALIE
 import { filterRecordStatus, getCookie, isNotEmpty } from "@/lib/datacontrol";
 //ICONS
@@ -106,7 +107,7 @@ export default function IndexConfigCadastral(props) {
             </Grid>
             <Grid item xs={10} md={10}>
                 <Paper sx={{ height: "100vh", flexGrow: 1, overflowY: 'auto' }}>
-                    {/* <Tab1 tabData={tabData} searchData={searchData} onSearch={onSearchNew} pdfData={pdfData} searchParameter={searchParameter} processSeq={processSeq} /> */}
+                    <Tab01 tabData={tabData} searchData={searchData} onSearch={onSearchNew} pdfData={pdfData} searchParameter={searchParameter} processSeq={processSeq} />
                 </Paper>
             </Grid>
         </Grid>
