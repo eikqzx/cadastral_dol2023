@@ -31,6 +31,7 @@ export default function Tab01(props) {
     const [count, setCount] = React.useState(0);
     const [checkCanEdit, setCheckCanEdit] = React.useState(false);
     const [haveCadImg, setHaveCadImg] = React.useState(false);
+    console.log(props?.searchData,"Tab01");
     React.useEffect(() => {
         if (Array.isArray(props?.searchData)) {
             if (props?.searchData.length != 0) {

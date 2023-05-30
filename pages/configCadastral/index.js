@@ -7,8 +7,10 @@ import {
     AccordionSummary,
     AccordionDetails,
     Typography,
-    Divider
+    Divider,
+    Box
 } from "@mui/material";
+import { TabContext, TabList, TabPanel } from '@mui/lab';
 //COMPONENTS
 import Search from "../components/search/search";
 import SnackBarDiaLog from "../components/snackbarV2";
@@ -27,7 +29,7 @@ import { cadastralImage10XByConditionParcelNoTo } from "@/service/sva";
 export default function IndexConfigCadastral(props) {
     const [searchData, setSearchData] = React.useState([]);
     const [createDataList, setCreateDataList] = React.useState([]);
-    const [tabData, setTapData] = React.useState([]);
+    const [tabData, setTapData] = React.useState('1');
     const [open, setOpen] = React.useState(false);
     const [message, setMessage] = React.useState('');
     const [type, setType] = React.useState('');
@@ -37,6 +39,10 @@ export default function IndexConfigCadastral(props) {
     const [pdfData, setPdfData] = React.useState();
     const [searchParameter, setSearchParameter] = React.useState(null);
     const { data } = useSession();
+
+    const handleChangeTabs = (event, newValue) => {
+        setTapData(newValue);
+    };
 
 
     // console.log(landOffice, "landOffice");
@@ -68,8 +74,6 @@ export default function IndexConfigCadastral(props) {
     React.useEffect(() => {
         _reqLandOffice(userData?.LANDOFFICE_SEQ);
     }, [userData])
-    // console.log(userData,"userData");
-    // console.log(processSeq, "processSeq");
 
     const onSearchNew = async (obj) => {
         console.log(obj, "obj_onSearch");
@@ -81,6 +85,12 @@ export default function IndexConfigCadastral(props) {
         console.log(data, "onSearchNew124");
         setSearchData(data)
     }
+
+    let seq = []
+    {
+        seq.CADASTRAL_SEQ = 890000002566779
+    }
+
     return (
         <Grid container spacing={0.5} py={7.5}>
             <SnackBarDiaLog open={open} message={message} type={type} handleClose={() => setOpen(false)} />
@@ -107,7 +117,29 @@ export default function IndexConfigCadastral(props) {
             </Grid>
             <Grid item xs={10} md={11}>
                 <Paper sx={{ height: "100vh", flexGrow: 1, overflowY: 'auto' }}>
-                    <Tab01 tabData={tabData} searchData={searchData} onSearch={onSearchNew} pdfData={pdfData} searchParameter={searchParameter} processSeq={processSeq} />
+                    <Box sx={{ width: '100%', typography: 'body1' }}>
+                        <TabContext value={tabData}>
+                            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                                <TabList
+                                    onChange={handleChangeTabs}
+                                    sx={{
+                                        '& .MuiTabs-indicator': { backgroundColor: "#5BB318 !important" },
+                                        '& .Mui-selected': { color: "#5BB318 !important" },
+                                        background: 'linear-gradient(26deg, rgba(255,255,232,1) 20%, rgba(188,243,176,1) 100%) !important',
+                                    }}
+                                    scrollButtons="auto"
+                                    allowScrollButtonsMobile
+                                >
+                                    <Tab label="แปลงต้นร่าง" value="1" />
+                                    <Tab label="ผู้ขอรังวัดต้นร่าง" value="2" />
+                                    <Tab label="รูปภาพต้นร่าง" value="3" />
+                                </TabList>
+                            </Box>
+                            <TabPanel value="1"><Tab01 searchData={seq} /></TabPanel>
+                            <TabPanel value="2"><Tab01 /></TabPanel>
+                            <TabPanel value="3"><Tab01 /></TabPanel>
+                        </TabContext>
+                    </Box>
                 </Paper>
             </Grid>
         </Grid>
