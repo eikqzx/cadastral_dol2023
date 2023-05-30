@@ -34,7 +34,7 @@ export default function AccountControl(props) {
                 }
                 const blob = await response.blob();
                 const fileExtension = '.pdf';
-                saveAs(blob, "บัญชีคุมเบิก-จ่ายเอกสารสารบบ หน้าสำรวจเลขที่" + " " + documentNo + fileExtension);
+                saveAs(blob, "บัญชีคุมเบิก-จ่ายเอกสารสารบบ ต้นร่างเลขที่" + " " + documentNo + fileExtension);
             } catch (error) {
                 console.error("Error fetching data: ", error);
                 // Handle the error appropriately, such as displaying an error message to the user

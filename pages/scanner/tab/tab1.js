@@ -846,7 +846,7 @@ export default function Tab1(props) {
                             (
                                 <Grid p={1} container spacing={1} justifyContent={'center'}>
                                     <Typography fontStyle={'italic'} color={'red'}>
-                                        กรุณาเลือกหน้าสำรวจ
+                                        กรุณาเลือกต้นร่าง
                                     </Typography>
                                 </Grid>
                             )

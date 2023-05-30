@@ -651,7 +651,7 @@ export default function Tab1(props) {
       {(props?.tabData == null || props?.tabData == undefined || props?.tabData?.length == 0) ?
         <Grid container justifyContent={'center'}>
           <Typography fontStyle={'italic'} color={'red'}>
-            กรุณาเลือกหน้าสำรวจ
+            กรุณาเลือกต้นร่าง
           </Typography>
         </Grid>
         : <React.Fragment>

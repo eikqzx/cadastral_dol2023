@@ -176,7 +176,7 @@ export default function ExportExcel(props) {
     worksheet.getRow(2).height = 30.00;
 
     worksheet.mergeCells("A3", "R3");
-    worksheet.getCell("A3").value = "หน้าสำรวจเลขที่" + " " + documentNo;
+    worksheet.getCell("A3").value = "ต้นร่างเลขที่" + " " + documentNo;
     worksheet.getCell("A3").alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getCell("A3").font = { size: 18, name: 'TH Sarabun New' };
     worksheet.getRow(3).height = 30.00;
@@ -211,7 +211,7 @@ export default function ExportExcel(props) {
     worksheet.getRow(5).height = 30.00;
 
     //=================================================COLUMN
-    worksheet.getRow(7).values = ["ลำดับ", "หน้าสำรวจเลขที่", "ได้รับ", "ไม่ได้รับ", "หมายเหตุ", "", "ลำดับ", "หน้าสำรวจเลขที่", "ได้รับ", "ไม่ได้รับ", "หมายเหตุ", "", "ลำดับ", "หน้าสำรวจเลขที่", "ได้รับ", "ไม่ได้รับ", "หมายเหตุ", ""];
+    worksheet.getRow(7).values = ["ลำดับ", "ต้นร่างเลขที่", "ได้รับ", "ไม่ได้รับ", "หมายเหตุ", "", "ลำดับ", "ต้นร่างเลขที่", "ได้รับ", "ไม่ได้รับ", "หมายเหตุ", "", "ลำดับ", "ต้นร่างเลขที่", "ได้รับ", "ไม่ได้รับ", "หมายเหตุ", ""];
     worksheet.getRow(7).font = { bold: true };
     worksheet.getRow(7).height = 30;
     worksheet.getRow(7).alignment = { vertical: 'middle', horizontal: 'left' };
@@ -312,7 +312,7 @@ export default function ExportExcel(props) {
 
     const blob = new Blob([buffer], { type: fileType });
 
-    saveAs(blob, "บัญชีคุมเบิก-จ่ายเอกสารสารบบ หน้าสำรวจเลขที่" + " " + documentNo + fileExtension);
+    saveAs(blob, "บัญชีคุมเบิก-จ่ายเอกสารสารบบ ต้นร่างเลขที่" + " " + documentNo + fileExtension);
 
   };
 

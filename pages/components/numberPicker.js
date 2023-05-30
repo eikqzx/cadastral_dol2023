@@ -49,7 +49,7 @@ export default function NumberPicker(props) {
                                 <TextField
                                     size="small"
                                     value={selStartNum}
-                                    // label="หน้าสำรวจเลขที่"
+                                    // label="ต้นร่างเลขที่"
                                     inputProps={
                                         {
                                             readOnly: true
@@ -66,7 +66,7 @@ export default function NumberPicker(props) {
                                 <TextField
                                     size="small"
                                     value={selEndNum}
-                                    // label="หน้าสำรวจเลขที่"
+                                    // label="ต้นร่างเลขที่"
                                     inputProps={
                                         {
                                             readOnly: true
