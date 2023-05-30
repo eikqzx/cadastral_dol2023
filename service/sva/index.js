@@ -254,6 +254,94 @@ export async function getCadastralLand() {
     }
 }
 
+export async function getCadastralLandByCadastralSeq(seq) {
+    let url = `/api/sva/getCadastralLandByCadastralSeq`
+    let dataSend = {
+        seq: seq
+    }
+    AddLoading();
+    try {
+        let res = await axios.post(url, dataSend)
+        let data = res.data
+        //console.log(data)
+        RemoveLoading();
+        return data
+    } catch (err) {
+        console.log(err)
+        RemoveLoading();
+        return false
+    }
+}
+
+export async function getCadastralLandByCadastralSeqList(list) {
+    let url = `/api/sva/getCadastralLandByCadastralSeq`;
+    let newDataSet = []
+    AddLoading()
+    for (var i in list) {
+        if (list[i] !== undefined && list[i] !== null) {
+            let dataSend = {
+                seq: list[i]
+            }
+            try {
+                let res = await axios.post(url, dataSend)
+                let data = res.data
+                for (var i in data) {
+                    newDataSet.push(data[i])
+                }
+            } catch {
+                RemoveLoading()
+                return false
+            }
+        }
+    }
+    RemoveLoading()
+    return newDataSet
+}
+
+export async function getCadastralOwnerBycadastralSeq(seq) {
+    let url = `/api/sva/getCadastralOwnerBycadastralSeq`
+    let dataSend = {
+        seq: seq
+    }
+    AddLoading();
+    try {
+        let res = await axios.post(url, dataSend)
+        let data = res.data
+        //console.log(data)
+        RemoveLoading();
+        return data
+    } catch (err) {
+        console.log(err)
+        RemoveLoading();
+        return false
+    }
+}
+
+export async function getCadastralOwnerBycadastralSeqList(list) {
+    let url = `/api/sva/getCadastralOwnerBycadastralSeq`;
+    let newDataSet = []
+    AddLoading()
+    for (var i in list) {
+        if (list[i] !== undefined && list[i] !== null) {
+            let dataSend = {
+                seq: list[i]
+            }
+            try {
+                let res = await axios.post(url, dataSend)
+                let data = res.data
+                for (var i in data) {
+                    newDataSet.push(data[i])
+                }
+            } catch {
+                RemoveLoading()
+                return false
+            }
+        }
+    }
+    RemoveLoading()
+    return newDataSet
+}
+
 export async function updCadastralLand(seq, dataSend) {
     let url = `/api/sva/updCadastralLand`
     let dataput = {
