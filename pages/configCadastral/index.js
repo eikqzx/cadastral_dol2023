@@ -102,10 +102,10 @@ export default function IndexConfigCadastral(props) {
                     </Accordion>
                 </Grid>
             }
-            <Grid item xs={2} md={2}>
+            <Grid item xs={2} md={1}>
                 <SideTreeView data={searchData} setTapData={setTapData} process={processSeq} />
             </Grid>
-            <Grid item xs={10} md={10}>
+            <Grid item xs={10} md={11}>
                 <Paper sx={{ height: "100vh", flexGrow: 1, overflowY: 'auto' }}>
                     <Tab01 tabData={tabData} searchData={searchData} onSearch={onSearchNew} pdfData={pdfData} searchParameter={searchParameter} processSeq={processSeq} />
                 </Paper>
