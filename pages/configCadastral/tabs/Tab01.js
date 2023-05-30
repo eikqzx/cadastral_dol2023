@@ -1,8 +1,14 @@
 import React from "react";
-import { Grid } from "@mui/material";
+import {
+    Grid,
+    Paper,
+    Typography,
+    IconButton,
+    Divider 
+} from "@mui/material";
 
 import { getLandOffice } from '@/service/mas/landOffice';
-
+import { useSession } from 'next-auth/react';
 export default function Tab01(props) {
     const [openAddData, setOpenAddData] = React.useState(false);
     const [open, setOpen] = React.useState(false);
@@ -90,7 +96,7 @@ export default function Tab01(props) {
                         </Grid>
                         <Grid item>
                             <Typography color={"darkblue"} fontWeight={"bold"} sx={{ textDecoration: 'underline' }} display="inline">&nbsp;{numofsurveyQty}&nbsp;</Typography>
-                            <IconButton size='small' disabled={numofsurveyQty == "-" || checkCanEdit} onClick={() => { setOpenEdit(props?.tabData) }}><Edit /></IconButton>
+                            {/* <IconButton size='small' disabled={numofsurveyQty == "-" || checkCanEdit} onClick={() => { setOpenEdit(props?.tabData) }}><Edit /></IconButton> */}
                         </Grid>
                     </Grid>
                 </Grid>
