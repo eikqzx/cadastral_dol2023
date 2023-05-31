@@ -19,17 +19,18 @@ import {
     MenuItem
 } from "@mui/material";
 //SERVICES
-import { getCadastralLandByCadastralSeq } from "@/service/sva";
+import { cadastralImageByCadastralSeq } from "@/service/sva";
 import { getLandOffice } from '@/service/mas/landOffice';
+import { getTitleByPK } from '@/service/mas/title';
 import { useSession } from 'next-auth/react';
 //LIBRALIE
 import { filterRecordStatus, getCookie, isNotEmpty } from "@/lib/datacontrol";
 import { numberWithCommas } from "@/lib/outputControl"
-export default function Tab01(props) {
+export default function Tab02(props) {
     const [open, setOpen] = React.useState(false);
     const [message, setMessage] = React.useState("");
     const [type, setType] = React.useState("success");
-    const [cadastralLandData, setCadastralLandData] = React.useState([]);
+    const [cadastralImageData, setCadastralImageData] = React.useState([]);
     const [office, setOffice] = React.useState("-");
     const [sheetcode, setSheetcode] = React.useState("-");
     const [boxNo, setBoxNo] = React.useState("-");
@@ -49,8 +50,8 @@ export default function Tab01(props) {
         setCurPage(value);
     };
 
-    console.log(props?.searchData, "Tab01");
-    console.log(cadastralLandData, "cadastralLandData");
+    console.log(props?.searchData, "Tab02");
+    console.log(cadastralImageData, "cadastralImageData");
     React.useEffect(() => {
         if (Array.isArray(props?.searchData)) {
             if (props?.searchData.length != 0) {
@@ -81,10 +82,15 @@ export default function Tab01(props) {
     }
 
     const _createNewData = async (data) => {
-        let cadastralLandData = await getCadastralLandByCadastralSeq(890000002566779)
-        console.log(cadastralLandData, "getMasterDatacadastralLandData");
-        cadastralLandData = filterRecordStatus(cadastralLandData.rows, "N")
-        setCadastralLandData(cadastralLandData)
+        let cadastralImageData = await cadastralImageByCadastralSeq(890000002566779)
+        console.log(cadastralImageData, "getMasterDatacadastralImageData");
+        cadastralImageData = filterRecordStatus(cadastralImageData.rows, "N")
+        for (let i in cadastralImageData) {
+            let dataItems = cadastralImageData[i]
+            dataItems.CADASTRAL_IMAGE_FULL_NAME = dataItems.CADASTRAL_IMAGE_FNAME + " " + dataItems.CADASTRAL_IMAGE_LNAME
+            cadastralImageData.push(dataItems)
+        }
+        setCadastralImageData(cadastralImageData)
     }
     return (
         <Grid>
@@ -151,20 +157,13 @@ export default function Tab01(props) {
                             <TableHead>
                                 <TableRow>
                                     <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">ลำดับ</Typography></TableCell>
-                                    <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">เลขที่ดิน</Typography></TableCell>
-                                    <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">หมายเลขระวางศูนย์กำเนิด 1</Typography></TableCell>
-                                    <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">หมายเลขระวางศูนย์กำเนิด 2</Typography></TableCell>
-                                    <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">หมายเลขแผ่นของระวางตามมาตราส่วน (ศูนย์กำเนิด)</Typography></TableCell>
-                                    <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">ชื่อระวางภาพถ่ายทางอากาศ</Typography></TableCell>
-                                    <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">หมายเลขระวางแผนที่ 1:50000 </Typography></TableCell>
-                                    <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">หมายเลขแผ่นของระวางแผนที่ 1:50000</Typography></TableCell>
-                                    <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">หมายเลขแผ่นของระวางตามมาตราส่วน</Typography></TableCell>
-                                    <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">สถานะแปลงคง</Typography></TableCell>
+                                    <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">ประเภทผู้ถือกรรมสิทธิ์</Typography></TableCell>
+                                    <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">ชื่อ-นามสกุล ผู้ขอรังวัด</Typography></TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {cadastralLandData.length > 0 &&
-                                    cadastralLandData?.map((el, index) => {
+                                {cadastralImageData.length > 0 &&
+                                    cadastralImageData?.map((el, index) => {
                                         if (rowsPerPage === -1) {
                                             return (
                                                 <React.Fragment key={index}>
@@ -179,30 +178,9 @@ export default function Tab01(props) {
                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} >
                                                             {index + 1}
                                                         </TableCell>
-                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} >{el.CADASTRAL_LAND_NO}</TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} >{el.CADASTRAL_IMAGE_TYPE}</TableCell>
                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {el.CADASTRAL_LAND_NO}
-                                                        </TableCell>
-                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {el.CADASTRAL_LAND_NO}
-                                                        </TableCell>
-                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {el.CADASTRAL_LAND_NO}
-                                                        </TableCell>
-                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {el.CADASTRAL_LAND_NO}
-                                                        </TableCell>
-                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {el.CADASTRAL_LAND_NO}
-                                                        </TableCell>
-                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {el.CADASTRAL_LAND_NO}
-                                                        </TableCell>
-                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {el.CADASTRAL_LAND_NO}
-                                                        </TableCell>
-                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {el.CADASTRAL_LAND_NO}
+                                                            {el.CADASTRAL_IMAGE_FULL_NAME}
                                                         </TableCell>
                                                     </TableRow>
                                                 </React.Fragment>
@@ -225,7 +203,7 @@ export default function Tab01(props) {
                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} >
                                                             {index + 1}
                                                         </TableCell>
-                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} >{el.CADASTRAL_LAND_NO}</TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} >{el.IMAGE_PNO}</TableCell>
                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
                                                             {el.CADASTRAL_LAND_NO}
                                                         </TableCell>
@@ -291,13 +269,13 @@ export default function Tab01(props) {
                                         page={curPage}
                                         onChange={_handleChangePage}
                                         color="error"
-                                        count={isNaN(Math.ceil(cadastralLandData?.length / rowsPerPage)) ? 0 : Math.ceil(cadastralLandData?.length / rowsPerPage)}
+                                        count={isNaN(Math.ceil(cadastralImageData?.length / rowsPerPage)) ? 0 : Math.ceil(cadastralImageData?.length / rowsPerPage)}
                                     />
                                 </Grid>
                                 <Grid item>
                                     <Typography fontSize={14}>
-                                        {cadastralLandData?.length > 0 &&
-                                            "จำนวนรายการทั้งหมด " + numberWithCommas(cadastralLandData.length) + " รายการ"}
+                                        {cadastralImageData?.length > 0 &&
+                                            "จำนวนรายการทั้งหมด " + numberWithCommas(cadastralImageData.length) + " รายการ"}
                                     </Typography>
                                 </Grid>
                             </Grid>

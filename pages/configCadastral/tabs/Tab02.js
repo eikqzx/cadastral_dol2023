@@ -19,17 +19,18 @@ import {
     MenuItem
 } from "@mui/material";
 //SERVICES
-import { getCadastralLandByCadastralSeq } from "@/service/sva";
+import { getCadastralOwnerBycadastralSeq } from "@/service/sva";
 import { getLandOffice } from '@/service/mas/landOffice';
+import { getTitleByPK } from '@/service/mas/title';
 import { useSession } from 'next-auth/react';
 //LIBRALIE
 import { filterRecordStatus, getCookie, isNotEmpty } from "@/lib/datacontrol";
 import { numberWithCommas } from "@/lib/outputControl"
-export default function Tab01(props) {
+export default function Tab02(props) {
     const [open, setOpen] = React.useState(false);
     const [message, setMessage] = React.useState("");
     const [type, setType] = React.useState("success");
-    const [cadastralLandData, setCadastralLandData] = React.useState([]);
+    const [cadastralOwnerData, setCadastralOwnerData] = React.useState([]);
     const [office, setOffice] = React.useState("-");
     const [sheetcode, setSheetcode] = React.useState("-");
     const [boxNo, setBoxNo] = React.useState("-");
@@ -49,8 +50,8 @@ export default function Tab01(props) {
         setCurPage(value);
     };
 
-    console.log(props?.searchData, "Tab01");
-    console.log(cadastralLandData, "cadastralLandData");
+    console.log(props?.searchData, "Tab02");
+    console.log(cadastralOwnerData, "cadastralOwnerData");
     React.useEffect(() => {
         if (Array.isArray(props?.searchData)) {
             if (props?.searchData.length != 0) {
@@ -81,10 +82,15 @@ export default function Tab01(props) {
     }
 
     const _createNewData = async (data) => {
-        let cadastralLandData = await getCadastralLandByCadastralSeq(890000002566779)
-        console.log(cadastralLandData, "getMasterDatacadastralLandData");
-        cadastralLandData = filterRecordStatus(cadastralLandData.rows, "N")
-        setCadastralLandData(cadastralLandData)
+        let cadastralOwnerData = await getCadastralOwnerBycadastralSeq(890000002566779)
+        console.log(cadastralOwnerData, "getMasterDatacadastralOwnerData");
+        cadastralOwnerData = filterRecordStatus(cadastralOwnerData.rows, "N")
+        for (let i in cadastralOwnerData) {
+            let dataItems = cadastralOwnerData[i]
+            dataItems.OWNER_FULL_NAME = dataItems.OWNER_FNAME + " " + dataItems.OWNER_LNAME
+            cadastralOwnerData.push(dataItems)
+        }
+        setCadastralOwnerData(cadastralOwnerData)
     }
     return (
         <Grid>
@@ -151,20 +157,13 @@ export default function Tab01(props) {
                             <TableHead>
                                 <TableRow>
                                     <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">ลำดับ</Typography></TableCell>
-                                    <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">เลขที่ดิน</Typography></TableCell>
-                                    <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">หมายเลขระวางศูนย์กำเนิด 1</Typography></TableCell>
-                                    <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">หมายเลขระวางศูนย์กำเนิด 2</Typography></TableCell>
-                                    <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">หมายเลขแผ่นของระวางตามมาตราส่วน (ศูนย์กำเนิด)</Typography></TableCell>
-                                    <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">ชื่อระวางภาพถ่ายทางอากาศ</Typography></TableCell>
-                                    <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">หมายเลขระวางแผนที่ 1:50000 </Typography></TableCell>
-                                    <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">หมายเลขแผ่นของระวางแผนที่ 1:50000</Typography></TableCell>
-                                    <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">หมายเลขแผ่นของระวางตามมาตราส่วน</Typography></TableCell>
-                                    <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">สถานะแปลงคง</Typography></TableCell>
+                                    <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">ประเภทผู้ถือกรรมสิทธิ์</Typography></TableCell>
+                                    <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">ชื่อ-นามสกุล ผู้ขอรังวัด</Typography></TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {cadastralLandData.length > 0 &&
-                                    cadastralLandData?.map((el, index) => {
+                                {cadastralOwnerData.length > 0 &&
+                                    cadastralOwnerData?.map((el, index) => {
                                         if (rowsPerPage === -1) {
                                             return (
                                                 <React.Fragment key={index}>
@@ -179,30 +178,9 @@ export default function Tab01(props) {
                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} >
                                                             {index + 1}
                                                         </TableCell>
-                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} >{el.CADASTRAL_LAND_NO}</TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} >{el.OWNER_TYPE}</TableCell>
                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {el.CADASTRAL_LAND_NO}
-                                                        </TableCell>
-                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {el.CADASTRAL_LAND_NO}
-                                                        </TableCell>
-                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {el.CADASTRAL_LAND_NO}
-                                                        </TableCell>
-                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {el.CADASTRAL_LAND_NO}
-                                                        </TableCell>
-                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {el.CADASTRAL_LAND_NO}
-                                                        </TableCell>
-                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {el.CADASTRAL_LAND_NO}
-                                                        </TableCell>
-                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {el.CADASTRAL_LAND_NO}
-                                                        </TableCell>
-                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {el.CADASTRAL_LAND_NO}
+                                                            {el.OWNER_FULL_NAME}
                                                         </TableCell>
                                                     </TableRow>
                                                 </React.Fragment>
@@ -225,30 +203,9 @@ export default function Tab01(props) {
                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} >
                                                             {index + 1}
                                                         </TableCell>
-                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} >{el.CADASTRAL_LAND_NO}</TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} >{el.OWNER_TYPE}</TableCell>
                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {el.CADASTRAL_LAND_NO}
-                                                        </TableCell>
-                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {el.CADASTRAL_LAND_NO}
-                                                        </TableCell>
-                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {el.CADASTRAL_LAND_NO}
-                                                        </TableCell>
-                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {el.CADASTRAL_LAND_NO}
-                                                        </TableCell>
-                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {el.CADASTRAL_LAND_NO}
-                                                        </TableCell>
-                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {el.CADASTRAL_LAND_NO}
-                                                        </TableCell>
-                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {el.CADASTRAL_LAND_NO}
-                                                        </TableCell>
-                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {el.CADASTRAL_LAND_NO}
+                                                            {el.OWNER_FULL_NAME}
                                                         </TableCell>
                                                     </TableRow>
                                                 </React.Fragment>
@@ -291,13 +248,13 @@ export default function Tab01(props) {
                                         page={curPage}
                                         onChange={_handleChangePage}
                                         color="error"
-                                        count={isNaN(Math.ceil(cadastralLandData?.length / rowsPerPage)) ? 0 : Math.ceil(cadastralLandData?.length / rowsPerPage)}
+                                        count={isNaN(Math.ceil(cadastralOwnerData?.length / rowsPerPage)) ? 0 : Math.ceil(cadastralOwnerData?.length / rowsPerPage)}
                                     />
                                 </Grid>
                                 <Grid item>
                                     <Typography fontSize={14}>
-                                        {cadastralLandData?.length > 0 &&
-                                            "จำนวนรายการทั้งหมด " + numberWithCommas(cadastralLandData.length) + " รายการ"}
+                                        {cadastralOwnerData?.length > 0 &&
+                                            "จำนวนรายการทั้งหมด " + numberWithCommas(cadastralOwnerData.length) + " รายการ"}
                                     </Typography>
                                 </Grid>
                             </Grid>

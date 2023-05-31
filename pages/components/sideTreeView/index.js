@@ -102,7 +102,7 @@ export default function SideTreeView(props) {
         console.log(logData, "logData");
         console.log(onSearchData, "onSearchData treeview");
         console.log(processSeq, "onSearchData processSeq");
-        let onSearchDataFiltered = onSearchData.filter(item => item.PROCESS_SEQ_ == processSeq || (item.PROCESS_SEQ_ == 102 && processSeq == 103))
+        let onSearchDataFiltered = onSearchData.filter(item => item.PROCESS_SEQ_ == processSeq || (item.PROCESS_SEQ_ == 102 && processSeq == 103 && processSeq == 124))
         console.log(onSearchDataFiltered, "onSearchDataFiltered");
         for (let i in onSearchDataFiltered) {
             let itemSearch = onSearchDataFiltered[i];

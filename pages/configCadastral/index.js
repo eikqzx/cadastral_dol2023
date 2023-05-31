@@ -16,6 +16,8 @@ import Search from "../components/search/search";
 import SnackBarDiaLog from "../components/snackbarV2";
 import SideTreeView from "../components/sideTreeView";
 import Tab01 from "./tabs/Tab01";
+import Tab02 from "./tabs/Tab02";
+import Tab03 from "./tabs/Tab03";
 //LIBRALIE
 import { filterRecordStatus, getCookie, isNotEmpty } from "@/lib/datacontrol";
 //ICONS
@@ -135,9 +137,9 @@ export default function IndexConfigCadastral(props) {
                                     <Tab label="รูปภาพต้นร่าง" value="3" />
                                 </TabList>
                             </Box>
-                            <TabPanel value="1"><Tab01 searchData={seq} /></TabPanel>
-                            <TabPanel value="2"><Tab01 /></TabPanel>
-                            <TabPanel value="3"><Tab01 /></TabPanel>
+                            <TabPanel value="1"><Tab01 searchData={searchData} /></TabPanel>
+                            <TabPanel value="2"><Tab02 searchData={searchData} /></TabPanel>
+                            <TabPanel value="3"><Tab03 searchData={searchData} /></TabPanel>
                         </TabContext>
                     </Box>
                 </Paper>
