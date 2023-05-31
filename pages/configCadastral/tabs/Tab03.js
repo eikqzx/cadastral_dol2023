@@ -26,7 +26,7 @@ import { useSession } from 'next-auth/react';
 //LIBRALIE
 import { filterRecordStatus, getCookie, isNotEmpty } from "@/lib/datacontrol";
 import { numberWithCommas } from "@/lib/outputControl"
-export default function Tab02(props) {
+export default function Tab03(props) {
     const [open, setOpen] = React.useState(false);
     const [message, setMessage] = React.useState("");
     const [type, setType] = React.useState("success");
@@ -50,7 +50,7 @@ export default function Tab02(props) {
         setCurPage(value);
     };
 
-    console.log(props?.searchData, "Tab02");
+    console.log(props?.searchData, "Tab03");
     console.log(cadastralImageData, "cadastralImageData");
     React.useEffect(() => {
         if (Array.isArray(props?.searchData)) {
@@ -82,7 +82,7 @@ export default function Tab02(props) {
     }
 
     const _createNewData = async (data) => {
-        let cadastralImageData = await cadastralImageByCadastralSeq(890000002566779)
+        let cadastralImageData = await cadastralImageByCadastralSeq(10000010)
         console.log(cadastralImageData, "getMasterDatacadastralImageData");
         cadastralImageData = filterRecordStatus(cadastralImageData.rows, "N")
         for (let i in cadastralImageData) {
@@ -157,8 +157,8 @@ export default function Tab02(props) {
                             <TableHead>
                                 <TableRow>
                                     <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">ลำดับ</Typography></TableCell>
-                                    <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">ประเภทผู้ถือกรรมสิทธิ์</Typography></TableCell>
-                                    <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">ชื่อ-นามสกุล ผู้ขอรังวัด</Typography></TableCell>
+                                    <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">ชื่อไฟล์ภาพ</Typography></TableCell>
+                                    <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">จำนวนไฟล์ภาพ</Typography></TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -178,9 +178,9 @@ export default function Tab02(props) {
                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} >
                                                             {index + 1}
                                                         </TableCell>
-                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} >{el.CADASTRAL_IMAGE_TYPE}</TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} >{el.IMAGE_PNAME}</TableCell>
                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {el.CADASTRAL_IMAGE_FULL_NAME}
+                                                            {el.IMAGE_PNO}
                                                         </TableCell>
                                                     </TableRow>
                                                 </React.Fragment>
@@ -200,33 +200,12 @@ export default function Tab02(props) {
                                                         }}
                                                         style={{ cursor: 'pointer' }}
                                                     >
-                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} >
+                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} >
                                                             {index + 1}
                                                         </TableCell>
-                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} >{el.IMAGE_PNO}</TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} >{el.IMAGE_PNAME}</TableCell>
                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {el.CADASTRAL_LAND_NO}
-                                                        </TableCell>
-                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {el.CADASTRAL_LAND_NO}
-                                                        </TableCell>
-                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {el.CADASTRAL_LAND_NO}
-                                                        </TableCell>
-                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {el.CADASTRAL_LAND_NO}
-                                                        </TableCell>
-                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {el.CADASTRAL_LAND_NO}
-                                                        </TableCell>
-                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {el.CADASTRAL_LAND_NO}
-                                                        </TableCell>
-                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {el.CADASTRAL_LAND_NO}
-                                                        </TableCell>
-                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {el.CADASTRAL_LAND_NO}
+                                                            {el.IMAGE_PNO}
                                                         </TableCell>
                                                     </TableRow>
                                                 </React.Fragment>

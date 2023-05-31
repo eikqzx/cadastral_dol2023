@@ -87,7 +87,8 @@ export default function Tab02(props) {
         cadastralOwnerData = filterRecordStatus(cadastralOwnerData.rows, "N")
         for (let i in cadastralOwnerData) {
             let dataItems = cadastralOwnerData[i]
-            dataItems.OWNER_FULL_NAME = dataItems.OWNER_FNAME + " " + dataItems.OWNER_LNAME
+            dataItems.TITLE_NAME_TH = await getTitleByPK(dataItems.TITLE_SEQ)
+            dataItems.OWNER_FULL_NAME = dataItems.TITLE_NAME_TH + " " + dataItems.OWNER_FNAME + " " + dataItems.OWNER_LNAME
             cadastralOwnerData.push(dataItems)
         }
         setCadastralOwnerData(cadastralOwnerData)
