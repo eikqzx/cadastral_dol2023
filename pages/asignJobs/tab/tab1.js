@@ -676,13 +676,13 @@ export default function Tab1(props) {
               <Divider />
               <AccordionDetails>
                 {datagroupA.length != 0 && <TableContainer>
-                  <Table size="small" >
+                  <Table size="small" sx={{ minWidth: 650, width: "100%" }}>
                     <TableHead>
                       <TableCell style={{ width: "5%" }} align="left">ลำดับ</TableCell>
                       <TableCell style={{ width: "5%" }} align="left">ตัวย่อ</TableCell>
                       <TableCell style={{ width: "25%" }} align="left">ชื่อเอกสาร</TableCell>
                       <TableCell style={{ width: "5%" }} align="left">จำนวนที่รับงานแล้ว</TableCell>
-                      <TableCell style={{ width: "25%" }} align="left"></TableCell>
+                      <TableCell style={{ width: "25%" }} align="left" colSpan={3}></TableCell>
                     </TableHead>
                     <TableBody>
                       {
@@ -699,45 +699,47 @@ export default function Tab1(props) {
                             <TableCell style={{ width: "5%" }} align="left">{item.SURVEYDOCTYPE_GROUP}</TableCell>
                             <TableCell style={{ width: "25%" }} align="left">{item.SURVEYDOCTYPE_NAME_TH}</TableCell>
                             <TableCell style={{ width: "5%" }} align="left">{item?.IMAGE_PNO ?? 0}</TableCell>
-                            <TableCell style={{ width: "25%" }}>
-                              <Stack direction={'row'}>
-                                <Grid item xs={12} md={2}>
-                                  <Tooltip title={"ลดเลข"}>
-                                    <IconButton
-                                      onClick={() => {
-                                        handleCountChange("decrease", index, item);
-                                        setCount((prevCount) => prevCount - 1);
-                                      }}
-                                      color="error">
-                                      <Remove />
-                                    </IconButton>
-                                  </Tooltip>
-                                </Grid>
-                                <Grid item xs={12} md={6}>
-                                  <TextField
-                                    type="number"
-                                    size="small"
-                                    label={"จำนวนหน้า"}
-                                    // sx={{ width: "60%" }}
-                                    inputProps={{ maxLength: 4, readOnly: true }}
-                                    defaultValue={"0"}
-                                    value={item?.COUNT_DOC || 0}
-                                    onChange={(e) => { handleCountChange("change", index, item, e.target.value) }}
-                                  />
-                                </Grid>
-                                <Grid item xs={12} md={2} >
-                                  <Tooltip title={"เพิ่มเลข"}>
-                                    <IconButton
-                                      onClick={() => {
-                                        handleCountChange("increase", index, item);
-                                        setCount((prevCount) => prevCount + 1);
-                                      }}
-                                      color="success">
-                                      <Add />
-                                    </IconButton>
-                                  </Tooltip>
-                                </Grid>
-                              </Stack>
+                            <TableCell style={{ width: "5%" }}>
+                              <Grid item xs={12} md={2}>
+                                <Tooltip title={"ลดเลข"}>
+                                  <IconButton
+                                    onClick={() => {
+                                      handleCountChange("decrease", index, item);
+                                      setCount((prevCount) => prevCount - 1);
+                                    }}
+                                    color="error">
+                                    <Remove />
+                                  </IconButton>
+                                </Tooltip>
+                              </Grid>
+                            </TableCell>
+                            <TableCell style={{ width: "15%" }}>
+                              <Grid item xs={12} md={6}>
+                                <TextField
+                                  type="number"
+                                  size="small"
+                                  label={"จำนวนหน้า"}
+                                  sx={{ width: 100 }}
+                                  inputProps={{ maxLength: 4, readOnly: true }}
+                                  defaultValue={"0"}
+                                  value={item?.COUNT_DOC || 0}
+                                  onChange={(e) => { handleCountChange("change", index, item, e.target.value) }}
+                                />
+                              </Grid>
+                            </TableCell>
+                            <TableCell style={{ width: "5%" }}>
+                              <Grid item xs={12} md={2} >
+                                <Tooltip title={"เพิ่มเลข"}>
+                                  <IconButton
+                                    onClick={() => {
+                                      handleCountChange("increase", index, item);
+                                      setCount((prevCount) => prevCount + 1);
+                                    }}
+                                    color="success">
+                                    <Add />
+                                  </IconButton>
+                                </Tooltip>
+                              </Grid>
                             </TableCell>
                           </TableRow>
                         )
@@ -770,13 +772,13 @@ export default function Tab1(props) {
               <Divider />
               <AccordionDetails>
                 {datagroupB.length != 0 && <TableContainer>
-                  <Table size="small" >
+                  <Table size="small" sx={{ minWidth: 650, width: "100%" }}>
                     <TableHead>
                       <TableCell style={{ width: "5%" }} align="left">ลำดับ</TableCell>
                       <TableCell style={{ width: "5%" }} align="left">ตัวย่อ</TableCell>
                       <TableCell style={{ width: "25%" }} align="left">ชื่อเอกสาร</TableCell>
                       <TableCell style={{ width: "5%" }} align="left">จำนวนที่รับงานแล้ว</TableCell>
-                      <TableCell style={{ width: "25%" }} align="left"></TableCell>
+                      <TableCell style={{ width: "25%" }} align="left" colSpan={3}></TableCell>
                     </TableHead>
                     <TableBody>
                       {
@@ -793,45 +795,47 @@ export default function Tab1(props) {
                             <TableCell style={{ width: "5%" }} align="left">{item.SURVEYDOCTYPE_GROUP}</TableCell>
                             <TableCell style={{ width: "25%" }} align="left">{item.SURVEYDOCTYPE_NAME_TH}</TableCell>
                             <TableCell style={{ width: "5%" }} align="left">{item?.IMAGE_PNO ?? 0}</TableCell>
-                            <TableCell style={{ width: "25%" }}>
-                              <Stack direction={'row'}>
-                                <Grid item xs={12} md={2}>
-                                  <Tooltip title={"ลดเลข"}>
-                                    <IconButton
-                                      onClick={() => {
-                                        handleCountChange("decrease", index, item);
-                                        setCount((prevCount) => prevCount - 1);
-                                      }}
-                                      color="error">
-                                      <Remove />
-                                    </IconButton>
-                                  </Tooltip>
-                                </Grid>
-                                <Grid item xs={12} md={6}>
-                                  <TextField
-                                    type="number"
-                                    size="small"
-                                    label={"จำนวนหน้า"}
-                                    // sx={{ width: "60%" }}
-                                    inputProps={{ maxLength: 4, readOnly: true }}
-                                    defaultValue={"0"}
-                                    value={item?.COUNT_DOC || 0}
-                                    onChange={(e) => { handleCountChange("change", index, item, e.target.value) }}
-                                  />
-                                </Grid>
-                                <Grid item xs={12} md={2} >
-                                  <Tooltip title={"เพิ่มเลข"}>
-                                    <IconButton
-                                      onClick={() => {
-                                        handleCountChange("increase", index, item);
-                                        setCount((prevCount) => prevCount + 1);
-                                      }}
-                                      color="success">
-                                      <Add />
-                                    </IconButton>
-                                  </Tooltip>
-                                </Grid>
-                              </Stack>
+                            <TableCell style={{ width: "5%" }}>
+                              <Grid item xs={12} md={2}>
+                                <Tooltip title={"ลดเลข"}>
+                                  <IconButton
+                                    onClick={() => {
+                                      handleCountChange("decrease", index, item);
+                                      setCount((prevCount) => prevCount - 1);
+                                    }}
+                                    color="error">
+                                    <Remove />
+                                  </IconButton>
+                                </Tooltip>
+                              </Grid>
+                            </TableCell>
+                            <TableCell style={{ width: "15%" }}>
+                              <Grid item xs={12} md={6}>
+                                <TextField
+                                  type="number"
+                                  size="small"
+                                  label={"จำนวนหน้า"}
+                                  sx={{ width: 100 }}
+                                  inputProps={{ maxLength: 4, readOnly: true }}
+                                  defaultValue={"0"}
+                                  value={item?.COUNT_DOC || 0}
+                                  onChange={(e) => { handleCountChange("change", index, item, e.target.value) }}
+                                />
+                              </Grid>
+                            </TableCell>
+                            <TableCell style={{ width: "5%" }}>
+                              <Grid item xs={12} md={2} >
+                                <Tooltip title={"เพิ่มเลข"}>
+                                  <IconButton
+                                    onClick={() => {
+                                      handleCountChange("increase", index, item);
+                                      setCount((prevCount) => prevCount + 1);
+                                    }}
+                                    color="success">
+                                    <Add />
+                                  </IconButton>
+                                </Tooltip>
+                              </Grid>
                             </TableCell>
                           </TableRow>
                         )
@@ -864,13 +868,13 @@ export default function Tab1(props) {
               <Divider />
               <AccordionDetails>
                 {datagroupC.length != 0 && <TableContainer>
-                  <Table size="small" >
+                  <Table size="small" sx={{ minWidth: 650, width: "100%" }}>
                     <TableHead>
                       <TableCell style={{ width: "5%" }} align="left">ลำดับ</TableCell>
                       <TableCell style={{ width: "5%" }} align="left">ตัวย่อ</TableCell>
                       <TableCell style={{ width: "25%" }} align="left">ชื่อเอกสาร</TableCell>
                       <TableCell style={{ width: "5%" }} align="left">จำนวนที่รับงานแล้ว</TableCell>
-                      <TableCell style={{ width: "25%" }} align="left"></TableCell>
+                      <TableCell style={{ width: "25%" }} align="left" colSpan={3}></TableCell>
                     </TableHead>
                     <TableBody>
                       {
@@ -887,45 +891,47 @@ export default function Tab1(props) {
                             <TableCell style={{ width: "5%" }} align="left">{item.SURVEYDOCTYPE_GROUP}</TableCell>
                             <TableCell style={{ width: "25%" }} align="left">{item.SURVEYDOCTYPE_NAME_TH}</TableCell>
                             <TableCell style={{ width: "5%" }} align="left">{item?.IMAGE_PNO ?? 0}</TableCell>
-                            <TableCell style={{ width: "25%" }}>
-                              <Stack direction={'row'}>
-                                <Grid item xs={12} md={2}>
-                                  <Tooltip title={"ลดเลข"}>
-                                    <IconButton
-                                      onClick={() => {
-                                        handleCountChange("decrease", index, item);
-                                        setCount((prevCount) => prevCount - 1);
-                                      }}
-                                      color="error">
-                                      <Remove />
-                                    </IconButton>
-                                  </Tooltip>
-                                </Grid>
-                                <Grid item xs={12} md={6}>
-                                  <TextField
-                                    type="number"
-                                    size="small"
-                                    label={"จำนวนหน้า"}
-                                    // sx={{ width: "60%" }}
-                                    inputProps={{ maxLength: 4, readOnly: true }}
-                                    defaultValue={"0"}
-                                    value={item?.COUNT_DOC || 0}
-                                    onChange={(e) => { handleCountChange("change", index, item, e.target.value) }}
-                                  />
-                                </Grid>
-                                <Grid item xs={12} md={2} >
-                                  <Tooltip title={"เพิ่มเลข"}>
-                                    <IconButton
-                                      onClick={() => {
-                                        handleCountChange("increase", index, item);
-                                        setCount((prevCount) => prevCount + 1);
-                                      }}
-                                      color="success">
-                                      <Add />
-                                    </IconButton>
-                                  </Tooltip>
-                                </Grid>
-                              </Stack>
+                            <TableCell style={{ width: "5%" }}>
+                              <Grid item xs={12} md={2}>
+                                <Tooltip title={"ลดเลข"}>
+                                  <IconButton
+                                    onClick={() => {
+                                      handleCountChange("decrease", index, item);
+                                      setCount((prevCount) => prevCount - 1);
+                                    }}
+                                    color="error">
+                                    <Remove />
+                                  </IconButton>
+                                </Tooltip>
+                              </Grid>
+                            </TableCell>
+                            <TableCell style={{ width: "15%" }}>
+                              <Grid item xs={12} md={6}>
+                                <TextField
+                                  type="number"
+                                  size="small"
+                                  label={"จำนวนหน้า"}
+                                  sx={{ width: 100 }}
+                                  inputProps={{ maxLength: 4, readOnly: true }}
+                                  defaultValue={"0"}
+                                  value={item?.COUNT_DOC || 0}
+                                  onChange={(e) => { handleCountChange("change", index, item, e.target.value) }}
+                                />
+                              </Grid>
+                            </TableCell>
+                            <TableCell style={{ width: "5%" }}>
+                              <Grid item xs={12} md={2} >
+                                <Tooltip title={"เพิ่มเลข"}>
+                                  <IconButton
+                                    onClick={() => {
+                                      handleCountChange("increase", index, item);
+                                      setCount((prevCount) => prevCount + 1);
+                                    }}
+                                    color="success">
+                                    <Add />
+                                  </IconButton>
+                                </Tooltip>
+                              </Grid>
                             </TableCell>
                           </TableRow>
                         )
@@ -958,13 +964,13 @@ export default function Tab1(props) {
               <Divider />
               <AccordionDetails>
                 {datagroupD.length != 0 && <TableContainer>
-                  <Table size="small" >
+                  <Table size="small" sx={{ minWidth: 650, width: "100%" }}>
                     <TableHead>
                       <TableCell style={{ width: "5%" }} align="left">ลำดับ</TableCell>
                       <TableCell style={{ width: "5%" }} align="left">ตัวย่อ</TableCell>
                       <TableCell style={{ width: "25%" }} align="left">ชื่อเอกสาร</TableCell>
                       <TableCell style={{ width: "5%" }} align="left">จำนวนที่รับงานแล้ว</TableCell>
-                      <TableCell style={{ width: "25%" }} align="left"></TableCell>
+                      <TableCell style={{ width: "25%" }} align="left" colSpan={3}></TableCell>
                     </TableHead>
                     <TableBody>
                       {
@@ -981,45 +987,47 @@ export default function Tab1(props) {
                             <TableCell style={{ width: "5%" }} align="left">{item.SURVEYDOCTYPE_GROUP}</TableCell>
                             <TableCell style={{ width: "25%" }} align="left">{item.SURVEYDOCTYPE_NAME_TH}</TableCell>
                             <TableCell style={{ width: "5%" }} align="left">{item?.IMAGE_PNO ?? 0}</TableCell>
-                            <TableCell style={{ width: "25%" }}>
-                              <Stack direction={'row'}>
-                                <Grid item xs={12} md={2}>
-                                  <Tooltip title={"ลดเลข"}>
-                                    <IconButton
-                                      onClick={() => {
-                                        handleCountChange("decrease", index, item);
-                                        setCount((prevCount) => prevCount - 1);
-                                      }}
-                                      color="error">
-                                      <Remove />
-                                    </IconButton>
-                                  </Tooltip>
-                                </Grid>
-                                <Grid item xs={12} md={6}>
-                                  <TextField
-                                    type="number"
-                                    size="small"
-                                    label={"จำนวนหน้า"}
-                                    // sx={{ width: "60%" }}
-                                    inputProps={{ maxLength: 4, readOnly: true }}
-                                    defaultValue={"0"}
-                                    value={item?.COUNT_DOC || 0}
-                                    onChange={(e) => { handleCountChange("change", index, item, e.target.value) }}
-                                  />
-                                </Grid>
-                                <Grid item xs={12} md={2} >
-                                  <Tooltip title={"เพิ่มเลข"}>
-                                    <IconButton
-                                      onClick={() => {
-                                        handleCountChange("increase", index, item);
-                                        setCount((prevCount) => prevCount + 1);
-                                      }}
-                                      color="success">
-                                      <Add />
-                                    </IconButton>
-                                  </Tooltip>
-                                </Grid>
-                              </Stack>
+                            <TableCell style={{ width: "5%" }}>
+                              <Grid item xs={12} md={2}>
+                                <Tooltip title={"ลดเลข"}>
+                                  <IconButton
+                                    onClick={() => {
+                                      handleCountChange("decrease", index, item);
+                                      setCount((prevCount) => prevCount - 1);
+                                    }}
+                                    color="error">
+                                    <Remove />
+                                  </IconButton>
+                                </Tooltip>
+                              </Grid>
+                            </TableCell>
+                            <TableCell style={{ width: "15%" }}>
+                              <Grid item xs={12} md={6}>
+                                <TextField
+                                  type="number"
+                                  size="small"
+                                  label={"จำนวนหน้า"}
+                                  sx={{ width: 100 }}
+                                  inputProps={{ maxLength: 4, readOnly: true }}
+                                  defaultValue={"0"}
+                                  value={item?.COUNT_DOC || 0}
+                                  onChange={(e) => { handleCountChange("change", index, item, e.target.value) }}
+                                />
+                              </Grid>
+                            </TableCell>
+                            <TableCell style={{ width: "5%" }}>
+                              <Grid item xs={12} md={2} >
+                                <Tooltip title={"เพิ่มเลข"}>
+                                  <IconButton
+                                    onClick={() => {
+                                      handleCountChange("increase", index, item);
+                                      setCount((prevCount) => prevCount + 1);
+                                    }}
+                                    color="success">
+                                    <Add />
+                                  </IconButton>
+                                </Tooltip>
+                              </Grid>
                             </TableCell>
                           </TableRow>
                         )

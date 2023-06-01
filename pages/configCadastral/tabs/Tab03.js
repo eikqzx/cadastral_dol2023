@@ -20,7 +20,6 @@ import {
 } from "@mui/material";
 //SERVICES
 import { cadastralImageByCadastralSeq } from "@/service/sva";
-import { getLandOffice } from '@/service/mas/landOffice';
 import { getTitleByPK } from '@/service/mas/title';
 import { useSession } from 'next-auth/react';
 //LIBRALIE
@@ -31,11 +30,6 @@ export default function Tab03(props) {
     const [message, setMessage] = React.useState("");
     const [type, setType] = React.useState("success");
     const [cadastralImageData, setCadastralImageData] = React.useState([]);
-    const [office, setOffice] = React.useState("-");
-    const [sheetcode, setSheetcode] = React.useState("-");
-    const [boxNo, setBoxNo] = React.useState("-");
-    const [numofsurveyQty, setNumofsurveyQty] = React.useState("-");
-    const [cadastralNo, setCadastralNo] = React.useState("-");
     const { data } = useSession();
 
     const [curPage, setCurPage] = React.useState(1);
@@ -50,36 +44,11 @@ export default function Tab03(props) {
         setCurPage(value);
     };
 
-    console.log(props?.searchData, "Tab03");
     console.log(cadastralImageData, "cadastralImageData");
     React.useEffect(() => {
-        if (Array.isArray(props?.searchData)) {
-            if (props?.searchData.length != 0) {
-                let filterData = props?.searchData?.filter(item => item.CADASTRAL_SEQ == props?.tabData?.CADASTRAL_SEQ);
-                console.log(filterData, "filterData");
-                if (filterData.length != 0) {
-                    getMasterData(filterData[0]);
-                }
-            }
-        }
         _createNewData()
-    }, [props?.searchData]);
+    }, []);
 
-    const getMasterData = async (data) => {
-        console.log(data, "getMasterData");
-        // _createNewData(data.CADASTRAL_SEQ)
-        if (data != undefined) {
-            let getLandOfficeData = await getLandOffice();
-            let landOfficeFiltered = getLandOfficeData.rows.filter(item => item.LANDOFFICE_SEQ == data?.LANDOFFICE_SEQ);
-            setSheetcode(data.SHEETCODE);
-            setBoxNo(data.BOX_NO.toString().padStart(2, '0'));
-            setNumofsurveyQty(data?.NUMOFSURVEY_QTY ?? "-");
-            setCadastralNo(data.CADASTRAL_NO);
-            console.log(landOfficeFiltered, "getLandOfficeData");
-            setOffice(landOfficeFiltered[0]?.LANDOFFICE_NAME_TH ?? "-");
-
-        }
-    }
 
     const _createNewData = async (data) => {
         let cadastralImageData = await cadastralImageByCadastralSeq(10000010)
@@ -93,63 +62,7 @@ export default function Tab03(props) {
         setCadastralImageData(cadastralImageData)
     }
     return (
-        <Grid>
-            <Grid p={2} spacing={1} component={Paper} container>
-                <Grid item xs={3} md={5}>
-                    <Grid container>
-                        <Grid item>
-                            <Typography>สำนักงาน: </Typography>
-                        </Grid>
-                        <Grid item>
-                            <Typography color={"darkblue"} fontWeight={"bold"} sx={{ textDecoration: 'underline' }} display="inline">&nbsp;{office}&nbsp;</Typography>
-                        </Grid>
-                    </Grid>
-                </Grid>
-                <Grid item xs={3} md={3}>
-                    <Grid container>
-                        <Grid item>
-                            <Typography>หมายเลขรหัสแทนระวาง(เลขแฟ้ม):</Typography>
-                        </Grid>
-                        <Grid item>
-                            <Typography color={"darkblue"} fontWeight={"bold"} sx={{ textDecoration: 'underline' }} display="inline">&nbsp;{sheetcode}&nbsp;</Typography>
-                        </Grid>
-                    </Grid>
-                </Grid>
-                <Grid item xs={3} md={3}>
-                    <Grid container>
-                        <Grid item >
-                            <Typography>เลขที่กล่อง:</Typography>
-                        </Grid>
-                        <Grid item>
-                            <Typography color={"darkblue"} fontWeight={"bold"} sx={{ textDecoration: 'underline' }} display="inline">&nbsp;{boxNo}&nbsp;</Typography>
-                        </Grid>
-                    </Grid>
-                </Grid>
-                <Grid item xs={3} md={3}>
-                    <Grid container>
-                        <Grid item >
-                            <Typography>ครั้งที่รังวัด:</Typography>
-                        </Grid>
-                        <Grid item>
-                            <Typography color={"darkblue"} fontWeight={"bold"} sx={{ textDecoration: 'underline' }} display="inline">&nbsp;{numofsurveyQty}&nbsp;</Typography>
-                            {/* <IconButton size='small' disabled={numofsurveyQty == "-" || checkCanEdit} onClick={() => { setOpenEdit(props?.tabData) }}><Edit /></IconButton> */}
-                        </Grid>
-                    </Grid>
-                </Grid>
-                <Grid item xs={3} md={4}>
-                    <Grid container>
-                        <Grid item >
-                            <Typography>เลขที่ต้นร่าง:</Typography>
-                        </Grid>
-                        <Grid item>
-                            <Typography color={"darkblue"} fontWeight={"bold"} sx={{ textDecoration: 'underline' }} display="inline">&nbsp;{cadastralNo}&nbsp;</Typography>
-                        </Grid>
-                    </Grid>
-                </Grid>
-                <Grid item xs={12}>
-                    <Divider />
-                </Grid>
-            </Grid>
+        <Grid container>
             <Grid item xs={12}>
                 <React.Fragment>
                     <TableContainer>
@@ -200,7 +113,7 @@ export default function Tab03(props) {
                                                         }}
                                                         style={{ cursor: 'pointer' }}
                                                     >
-                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} >
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} >
                                                             {index + 1}
                                                         </TableCell>
                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} >{el.IMAGE_PNAME}</TableCell>

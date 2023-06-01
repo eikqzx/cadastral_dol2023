@@ -30,7 +30,6 @@ import { getLandOfficeByPK } from "@/service/mas/landOffice";
 import { cadastralImage10XByConditionParcelNoTo } from "@/service/sva";
 export default function IndexConfigCadastral(props) {
     const [searchData, setSearchData] = React.useState([]);
-    const [createDataList, setCreateDataList] = React.useState([]);
     const [tabData, setTapData] = React.useState('1');
     const [open, setOpen] = React.useState(false);
     const [message, setMessage] = React.useState('');
@@ -38,10 +37,14 @@ export default function IndexConfigCadastral(props) {
     const [processSeq, setProcessSeq] = React.useState(102)
     const [userData, setUserData] = React.useState(null);
     const [landOffice, setLandOffice] = React.useState(null);
-    const [pdfData, setPdfData] = React.useState();
     const [searchParameter, setSearchParameter] = React.useState(null);
     const { data } = useSession();
-
+    //MASTER_DATA
+    const [office, setOffice] = React.useState("-");
+    const [sheetcode, setSheetcode] = React.useState("-");
+    const [boxNo, setBoxNo] = React.useState("-");
+    const [numofsurveyQty, setNumofsurveyQty] = React.useState("-");
+    const [cadastralNo, setCadastralNo] = React.useState("-");
     const handleChangeTabs = (event, newValue) => {
         setTapData(newValue);
     };
@@ -79,7 +82,6 @@ export default function IndexConfigCadastral(props) {
 
     const onSearchNew = async (obj) => {
         console.log(obj, "obj_onSearch");
-        setPdfData(obj)
         setSearchParameter(obj)
         let data = null;
         data = await cadastralImage10XByConditionParcelNoTo(obj);
@@ -92,6 +94,34 @@ export default function IndexConfigCadastral(props) {
     {
         seq.CADASTRAL_SEQ = 890000002566779
     }
+    React.useEffect(() => {
+        if (Array.isArray(searchData)) {
+            if (searchData.length != 0) {
+                let filterData = searchData?.filter(item => item.CADASTRAL_SEQ == props?.tabData?.CADASTRAL_SEQ);
+                console.log(filterData, "filterData");
+                if (filterData.length != 0) {
+                    getMasterData(filterData[0]);
+                }
+            }
+        }
+    }, [searchData]);
+
+    const getMasterData = async (data) => {
+        console.log(data, "getMasterData");
+        // _createNewData(data.CADASTRAL_SEQ)
+        if (data != undefined) {
+            let getLandOfficeData = await getLandOffice();
+            let landOfficeFiltered = getLandOfficeData.rows.filter(item => item.LANDOFFICE_SEQ == data?.LANDOFFICE_SEQ);
+            setSheetcode(data.SHEETCODE);
+            setBoxNo(data.BOX_NO.toString().padStart(2, '0'));
+            setNumofsurveyQty(data?.NUMOFSURVEY_QTY ?? "-");
+            setCadastralNo(data.CADASTRAL_NO);
+            console.log(landOfficeFiltered, "getLandOfficeData");
+            setOffice(landOfficeFiltered[0]?.LANDOFFICE_NAME_TH ?? "-");
+
+        }
+    }
+
 
     return (
         <Grid container spacing={0.5} py={7.5}>
@@ -119,6 +149,62 @@ export default function IndexConfigCadastral(props) {
             </Grid>
             <Grid item xs={10} md={11}>
                 <Paper sx={{ height: "100vh", flexGrow: 1, overflowY: 'auto' }}>
+                    <Grid p={2} spacing={1} component={Paper} container>
+                        <Grid item xs={3} md={5}>
+                            <Grid container>
+                                <Grid item>
+                                    <Typography>สำนักงาน: </Typography>
+                                </Grid>
+                                <Grid item>
+                                    <Typography color={"darkblue"} fontWeight={"bold"} sx={{ textDecoration: 'underline' }} display="inline">&nbsp;{office}&nbsp;</Typography>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                        <Grid item xs={3} md={3}>
+                            <Grid container>
+                                <Grid item>
+                                    <Typography>หมายเลขรหัสแทนระวาง(เลขแฟ้ม):</Typography>
+                                </Grid>
+                                <Grid item>
+                                    <Typography color={"darkblue"} fontWeight={"bold"} sx={{ textDecoration: 'underline' }} display="inline">&nbsp;{sheetcode}&nbsp;</Typography>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                        <Grid item xs={3} md={3}>
+                            <Grid container>
+                                <Grid item >
+                                    <Typography>เลขที่กล่อง:</Typography>
+                                </Grid>
+                                <Grid item>
+                                    <Typography color={"darkblue"} fontWeight={"bold"} sx={{ textDecoration: 'underline' }} display="inline">&nbsp;{boxNo}&nbsp;</Typography>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                        <Grid item xs={3} md={3}>
+                            <Grid container>
+                                <Grid item >
+                                    <Typography>ครั้งที่รังวัด:</Typography>
+                                </Grid>
+                                <Grid item>
+                                    <Typography color={"darkblue"} fontWeight={"bold"} sx={{ textDecoration: 'underline' }} display="inline">&nbsp;{numofsurveyQty}&nbsp;</Typography>
+                                    {/* <IconButton size='small' disabled={numofsurveyQty == "-" || checkCanEdit} onClick={() => { setOpenEdit(props?.tabData) }}><Edit /></IconButton> */}
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                        <Grid item xs={3} md={4}>
+                            <Grid container>
+                                <Grid item >
+                                    <Typography>เลขที่ต้นร่าง:</Typography>
+                                </Grid>
+                                <Grid item>
+                                    <Typography color={"darkblue"} fontWeight={"bold"} sx={{ textDecoration: 'underline' }} display="inline">&nbsp;{cadastralNo}&nbsp;</Typography>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Divider />
+                        </Grid>
+                    </Grid>
                     <Box sx={{ width: '100%', typography: 'body1' }}>
                         <TabContext value={tabData}>
                             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>

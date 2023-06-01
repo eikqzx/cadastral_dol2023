@@ -20,7 +20,6 @@ import {
 } from "@mui/material";
 //SERVICES
 import { getCadastralLandByCadastralSeq } from "@/service/sva";
-import { getLandOffice } from '@/service/mas/landOffice';
 import { useSession } from 'next-auth/react';
 //LIBRALIE
 import { filterRecordStatus, getCookie, isNotEmpty } from "@/lib/datacontrol";
@@ -30,11 +29,6 @@ export default function Tab01(props) {
     const [message, setMessage] = React.useState("");
     const [type, setType] = React.useState("success");
     const [cadastralLandData, setCadastralLandData] = React.useState([]);
-    const [office, setOffice] = React.useState("-");
-    const [sheetcode, setSheetcode] = React.useState("-");
-    const [boxNo, setBoxNo] = React.useState("-");
-    const [numofsurveyQty, setNumofsurveyQty] = React.useState("-");
-    const [cadastralNo, setCadastralNo] = React.useState("-");
     const { data } = useSession();
 
     const [curPage, setCurPage] = React.useState(1);
@@ -49,37 +43,10 @@ export default function Tab01(props) {
         setCurPage(value);
     };
 
-    console.log(props?.searchData, "Tab01");
     console.log(cadastralLandData, "cadastralLandData");
     React.useEffect(() => {
-        if (Array.isArray(props?.searchData)) {
-            if (props?.searchData.length != 0) {
-                let filterData = props?.searchData?.filter(item => item.CADASTRAL_SEQ == props?.tabData?.CADASTRAL_SEQ);
-                console.log(filterData, "filterData");
-                if (filterData.length != 0) {
-                    getMasterData(filterData[0]);
-                }
-            }
-        }
         _createNewData()
-    }, [props?.searchData]);
-
-    const getMasterData = async (data) => {
-        console.log(data, "getMasterData");
-        // _createNewData(data.CADASTRAL_SEQ)
-        if (data != undefined) {
-            let getLandOfficeData = await getLandOffice();
-            let landOfficeFiltered = getLandOfficeData.rows.filter(item => item.LANDOFFICE_SEQ == data?.LANDOFFICE_SEQ);
-            setSheetcode(data.SHEETCODE);
-            setBoxNo(data.BOX_NO.toString().padStart(2, '0'));
-            setNumofsurveyQty(data?.NUMOFSURVEY_QTY ?? "-");
-            setCadastralNo(data.CADASTRAL_NO);
-            console.log(landOfficeFiltered, "getLandOfficeData");
-            setOffice(landOfficeFiltered[0]?.LANDOFFICE_NAME_TH ?? "-");
-
-        }
-    }
-
+    }, []);
     const _createNewData = async (data) => {
         let cadastralLandData = await getCadastralLandByCadastralSeq(890000002566779)
         console.log(cadastralLandData, "getMasterDatacadastralLandData");
@@ -88,62 +55,6 @@ export default function Tab01(props) {
     }
     return (
         <Grid>
-            <Grid p={2} spacing={1} component={Paper} container>
-                <Grid item xs={3} md={5}>
-                    <Grid container>
-                        <Grid item>
-                            <Typography>สำนักงาน: </Typography>
-                        </Grid>
-                        <Grid item>
-                            <Typography color={"darkblue"} fontWeight={"bold"} sx={{ textDecoration: 'underline' }} display="inline">&nbsp;{office}&nbsp;</Typography>
-                        </Grid>
-                    </Grid>
-                </Grid>
-                <Grid item xs={3} md={3}>
-                    <Grid container>
-                        <Grid item>
-                            <Typography>หมายเลขรหัสแทนระวาง(เลขแฟ้ม):</Typography>
-                        </Grid>
-                        <Grid item>
-                            <Typography color={"darkblue"} fontWeight={"bold"} sx={{ textDecoration: 'underline' }} display="inline">&nbsp;{sheetcode}&nbsp;</Typography>
-                        </Grid>
-                    </Grid>
-                </Grid>
-                <Grid item xs={3} md={3}>
-                    <Grid container>
-                        <Grid item >
-                            <Typography>เลขที่กล่อง:</Typography>
-                        </Grid>
-                        <Grid item>
-                            <Typography color={"darkblue"} fontWeight={"bold"} sx={{ textDecoration: 'underline' }} display="inline">&nbsp;{boxNo}&nbsp;</Typography>
-                        </Grid>
-                    </Grid>
-                </Grid>
-                <Grid item xs={3} md={3}>
-                    <Grid container>
-                        <Grid item >
-                            <Typography>ครั้งที่รังวัด:</Typography>
-                        </Grid>
-                        <Grid item>
-                            <Typography color={"darkblue"} fontWeight={"bold"} sx={{ textDecoration: 'underline' }} display="inline">&nbsp;{numofsurveyQty}&nbsp;</Typography>
-                            {/* <IconButton size='small' disabled={numofsurveyQty == "-" || checkCanEdit} onClick={() => { setOpenEdit(props?.tabData) }}><Edit /></IconButton> */}
-                        </Grid>
-                    </Grid>
-                </Grid>
-                <Grid item xs={3} md={4}>
-                    <Grid container>
-                        <Grid item >
-                            <Typography>เลขที่ต้นร่าง:</Typography>
-                        </Grid>
-                        <Grid item>
-                            <Typography color={"darkblue"} fontWeight={"bold"} sx={{ textDecoration: 'underline' }} display="inline">&nbsp;{cadastralNo}&nbsp;</Typography>
-                        </Grid>
-                    </Grid>
-                </Grid>
-                <Grid item xs={12}>
-                    <Divider />
-                </Grid>
-            </Grid>
             <Grid item xs={12}>
                 <React.Fragment>
                     <TableContainer>
