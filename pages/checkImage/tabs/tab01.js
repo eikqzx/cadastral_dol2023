@@ -421,86 +421,8 @@ export default function Tab01(props) {
                                         }
                                     </Paper>
                                 </Grid>
-                                {/* <Grid item xs={4} p={2}>
-                                    <Paper sx={{ textAlign: 'center' }}>xs=4</Paper>
-                                </Grid> */}
                             </Grid>
                         </Grid>
-                        {/* <Grid item xs={12} p={1}>
-                            {imageArrData?.length != 0 && <Grid container alignItems="center"
-                                justifyContent="center">
-                                <Grid item>
-                                    <Card sx={{
-                                        background: 'linear-gradient(26deg, rgba(255,255,232,1) 20%, rgba(188,243,176,1) 100%) !important',
-                                    }}>
-                                        <CardContent>
-                                            <Grid container alignItems="center"
-                                                justifyContent="center">
-                                                <Grid item>
-                                                    <IconButton onClick={handlePreviousImage} disabled={currentImageIndex == 0} size='large' aria-label="previous">
-                                                        <SkipPreviousIcon />
-                                                    </IconButton>
-                                                </Grid>
-                                                <Grid item>
-                                                    <Typography variant="h5">{imageArrData[currentImageIndex]?.IMAGE_PNAME + " (" + imageArrData[currentImageIndex]?.IMAGE_PNO + ")"}</Typography>
-                                                </Grid>
-                                                <Grid item>
-                                                    <IconButton onClick={handleNextImage} disabled={currentImageIndex == (imageArrData.length - 1)} size='large' aria-label="next">
-                                                        <SkipNextIcon />
-                                                    </IconButton>
-                                                </Grid>
-                                            </Grid>
-                                        </CardContent>
-                                        <CardActions>
-                                            <Grid container alignItems="center"
-                                                justifyContent="center">
-                                                <Grid item xs={10}>
-                                                    <CardMedia
-                                                        sx={{ maxWidth: 1000 }}
-                                                    >
-                                                        <ReactImageMagnify
-                                                            {...{
-                                                                smallImage: {
-                                                                    isFluidWidth: true,
-                                                                    src: imageArrData[currentImageIndex]?.FILE_DATA,
-                                                                    width: 400,
-                                                                    height: 300,
-                                                                },
-                                                                largeImage: {
-                                                                    src: imageArrData[currentImageIndex]?.FILE_DATA,
-                                                                    width: 2500,
-                                                                    height: 2500
-                                                                },
-                                                                enlargedImagePosition: 'over'
-                                                            }}
-                                                        />
-                                                    </CardMedia>
-                                                </Grid>
-                                            </Grid>
-                                        </CardActions>
-                                        <CardContent>
-                                            <Grid container alignItems="center"
-                                                justifyContent="center">
-                                                <Grid item>
-                                                    <IconButton onClick={handlePreviousImage} disabled={currentImageIndex == 0} size='large' aria-label="previous">
-                                                        <SkipPreviousIcon />
-                                                    </IconButton>
-                                                </Grid>
-                                                <Grid item>
-                                                    <Typography variant="h5">{imageArrData[currentImageIndex]?.IMAGE_PNAME + " (" + imageArrData[currentImageIndex]?.IMAGE_PNO + ")"}</Typography>
-                                                </Grid>
-                                                <Grid item>
-                                                    <IconButton onClick={handleNextImage} disabled={currentImageIndex == (imageArrData.length - 1)} size='large' aria-label="next">
-                                                        <SkipNextIcon />
-                                                    </IconButton>
-                                                </Grid>
-                                            </Grid>
-                                        </CardContent>
-                                    </Card>
-                                </Grid>
-                            </Grid>
-                            }
-                        </Grid> */}
                         <Grid item xs={12}>
                             <Grid container justifyContent="flex-start" xs={12}>
                                 <Grid item xs={12} p={2}>
