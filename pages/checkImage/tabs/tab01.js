@@ -55,6 +55,7 @@ import { getStatus } from '@/service/mas/status';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ImageMui from "@mui/icons-material/Image"
 import CloseIcon from '@mui/icons-material/Close';
+import Image from 'next/image';
 
 function Tab01(props) {
     const [imageObj, setImageObj] = React.useState([]);
@@ -388,7 +389,7 @@ function Tab01(props) {
                                                         <TableRow>
                                                             <TableCell style={{ width: "40%" }} align="left">ชื่อเอกสาร</TableCell>
                                                             <TableCell style={{ width: "35%" }} align="left">สถานะ</TableCell>
-                                                            <TableCell style={{ width: "25%" }} align="left">จัดการ</TableCell>
+                                                            <TableCell style={{ width: "25%" }} align="left">รูปภาพ</TableCell>
                                                         </TableRow>
                                                     </TableHead>
                                                     <TableBody>
@@ -407,7 +408,7 @@ function Tab01(props) {
                                                                     <TableCell style={{ width: "25%" }} align="left">
                                                                         <Tooltip title="ดูรูปภาพ">
                                                                             <IconButton onClick={() => { openImageUrl(item) }}>
-                                                                                <ImageMui />
+                                                                                <Image alt={item.IMAGE_PNAME} src={item.FILE_DATA} width={50} height={70.5} />
                                                                             </IconButton>
                                                                         </Tooltip>
                                                                     </TableCell>
