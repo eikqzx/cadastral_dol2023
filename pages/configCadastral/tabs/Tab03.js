@@ -57,32 +57,35 @@ export default function Tab03(props) {
         setRowsPerPage(event.target.value);
         setCurPage(1); // Reset current page to 1
     };
-
+    console.log(advancedExampleOpen, "advancedExampleOpen");
     const _handleChangePage = (event, value) => {
         //console.log(value);
         setCurPage(value);
     };
 
     console.log(cadastralImageData, "cadastralImageData");
+    console.log(imageObj, "imageObj");
     React.useEffect(() => {
         _createNewData()
     }, []);
 
     const _createNewData = async (data) => {
-        let cadastralImageData = await cadastralImageByCadastralSeq(10000010)
+        let cadastralImageData = await cadastralImageByCadastralSeq(10000029)
         console.log(cadastralImageData, "getMasterDatacadastralImageData");
         cadastralImageData = filterRecordStatus(cadastralImageData.rows, "N")
         for (let i in cadastralImageData) {
             let dataItems = cadastralImageData[i]
+            // console.log(dataItems,"dataItems");
             dataItems.CADASTRAL_IMAGE_FULL_NAME = dataItems.CADASTRAL_IMAGE_FNAME + " " + dataItems.CADASTRAL_IMAGE_LNAME
             let resGetFile = await getFile(dataItems.IMAGE_PATH);
-            console.log(resGetFile,"resGetFile");
+            console.log(resGetFile, "resGetFile");
             dataItems['FILE_STATUS'] = resGetFile.status;
             if (resGetFile.status) {
                 dataItems['FILE_DATA'] = `data:image/*;base64,${resGetFile.fileAsBase64}`;
             } else {
                 dataItems['FILE_DATA'] = "/img_not_found.png"
             }
+            console.log(dataItems,"dataItems");
             cadastralImageData.push(dataItems)
         }
         setCadastralImageData(cadastralImageData)
@@ -95,7 +98,7 @@ export default function Tab03(props) {
             let arr = [];
             // { ...slides[0], title: "Puppy in sunglasses", description: "Mollie Sivaram" }
             let obj = { src: file.FILE_DATA, title: `${file.IMAGE_PNAME} (${file.IMAGE_PNO})` };
-            console.log(obj, "file");
+            // console.log(obj, "file");
             arr.push(obj);
             console.log(arr, "imageObj");
             setImageObj(arr);
