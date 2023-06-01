@@ -388,6 +388,7 @@ export default function Tab01(props) {
                                                     <TableHead>
                                                         <TableRow>
                                                             <TableCell style={{ width: "40%" }} align="left">ชื่อเอกสาร</TableCell>
+                                                            <TableCell style={{ width: "40%" }} align="left">ที่อยู่ไฟล์</TableCell>
                                                             <TableCell style={{ width: "35%" }} align="left">สถานะ</TableCell>
                                                             <TableCell style={{ width: "25%" }} align="left">รูปภาพ</TableCell>
                                                         </TableRow>
@@ -401,11 +402,12 @@ export default function Tab01(props) {
                                                                         backgroundColor: '#ECF2FF !important',
                                                                     },
                                                                 }}>
-                                                                    <TableCell style={{ width: "40%" }} align="left">{`${item.IMAGE_PNAME} (${item.IMAGE_PNO})`}</TableCell>
-                                                                    <TableCell style={{ width: "35%" }} align="left">{
+                                                                    <TableCell style={{ width: "30%" }} align="left">{`${item.IMAGE_PNAME} (${item.IMAGE_PNO})`}</TableCell>
+                                                                    <TableCell style={{ width: "30%" }} align="left">{`${item?.IMAGE_PATH ?? "-"}`}</TableCell>
+                                                                    <TableCell style={{ width: "20%" }} align="left">{
                                                                         item.FILE_STATUS ? <Chip icon={<CheckCircleIcon />} label="อัปโหลดแล้ว" color="success" /> : <Chip icon={<CloseIcon />} label="ไม่ได้อัปโหลด" color="error" />
                                                                     }</TableCell>
-                                                                    <TableCell style={{ width: "25%" }} align="left">
+                                                                    <TableCell style={{ width: "20%" }} align="left">
                                                                         <Tooltip title="ดูรูปภาพ">
                                                                             <IconButton onClick={() => { openImageUrl(item) }}>
                                                                                 <Image alt={item.IMAGE_PNAME} src={item.FILE_DATA} width={50} height={70.5} />
