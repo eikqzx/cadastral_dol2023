@@ -107,13 +107,13 @@ export default function Tab01(props) {
 
     const handleNextImage = () => {
         setCurrentImageIndex((prevIndex) =>
-            prevIndex === imageArrData.length - 1 ? 0 : prevIndex + 1
+            prevIndex === imageArrData?.length - 1 ? 0 : prevIndex + 1
         );
     };
 
     const handlePreviousImage = () => {
         setCurrentImageIndex((prevIndex) =>
-            prevIndex === 0 ? imageArrData.length - 1 : prevIndex - 1
+            prevIndex === 0 ? imageArrData?.length - 1 : prevIndex - 1
         );
     };
 
@@ -125,12 +125,12 @@ export default function Tab01(props) {
     console.log(imageArrData, "imageArrData");
     React.useEffect(() => {
         if (Array.isArray(props?.searchData)) {
-            if (props?.searchData.length != 0) {
+            if (props?.searchData?.length != 0) {
                 let filterData = props?.searchData?.filter(
                     (item) => item.CADASTRAL_SEQ == props?.tabData?.CADASTRAL_SEQ
                 );
                 console.log(filterData, "filterDatafilterData");
-                if (filterData.length != 0) {
+                if (filterData?.length != 0) {
                     getMasterData(filterData[0]);
                     // createData(filterData[0]);
                 }
@@ -248,7 +248,7 @@ export default function Tab01(props) {
                     {message}
                 </Alert>
             </Snackbar>
-            {imageObj.length != 0 && <Lightbox
+            {imageObj?.length != 0 && <Lightbox
                 open={advancedExampleOpen}
                 close={() => setAdvancedExampleOpen(false)}
                 styles={{
@@ -376,7 +376,7 @@ export default function Tab01(props) {
                         </Grid>
                     </Grid>
                 </Grid>
-                {props?.tabData.length != 0 &&
+                {props?.tabData?.length != 0 &&
                     <React.Fragment>
                         <Grid item xs={12}>
                             <Grid container justifyContent="flex-start" xs={12}>
