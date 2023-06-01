@@ -57,7 +57,7 @@ import ImageMui from "@mui/icons-material/Image"
 import CloseIcon from '@mui/icons-material/Close';
 import Image from 'next/image';
 
-function Tab01(props) {
+export default function Tab01(props) {
     const [imageObj, setImageObj] = React.useState([]);
     const [open, setOpen] = React.useState(false);
     const [message, setMessage] = React.useState("");
@@ -532,5 +532,3 @@ function Tab01(props) {
         </div>
     )
 }
-
-export default Tab01
