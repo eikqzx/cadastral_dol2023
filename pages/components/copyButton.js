@@ -23,10 +23,10 @@ const CopyButton = ({ text }) => {
         <div>
             <Snackbar open={copied} autoHideDuration={6000} onClose={handleClose}>
                 <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-                    คัดลอก Path File แล้ว
+                    คัดลอกที่อยู่ไฟล์แล้ว
                 </Alert>
             </Snackbar>
-            <Tooltip title="คัดลอก Path File"><IconButton onClick={CopyToClipboard}><ContentCopy /></IconButton></Tooltip>
+            <Tooltip title="คัดลอกที่อยู่ไฟล์"><IconButton onClick={CopyToClipboard}><ContentCopy /></IconButton></Tooltip>
         </div>
     );
 };

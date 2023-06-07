@@ -56,6 +56,9 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ImageMui from "@mui/icons-material/Image"
 import CloseIcon from '@mui/icons-material/Close';
 import Image from 'next/image';
+import CopyButton from "@/pages/components/copyButton";
+import { getDocument } from '@/service/mas/document';
+import { getSurveyDocType } from '@/service/mas/surveyDocTypeGroup';
 
 export default function Tab01(props) {
     const [imageObj, setImageObj] = React.useState([]);
@@ -179,20 +182,69 @@ export default function Tab01(props) {
         let resImage = await cadastralImageByCadastralSeq(data.CADASTRAL_SEQ);
         console.log(resImage, "createData");
         let dataRows = resImage.rows
-        let arr = []
+        let arr = [];
+
+
         for (let i in dataRows) {
             let item = dataRows[i]
             let resGetFile = await getFile(item.IMAGE_PATH);
             item['FILE_STATUS'] = resGetFile.status;
             if (resGetFile.status) {
+                let link = <CopyButton text={item?.IMAGE_PATH} />
                 item['FILE_DATA'] = `data:image/*;base64,${resGetFile.fileAsBase64}`;
+                item['FILE_DES'] = <React.Fragment>
+                    <Grid container spacing={1}>
+                        <Grid item><Typography>
+                            {<Grid item> JPG File{<br />}
+                                Bit depth 24{<br />}
+                                Resolution 300 dpi{<br />}</Grid>}
+                            <Grid item>{item?.IMAGE_PATH}</Grid>
+                            <Grid>{link}</Grid>
+                        </Typography></Grid>
+                    </Grid>
+                </React.Fragment>
             } else {
                 item['FILE_DATA'] = "/img_not_found.png"
+                item['FILE_DES'] = ``
             }
             arr.push(item);
+            // arrNew.push(item);
         }
+        const groupedImages = arr.reduce((groups, image) => {
+            const { SURVEYDOCTYPE_SEQ } = image;
+
+            if (!groups[SURVEYDOCTYPE_SEQ]) {
+                groups[SURVEYDOCTYPE_SEQ] = [];
+            }
+
+            groups[SURVEYDOCTYPE_SEQ].push(image);
+
+            return groups;
+        }, {});
+        const uniqueArray = [];
+        console.log(groupedImages, "groupedImages");
+
+        for (const key in groupedImages) {
+            const images = groupedImages[key];
+
+            for (let i = 0; i < images.length; i++) {
+                const index = uniqueArray.findIndex((obj) => obj.SURVEYDOCTYPE_SEQ === images[i].SURVEYDOCTYPE_SEQ);
+                if (index === -1) {
+                    uniqueArray.push({
+                        SURVEYDOCTYPE_SEQ: images[i].SURVEYDOCTYPE_SEQ,
+                        data: images[i],
+                        childData: [images[i]],
+                    });
+                } else {
+                    uniqueArray[index].childData.push(images[i]);
+                }
+            }
+        }
+
+        console.log(uniqueArray, "uniqueArray");
+        console.log(arr, "arrarrarr");
         setImageArrData([]);
-        setImageArrData(arr);
+        setImageArrData(uniqueArray);
     }
 
     const onSave = async () => {
@@ -225,17 +277,19 @@ export default function Tab01(props) {
 
     const openImageUrl = async (file) => {
         console.log(file, "file");
+        let arr = [];
         // console.log("tesrt");
-        if (file.FILE_STATUS) {
-            let arr = [];
-            // { ...slides[0], title: "Puppy in sunglasses", description: "Mollie Sivaram" }
-            let obj = { src: file.FILE_DATA, title: `${file.IMAGE_PNAME} (${file.IMAGE_PNO})` };
-            console.log(obj, "file");
-            arr.push(obj);
-            console.log(arr, "imageObj");
-            setImageObj(arr);
-            setAdvancedExampleOpen(true);
+        for(let i in file){
+            const element = file[i];
+            if (element.FILE_STATUS) {
+                let obj = { src: element.FILE_DATA, title: `${element.IMAGE_PNAME} (${element.IMAGE_PNO})`, description: element.FILE_DES };
+                console.log(obj, "file");
+                arr.push(obj);
+            }
         }
+        console.log(arr, "imageObj");
+        setImageObj(arr);
+        setAdvancedExampleOpen(true);
     };
 
     return (
@@ -388,7 +442,7 @@ export default function Tab01(props) {
                                                     <TableHead>
                                                         <TableRow>
                                                             <TableCell style={{ width: "40%" }} align="left">ชื่อเอกสาร</TableCell>
-                                                            <TableCell style={{ width: "40%" }} align="left">ที่อยู่ไฟล์</TableCell>
+                                                            {/* <TableCell style={{ width: "40%" }} align="left">ที่อยู่ไฟล์</TableCell> */}
                                                             <TableCell style={{ width: "35%" }} align="left">สถานะ</TableCell>
                                                             <TableCell style={{ width: "25%" }} align="left">รูปภาพ</TableCell>
                                                         </TableRow>
@@ -402,17 +456,19 @@ export default function Tab01(props) {
                                                                         backgroundColor: '#ECF2FF !important',
                                                                     },
                                                                 }}>
-                                                                    <TableCell style={{ width: "30%" }} align="left">{`${item.IMAGE_PNAME} (${item.IMAGE_PNO})`}</TableCell>
-                                                                    <TableCell style={{ width: "30%" }} align="left">{`${item?.IMAGE_PATH ?? "-"}`}</TableCell>
+                                                                    <TableCell style={{ width: "30%" }} align="left">{`${item?.data?.IMAGE_PNAME}`}</TableCell>
+                                                                    {/* <TableCell style={{ width: "30%" }} align="left">{`${item?.IMAGE_PATH ?? "-"}`}</TableCell> */}
                                                                     <TableCell style={{ width: "20%" }} align="left">{
-                                                                        item.FILE_STATUS ? <Chip icon={<CheckCircleIcon />} label="อัปโหลดแล้ว" color="success" /> : <Chip icon={<CloseIcon />} label="ไม่ได้อัปโหลด" color="error" />
+                                                                        item?.data?.FILE_STATUS ? <Chip icon={<CheckCircleIcon />} label="อัปโหลดแล้ว" color="success" /> : <Chip icon={<CloseIcon />} label="ไม่ได้อัปโหลด" color="error" />
                                                                     }</TableCell>
                                                                     <TableCell style={{ width: "20%" }} align="left">
-                                                                        <Tooltip title="ดูรูปภาพ">
-                                                                            <IconButton onClick={() => { openImageUrl(item) }}>
-                                                                                <Image alt={item.IMAGE_PNAME} src={item.FILE_DATA} width={50} height={70.5} />
-                                                                            </IconButton>
-                                                                        </Tooltip>
+                                                                        {item?.childData?.map((item2, i) => (
+                                                                            <Tooltip key={i} title="ดูรูปภาพ">
+                                                                                <IconButton onClick={() => { openImageUrl(item?.childData) }}>
+                                                                                    <Image alt={item2.IMAGE_PNAME} src={item2.FILE_DATA} width={50} height={70.5} />
+                                                                                </IconButton>
+                                                                            </Tooltip>
+                                                                        ))}
                                                                     </TableCell>
                                                                 </TableRow>
                                                             ))

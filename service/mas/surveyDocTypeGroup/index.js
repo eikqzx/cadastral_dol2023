@@ -19,3 +19,19 @@ export async function surveyDocTypeBySurveyDocTypeGroup(seq) {
         return false
     }
 }
+
+export async function getSurveyDocType() {
+    let url = `/api/mas/surveyDocTypeGroup/getSurveyDocType`
+    AddLoading();
+    try {
+        let res = await axios.get(url)
+        let data = res.data
+        //console.log(data)
+        RemoveLoading();
+        return data
+    } catch (err) {
+        console.log(err)
+        RemoveLoading();
+        return false
+    }
+}
