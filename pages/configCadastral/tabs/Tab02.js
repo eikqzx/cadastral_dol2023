@@ -46,16 +46,19 @@ export default function Tab02(props) {
 
     console.log(cadastralOwnerData, "cadastralOwnerData");
     React.useEffect(() => {
-        _createNewData()
-    }, []);
+        if (props.searchData) {
+            _createNewData(props.searchData)
+        }
+    }, [props.searchData]);
 
     const _createNewData = async (data) => {
-        let cadastralOwnerData = await getCadastralOwnerBycadastralSeq(890000002566779)
+        console.log(data,"data_createNewDataTab02");
+        let cadastralOwnerData = await getCadastralOwnerBycadastralSeq(data[0].CADASTRAL_SEQ)
         console.log(cadastralOwnerData, "getMasterDatacadastralOwnerData");
         cadastralOwnerData = filterRecordStatus(cadastralOwnerData.rows, "N")
         for (let i in cadastralOwnerData) {
             let dataItems = cadastralOwnerData[i]
-            dataItems.TITLE_NAME_TH = await getTitleByPK(dataItems.TITLE_SEQ)
+            dataItems.TITLE_NAME_TH = await getTitleByPK(dataItems.OWNER_TITLE_SEQ)
             dataItems.OWNER_FULL_NAME = dataItems.TITLE_NAME_TH + " " + dataItems.OWNER_FNAME + " " + dataItems.OWNER_LNAME
             cadastralOwnerData.push(dataItems)
         }

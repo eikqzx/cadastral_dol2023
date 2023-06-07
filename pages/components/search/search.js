@@ -55,7 +55,7 @@ export default function Search(props) {
         }
     }, [])
 
-    console.log(props, "condoProjectYear");
+    console.log(props, "propsSearch");
 
     // console.log(isErrorField,"isErrorField");
 

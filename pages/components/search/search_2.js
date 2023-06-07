@@ -71,7 +71,7 @@ export default function SearchJob2(props) {
         }
     }, [])
 
-    console.log(condoYears, "condoProjectYear");
+    // console.log(condoYears, "condoProjectYear");
 
     console.log(props.printplateTypeSeq, "printplateTypeSeq");
 

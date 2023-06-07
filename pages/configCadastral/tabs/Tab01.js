@@ -45,10 +45,13 @@ export default function Tab01(props) {
 
     console.log(cadastralLandData, "cadastralLandData");
     React.useEffect(() => {
-        _createNewData()
-    }, []);
+        if (props.searchData) {
+            _createNewData(props.searchData)
+        }
+    }, [props.searchData]);
     const _createNewData = async (data) => {
-        let cadastralLandData = await getCadastralLandByCadastralSeq(890000002566779)
+        console.log(data,"data_createNewDataTab01");
+        let cadastralLandData = await getCadastralLandByCadastralSeq(data[0].CADASTRAL_SEQ)
         console.log(cadastralLandData, "getMasterDatacadastralLandData");
         cadastralLandData = filterRecordStatus(cadastralLandData.rows, "N")
         setCadastralLandData(cadastralLandData)

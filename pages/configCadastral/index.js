@@ -26,16 +26,16 @@ import { decode } from "next-base64";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 //SERVICE
-import { getLandOfficeByPK } from "@/service/mas/landOffice";
+import { getLandOfficeByPK, getLandOffice } from "@/service/mas/landOffice";
 import { cadastralImage10XByConditionParcelNoTo } from "@/service/sva";
 export default function IndexConfigCadastral(props) {
-    console.log(props,"propsIndexConfigCadastral");
+
     const [searchData, setSearchData] = React.useState([]);
     const [tabData, setTapData] = React.useState('1');
     const [open, setOpen] = React.useState(false);
     const [message, setMessage] = React.useState('');
     const [type, setType] = React.useState('');
-    const [processSeq, setProcessSeq] = React.useState(124)
+    const [processSeq, setProcessSeq] = React.useState(106)
     const [userData, setUserData] = React.useState(null);
     const [landOffice, setLandOffice] = React.useState(null);
     const [searchParameter, setSearchParameter] = React.useState(null);
@@ -49,7 +49,7 @@ export default function IndexConfigCadastral(props) {
     const handleChangeTabs = (event, newValue) => {
         setTapData(newValue);
     };
-
+    console.log(props, "propsIndexConfigCadastral");
 
     // console.log(landOffice, "landOffice");
     // console.log(userData, "userData");
@@ -69,7 +69,10 @@ export default function IndexConfigCadastral(props) {
         if (isNotEmpty(dataUrl)) {
             let seq = decode(dataUrl?.PROCESS_SEQ);
             console.log(seq, "seqseqseq");
-            setProcessSeq(seq);
+            if (seq == 124) {
+                seq = 106
+                setProcessSeq(seq);
+            }
         }
     }, [])
 
@@ -92,35 +95,27 @@ export default function IndexConfigCadastral(props) {
         setSearchData(data)
     }
 
-    let seq = []
-    {
-        seq.CADASTRAL_SEQ = 890000002566779
-    }
     React.useEffect(() => {
-        if (Array.isArray(searchData)) {
-            if (searchData.length != 0) {
-                let filterData = searchData?.filter(item => item.CADASTRAL_SEQ == props?.tabData?.CADASTRAL_SEQ);
-                console.log(filterData, "filterData");
-                if (filterData.length != 0) {
-                    getMasterData(filterData[0]);
-                }
-            }
+        if (searchData.length != 0) {
+            getMasterData(searchData)
         }
     }, [searchData]);
 
     const getMasterData = async (data) => {
+        // data = data.rows
         console.log(data, "getMasterData");
         // _createNewData(data.CADASTRAL_SEQ)
-        if (data != undefined) {
-            let getLandOfficeData = await getLandOffice();
-            let landOfficeFiltered = getLandOfficeData.rows.filter(item => item.LANDOFFICE_SEQ == data?.LANDOFFICE_SEQ);
-            setSheetcode(data.SHEETCODE);
-            setBoxNo(data.BOX_NO.toString().padStart(2, '0'));
-            setNumofsurveyQty(data?.NUMOFSURVEY_QTY ?? "-");
-            setCadastralNo(data.CADASTRAL_NO);
-            console.log(landOfficeFiltered, "getLandOfficeData");
-            setOffice(landOfficeFiltered[0]?.LANDOFFICE_NAME_TH ?? "-");
-
+        for (let i in data) {
+            if (data[i] != undefined) {
+                let getLandOfficeData = await getLandOffice();
+                let landOfficeFiltered = getLandOfficeData.rows.filter(item => item.LANDOFFICE_SEQ == data[i]?.LANDOFFICE_SEQ);
+                setSheetcode(data[i].SHEETCODE);
+                setBoxNo(data[i].BOX_NO.toString().padStart(2, "0"));
+                setNumofsurveyQty(data[i]?.NUMOFSURVEY_QTY ?? "-");
+                setCadastralNo(data[i].CADASTRAL_NO);
+                console.log(landOfficeFiltered, "getLandOfficeData");
+                setOffice(landOfficeFiltered[0]?.LANDOFFICE_NAME_TH ?? "-");
+            }
         }
     }
 
@@ -207,31 +202,34 @@ export default function IndexConfigCadastral(props) {
                             <Divider />
                         </Grid>
                     </Grid>
-                    <Box sx={{ width: '100%', typography: 'body1' }}>
-                        <TabContext value={tabData}>
-                            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                                <TabList
-                                    onChange={handleChangeTabs}
-                                    sx={{
-                                        '& .MuiTabs-indicator': { backgroundColor: "#5BB318 !important" },
-                                        '& .Mui-selected': { color: "#5BB318 !important" },
-                                        background: 'linear-gradient(26deg, rgba(255,255,232,1) 20%, rgba(188,243,176,1) 100%) !important',
-                                    }}
-                                    scrollButtons="auto"
-                                    allowScrollButtonsMobile
-                                >
-                                    <Tab label="แปลงต้นร่าง" value="1" />
-                                    <Tab label="ผู้ขอรังวัดต้นร่าง" value="2" />
-                                    <Tab label="รูปภาพต้นร่าง" value="3" />
-                                </TabList>
-                            </Box>
-                            <TabPanel value="1"><Tab01 searchData={searchData} /></TabPanel>
-                            <TabPanel value="2"><Tab02 searchData={searchData} /></TabPanel>
-                            <TabPanel value="3"><Tab03 searchData={searchData} /></TabPanel>
-                        </TabContext>
-                    </Box>
+                    {
+                        searchData.length != 0 &&
+                        <Box sx={{ width: '100%', typography: 'body1' }}>
+                            <TabContext value={tabData}>
+                                <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                                    <TabList
+                                        onChange={handleChangeTabs}
+                                        sx={{
+                                            '& .MuiTabs-indicator': { backgroundColor: "#5BB318 !important" },
+                                            '& .Mui-selected': { color: "#5BB318 !important" },
+                                            background: 'linear-gradient(26deg, rgba(255,255,232,1) 20%, rgba(188,243,176,1) 100%) !important',
+                                        }}
+                                        scrollButtons="auto"
+                                        allowScrollButtonsMobile
+                                    >
+                                        <Tab label="แปลงต้นร่าง" value="1" />
+                                        <Tab label="ผู้ขอรังวัดต้นร่าง" value="2" />
+                                        <Tab label="รูปภาพต้นร่าง" value="3" />
+                                    </TabList>
+                                </Box>
+                                <TabPanel value="1"><Tab01 searchData={searchData} /></TabPanel>
+                                <TabPanel value="2"><Tab02 searchData={searchData} /></TabPanel>
+                                <TabPanel value="3"><Tab03 searchData={searchData} /></TabPanel>
+                            </TabContext>
+                        </Box>
+                    }
                 </Paper>
             </Grid>
-        </Grid>
+        </Grid >
     )
 }

@@ -66,11 +66,14 @@ export default function Tab03(props) {
     console.log(cadastralImageData, "cadastralImageData");
     console.log(imageObj, "imageObj");
     React.useEffect(() => {
-        _createNewData()
-    }, []);
+        if (props.searchData) {
+            _createNewData(props.searchData)
+        }
+    }, [props.searchData]);
 
     const _createNewData = async (data) => {
-        let cadastralImageData = await cadastralImageByCadastralSeq(10000029)
+        console.log(data,"data_createNewDataTab03");
+        let cadastralImageData = await cadastralImageByCadastralSeq(data[0].CADASTRAL_SEQ)
         console.log(cadastralImageData, "getMasterDatacadastralImageData");
         cadastralImageData = filterRecordStatus(cadastralImageData.rows, "N")
         for (let i in cadastralImageData) {
