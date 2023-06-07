@@ -72,14 +72,13 @@ export default function Tab03(props) {
     }, [props.searchData]);
 
     const _createNewData = async (data) => {
-        console.log(data,"data_createNewDataTab03");
+        console.log(data, "data_createNewDataTab03");
         let cadastralImageData = await cadastralImageByCadastralSeq(data[0].CADASTRAL_SEQ)
         console.log(cadastralImageData, "getMasterDatacadastralImageData");
         cadastralImageData = filterRecordStatus(cadastralImageData.rows, "N")
         for (let i in cadastralImageData) {
             let dataItems = cadastralImageData[i]
             // console.log(dataItems,"dataItems");
-            dataItems.CADASTRAL_IMAGE_FULL_NAME = dataItems.CADASTRAL_IMAGE_FNAME + " " + dataItems.CADASTRAL_IMAGE_LNAME
             let resGetFile = await getFile(dataItems.IMAGE_PATH);
             console.log(resGetFile, "resGetFile");
             dataItems['FILE_STATUS'] = resGetFile.status;
@@ -88,10 +87,42 @@ export default function Tab03(props) {
             } else {
                 dataItems['FILE_DATA'] = "/img_not_found.png"
             }
-            console.log(dataItems,"dataItems");
+            console.log(dataItems, "dataItems");
             cadastralImageData.push(dataItems)
         }
-        setCadastralImageData(cadastralImageData)
+        const groupedImages = cadastralImageData.reduce((groups, image) => {
+            const { SURVEYDOCTYPE_SEQ } = image;
+
+            if (!groups[SURVEYDOCTYPE_SEQ]) {
+                groups[SURVEYDOCTYPE_SEQ] = [];
+            }
+
+            groups[SURVEYDOCTYPE_SEQ].push(image);
+
+            return groups;
+        }, {});
+        const uniqueArray = [];
+        console.log(groupedImages, "groupedImages");
+
+        for (const key in groupedImages) {
+            const images = groupedImages[key];
+
+            for (let i = 0; i < images.length; i++) {
+                const index = uniqueArray.findIndex((obj) => obj.SURVEYDOCTYPE_SEQ === images[i].SURVEYDOCTYPE_SEQ);
+                if (index === -1) {
+                    uniqueArray.push({
+                        SURVEYDOCTYPE_SEQ: images[i].SURVEYDOCTYPE_SEQ,
+                        data: images[i],
+                        childData: [images[i]],
+                    });
+                } else {
+                    uniqueArray[index].childData.push(images[i]);
+                }
+            }
+        }
+        console.log(uniqueArray, "uniqueArray");
+        setCadastralImageData(uniqueArray)
+
     }
 
     const openImageUrl = async (file) => {
@@ -174,16 +205,18 @@ export default function Tab03(props) {
                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} >
                                                             {index + 1}
                                                         </TableCell>
-                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} >{el.IMAGE_PNAME}</TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} >{el.data.IMAGE_PNAME}</TableCell>
                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {el.IMAGE_PNO}
+                                                            {el.data.IMAGE_PNO}
                                                         </TableCell>
                                                         <TableCell style={{ width: "25%" }} align="left">
-                                                            <Tooltip title="ดูรูปภาพ">
-                                                                <IconButton onClick={() => { openImageUrl(el) }}>
-                                                                    <Image alt={el.IMAGE_PNAME} src={el.FILE_DATA} width={50} height={70.5} />
-                                                                </IconButton>
-                                                            </Tooltip>
+                                                            {el.childData.map((image, i) =>
+                                                                <Tooltip key={i} title="ดูรูปภาพ">
+                                                                    <IconButton onClick={() => { openImageUrl(image) }}>
+                                                                        <Image alt={image.IMAGE_PNAME} src={image.FILE_DATA} width={50} height={70.5} />
+                                                                    </IconButton>
+                                                                </Tooltip>)
+                                                            }
                                                         </TableCell>
                                                     </TableRow>
                                                 </React.Fragment>
@@ -206,16 +239,18 @@ export default function Tab03(props) {
                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} >
                                                             {index + 1}
                                                         </TableCell>
-                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} >{el.IMAGE_PNAME}</TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} >{el.data.IMAGE_PNAME}</TableCell>
                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {el.IMAGE_PNO}
+                                                            {el.data.IMAGE_PNO}
                                                         </TableCell>
                                                         <TableCell style={{ width: "25%" }} align="left">
-                                                            <Tooltip title="ดูรูปภาพ">
-                                                                <IconButton onClick={() => { openImageUrl(el) }}>
-                                                                    <Image alt={el.IMAGE_PNAME} src={el.FILE_DATA} width={50} height={70.5} />
-                                                                </IconButton>
-                                                            </Tooltip>
+                                                            {el.childData.map((image, i) =>
+                                                                <Tooltip key={i} title="ดูรูปภาพ">
+                                                                    <IconButton onClick={() => { openImageUrl(image) }}>
+                                                                        <Image alt={image.IMAGE_PNAME} src={image.FILE_DATA} width={50} height={70.5} />
+                                                                    </IconButton>
+                                                                </Tooltip>)
+                                                            }
                                                         </TableCell>
                                                     </TableRow>
                                                 </React.Fragment>
@@ -272,6 +307,6 @@ export default function Tab03(props) {
                     </Grid>
                 </React.Fragment>
             </Grid>
-        </Grid>
+        </Grid >
     )
 }
