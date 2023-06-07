@@ -76,6 +76,7 @@ export default function Tab03(props) {
         let cadastralImageData = await cadastralImageByCadastralSeq(data[0].CADASTRAL_SEQ)
         console.log(cadastralImageData, "getMasterDatacadastralImageData");
         cadastralImageData = filterRecordStatus(cadastralImageData.rows, "N")
+        let cadastralImageDataArr = [];
         for (let i in cadastralImageData) {
             let dataItems = cadastralImageData[i]
             // console.log(dataItems,"dataItems");
@@ -87,12 +88,13 @@ export default function Tab03(props) {
             } else {
                 dataItems['FILE_DATA'] = "/img_not_found.png"
             }
-            console.log(dataItems, "dataItems");
-            cadastralImageData.push(dataItems)
-        }
+            console.log(dataItems, "dataItemscadastralImageByCadastralSeq");
+            cadastralImageDataArr.push(dataItems)
+        } 
+        console.log(cadastralImageData,"cadastralImageDataQ");
         const groupedImages = cadastralImageData.reduce((groups, image) => {
             const { SURVEYDOCTYPE_SEQ } = image;
-
+            console.log(image,"groupedImagesgroupedImages");
             if (!groups[SURVEYDOCTYPE_SEQ]) {
                 groups[SURVEYDOCTYPE_SEQ] = [];
             }
@@ -102,7 +104,7 @@ export default function Tab03(props) {
             return groups;
         }, {});
         const uniqueArray = [];
-        console.log(groupedImages, "groupedImages");
+        // console.log(groupedImages, "groupedImages");
 
         for (const key in groupedImages) {
             const images = groupedImages[key];
