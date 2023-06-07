@@ -29,12 +29,13 @@ import { useSession } from "next-auth/react";
 import { getLandOfficeByPK } from "@/service/mas/landOffice";
 import { cadastralImage10XByConditionParcelNoTo } from "@/service/sva";
 export default function IndexConfigCadastral(props) {
+    console.log(props,"propsIndexConfigCadastral");
     const [searchData, setSearchData] = React.useState([]);
     const [tabData, setTapData] = React.useState('1');
     const [open, setOpen] = React.useState(false);
     const [message, setMessage] = React.useState('');
     const [type, setType] = React.useState('');
-    const [processSeq, setProcessSeq] = React.useState(102)
+    const [processSeq, setProcessSeq] = React.useState(124)
     const [userData, setUserData] = React.useState(null);
     const [landOffice, setLandOffice] = React.useState(null);
     const [searchParameter, setSearchParameter] = React.useState(null);
@@ -82,6 +83,7 @@ export default function IndexConfigCadastral(props) {
 
     const onSearchNew = async (obj) => {
         console.log(obj, "obj_onSearch");
+        obj.PROCESS_SEQ_ = Number(processSeq);
         setSearchParameter(obj)
         let data = null;
         data = await cadastralImage10XByConditionParcelNoTo(obj);
