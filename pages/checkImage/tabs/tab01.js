@@ -183,12 +183,15 @@ export default function Tab01(props) {
         console.log(resImage, "createData");
         let dataRows = resImage.rows
         let arr = [];
-
-
+        let resDocData = await getSurveyDocType();
+        let arrDocData = resDocData.rows
+        // console.log(arrDocData,"arrDocData");
         for (let i in dataRows) {
             let item = dataRows[i]
             let resGetFile = await getFile(item.IMAGE_PATH);
+            let docArr = arrDocData.filter((doc)=>doc.SURVEYDOCTYPE_SEQ == item.SURVEYDOCTYPE_SEQ);
             item['FILE_STATUS'] = resGetFile.status;
+            item["DOC_DATA"] = docArr[0];
             if (resGetFile.status) {
                 let link = <CopyButton text={item?.IMAGE_PATH} />
                 item['FILE_DATA'] = `data:image/*;base64,${resGetFile.fileAsBase64}`;
@@ -441,7 +444,7 @@ export default function Tab01(props) {
                                                 <Table size="small" >
                                                     <TableHead>
                                                         <TableRow>
-                                                            <TableCell style={{ width: "40%" }} align="left">ชื่อเอกสาร</TableCell>
+                                                            <TableCell style={{ width: "40%" }} align="left">หลักฐานการรังวัด</TableCell>
                                                             {/* <TableCell style={{ width: "40%" }} align="left">ที่อยู่ไฟล์</TableCell> */}
                                                             <TableCell style={{ width: "35%" }} align="left">สถานะ</TableCell>
                                                             <TableCell style={{ width: "25%" }} align="left">รูปภาพ</TableCell>
@@ -456,7 +459,7 @@ export default function Tab01(props) {
                                                                         backgroundColor: '#ECF2FF !important',
                                                                     },
                                                                 }}>
-                                                                    <TableCell style={{ width: "30%" }} align="left">{`${item?.data?.IMAGE_PNAME}`}</TableCell>
+                                                                    <TableCell style={{ width: "30%" }} align="left">{`${item?.data?.DOC_DATA?.SURVEYDOCTYPE_GROUP} ${item?.data?.IMAGE_PNAME}`}</TableCell>
                                                                     {/* <TableCell style={{ width: "30%" }} align="left">{`${item?.IMAGE_PATH ?? "-"}`}</TableCell> */}
                                                                     <TableCell style={{ width: "20%" }} align="left">{
                                                                         item?.data?.FILE_STATUS ? <Chip icon={<CheckCircleIcon />} label="อัปโหลดแล้ว" color="success" /> : <Chip icon={<CloseIcon />} label="ไม่ได้อัปโหลด" color="error" />
