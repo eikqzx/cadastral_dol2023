@@ -19,7 +19,7 @@ import {
     MenuItem
 } from "@mui/material";
 //SERVICES
-import { getCadastralLandByCadastralSeq } from "@/service/sva";
+import { getCadastralByPK } from "@/service/sva";
 import { useSession } from 'next-auth/react';
 //LIBRALIE
 import { filterRecordStatus, getCookie, isNotEmpty } from "@/lib/datacontrol";
@@ -28,7 +28,7 @@ export default function Tab01(props) {
     const [open, setOpen] = React.useState(false);
     const [message, setMessage] = React.useState("");
     const [type, setType] = React.useState("success");
-    const [cadastralLandData, setCadastralLandData] = React.useState([]);
+    const [cadastralData, setCadastralData] = React.useState([]);
     const { data } = useSession();
 
     const [curPage, setCurPage] = React.useState(1);
@@ -43,18 +43,18 @@ export default function Tab01(props) {
         setCurPage(value);
     };
 
-    console.log(cadastralLandData, "cadastralLandData");
+    console.log(cadastralData, "cadastralData");
     React.useEffect(() => {
         if (props.searchData) {
             _createNewData(props.searchData)
         }
     }, [props.searchData]);
     const _createNewData = async (data) => {
-        console.log(data,"data_createNewDataTab01");
-        let cadastralLandData = await getCadastralLandByCadastralSeq(data[0].CADASTRAL_SEQ)
-        console.log(cadastralLandData, "getMasterDatacadastralLandData");
-        cadastralLandData = filterRecordStatus(cadastralLandData.rows, "N")
-        setCadastralLandData(cadastralLandData)
+        console.log(data, "data_createNewDataTab01");
+        let cadastralData = await getCadastralByPK(data[0].CADASTRAL_SEQ)
+        console.log(cadastralData, "getMasterDatacadastralData");
+        cadastralData = filterRecordStatus(cadastralData.rows, "N")
+        setCadastralData(cadastralData)
     }
     return (
         <Grid>
@@ -66,6 +66,7 @@ export default function Tab01(props) {
                                 <TableRow>
                                     <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">ลำดับ</Typography></TableCell>
                                     <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">เลขที่ดิน</Typography></TableCell>
+                                    <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">โซน</Typography></TableCell>
                                     <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">หมายเลขระวางศูนย์กำเนิด 1</Typography></TableCell>
                                     <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">หมายเลขระวางศูนย์กำเนิด 2</Typography></TableCell>
                                     <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">หมายเลขแผ่นของระวางตามมาตราส่วน (ศูนย์กำเนิด)</Typography></TableCell>
@@ -73,12 +74,27 @@ export default function Tab01(props) {
                                     <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">หมายเลขระวางแผนที่ 1:50000 </Typography></TableCell>
                                     <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">หมายเลขแผ่นของระวางแผนที่ 1:50000</Typography></TableCell>
                                     <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">หมายเลขแผ่นของระวางตามมาตราส่วน</Typography></TableCell>
-                                    <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">สถานะแปลงคง</Typography></TableCell>
+                                    <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">รหัสมาตราส่วน (รูปแผนที่)</Typography></TableCell>
+                                    <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">รหัสมาตราส่วน (ระวาง)</Typography></TableCell>
+                                    <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">จำนวนแปลงที่ดินในต้นร่าง</Typography></TableCell>
+                                    <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">จำนวนรูปภาพของต้นร่าง</Typography></TableCell>
+                                    <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">หมายเหตุ</Typography></TableCell>
+                                    <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">สถานะข้อมูล</Typography></TableCell>
+                                    <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">ชื่อผู้สร้างข้อมูล</Typography></TableCell>
+                                    <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">วันที่สร้างข้อมูล</Typography></TableCell>
+                                    <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">ชื่อผู้ปรับปรุงข้อมูล</Typography></TableCell>
+                                    <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">วันที่ปรับปรุงข้อมูล</Typography></TableCell>
+                                    <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">สถานะการยกเลิก</Typography></TableCell>
+                                    <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">ผู้ยกเลิก</Typography></TableCell>
+                                    <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">สาเหตุการยกเลิก</Typography></TableCell>
+                                    <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">สถานะเป็นของงานยกเลิก</Typography></TableCell>
+                                    <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">ต้นร่างมีการสูญหาย</Typography></TableCell>
+                                    <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">ลำดับที่รับเรื่องรังวัด</Typography></TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {cadastralLandData.length > 0 &&
-                                    cadastralLandData?.map((el, index) => {
+                                {cadastralData.length > 0 &&
+                                    cadastralData?.map((el, index) => {
                                         if (rowsPerPage === -1) {
                                             return (
                                                 <React.Fragment key={index}>
@@ -90,33 +106,83 @@ export default function Tab01(props) {
                                                         }}
                                                         style={{ cursor: 'pointer' }}
                                                     >
-                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} >
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
                                                             {index + 1}
                                                         </TableCell>
-                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} >{el.CADASTRAL_LAND_NO}</TableCell>
                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
                                                             {el.CADASTRAL_LAND_NO}
                                                         </TableCell>
                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {el.CADASTRAL_LAND_NO}
+                                                            {el.ZONE_LAND}
                                                         </TableCell>
                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {el.CADASTRAL_LAND_NO}
+                                                            {el.CADASTRAL_ORIGINMAP1}
                                                         </TableCell>
                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {el.CADASTRAL_LAND_NO}
+                                                            {el.CADASTRAL_ORIGINMAP2}
                                                         </TableCell>
                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {el.CADASTRAL_LAND_NO}
+                                                            {el.CADASTRAL_ORIGINMAP3}
                                                         </TableCell>
                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {el.CADASTRAL_LAND_NO}
+                                                            {el.AIRPHOTOMAP_NAME}
                                                         </TableCell>
                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {el.CADASTRAL_LAND_NO}
+                                                            {el.AIRPHOTOMAP1}
                                                         </TableCell>
                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {el.CADASTRAL_LAND_NO}
+                                                            {el.AIRPHOTOMAP2}
+                                                        </TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
+                                                            {el.AIRPHOTOMAP3}
+                                                        </TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
+                                                            {el.SCALE_MAP_SEQ}
+                                                        </TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
+                                                            {el.SCALE_RAWANG}
+                                                        </TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
+                                                            {el.CADASTRAL_LAND_QTY}
+                                                        </TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
+                                                            {el.CADASTRAL_IMAGE_QTY}
+                                                        </TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
+                                                            {el.CADASTRAL_NOTE}
+                                                        </TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
+                                                            {el.RECORD_STATUS}
+                                                        </TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
+                                                            {el.CREATE_USER}
+                                                        </TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
+                                                            {el.CREATE_DTM}
+                                                        </TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
+                                                            {el.LAST_UPD_USER}
+                                                        </TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
+                                                            {el.LAST_UPD_DTM}
+                                                        </TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
+                                                            {el.CANCEL_FLAG}
+                                                        </TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
+                                                            {el.CANCEL_USER}
+                                                        </TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
+                                                            {el.CANCEL_CAUSE}
+                                                        </TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
+                                                            {el.CANCELJOB_FLAG}
+                                                        </TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
+                                                            {el.LOST_FLAG}
+                                                        </TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
+                                                            {el.SURVEYJOB_SEQ}
                                                         </TableCell>
                                                     </TableRow>
                                                 </React.Fragment>
@@ -136,33 +202,83 @@ export default function Tab01(props) {
                                                         }}
                                                         style={{ cursor: 'pointer' }}
                                                     >
-                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} >
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
                                                             {index + 1}
                                                         </TableCell>
-                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} >{el.CADASTRAL_LAND_NO}</TableCell>
                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
                                                             {el.CADASTRAL_LAND_NO}
                                                         </TableCell>
                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {el.CADASTRAL_LAND_NO}
+                                                            {el.ZONE_LAND}
                                                         </TableCell>
                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {el.CADASTRAL_LAND_NO}
+                                                            {el.CADASTRAL_ORIGINMAP1}
                                                         </TableCell>
                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {el.CADASTRAL_LAND_NO}
+                                                            {el.CADASTRAL_ORIGINMAP2}
                                                         </TableCell>
                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {el.CADASTRAL_LAND_NO}
+                                                            {el.CADASTRAL_ORIGINMAP3}
                                                         </TableCell>
                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {el.CADASTRAL_LAND_NO}
+                                                            {el.AIRPHOTOMAP_NAME}
                                                         </TableCell>
                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {el.CADASTRAL_LAND_NO}
+                                                            {el.AIRPHOTOMAP1}
                                                         </TableCell>
                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {el.CADASTRAL_LAND_NO}
+                                                            {el.AIRPHOTOMAP2}
+                                                        </TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
+                                                            {el.AIRPHOTOMAP3}
+                                                        </TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
+                                                            {el.SCALE_MAP_SEQ}
+                                                        </TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
+                                                            {el.SCALE_RAWANG}
+                                                        </TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
+                                                            {el.CADASTRAL_LAND_QTY}
+                                                        </TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
+                                                            {el.CADASTRAL_IMAGE_QTY}
+                                                        </TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
+                                                            {el.CADASTRAL_NOTE}
+                                                        </TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
+                                                            {el.RECORD_STATUS}
+                                                        </TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
+                                                            {el.CREATE_USER}
+                                                        </TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
+                                                            {el.CREATE_DTM}
+                                                        </TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
+                                                            {el.LAST_UPD_USER}
+                                                        </TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
+                                                            {el.LAST_UPD_DTM}
+                                                        </TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
+                                                            {el.CANCEL_FLAG}
+                                                        </TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
+                                                            {el.CANCEL_USER}
+                                                        </TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
+                                                            {el.CANCEL_CAUSE}
+                                                        </TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
+                                                            {el.CANCELJOB_FLAG}
+                                                        </TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
+                                                            {el.LOST_FLAG}
+                                                        </TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
+                                                            {el.SURVEYJOB_SEQ}
                                                         </TableCell>
                                                     </TableRow>
                                                 </React.Fragment>
@@ -205,13 +321,13 @@ export default function Tab01(props) {
                                         page={curPage}
                                         onChange={_handleChangePage}
                                         color="error"
-                                        count={isNaN(Math.ceil(cadastralLandData?.length / rowsPerPage)) ? 0 : Math.ceil(cadastralLandData?.length / rowsPerPage)}
+                                        count={isNaN(Math.ceil(cadastralData?.length / rowsPerPage)) ? 0 : Math.ceil(cadastralData?.length / rowsPerPage)}
                                     />
                                 </Grid>
                                 <Grid item>
                                     <Typography fontSize={14}>
-                                        {cadastralLandData?.length > 0 &&
-                                            "จำนวนรายการทั้งหมด " + numberWithCommas(cadastralLandData.length) + " รายการ"}
+                                        {cadastralData?.length > 0 &&
+                                            "จำนวนรายการทั้งหมด " + numberWithCommas(cadastralData.length) + " รายการ"}
                                     </Typography>
                                 </Grid>
                             </Grid>

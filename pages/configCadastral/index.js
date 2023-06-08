@@ -217,9 +217,9 @@ export default function IndexConfigCadastral(props) {
                                         scrollButtons="auto"
                                         allowScrollButtonsMobile
                                     >
-                                        <Tab label="แปลงต้นร่าง" value="1" />
-                                        <Tab label="ผู้ขอรังวัดต้นร่าง" value="2" />
-                                        <Tab label="รูปภาพต้นร่าง" value="3" />
+                                        <Tab label="ต้นร่าง" value="1" />
+                                        <Tab label="แปลงต้นร่าง" value="2" />
+                                        <Tab label="ผู้ขอรังวัดต้นร่าง" value="3" />
                                     </TabList>
                                 </Box>
                                 <TabPanel value="1"><Tab01 searchData={searchData} /></TabPanel>
