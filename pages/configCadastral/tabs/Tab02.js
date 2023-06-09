@@ -24,6 +24,10 @@ import { useSession } from 'next-auth/react';
 //LIBRALIE
 import { filterRecordStatus, getCookie, isNotEmpty } from "@/lib/datacontrol";
 import { numberWithCommas } from "@/lib/outputControl"
+//COMPONENTS
+import { confirmDialog } from "@/pages/components/confirmDialog";
+import DialogTab02 from "@/pages/configCadastral/dialog/dialogTab02"
+
 export default function Tab02(props) {
     const [open, setOpen] = React.useState(false);
     const [message, setMessage] = React.useState("");
@@ -50,11 +54,14 @@ export default function Tab02(props) {
         }
     }, [props.searchData]);
     const _createNewData = async (data) => {
-        console.log(data, "data_createNewDataTab01");
+        console.log(data, "data_createNewDataTab02");
         let cadastralLandData = await getCadastralLandByCadastralSeq(data[0].CADASTRAL_SEQ)
         console.log(cadastralLandData, "getMasterDatacadastralLandData");
         cadastralLandData = filterRecordStatus(cadastralLandData.rows, "N")
         setCadastralLandData(cadastralLandData)
+    }
+    const handleChange = async () => {
+        setOpenDialog(true)
     }
     return (
         <Grid>
@@ -96,6 +103,12 @@ export default function Tab02(props) {
                                                             '&:hover': {
                                                                 backgroundColor: '#ECF2FF !important',
                                                             },
+                                                        }}
+                                                        onClick={() => {
+                                                            confirmDialog.createDialog(
+                                                                `ไม่พบข้อมูลทะเบียนของเอกสารสิทธิ์เลขที่ ${el.PARCEL_NO} ต้องการเพิ่มข้อมูลทะเบียน หรือไม่ ?`,
+                                                                () => { handleChange(el) }
+                                                            );
                                                         }}
                                                         style={{ cursor: 'pointer' }}
                                                     >
@@ -171,6 +184,12 @@ export default function Tab02(props) {
                                                             '&:hover': {
                                                                 backgroundColor: '#ECF2FF !important',
                                                             },
+                                                        }}
+                                                        onClick={() => {
+                                                            confirmDialog.createDialog(
+                                                                `ไม่พบข้อมูลทะเบียนของเอกสารสิทธิ์เลขที่ ${el.PARCEL_NO} ต้องการเพิ่มข้อมูลทะเบียน หรือไม่ ?`,
+                                                                () => { handleChange(el) }
+                                                            );
                                                         }}
                                                         style={{ cursor: 'pointer' }}
                                                     >

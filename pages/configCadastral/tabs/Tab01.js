@@ -24,12 +24,16 @@ import { useSession } from 'next-auth/react';
 //LIBRALIE
 import { filterRecordStatus, getCookie, isNotEmpty } from "@/lib/datacontrol";
 import { numberWithCommas } from "@/lib/outputControl"
+//COMPONENTS
+import { confirmDialog } from "@/pages/components/confirmDialog";
+import DialogTab01 from "@/pages/configCadastral/dialog/dialogTab01"
 export default function Tab01(props) {
     const [open, setOpen] = React.useState(false);
     const [message, setMessage] = React.useState("");
     const [type, setType] = React.useState("success");
     const [cadastralData, setCadastralData] = React.useState([]);
     const { data } = useSession();
+    const [openDialog, setOpenDialog] = React.useState(false);
 
     const [curPage, setCurPage] = React.useState(1);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -56,9 +60,14 @@ export default function Tab01(props) {
         cadastralData = filterRecordStatus(cadastralData.rows, "N")
         setCadastralData(cadastralData)
     }
+
+    const handleChange = async () => {
+        setOpenDialog(true)
+    }
     return (
         <Grid>
             <Grid item xs={12}>
+                {openDialog && <DialogTab01 open={openDialog} close={() => (setOpenDialog(false))} onSubmit={handleChange} />}
                 <React.Fragment>
                     <TableContainer>
                         <Table sx={{ minWidth: 650, width: '100%', border: '1px solid ' }} size="small" stickyHeader >
@@ -105,6 +114,12 @@ export default function Tab01(props) {
                                                             },
                                                         }}
                                                         style={{ cursor: 'pointer' }}
+                                                        onClick={() => {
+                                                            confirmDialog.createDialog(
+                                                                `ไม่พบข้อมูลทะเบียนของเอกสารสิทธิ์เลขที่ ${el.PARCEL_NO} ต้องการเพิ่มข้อมูลทะเบียน หรือไม่ ?`,
+                                                                () => { handleChange(el) }
+                                                            );
+                                                        }}
                                                     >
                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
                                                             {index + 1}
@@ -199,6 +214,12 @@ export default function Tab01(props) {
                                                             '&:hover': {
                                                                 backgroundColor: '#ECF2FF !important',
                                                             },
+                                                        }}
+                                                        onClick={() => {
+                                                            confirmDialog.createDialog(
+                                                                `ไม่พบข้อมูลทะเบียนของเอกสารสิทธิ์เลขที่ ${el.PARCEL_NO} ต้องการเพิ่มข้อมูลทะเบียน หรือไม่ ?`,
+                                                                () => { handleChange(el) }
+                                                            );
                                                         }}
                                                         style={{ cursor: 'pointer' }}
                                                     >
