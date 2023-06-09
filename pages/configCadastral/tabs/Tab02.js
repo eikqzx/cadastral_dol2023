@@ -19,8 +19,7 @@ import {
     MenuItem
 } from "@mui/material";
 //SERVICES
-import { getCadastralOwnerBycadastralSeq } from "@/service/sva";
-import { getTitleByPK } from '@/service/mas/title';
+import { getCadastralLandByCadastralSeq } from "@/service/sva";
 import { useSession } from 'next-auth/react';
 //LIBRALIE
 import { filterRecordStatus, getCookie, isNotEmpty } from "@/lib/datacontrol";
@@ -29,7 +28,7 @@ export default function Tab02(props) {
     const [open, setOpen] = React.useState(false);
     const [message, setMessage] = React.useState("");
     const [type, setType] = React.useState("success");
-    const [cadastralOwnerData, setCadastralOwnerData] = React.useState([]);
+    const [cadastralLandData, setCadastralLandData] = React.useState([]);
     const { data } = useSession();
 
     const [curPage, setCurPage] = React.useState(1);
@@ -44,42 +43,51 @@ export default function Tab02(props) {
         setCurPage(value);
     };
 
-    console.log(cadastralOwnerData, "cadastralOwnerData");
+    console.log(cadastralLandData, "cadastralLandData");
     React.useEffect(() => {
         if (props.searchData) {
             _createNewData(props.searchData)
         }
     }, [props.searchData]);
-
     const _createNewData = async (data) => {
-        console.log(data,"data_createNewDataTab02");
-        let cadastralOwnerData = await getCadastralOwnerBycadastralSeq(data[0].CADASTRAL_SEQ)
-        console.log(cadastralOwnerData, "getMasterDatacadastralOwnerData");
-        cadastralOwnerData = filterRecordStatus(cadastralOwnerData.rows, "N")
-        for (let i in cadastralOwnerData) {
-            let dataItems = cadastralOwnerData[i]
-            dataItems.TITLE_NAME_TH = await getTitleByPK(dataItems.OWNER_TITLE_SEQ)
-            dataItems.OWNER_FULL_NAME = dataItems.TITLE_NAME_TH + " " + dataItems.OWNER_FNAME + " " + dataItems.OWNER_LNAME
-            cadastralOwnerData.push(dataItems)
-        }
-        setCadastralOwnerData(cadastralOwnerData)
+        console.log(data, "data_createNewDataTab01");
+        let cadastralLandData = await getCadastralLandByCadastralSeq(data[0].CADASTRAL_SEQ)
+        console.log(cadastralLandData, "getMasterDatacadastralLandData");
+        cadastralLandData = filterRecordStatus(cadastralLandData.rows, "N")
+        setCadastralLandData(cadastralLandData)
     }
     return (
-        <Grid container>
+        <Grid>
             <Grid item xs={12}>
                 <React.Fragment>
                     <TableContainer>
-                        <Table sx={{ minWidth: 650, width: "100%", border: '1px solid ' }} size="small" stickyHeader >
+                        <Table sx={{ minWidth: 650, width: '100%', border: '1px solid ' }} size="small" stickyHeader >
                             <TableHead>
                                 <TableRow>
                                     <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">ลำดับ</Typography></TableCell>
-                                    <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">ประเภทผู้ถือกรรมสิทธิ์</Typography></TableCell>
-                                    <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">ชื่อ-นามสกุล ผู้ขอรังวัด</Typography></TableCell>
+                                    <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">ลำดับแปลง</Typography></TableCell>
+                                    <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">โซน</Typography></TableCell>
+                                    <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">หมายเลขระวางศูนย์กำเนิด 1</Typography></TableCell>
+                                    <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">หมายเลขระวางศูนย์กำเนิด 2</Typography></TableCell>
+                                    <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">หมายเลขแผ่นของระวางตามมาตราส่วน (ศูนย์กำเนิด)</Typography></TableCell>
+                                    <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">เลขที่ดิน</Typography></TableCell>
+                                    <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">ชื่อระวางภาพถ่ายทางอากาศ</Typography></TableCell>
+                                    <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">หมายเลขระวางแผนที่ 1:50000 </Typography></TableCell>
+                                    <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">หมายเลขแผ่นของระวางแผนที่ 1:50000</Typography></TableCell>
+                                    <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">หมายเลขแผ่นของระวางตามมาตราส่วน</Typography></TableCell>
+                                    <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">ลำดับที่มาตราส่วน</Typography></TableCell>
+                                    <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">สถานะแปลงคง</Typography></TableCell>
+                                    <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">หมายเหตุ</Typography></TableCell>
+                                    <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">สถานะข้อมูล</Typography></TableCell>
+                                    <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">ชื่อผู้สร้างข้อมูล</Typography></TableCell>
+                                    <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">วันที่สร้างข้อมูล</Typography></TableCell>
+                                    <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">ชื่อผู้ปรับปรุงข้อมูล</Typography></TableCell>
+                                    <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">วันที่ปรับปรุงข้อมูล</Typography></TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {cadastralOwnerData.length > 0 &&
-                                    cadastralOwnerData?.map((el, index) => {
+                                {cadastralLandData.length > 0 &&
+                                    cadastralLandData?.map((el, index) => {
                                         if (rowsPerPage === -1) {
                                             return (
                                                 <React.Fragment key={index}>
@@ -91,12 +99,62 @@ export default function Tab02(props) {
                                                         }}
                                                         style={{ cursor: 'pointer' }}
                                                     >
-                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} >
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
                                                             {index + 1}
                                                         </TableCell>
-                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} >{el.OWNER_TYPE}</TableCell>
                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {el.OWNER_FULL_NAME}
+                                                            {el.LAND_ORDER}
+                                                        </TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
+                                                            {el.ZONE_LAND}
+                                                        </TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
+                                                            {el.CADASTRAL_LAND_ORIGINMAP1}
+                                                        </TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
+                                                            {el.CADASTRAL_LAND_ORIGINMAP2}
+                                                        </TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
+                                                            {el.CADASTRAL_LAND_ORIGINMAP3}
+                                                        </TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
+                                                            {el.CADASTRAL_LAND_NO}
+                                                        </TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
+                                                            {el.AIRPHOTOMAP_NAME}
+                                                        </TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
+                                                            {el.AIRPHOTOMAP1}
+                                                        </TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
+                                                            {el.AIRPHOTOMAP2}
+                                                        </TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
+                                                            {el.AIRPHOTOMAP3}
+                                                        </TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
+                                                            {el.SCALE_SEQ}
+                                                        </TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
+                                                            {el.STATIC_FLAG}
+                                                        </TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
+                                                            {el.CADASTRAL_LAND_NOTE}
+                                                        </TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
+                                                            {el.RECORD_STATUS}
+                                                        </TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
+                                                            {el.CREATE_USER}
+                                                        </TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
+                                                            {el.CREATE_DTM}
+                                                        </TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
+                                                            {el.LAST_UPD_USER}
+                                                        </TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
+                                                            {el.LAST_UPD_DTM}
                                                         </TableCell>
                                                     </TableRow>
                                                 </React.Fragment>
@@ -116,12 +174,62 @@ export default function Tab02(props) {
                                                         }}
                                                         style={{ cursor: 'pointer' }}
                                                     >
-                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} >
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
                                                             {index + 1}
                                                         </TableCell>
-                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} >{el.OWNER_TYPE}</TableCell>
                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {el.OWNER_FULL_NAME}
+                                                            {el.LAND_ORDER}
+                                                        </TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
+                                                            {el.ZONE_LAND}
+                                                        </TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
+                                                            {el.CADASTRAL_LAND_ORIGINMAP1}
+                                                        </TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
+                                                            {el.CADASTRAL_LAND_ORIGINMAP2}
+                                                        </TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
+                                                            {el.CADASTRAL_LAND_ORIGINMAP3}
+                                                        </TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
+                                                            {el.CADASTRAL_LAND_NO}
+                                                        </TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
+                                                            {el.AIRPHOTOMAP_NAME}
+                                                        </TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
+                                                            {el.AIRPHOTOMAP1}
+                                                        </TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
+                                                            {el.AIRPHOTOMAP2}
+                                                        </TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
+                                                            {el.AIRPHOTOMAP3}
+                                                        </TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
+                                                            {el.SCALE_SEQ}
+                                                        </TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
+                                                            {el.STATIC_FLAG}
+                                                        </TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
+                                                            {el.CADASTRAL_LAND_NOTE}
+                                                        </TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
+                                                            {el.RECORD_STATUS}
+                                                        </TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
+                                                            {el.CREATE_USER}
+                                                        </TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
+                                                            {el.CREATE_DTM}
+                                                        </TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
+                                                            {el.LAST_UPD_USER}
+                                                        </TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
+                                                            {el.LAST_UPD_DTM}
                                                         </TableCell>
                                                     </TableRow>
                                                 </React.Fragment>
@@ -164,13 +272,13 @@ export default function Tab02(props) {
                                         page={curPage}
                                         onChange={_handleChangePage}
                                         color="error"
-                                        count={isNaN(Math.ceil(cadastralOwnerData?.length / rowsPerPage)) ? 0 : Math.ceil(cadastralOwnerData?.length / rowsPerPage)}
+                                        count={isNaN(Math.ceil(cadastralLandData?.length / rowsPerPage)) ? 0 : Math.ceil(cadastralLandData?.length / rowsPerPage)}
                                     />
                                 </Grid>
                                 <Grid item>
                                     <Typography fontSize={14}>
-                                        {cadastralOwnerData?.length > 0 &&
-                                            "จำนวนรายการทั้งหมด " + numberWithCommas(cadastralOwnerData.length) + " รายการ"}
+                                        {cadastralLandData?.length > 0 &&
+                                            "จำนวนรายการทั้งหมด " + numberWithCommas(cadastralLandData.length) + " รายการ"}
                                     </Typography>
                                 </Grid>
                             </Grid>

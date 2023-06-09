@@ -44,7 +44,49 @@ export async function getCadastral() {
         return false
     }
 }
+export async function getCadastralByPK(seq) {
+    let url = `/api/sva/getCadastralByPK`
+    let dataSend = {
+        seq: seq
+    }
+    AddLoading();
+    try {
+        let res = await axios.post(url, dataSend)
+        let data = res.data
+        //console.log(data)
+        RemoveLoading();
+        return data
+    } catch (err) {
+        console.log(err)
+        RemoveLoading();
+        return false
+    }
+}
 
+export async function getCadastralByPKList(list) {
+    let url = `/api/sva/getCadastralByPK`;
+    let newDataSet = []
+    AddLoading()
+    for (var i in list) {
+        if (list[i] !== undefined && list[i] !== null) {
+            let dataSend = {
+                seq: list[i]
+            }
+            try {
+                let res = await axios.post(url, dataSend)
+                let data = res.data
+                for (var i in data) {
+                    newDataSet.push(data[i])
+                }
+            } catch {
+                RemoveLoading()
+                return false
+            }
+        }
+    }
+    RemoveLoading()
+    return newDataSet
+}
 export async function updateCadastral(seq, dataSend) {
     let url = `/api/sva/updateCadastral`
     let dataput = {

@@ -16,40 +16,21 @@ import {
     FormControl,
     InputLabel,
     Select,
-    MenuItem,
-    Tooltip
+    MenuItem
 } from "@mui/material";
 //SERVICES
-import { cadastralImageByCadastralSeq } from "@/service/sva";
+import { getCadastralOwnerBycadastralSeq } from "@/service/sva";
 import { getTitleByPK } from '@/service/mas/title';
 import { useSession } from 'next-auth/react';
-import { getStatus } from '@/service/mas/status';
-import { getFile } from '@/service/upload';
 //LIBRALIE
 import { filterRecordStatus, getCookie, isNotEmpty } from "@/lib/datacontrol";
-import Lightbox from "yet-another-react-lightbox";
-import Captions from "yet-another-react-lightbox/plugins/captions";
-import Fullscreen from "yet-another-react-lightbox/plugins/fullscreen";
-import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
-import Zoom from "yet-another-react-lightbox/plugins/zoom";
-import "yet-another-react-lightbox/plugins/captions.css";
-import "yet-another-react-lightbox/plugins/thumbnails.css";
-import "yet-another-react-lightbox/styles.css";
 import { numberWithCommas } from "@/lib/outputControl"
-import Image from 'next/image';
-//ICONS
-import CloseIcon from '@mui/icons-material/Close';
-
-
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 export default function Tab03(props) {
     const [open, setOpen] = React.useState(false);
     const [message, setMessage] = React.useState("");
     const [type, setType] = React.useState("success");
-    const [cadastralImageData, setCadastralImageData] = React.useState([]);
-    const [advancedExampleOpen, setAdvancedExampleOpen] = React.useState(false);
+    const [cadastralOwnerData, setCadastralOwnerData] = React.useState([]);
     const { data } = useSession();
-    const [imageObj, setImageObj] = React.useState([]);
 
     const [curPage, setCurPage] = React.useState(1);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -57,14 +38,13 @@ export default function Tab03(props) {
         setRowsPerPage(event.target.value);
         setCurPage(1); // Reset current page to 1
     };
-    console.log(advancedExampleOpen, "advancedExampleOpen");
+
     const _handleChangePage = (event, value) => {
         //console.log(value);
         setCurPage(value);
     };
 
-    console.log(cadastralImageData, "cadastralImageData");
-    console.log(imageObj, "imageObj");
+    console.log(cadastralOwnerData, "cadastralOwnerData");
     React.useEffect(() => {
         if (props.searchData) {
             _createNewData(props.searchData)
@@ -72,112 +52,20 @@ export default function Tab03(props) {
     }, [props.searchData]);
 
     const _createNewData = async (data) => {
-        console.log(data, "data_createNewDataTab03");
-        let cadastralImageData = await cadastralImageByCadastralSeq(data[0].CADASTRAL_SEQ)
-        console.log(cadastralImageData, "getMasterDatacadastralImageData");
-        cadastralImageData = filterRecordStatus(cadastralImageData.rows, "N")
-        let cadastralImageDataArr = [];
-        for (let i in cadastralImageData) {
-            let dataItems = cadastralImageData[i]
-            // console.log(dataItems,"dataItems");
-            let resGetFile = await getFile(dataItems.IMAGE_PATH);
-            console.log(resGetFile, "resGetFile");
-            dataItems['FILE_STATUS'] = resGetFile.status;
-            if (resGetFile.status) {
-                dataItems['FILE_DATA'] = `data:image/*;base64,${resGetFile.fileAsBase64}`;
-            } else {
-                dataItems['FILE_DATA'] = "/img_not_found.png"
-            }
-            console.log(dataItems, "dataItemscadastralImageByCadastralSeq");
-            cadastralImageDataArr.push(dataItems)
-        } 
-        console.log(cadastralImageData,"cadastralImageDataQ");
-        const groupedImages = cadastralImageData.reduce((groups, image) => {
-            const { SURVEYDOCTYPE_SEQ } = image;
-            console.log(image,"groupedImagesgroupedImages");
-            if (!groups[SURVEYDOCTYPE_SEQ]) {
-                groups[SURVEYDOCTYPE_SEQ] = [];
-            }
-
-            groups[SURVEYDOCTYPE_SEQ].push(image);
-
-            return groups;
-        }, {});
-        const uniqueArray = [];
-        // console.log(groupedImages, "groupedImages");
-
-        for (const key in groupedImages) {
-            const images = groupedImages[key];
-
-            for (let i = 0; i < images.length; i++) {
-                const index = uniqueArray.findIndex((obj) => obj.SURVEYDOCTYPE_SEQ === images[i].SURVEYDOCTYPE_SEQ);
-                if (index === -1) {
-                    uniqueArray.push({
-                        SURVEYDOCTYPE_SEQ: images[i].SURVEYDOCTYPE_SEQ,
-                        data: images[i],
-                        childData: [images[i]],
-                    });
-                } else {
-                    uniqueArray[index].childData.push(images[i]);
-                }
-            }
+        console.log(data,"data_createNewDataTab02");
+        let cadastralOwnerData = await getCadastralOwnerBycadastralSeq(data[0].CADASTRAL_SEQ)
+        console.log(cadastralOwnerData, "getMasterDatacadastralOwnerData");
+        cadastralOwnerData = filterRecordStatus(cadastralOwnerData.rows, "N")
+        for (let i in cadastralOwnerData) {
+            let dataItems = cadastralOwnerData[i]
+            dataItems.TITLE_NAME_TH = await getTitleByPK(dataItems.OWNER_TITLE_SEQ)
+            dataItems.OWNER_FULL_NAME = dataItems.TITLE_NAME_TH + " " + dataItems.OWNER_FNAME + " " + dataItems.OWNER_LNAME
+            cadastralOwnerData.push(dataItems)
         }
-        console.log(uniqueArray, "uniqueArray");
-        setCadastralImageData(uniqueArray)
-
+        setCadastralOwnerData(cadastralOwnerData)
     }
-
-    const openImageUrl = async (file) => {
-        console.log(file, "file");
-        // console.log("tesrt");
-        if (file.FILE_STATUS) {
-            let arr = [];
-            // { ...slides[0], title: "Puppy in sunglasses", description: "Mollie Sivaram" }
-            let obj = { src: file.FILE_DATA, title: `${file.IMAGE_PNAME} (${file.IMAGE_PNO})` };
-            // console.log(obj, "file");
-            arr.push(obj);
-            console.log(arr, "imageObj");
-            setImageObj(arr);
-            setAdvancedExampleOpen(true);
-        }
-    };
     return (
         <Grid container>
-            {imageObj.length != 0 && <Lightbox
-                open={advancedExampleOpen}
-                close={() => setAdvancedExampleOpen(false)}
-                styles={{
-                    root: {
-                        "--yarl__color_backdrop": "rgba(192, 192, 192, 1)",
-                        "--yarl__slide_title_color": "rgba(0, 0, 0, 0.7)",
-                    },
-                    thumbnail: {
-                        backgroundColor: "rgba(255, 255, 255, 0.1)",
-                        border: "1px solid #ccc",
-                    },
-                    captionsTitleContainer: {
-                        backgroundColor: "rgba(255, 255, 255, 0.2)",
-                        border: "1px solid #ccc",
-                    },
-                    captionsDescriptionContainer: {
-                        backgroundColor: "rgba(255, 255, 255, 0.2)",
-                        // border: "1px solid #ccc",
-                    },
-                    captionsDescription: {
-                        backgroundColor: "rgba(255, 255, 255, 0.0)",
-                        color: "rgba(0, 0, 0, 0.7)",
-                    }
-                }}
-                slides={imageObj}
-                plugins={[Captions, Fullscreen, Thumbnails, Zoom]}
-                zoom={{
-                    scrollToZoom: true,
-                }}
-                carousel={{
-                    preload: 1,
-                    finite: true
-                }}
-            />}
             <Grid item xs={12}>
                 <React.Fragment>
                     <TableContainer>
@@ -185,14 +73,13 @@ export default function Tab03(props) {
                             <TableHead>
                                 <TableRow>
                                     <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">ลำดับ</Typography></TableCell>
-                                    <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">ชื่อไฟล์ภาพ</Typography></TableCell>
-                                    <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">จำนวนไฟล์ภาพ</Typography></TableCell>
-                                    <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">รายละเอียดไฟล์ภาพ</Typography></TableCell>
+                                    <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">ประเภทผู้ถือกรรมสิทธิ์</Typography></TableCell>
+                                    <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">ชื่อ-นามสกุล ผู้ขอรังวัด</Typography></TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {cadastralImageData.length > 0 &&
-                                    cadastralImageData?.map((el, index) => {
+                                {cadastralOwnerData.length > 0 &&
+                                    cadastralOwnerData?.map((el, index) => {
                                         if (rowsPerPage === -1) {
                                             return (
                                                 <React.Fragment key={index}>
@@ -207,18 +94,9 @@ export default function Tab03(props) {
                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} >
                                                             {index + 1}
                                                         </TableCell>
-                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} >{el.data.IMAGE_PNAME}</TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} >{el.OWNER_TYPE}</TableCell>
                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {el.data.IMAGE_PNO}
-                                                        </TableCell>
-                                                        <TableCell style={{ width: "25%" }} align="left">
-                                                            {el.childData.map((image, i) =>
-                                                                <Tooltip key={i} title="ดูรูปภาพ">
-                                                                    <IconButton onClick={() => { openImageUrl(image) }}>
-                                                                        <Image alt={image.IMAGE_PNAME} src={image.FILE_DATA} width={50} height={70.5} />
-                                                                    </IconButton>
-                                                                </Tooltip>)
-                                                            }
+                                                            {el.OWNER_FULL_NAME}
                                                         </TableCell>
                                                     </TableRow>
                                                 </React.Fragment>
@@ -241,18 +119,9 @@ export default function Tab03(props) {
                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} >
                                                             {index + 1}
                                                         </TableCell>
-                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} >{el.data.IMAGE_PNAME}</TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} >{el.OWNER_TYPE}</TableCell>
                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {el.data.IMAGE_PNO}
-                                                        </TableCell>
-                                                        <TableCell style={{ width: "25%" }} align="left">
-                                                            {el.childData.map((image, i) =>
-                                                                <Tooltip key={i} title="ดูรูปภาพ">
-                                                                    <IconButton onClick={() => { openImageUrl(image) }}>
-                                                                        <Image alt={image.IMAGE_PNAME} src={image.FILE_DATA} width={50} height={70.5} />
-                                                                    </IconButton>
-                                                                </Tooltip>)
-                                                            }
+                                                            {el.OWNER_FULL_NAME}
                                                         </TableCell>
                                                     </TableRow>
                                                 </React.Fragment>
@@ -295,13 +164,13 @@ export default function Tab03(props) {
                                         page={curPage}
                                         onChange={_handleChangePage}
                                         color="error"
-                                        count={isNaN(Math.ceil(cadastralImageData?.length / rowsPerPage)) ? 0 : Math.ceil(cadastralImageData?.length / rowsPerPage)}
+                                        count={isNaN(Math.ceil(cadastralOwnerData?.length / rowsPerPage)) ? 0 : Math.ceil(cadastralOwnerData?.length / rowsPerPage)}
                                     />
                                 </Grid>
                                 <Grid item>
                                     <Typography fontSize={14}>
-                                        {cadastralImageData?.length > 0 &&
-                                            "จำนวนรายการทั้งหมด " + numberWithCommas(cadastralImageData.length) + " รายการ"}
+                                        {cadastralOwnerData?.length > 0 &&
+                                            "จำนวนรายการทั้งหมด " + numberWithCommas(cadastralOwnerData.length) + " รายการ"}
                                     </Typography>
                                 </Grid>
                             </Grid>
@@ -309,6 +178,6 @@ export default function Tab03(props) {
                     </Grid>
                 </React.Fragment>
             </Grid>
-        </Grid >
+        </Grid>
     )
 }
