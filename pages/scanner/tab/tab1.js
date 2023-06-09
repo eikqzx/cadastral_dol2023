@@ -706,7 +706,7 @@ export default function Tab1(props) {
                                                                                         style={{ whiteSpace: "normal" }}
                                                                                     // disabled={isItemSelected(item.SURVEYDOCTYPE_SEQ)}
                                                                                     >
-                                                                                        {`${item.SURVEYDOCTYPE_NAME_TH} (${item.SURVEYDOCTYPE_GROUP})`}
+                                                                                        {`(${item.SURVEYDOCTYPE_GROUP}) ${item.SURVEYDOCTYPE_NAME_TH}`}
                                                                                     </MenuItem>
                                                                                 ))}
                                                                             </MenuList>
@@ -726,7 +726,7 @@ export default function Tab1(props) {
                                                                                         style={{ whiteSpace: "normal" }}
                                                                                     // disabled={isItemSelected(item.SURVEYDOCTYPE_SEQ)}
                                                                                     >
-                                                                                        {`${item.SURVEYDOCTYPE_NAME_TH} (${item.SURVEYDOCTYPE_GROUP})`}
+                                                                                        {`(${item.SURVEYDOCTYPE_GROUP}) ${item.SURVEYDOCTYPE_NAME_TH}`}
                                                                                     </MenuItem>
                                                                                 ))}
                                                                             </MenuList>
@@ -746,7 +746,7 @@ export default function Tab1(props) {
                                                                                             style={{ whiteSpace: "normal" }}
                                                                                         // disabled={isItemSelected(item.SURVEYDOCTYPE_SEQ)}
                                                                                         >
-                                                                                            {`${item.SURVEYDOCTYPE_NAME_TH} (${item.SURVEYDOCTYPE_GROUP})`}
+                                                                                            {`(${item.SURVEYDOCTYPE_GROUP}) ${item.SURVEYDOCTYPE_NAME_TH}`}
                                                                                         </MenuItem> :
                                                                                         null
                                                                                 ))}

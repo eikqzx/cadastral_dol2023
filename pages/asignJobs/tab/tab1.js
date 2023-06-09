@@ -32,7 +32,7 @@ import {
 import { confirmDialog } from "@/pages/components/confirmDialog";
 import AddCad from '../components/addCadastral';
 import { useSession } from 'next-auth/react';
-import { cadastralImageDocumentPNoByCadastralSeq, cadastralImagePNoByCadastralSeq, getCadastralImage, insertCadastral, mrgCadastralImage, updateCadastral } from '@/service/sva';
+import { cadastralImageDocumentPNoByCadastralSeq, cadastralImageGroupByCadastralSeq, cadastralImagePNoByCadastralSeq, getCadastralImage, insertCadastral, mrgCadastralImage, updateCadastral } from '@/service/sva';
 import { getLandOffice } from '@/service/mas/landOffice';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -157,23 +157,99 @@ export default function Tab1(props) {
   }
 
   const handleCountChange = (type, index, obj, value) => {
-    // console.log(obj, "handleCountChange");
+    console.log(obj, "handleCountChange");
+    console.log(index, "handleCountChange");
+    if (obj.SURVEYDOCTYPE_GROUP == "A") {
+      let updatedTextFields = [...datagroupA]
+      console.log(updatedTextFields[index].COUNT_DOC, "handleCountChange");
+      if (updatedTextFields[index].COUNT_DOC == undefined) {
+        updatedTextFields[index].COUNT_DOC = 0;
+      }
+      if (type === "increase") {
+        updatedTextFields[index].COUNT_DOC = updatedTextFields[index].COUNT_DOC + 1
+        console.log(updatedTextFields[index].COUNT_DOC, "handleCountChange increase");
+      }
+      if (type === "decrease") {
+        if (updatedTextFields[index].COUNT_DOC > 0) {
+          updatedTextFields[index].COUNT_DOC = updatedTextFields[index].COUNT_DOC - 1
+          console.log(updatedTextFields[index].COUNT_DOC, "handleCountChange decrease");
+        }
+      }
+      setDataGroupA(updatedTextFields);
+    }
+
+    if (obj.SURVEYDOCTYPE_GROUP == "B") {
+      let updatedTextFields = [...datagroupB]
+      console.log(updatedTextFields[index].COUNT_DOC, "handleCountChange");
+      if (updatedTextFields[index].COUNT_DOC == undefined) {
+        updatedTextFields[index].COUNT_DOC = 0;
+      }
+      if (type === "increase") {
+        updatedTextFields[index].COUNT_DOC = updatedTextFields[index].COUNT_DOC + 1
+        console.log(updatedTextFields[index].COUNT_DOC, "handleCountChange increase");
+      }
+      if (type === "decrease") {
+        if (updatedTextFields[index].COUNT_DOC > 0) {
+          updatedTextFields[index].COUNT_DOC = updatedTextFields[index].COUNT_DOC - 1
+          console.log(updatedTextFields[index].COUNT_DOC, "handleCountChange decrease");
+        }
+      }
+      setDataGroupB(updatedTextFields);
+    }
+
+    if (obj.SURVEYDOCTYPE_GROUP == "C") {
+      let updatedTextFields = [...datagroupC]
+      console.log(updatedTextFields[index].COUNT_DOC, "handleCountChange");
+      if (updatedTextFields[index].COUNT_DOC == undefined) {
+        updatedTextFields[index].COUNT_DOC = 0;
+      }
+      if (type === "increase") {
+        updatedTextFields[index].COUNT_DOC = updatedTextFields[index].COUNT_DOC + 1
+        console.log(updatedTextFields[index].COUNT_DOC, "handleCountChange increase");
+      }
+      if (type === "decrease") {
+        if (updatedTextFields[index].COUNT_DOC > 0) {
+          updatedTextFields[index].COUNT_DOC = updatedTextFields[index].COUNT_DOC - 1
+          console.log(updatedTextFields[index].COUNT_DOC, "handleCountChange decrease");
+        }
+      }
+      setDataGroupC(updatedTextFields);
+    }
+
+    if (obj.SURVEYDOCTYPE_GROUP == "D") {
+      let updatedTextFields = [...datagroupD]
+      console.log(updatedTextFields[index].COUNT_DOC, "handleCountChange");
+      if (updatedTextFields[index].COUNT_DOC == undefined) {
+        updatedTextFields[index].COUNT_DOC = 0;
+      }
+      if (type === "increase") {
+        updatedTextFields[index].COUNT_DOC = updatedTextFields[index].COUNT_DOC + 1
+        console.log(updatedTextFields[index].COUNT_DOC, "handleCountChange increase");
+      }
+      if (type === "decrease") {
+        if (updatedTextFields[index].COUNT_DOC > 0) {
+          updatedTextFields[index].COUNT_DOC = updatedTextFields[index].COUNT_DOC - 1
+          console.log(updatedTextFields[index].COUNT_DOC, "handleCountChange decrease");
+        }
+      }
+      setDataGroupD(updatedTextFields);
+    }
     // console.log(obj["COUNT_DOC"], "handleCountChange");
 
-    const parcelHsfsPno = obj["SURVEYDOCTYPE_PNO_SEQ"];
+    // const parcelHsfsPno = obj["SURVEYDOCTYPE_PNO_SEQ"];
 
-    if (parcelHsfsPno != null && parcelHsfsPno != undefined) {
-      if (type === "increase") {
-        obj["COUNT_DOC"] = obj["COUNT_DOC"] != null && obj["COUNT_DOC"] != undefined ? obj["COUNT_DOC"] + 1 : 1;
-      } else if (type === "decrease") {
-        obj["COUNT_DOC"] = obj["COUNT_DOC"] != null && obj["COUNT_DOC"] != undefined && obj["COUNT_DOC"] > 0 ? obj["COUNT_DOC"] - 1 : 0;
-      } else if (type === "change") {
-        obj["COUNT_DOC"] = Number(value);
-      }
-    } else {
-      obj["COUNT_DOC"] = 1;
-      obj["SURVEYDOCTYPE_PNO_SEQ"] = 0;
-    }
+    // if (parcelHsfsPno != null && parcelHsfsPno != undefined) {
+    //   if (type === "increase") {
+    //     obj["COUNT_DOC"] = obj["COUNT_DOC"] != null && obj["COUNT_DOC"] != undefined ? obj["COUNT_DOC"] + 1 : 1;
+    //   } else if (type === "decrease") {
+    //     obj["COUNT_DOC"] = obj["COUNT_DOC"] != null && obj["COUNT_DOC"] != undefined && obj["COUNT_DOC"] > 0 ? obj["COUNT_DOC"] - 1 : 0;
+    //   } else if (type === "change") {
+    //     obj["COUNT_DOC"] = Number(value);
+    //   }
+    // } else {
+    //   obj["COUNT_DOC"] = 1;
+    //   obj["SURVEYDOCTYPE_PNO_SEQ"] = 0;
+    // }
     // console.log(obj, "handleCountChange");
   };
 
@@ -192,16 +268,20 @@ export default function Tab1(props) {
   }
 
   const createSurveyData = async () => {
-    let res = await getCadastralImage();
-    res = filterRecordStatus(res.rows, "N");
-    res = res.filter(item => item.CADASTRAL_SEQ == props?.tabData?.CADASTRAL_SEQ);
+    // let res = await getCadastralImage();
+    let objSearchGroup = {
+      "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
+      "PROCESS_SEQ_": 102
+    }
+    let resGroup = await cadastralImageGroupByCadastralSeq(objSearchGroup);
+    resGroup = resGroup.rows
+    console.log(resGroup, "resGroup");
     //
-    console.log(res, "res createSurveyData");
-    if (res.length > 0) {
+    if (resGroup.length > 0) {
       setHaveCadImg(true);
     }
-    if (typeof res.find(obj => obj.PROCESS_SEQ_ == 103 && obj.STATUS_SEQ_ == 101) == "object") {
-      console.log(res.find(obj => obj.PROCESS_SEQ_ == 103 && obj.STATUS_SEQ_ == 101), "isTrue");
+    if (typeof resGroup.find(obj => obj.PROCESS_SEQ_ == 103 && obj.STATUS_SEQ_ == 101) == "object") {
+      console.log(resGroup.find(obj => obj.PROCESS_SEQ_ == 103 && obj.STATUS_SEQ_ == 101), "isTrue");
       setCheckCanEdit(true);
     }
     let resGroupA = await surveyDocTypeBySurveyDocTypeGroup("A");
@@ -214,8 +294,8 @@ export default function Tab1(props) {
     let dataD = filterRecordStatus(resGroupD.rows, "N");
     for (let i in dataA) {
       let item = dataA[i];
-      for (let x in res) {
-        let itemX = res[x];
+      for (let x in resGroup) {
+        let itemX = resGroup[x];
         if (item.SURVEYDOCTYPE_SEQ == itemX.SURVEYDOCTYPE_SEQ) {
           item["COUNT_DOC"] = itemX.IMAGE_PNO;
           item["IMAGE_PNO"] = itemX.IMAGE_PNO;
@@ -224,8 +304,8 @@ export default function Tab1(props) {
     }
     for (let i in dataB) {
       let item = dataB[i];
-      for (let x in res) {
-        let itemX = res[x];
+      for (let x in resGroup) {
+        let itemX = resGroup[x];
         if (item.SURVEYDOCTYPE_SEQ == itemX.SURVEYDOCTYPE_SEQ) {
           item["COUNT_DOC"] = itemX.IMAGE_PNO;
           item["IMAGE_PNO"] = itemX.IMAGE_PNO;
@@ -234,8 +314,8 @@ export default function Tab1(props) {
     }
     for (let i in dataC) {
       let item = dataC[i];
-      for (let x in res) {
-        let itemX = res[x];
+      for (let x in resGroup) {
+        let itemX = resGroup[x];
         if (item.SURVEYDOCTYPE_SEQ == itemX.SURVEYDOCTYPE_SEQ) {
           item["COUNT_DOC"] = itemX.IMAGE_PNO;
           item["IMAGE_PNO"] = itemX.IMAGE_PNO;
@@ -244,8 +324,8 @@ export default function Tab1(props) {
     }
     for (let i in dataD) {
       let item = dataD[i];
-      for (let x in res) {
-        let itemX = res[x];
+      for (let x in resGroup) {
+        let itemX = resGroup[x];
         if (item.SURVEYDOCTYPE_SEQ == itemX.SURVEYDOCTYPE_SEQ) {
           item["COUNT_DOC"] = itemX.IMAGE_PNO;
           item["IMAGE_PNO"] = itemX.IMAGE_PNO;

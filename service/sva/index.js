@@ -426,3 +426,18 @@ export async function insCadastralOwner(dataSend) {
         return false
     }
 }
+
+export async function cadastralImageGroupByCadastralSeq(dataSend) {
+    let url = `/api/sva/cadastralImageGroupByCadastralSeq`
+    AddLoading();
+    try {
+        let res = await axios.post(url, dataSend)
+        let data = res.data
+        //console.log(data)
+        RemoveLoading()
+        return data
+    } catch (err) {
+        console.log(err)
+        return false
+    }
+}
