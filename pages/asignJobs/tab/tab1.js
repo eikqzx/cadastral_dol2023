@@ -328,7 +328,7 @@ export default function Tab1(props) {
         let itemX = resGroup[x];
         if (item.SURVEYDOCTYPE_SEQ == itemX.SURVEYDOCTYPE_SEQ) {
           item["COUNT_DOC"] = itemX.IMAGE_PNO;
-          item["IMAGE_PNO"] = itemX.IMAGE_PNO;
+          item["SURVEYDOCTYPE_PNO"] = itemX.IMAGE_PNO;
         }
       }
     }
@@ -365,7 +365,7 @@ export default function Tab1(props) {
             "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
             "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ,
             "SURVEYDOCTYPE_PNO_SEQ": item.COUNT_DOC,
-            "SURVEYDOCTYPE_PNO": resCadastralImageDocumentPNoByCadastralSeq.rows[0].IMAGE_PNO,
+            "SURVEYDOCTYPE_PNO": resCadastralImageDocumentPNoByCadastralSeq.rows[0].SURVEYDOCTYPE_PNO,
             "CADASTRAL_IMAGE_PNO": resCadastralImagePNoByCadastralSeq.rows[0].CADASTRAL_IMAGE_PNO,
             "PROCESS_SEQ_": 102,
             "STATUS_SEQ_": 101,
@@ -390,7 +390,7 @@ export default function Tab1(props) {
             "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
             "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ,
             "SURVEYDOCTYPE_PNO_SEQ": item.COUNT_DOC,
-            "SURVEYDOCTYPE_PNO": resCadastralImageDocumentPNoByCadastralSeq.rows[0].IMAGE_PNO,
+            "SURVEYDOCTYPE_PNO": resCadastralImageDocumentPNoByCadastralSeq.rows[0].SURVEYDOCTYPE_PNO,
             "CADASTRAL_IMAGE_PNO": resCadastralImagePNoByCadastralSeq.rows[0].CADASTRAL_IMAGE_PNO,
             "PROCESS_SEQ_": 102,
             "STATUS_SEQ_": 101,
@@ -415,7 +415,7 @@ export default function Tab1(props) {
             "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
             "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ,
             "SURVEYDOCTYPE_PNO_SEQ": item.COUNT_DOC,
-            "SURVEYDOCTYPE_PNO": resCadastralImageDocumentPNoByCadastralSeq.rows[0].IMAGE_PNO,
+            "SURVEYDOCTYPE_PNO": resCadastralImageDocumentPNoByCadastralSeq.rows[0].SURVEYDOCTYPE_PNO,
             "CADASTRAL_IMAGE_PNO": resCadastralImagePNoByCadastralSeq.rows[0].CADASTRAL_IMAGE_PNO,
             "PROCESS_SEQ_": 102,
             "STATUS_SEQ_": 101,
@@ -440,7 +440,7 @@ export default function Tab1(props) {
             "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
             "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ,
             "SURVEYDOCTYPE_PNO_SEQ": item.COUNT_DOC,
-            "SURVEYDOCTYPE_PNO": resCadastralImageDocumentPNoByCadastralSeq.rows[0].IMAGE_PNO,
+            "SURVEYDOCTYPE_PNO": resCadastralImageDocumentPNoByCadastralSeq.rows[0].SURVEYDOCTYPE_PNO,
             "CADASTRAL_IMAGE_PNO": resCadastralImagePNoByCadastralSeq.rows[0].CADASTRAL_IMAGE_PNO,
             "PROCESS_SEQ_": 102,
             "STATUS_SEQ_": 101,
@@ -495,7 +495,7 @@ export default function Tab1(props) {
               "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
               "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ,
               "SURVEYDOCTYPE_PNO_SEQ": item.COUNT_DOC,
-              "SURVEYDOCTYPE_PNO": resCadastralImageDocumentPNoByCadastralSeq.rows[0].IMAGE_PNO,
+              "SURVEYDOCTYPE_PNO": resCadastralImageDocumentPNoByCadastralSeq.rows[0].SURVEYDOCTYPE_PNO,
               "CADASTRAL_IMAGE_PNO": resCadastralImagePNoByCadastralSeq.rows[0].CADASTRAL_IMAGE_PNO,
               "PROCESS_SEQ_": 102,
               "STATUS_SEQ_": 101,
@@ -537,7 +537,7 @@ export default function Tab1(props) {
               "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
               "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ,
               "SURVEYDOCTYPE_PNO_SEQ": item.COUNT_DOC,
-              "SURVEYDOCTYPE_PNO": resCadastralImageDocumentPNoByCadastralSeq.rows[0].IMAGE_PNO,
+              "SURVEYDOCTYPE_PNO": resCadastralImageDocumentPNoByCadastralSeq.rows[0].SURVEYDOCTYPE_PNO,
               "CADASTRAL_IMAGE_PNO": resCadastralImagePNoByCadastralSeq.rows[0].CADASTRAL_IMAGE_PNO,
               "PROCESS_SEQ_": 102,
               "STATUS_SEQ_": 101,
@@ -579,7 +579,7 @@ export default function Tab1(props) {
               "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
               "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ,
               "SURVEYDOCTYPE_PNO_SEQ": item.COUNT_DOC,
-              "SURVEYDOCTYPE_PNO": resCadastralImageDocumentPNoByCadastralSeq.rows[0].IMAGE_PNO,
+              "SURVEYDOCTYPE_PNO": resCadastralImageDocumentPNoByCadastralSeq.rows[0].SURVEYDOCTYPE_PNO,
               "CADASTRAL_IMAGE_PNO": resCadastralImagePNoByCadastralSeq.rows[0].CADASTRAL_IMAGE_PNO,
               "PROCESS_SEQ_": 102,
               "STATUS_SEQ_": 101,
@@ -621,7 +621,7 @@ export default function Tab1(props) {
               "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
               "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ,
               "SURVEYDOCTYPE_PNO_SEQ": item.COUNT_DOC,
-              "SURVEYDOCTYPE_PNO": resCadastralImageDocumentPNoByCadastralSeq.rows[0].IMAGE_PNO,
+              "SURVEYDOCTYPE_PNO": resCadastralImageDocumentPNoByCadastralSeq.rows[0].SURVEYDOCTYPE_PNO,
               "CADASTRAL_IMAGE_PNO": resCadastralImagePNoByCadastralSeq.rows[0].CADASTRAL_IMAGE_PNO,
               "PROCESS_SEQ_": 102,
               "STATUS_SEQ_": 101,
