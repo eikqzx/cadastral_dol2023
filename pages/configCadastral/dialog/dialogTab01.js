@@ -7,10 +7,50 @@ import {
     DialogTitle,
     DialogActions,
     DialogContent,
-    Button
+    Button,
+    Paper,
+    Divider,
+    FormControl,
+    FormControlLabel,
+    Checkbox
 } from "@mui/material";
-
+//SERVICE
+import { getLandOfficeByPK, getLandOffice } from "@/service/mas/landOffice";
 export default function DilogTab01Index(props) {
+    console.log(props, "propsDilogTab01Index");
+    const [office, setOffice] = React.useState("-");
+    const [sheetcode, setSheetcode] = React.useState("-");
+    const [boxNo, setBoxNo] = React.useState("-");
+    const [numofsurveyQty, setNumofsurveyQty] = React.useState("-");
+    const [cadastralNo, setCadastralNo] = React.useState("-");
+
+    const [checked, setChecked] = React.useState(false);
+    const [zoneData, setZoneData] = React.useState()
+    console.log(checked, "checked");
+    React.useEffect(() => {
+        getMasterData(props.cadastralData)
+    }, [])
+
+    const handleCheckboxChange = (event) => {
+        setChecked(event.target.checked);
+    };
+    const getMasterData = async (data) => {
+        // data = data.rows
+        console.log(data, "getMasterData");
+        // _createNewData(data.CADASTRAL_SEQ)
+        for (let i in data) {
+            if (data[i] != undefined) {
+                let getLandOfficeData = await getLandOffice();
+                let landOfficeFiltered = getLandOfficeData.rows.filter(item => item.LANDOFFICE_SEQ == data[i]?.LANDOFFICE_SEQ);
+                setSheetcode(data[i].SHEETCODE);
+                setBoxNo(data[i].BOX_NO.toString().padStart(2, "0"));
+                setNumofsurveyQty(data[i]?.NUMOFSURVEY_QTY ?? "-");
+                setCadastralNo(data[i].CADASTRAL_NO);
+                console.log(landOfficeFiltered, "getLandOfficeData");
+                setOffice(landOfficeFiltered[0]?.LANDOFFICE_NAME_TH ?? "-");
+            }
+        }
+    }
     return (
         <Grid>
             <Dialog
@@ -19,11 +59,656 @@ export default function DilogTab01Index(props) {
                 fullWidth
                 fullScreen
             >
-                <DialogTitle>
-
+                <DialogTitle sx={{ background: 'linear-gradient(26deg, rgba(255,255,232,1) 20%, rgba(188,243,176,1) 100%)' }}>
+                    <Typography variant="subtitle">แก้ไขข้อมูลต้นร่าง</Typography>
                 </DialogTitle>
                 <DialogContent>
-
+                    {/* master_Data */}
+                    <Grid p={2} spacing={1} component={Paper} container>
+                        <Grid item xs={3} md={5}>
+                            <Grid container>
+                                <Grid item>
+                                    <Typography>สำนักงาน: </Typography>
+                                </Grid>
+                                <Grid item>
+                                    <Typography color={"darkblue"} fontWeight={"bold"} sx={{ textDecoration: 'underline' }} display="inline">&nbsp;{office}&nbsp;</Typography>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                        <Grid item xs={3} md={3}>
+                            <Grid container>
+                                <Grid item>
+                                    <Typography>หมายเลขรหัสแทนระวาง(เลขแฟ้ม):</Typography>
+                                </Grid>
+                                <Grid item>
+                                    <Typography color={"darkblue"} fontWeight={"bold"} sx={{ textDecoration: 'underline' }} display="inline">&nbsp;{sheetcode}&nbsp;</Typography>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                        <Grid item xs={3} md={3}>
+                            <Grid container>
+                                <Grid item >
+                                    <Typography>เลขที่กล่อง:</Typography>
+                                </Grid>
+                                <Grid item>
+                                    <Typography color={"darkblue"} fontWeight={"bold"} sx={{ textDecoration: 'underline' }} display="inline">&nbsp;{boxNo}&nbsp;</Typography>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                        <Grid item xs={3} md={3}>
+                            <Grid container>
+                                <Grid item >
+                                    <Typography>ครั้งที่รังวัด:</Typography>
+                                </Grid>
+                                <Grid item>
+                                    <Typography color={"darkblue"} fontWeight={"bold"} sx={{ textDecoration: 'underline' }} display="inline">&nbsp;{numofsurveyQty}&nbsp;</Typography>
+                                    {/* <IconButton size='small' disabled={numofsurveyQty == "-" || checkCanEdit} onClick={() => { setOpenEdit(props?.tabData) }}><Edit /></IconButton> */}
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                        <Grid item xs={3} md={4}>
+                            <Grid container>
+                                <Grid item >
+                                    <Typography>เลขที่ต้นร่าง:</Typography>
+                                </Grid>
+                                <Grid item>
+                                    <Typography color={"darkblue"} fontWeight={"bold"} sx={{ textDecoration: 'underline' }} display="inline">&nbsp;{cadastralNo}&nbsp;</Typography>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Divider />
+                        </Grid>
+                    </Grid>
+                    {/* CheckBox */}
+                    <Grid container justifyItems={'center'} alignItems={'center'}>
+                        <FormControlLabel
+                            control={
+                                <Checkbox
+                                    checked={checked}
+                                    onChange={handleCheckboxChange}
+                                    value={checked ? 1 : 0}
+                                />
+                            }
+                            label="เป็นงานรังวัดเอกชน" />
+                    </Grid>
+                    {/* ประเภทการรังวัด */}
+                    <Grid container justifyItems={'center'} alignItems={'center'}>
+                        <Grid item xs={12} md={2} py={2}>
+                            <Typography fontSize={16}>ประเภทการรังวัด :</Typography>
+                        </Grid>
+                        <Grid item xs={12} md={2} py={2}>
+                            <TextField
+                                maxWidth={"sm"}
+                                maxLength={500}
+                                placeholder="ประเภทการรังวัด"
+                                value={zoneData}
+                                onChange={(e) => {
+                                    setZoneData(e.target.value);
+                                }}
+                                style={{ width: "100%" }}
+                            />
+                        </Grid>
+                        <Grid item xs={12} md={2} py={2} px={1}>
+                            <Typography fontSize={16}>ประเภทการรังวัดเพิ่มเติม 1 :</Typography>
+                        </Grid>
+                        <Grid item xs={12} md={2} py={2}>
+                            <TextField
+                                maxWidth={"sm"}
+                                maxLength={500}
+                                placeholder="ประเภทการรังวัดเพิ่มเติม 1"
+                                value={zoneData}
+                                onChange={(e) => {
+                                    setZoneData(e.target.value);
+                                }}
+                                style={{ width: "100%" }}
+                            />
+                        </Grid>
+                        <Grid item xs={12} md={2} py={2} px={1}>
+                            <Typography fontSize={16}>ประเภทการรังวัดเพิ่มเติม 2 :</Typography>
+                        </Grid>
+                        <Grid item xs={12} md={2} py={2}>
+                            <TextField
+                                maxWidth={"sm"}
+                                maxLength={500}
+                                placeholder="ประเภทการรังวัดเพิ่มเติม 2"
+                                value={zoneData}
+                                onChange={(e) => {
+                                    setZoneData(e.target.value);
+                                }}
+                                style={{ width: "100%" }} />
+                        </Grid>
+                        <Grid item xs={12} md={2} py={2}>
+                            <Typography fontSize={16}>ประเภทการรังวัดเพิ่มเติม 3 :</Typography>
+                        </Grid>
+                        <Grid item xs={12} md={2} py={2}>
+                            <TextField
+                                maxWidth={"sm"}
+                                maxLength={500}
+                                placeholder="ประเภทการรังวัดเพิ่มเติม 3"
+                                value={zoneData}
+                                onChange={(e) => {
+                                    setZoneData(e.target.value);
+                                }}
+                                style={{ width: "100%" }} />
+                        </Grid>
+                    </Grid>
+                    {/* จังหวัด */}
+                    <Grid container justifyItems={'center'} alignItems={'center'}>
+                        <Grid item xs={12} md={2} py={2}>
+                            <Typography fontSize={16}>จังหวัด :</Typography>
+                        </Grid>
+                        <Grid item xs={12} md={2} py={2}>
+                            <TextField
+                                maxWidth={"sm"}
+                                maxLength={500}
+                                placeholder="จังหวัด"
+                                value={zoneData}
+                                onChange={(e) => {
+                                    setZoneData(e.target.value);
+                                }}
+                                style={{ width: "100%" }}
+                            />
+                        </Grid>
+                        <Grid item xs={12} md={2} py={2} px={1}>
+                            <Typography fontSize={16}>อำเภอ :</Typography>
+                        </Grid>
+                        <Grid item xs={12} md={2} py={2}>
+                            <TextField
+                                maxWidth={"sm"}
+                                maxLength={500}
+                                placeholder="อำเภอ"
+                                value={zoneData}
+                                onChange={(e) => {
+                                    setZoneData(e.target.value);
+                                }}
+                                style={{ width: "100%" }}
+                            />
+                        </Grid>
+                        <Grid item xs={12} md={2} py={2} px={1}>
+                            <Typography fontSize={16}>ตำบล :</Typography>
+                        </Grid>
+                        <Grid item xs={12} md={2} py={2}>
+                            <TextField
+                                maxWidth={"sm"}
+                                maxLength={500}
+                                placeholder="ตำบล"
+                                value={zoneData}
+                                onChange={(e) => {
+                                    setZoneData(e.target.value);
+                                }}
+                                style={{ width: "100%" }} />
+                        </Grid>
+                    </Grid>
+                    {/* โซน */}
+                    <Grid container justifyItems={'center'} alignItems={'center'}>
+                        <Grid item xs={12} md={2} py={2}>
+                            <Typography fontSize={16}>โซน :</Typography>
+                        </Grid>
+                        <Grid item xs={12} md={2} py={2}>
+                            <TextField
+                                maxWidth={"sm"}
+                                maxLength={500}
+                                placeholder="โซน"
+                                value={zoneData}
+                                onChange={(e) => {
+                                    setZoneData(e.target.value);
+                                }}
+                                style={{ width: "100%" }}
+                            />
+                        </Grid>
+                        <Grid item xs={12} md={2} py={2} px={1}>
+                            <Typography fontSize={16}>ประเภทระวาง :</Typography>
+                        </Grid>
+                        <Grid item xs={12} md={2} py={2}>
+                            <TextField
+                                maxWidth={"sm"}
+                                maxLength={500}
+                                placeholder="ประเภทระวาง"
+                                value={zoneData}
+                                onChange={(e) => {
+                                    setZoneData(e.target.value);
+                                }}
+                                style={{ width: "100%" }} />
+                        </Grid>
+                        <Grid item xs={12} md={2} py={2} px={1}>
+                            <Typography fontSize={16}>หมายเลขระวางแผนที่ 1:50000 (UTM) :</Typography>
+                        </Grid>
+                        <Grid item xs={12} md={2} py={2}>
+                            <TextField
+                                maxWidth={"sm"}
+                                maxLength={500}
+                                placeholder="หมายเลขระวางแผนที่ 1:50000 (UTM)"
+                                value={zoneData}
+                                onChange={(e) => {
+                                    setZoneData(e.target.value);
+                                }}
+                                style={{ width: "100%" }} />
+                        </Grid>
+                    </Grid>
+                    {/* หมายเลขแผ่น */}
+                    <Grid container justifyItems={'center'} alignItems={'center'}>
+                        <Grid item xs={12} md={2} py={2}>
+                            <Typography fontSize={16}>หมายเลขแผ่นของระวางแผนที่ 1:50000 (UTM) :</Typography>
+                        </Grid>
+                        <Grid item xs={12} md={2} py={2}>
+                            <TextField
+                                maxWidth={"sm"}
+                                maxLength={500}
+                                placeholder="หมายเลขแผ่นของระวางแผนที่ 1:50000 (UTM)"
+                                value={zoneData}
+                                onChange={(e) => {
+                                    setZoneData(e.target.value);
+                                }}
+                                style={{ width: "100%" }}
+                            />
+                        </Grid>
+                        <Grid item xs={12} md={2} py={2} px={1}>
+                            <Typography fontSize={16}>หมายเลขระวางแผนที่ 1:4000 (UTM) :</Typography>
+                        </Grid>
+                        <Grid item xs={12} md={2} py={2}>
+                            <TextField
+                                maxWidth={"sm"}
+                                maxLength={500}
+                                placeholder="หมายเลขระวางแผนที่ 1:4000 (UTM)"
+                                value={zoneData}
+                                onChange={(e) => {
+                                    setZoneData(e.target.value);
+                                }}
+                                style={{ width: "100%" }} />
+                        </Grid>
+                        <Grid item xs={12} md={2} py={2} px={1}>
+                            <Typography fontSize={16}>หมายเลขแผ่นของระวางตามมาตราส่วน (UTM) :</Typography>
+                        </Grid>
+                        <Grid item xs={12} md={2} py={2}>
+                            <TextField
+                                maxWidth={"sm"}
+                                maxLength={500}
+                                placeholder="หมายเลขแผ่นของระวางตามมาตราส่วน (UTM)"
+                                value={zoneData}
+                                onChange={(e) => {
+                                    setZoneData(e.target.value);
+                                }}
+                                style={{ width: "100%" }} />
+                        </Grid>
+                    </Grid>
+                    {/* หมายเลขระวาง */}
+                    <Grid container justifyItems={'center'} alignItems={'center'}>
+                        <Grid item xs={12} md={2} py={2}>
+                            <Typography fontSize={16}>หมายเลขระวางศูนย์กำเนิด 1 :</Typography>
+                        </Grid>
+                        <Grid item xs={12} md={2} py={2}>
+                            <TextField
+                                maxWidth={"sm"}
+                                maxLength={500}
+                                placeholder="หมายเลขระวางศูนย์กำเนิด 1"
+                                value={zoneData}
+                                onChange={(e) => {
+                                    setZoneData(e.target.value);
+                                }}
+                                style={{ width: "100%" }}
+                            />
+                        </Grid>
+                        <Grid item xs={12} md={2} py={2} px={1}>
+                            <Typography fontSize={16}>หมายเลขระวางศูนย์กำเนิด 2 :</Typography>
+                        </Grid>
+                        <Grid item xs={12} md={2} py={2}>
+                            <TextField
+                                maxWidth={"sm"}
+                                maxLength={500}
+                                placeholder="หมายเลขระวางศูนย์กำเนิด 2"
+                                value={zoneData}
+                                onChange={(e) => {
+                                    setZoneData(e.target.value);
+                                }}
+                                style={{ width: "100%" }} />
+                        </Grid>
+                        <Grid item xs={12} md={2} py={2} px={1}>
+                            <Typography fontSize={16}>หมายเลขแผ่นของระวางตามมาตราส่วน (ศูนย์กำเนิด) :</Typography>
+                        </Grid>
+                        <Grid item xs={12} md={2} py={2}>
+                            <TextField
+                                maxWidth={"sm"}
+                                maxLength={500}
+                                placeholder="หมายเลขแผ่นของระวางตามมาตราส่วน (ศูนย์กำเนิด)"
+                                value={zoneData}
+                                onChange={(e) => {
+                                    setZoneData(e.target.value);
+                                }}
+                                style={{ width: "100%" }} />
+                        </Grid>
+                    </Grid>
+                    {/* ชื่อระวางภาพถ่ายทางอากาศ */}
+                    <Grid container justifyItems={'center'} alignItems={'center'}>
+                        <Grid item xs={12} md={2} py={2}>
+                            <Typography fontSize={16}>ชื่อระวางภาพถ่ายทางอากาศ :</Typography>
+                        </Grid>
+                        <Grid item xs={12} md={2} py={2}>
+                            <TextField
+                                maxWidth={"sm"}
+                                maxLength={500}
+                                placeholder="ชื่อระวางภาพถ่ายทางอากาศ"
+                                value={zoneData}
+                                onChange={(e) => {
+                                    setZoneData(e.target.value);
+                                }}
+                                style={{ width: "100%" }}
+                            />
+                        </Grid>
+                        <Grid item xs={12} md={2} py={2} px={1}>
+                            <Typography fontSize={16}>หมายเลขระวางแผนที่ 1:50000 :</Typography>
+                        </Grid>
+                        <Grid item xs={12} md={2} py={2}>
+                            <TextField
+                                maxWidth={"sm"}
+                                maxLength={500}
+                                placeholder="หมายเลขระวางแผนที่ 1:50000"
+                                value={zoneData}
+                                onChange={(e) => {
+                                    setZoneData(e.target.value);
+                                }}
+                                style={{ width: "100%" }} />
+                        </Grid>
+                        <Grid item xs={12} md={2} py={2} px={1}>
+                            <Typography fontSize={16}>หมายเลขแผ่นของระวางแผนที่ 1:50000 :</Typography>
+                        </Grid>
+                        <Grid item xs={12} md={2} py={2}>
+                            <TextField
+                                maxWidth={"sm"}
+                                maxLength={500}
+                                placeholder="หมายเลขแผ่นของระวางแผนที่ 1:50000"
+                                value={zoneData}
+                                onChange={(e) => {
+                                    setZoneData(e.target.value);
+                                }}
+                                style={{ width: "100%" }} />
+                        </Grid>
+                    </Grid>
+                    {/* หมายเลขแผ่นของระวางตามมาตราส่วน */}
+                    <Grid container justifyItems={'center'} alignItems={'center'}>
+                        <Grid item xs={12} md={2} py={2}>
+                            <Typography fontSize={16}>หมายเลขแผ่นของระวางตามมาตราส่วน :</Typography>
+                        </Grid>
+                        <Grid item xs={12} md={2} py={2}>
+                            <TextField
+                                maxWidth={"sm"}
+                                maxLength={500}
+                                placeholder="หมายเลขแผ่นของระวางตามมาตราส่วน"
+                                value={zoneData}
+                                onChange={(e) => {
+                                    setZoneData(e.target.value);
+                                }}
+                                style={{ width: "100%" }}
+                            />
+                        </Grid>
+                        <Grid item xs={12} md={2} py={2} px={1}>
+                            <Typography fontSize={16}>รหัสมาตราส่วน (รูปแผนที่) :</Typography>
+                        </Grid>
+                        <Grid item xs={12} md={2} py={2}>
+                            <TextField
+                                maxWidth={"sm"}
+                                maxLength={500}
+                                placeholder="รหัสมาตราส่วน (รูปแผนที่)"
+                                value={zoneData}
+                                onChange={(e) => {
+                                    setZoneData(e.target.value);
+                                }}
+                                style={{ width: "100%" }} />
+                        </Grid>
+                        <Grid item xs={12} md={2} py={2} px={1}>
+                            <Typography fontSize={16}>รหัสมาตราส่วน (ระวาง) :</Typography>
+                        </Grid>
+                        <Grid item xs={12} md={2} py={2}>
+                            <TextField
+                                maxWidth={"sm"}
+                                maxLength={500}
+                                placeholder="รหัสมาตราส่วน (ระวาง)"
+                                value={zoneData}
+                                onChange={(e) => {
+                                    setZoneData(e.target.value);
+                                }}
+                                style={{ width: "100%" }} />
+                        </Grid>
+                    </Grid>
+                    {/* รหัสประเภทหมุดหลัก */}
+                    <Grid container justifyItems={'center'} alignItems={'center'}>
+                        <Grid item xs={12} md={2} py={2}>
+                            <Typography fontSize={16}>รหัสประเภทหมุดหลักเขตที่ 1 :</Typography>
+                        </Grid>
+                        <Grid item xs={12} md={2} py={2}>
+                            <TextField
+                                maxWidth={"sm"}
+                                maxLength={500}
+                                placeholder="รหัสประเภทหมุดหลักเขตที่ 1"
+                                value={zoneData}
+                                onChange={(e) => {
+                                    setZoneData(e.target.value);
+                                }}
+                                style={{ width: "100%" }}
+                            />
+                        </Grid>
+                        <Grid item xs={12} md={2} py={2} px={1}>
+                            <Typography fontSize={16}>จำนวนหลักเขตแบบที่ 1 :</Typography>
+                        </Grid>
+                        <Grid item xs={12} md={2} py={2}>
+                            <TextField
+                                maxWidth={"sm"}
+                                maxLength={500}
+                                placeholder="จำนวนหลักเขตแบบที่ 1"
+                                value={zoneData}
+                                onChange={(e) => {
+                                    setZoneData(e.target.value);
+                                }}
+                                style={{ width: "100%" }} />
+                        </Grid>
+                        <Grid item xs={12} md={2} py={2} px={1}>
+                            <Typography fontSize={16}>รหัสประเภทหมุดหลักเขตที่ 2 :</Typography>
+                        </Grid>
+                        <Grid item xs={12} md={2} py={2}>
+                            <TextField
+                                maxWidth={"sm"}
+                                maxLength={500}
+                                placeholder="รหัสประเภทหมุดหลักเขตที่ 2"
+                                value={zoneData}
+                                onChange={(e) => {
+                                    setZoneData(e.target.value);
+                                }}
+                                style={{ width: "100%" }} />
+                        </Grid>
+                        <Grid item xs={12} md={2} py={2} >
+                            <Typography fontSize={16}>จำนวนหลักเขตแบบที่ 2 :</Typography>
+                        </Grid>
+                        <Grid item xs={12} md={2} py={2}>
+                            <TextField
+                                maxWidth={"sm"}
+                                maxLength={500}
+                                placeholder="จำนวนหลักเขตแบบที่ 2"
+                                value={zoneData}
+                                onChange={(e) => {
+                                    setZoneData(e.target.value);
+                                }}
+                                style={{ width: "100%" }} />
+                        </Grid>
+                    </Grid>
+                    {/* วันที่รังวัด */}
+                    <Grid container justifyItems={'center'} alignItems={'center'}>
+                        <Grid item xs={12} md={2} py={2}>
+                            <Typography fontSize={16}>วันที่รังวัด :</Typography>
+                        </Grid>
+                        <Grid item xs={12} md={2} py={2}>
+                            <TextField
+                                maxWidth={"sm"}
+                                maxLength={500}
+                                placeholder="วันที่รังวัด"
+                                value={zoneData}
+                                onChange={(e) => {
+                                    setZoneData(e.target.value);
+                                }}
+                                style={{ width: "100%" }}
+                            />
+                        </Grid>
+                        <Grid item xs={12} md={2} py={2} px={1}>
+                            <Typography fontSize={16}>คำนำหน้าชื่อช่างรังวัด :</Typography>
+                        </Grid>
+                        <Grid item xs={12} md={2} py={2}>
+                            <TextField
+                                maxWidth={"sm"}
+                                maxLength={500}
+                                placeholder="คำนำหน้าชื่อช่างรังวัด"
+                                value={zoneData}
+                                onChange={(e) => {
+                                    setZoneData(e.target.value);
+                                }}
+                                style={{ width: "100%" }} />
+                        </Grid>
+                        <Grid item xs={12} md={2} py={2} px={1}>
+                            <Typography fontSize={16}>ชื่อช่างรังวัด :</Typography>
+                        </Grid>
+                        <Grid item xs={12} md={2} py={2}>
+                            <TextField
+                                maxWidth={"sm"}
+                                maxLength={500}
+                                placeholder="ชื่อช่างรังวัด"
+                                value={zoneData}
+                                onChange={(e) => {
+                                    setZoneData(e.target.value);
+                                }}
+                                style={{ width: "100%" }} />
+                        </Grid>
+                        <Grid item xs={12} md={2} py={2} >
+                            <Typography fontSize={16}>นามสกุลช่างรังวัด :</Typography>
+                        </Grid>
+                        <Grid item xs={12} md={2} py={2}>
+                            <TextField
+                                maxWidth={"sm"}
+                                maxLength={500}
+                                placeholder="นามสกุลช่างรังวัด"
+                                value={zoneData}
+                                onChange={(e) => {
+                                    setZoneData(e.target.value);
+                                }}
+                                style={{ width: "100%" }} />
+                        </Grid>
+                        <Grid item xs={12} md={2} py={2} px={1}>
+                            <Typography fontSize={16}>ตำแหน่งช่างรังวัด :</Typography>
+                        </Grid>
+                        <Grid item xs={12} md={2} py={2}>
+                            <TextField
+                                maxWidth={"sm"}
+                                maxLength={500}
+                                placeholder="ตำแหน่งช่างรังวัด"
+                                value={zoneData}
+                                onChange={(e) => {
+                                    setZoneData(e.target.value);
+                                }}
+                                style={{ width: "100%" }} />
+                        </Grid>
+                    </Grid>
+                    <Grid container justifyItems={'center'} alignItems={'center'}>
+                        <Grid item xs={12} md={2} py={2}>
+                            <Typography fontSize={16}>ระดับ :</Typography>
+                        </Grid>
+                        <Grid item xs={12} md={2} py={2}>
+                            <TextField
+                                maxWidth={"sm"}
+                                maxLength={500}
+                                placeholder="ระดับ"
+                                value={zoneData}
+                                onChange={(e) => {
+                                    setZoneData(e.target.value);
+                                }}
+                                style={{ width: "100%" }}
+                            />
+                        </Grid>
+                        <Grid item xs={12} md={2} py={2} px={1}>
+                            <Typography fontSize={16}>เนื้อที่เดิม (ไร่) :</Typography>
+                        </Grid>
+                        <Grid item xs={12} md={2} py={2}>
+                            <TextField
+                                maxWidth={"sm"}
+                                maxLength={500}
+                                placeholder="เนื้อที่เดิม (ไร่)"
+                                value={zoneData}
+                                onChange={(e) => {
+                                    setZoneData(e.target.value);
+                                }}
+                                style={{ width: "100%" }} />
+                        </Grid>
+                        <Grid item xs={12} md={2} py={2} px={1}>
+                            <Typography fontSize={16}>เนื้อที่เดิม (งาน) :</Typography>
+                        </Grid>
+                        <Grid item xs={12} md={2} py={2}>
+                            <TextField
+                                maxWidth={"sm"}
+                                maxLength={500}
+                                placeholder="เนื้อที่เดิม (งาน)"
+                                value={zoneData}
+                                onChange={(e) => {
+                                    setZoneData(e.target.value);
+                                }}
+                                style={{ width: "100%" }} />
+                        </Grid>
+                        <Grid item xs={12} md={2} py={2} >
+                            <Typography fontSize={16}>เนื้อที่เดิม (วา) :</Typography>
+                        </Grid>
+                        <Grid item xs={12} md={2} py={2}>
+                            <TextField
+                                maxWidth={"sm"}
+                                maxLength={500}
+                                placeholder="เนื้อที่เดิม (วา)"
+                                value={zoneData}
+                                onChange={(e) => {
+                                    setZoneData(e.target.value);
+                                }}
+                                style={{ width: "100%" }} />
+                        </Grid>
+                        <Grid item xs={12} md={2} py={2} px={1}>
+                            <Typography fontSize={16}>เนื้อที่เดิม (เศษวา) :</Typography>
+                        </Grid>
+                        <Grid item xs={12} md={2} py={2}>
+                            <TextField
+                                maxWidth={"sm"}
+                                maxLength={500}
+                                placeholder="เนื้อที่เดิม (เศษวา)"
+                                value={zoneData}
+                                onChange={(e) => {
+                                    setZoneData(e.target.value);
+                                }}
+                                style={{ width: "100%" }} />
+                        </Grid>
+                    </Grid>
+                    <Grid container justifyItems={'center'} alignItems={'center'}>
+                        <Grid item xs={12} md={2} py={2}>
+                            <Typography fontSize={16}>จำนวนผู้ถือกรรมสิทธิ์ :</Typography>
+                        </Grid>
+                        <Grid item xs={12} md={2} py={2}>
+                            <TextField
+                                maxWidth={"sm"}
+                                maxLength={500}
+                                placeholder="จำนวนผู้ถือกรรมสิทธิ์"
+                                value={zoneData}
+                                onChange={(e) => {
+                                    setZoneData(e.target.value);
+                                }}
+                                style={{ width: "100%" }}
+                            />
+                        </Grid>
+                        <Grid item xs={12} md={2} py={2} px={1}>
+                            <Typography fontSize={16}>หมายเหตุ :</Typography>
+                        </Grid>
+                        <Grid item xs={12} md={6} py={2}>
+                            <TextField
+                                maxWidth={"sm"}
+                                maxLength={500}
+                                placeholder="หมายเหตุ"
+                                value={zoneData}
+                                onChange={(e) => {
+                                    setZoneData(e.target.value);
+                                }}
+                                style={{ width: "100%" }}
+                            />
+                        </Grid>
+                    </Grid>
                 </DialogContent>
                 <DialogActions>
                     <Grid container justifyContent={'flex-end'}>

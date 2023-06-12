@@ -19,8 +19,8 @@ export default function DilogTab02Index(props) {
                 fullWidth
                 fullScreen
             >
-                <DialogTitle>
-
+                <DialogTitle sx={{ background: 'linear-gradient(26deg, rgba(255,255,232,1) 20%, rgba(188,243,176,1) 100%)' }}>
+                    <Typography variant="subtitle">แก้ไขข้อมูลแปลงต้นร่าง</Typography>
                 </DialogTitle>
                 <DialogContent>
 

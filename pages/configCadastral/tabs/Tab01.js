@@ -67,7 +67,7 @@ export default function Tab01(props) {
     return (
         <Grid>
             <Grid item xs={12}>
-                {openDialog && <DialogTab01 open={openDialog} close={() => (setOpenDialog(false))} onSubmit={handleChange} />}
+                {openDialog && <DialogTab01 open={openDialog} close={() => (setOpenDialog(false))} onSubmit={handleChange} cadastralData={cadastralData} />}
                 <React.Fragment>
                     <TableContainer>
                         <Table sx={{ minWidth: 650, width: '100%', border: '1px solid ' }} size="small" stickyHeader >
