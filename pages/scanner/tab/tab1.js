@@ -42,7 +42,7 @@ import "yet-another-react-lightbox/plugins/thumbnails.css";
 import "yet-another-react-lightbox/styles.css";
 import { cadastralImageByCadastralSeq, cadastralImageByCadastralSeqSurveyDocTypeSeq, cadastralImagePNoByCadastralSeq, getCadastralImage, insertCadastral, saveScanCadastralImage, updateCadastral, updateCadastralImage } from "@/service/sva";
 import { filterRecordStatus } from "@/lib/datacontrol";
-import { surveyDocTypeBySurveyDocTypeGroup } from "@/service/mas/surveyDocTypeGroup";
+import { getSurveyDocType, surveyDocTypeBySurveyDocTypeGroup } from "@/service/mas/surveyDocTypeGroup";
 import CheckIcon from "@mui/icons-material/Check";
 import { useRouter } from "next/router";
 import { getFile, uploadFileMulti, uploadFileSingle } from "@/service/upload";
@@ -82,12 +82,16 @@ export default function Tab1(props) {
 
     const _req_getCadastralImage = async (seq) => {
         let res = await cadastralImageByCadastralSeq(seq);
+        let resDocData = await getSurveyDocType();
+        let arrDocData = resDocData.rows
         res = filterRecordStatus(res.rows, "N");
         // res = res.filter(item => item.CADASTRAL_SEQ == props?.tabData?.CADASTRAL_SEQ);
         console.log(res, "res _req_getCadastralImage");
         for (let i in res) {
             let item = res[i];
             let resGetFile = await getFile(item.IMAGE_PATH);
+            let docArr = arrDocData.filter((doc)=>doc.SURVEYDOCTYPE_SEQ == item.SURVEYDOCTYPE_SEQ);
+            item["DOC_DATA"] = docArr[0];
             console.log(resGetFile, "resGetFile");
             item['FILE_STATUS'] = resGetFile.status;
             if (resGetFile.status) {
@@ -96,6 +100,7 @@ export default function Tab1(props) {
                 item['FILE_DATA'] = "/img_not_found.png"
             }
         }
+
         await setCadastralImageData([]);
         await setCadastralImageData(res);
     }
@@ -130,7 +135,7 @@ export default function Tab1(props) {
         };
         let resSearchPath = await cadastralImageByCadastralSeqSurveyDocTypeSeq(searchScanObj);
         resSearchPath = filterRecordStatus(resSearchPath.rows, "N");
-        console.log(resSearchPath, "resSaveList");
+        console.log(resSearchPath, "resSaveList resSearchPath");
         // return
         const filePath = resSearchPath[resSearchPath.length - 1].IMAGE_PATH;
         const fileName = filePath.substring(filePath.lastIndexOf('/') + 1);
@@ -706,7 +711,7 @@ export default function Tab1(props) {
                                                                                         style={{ whiteSpace: "normal" }}
                                                                                     // disabled={isItemSelected(item.SURVEYDOCTYPE_SEQ)}
                                                                                     >
-                                                                                        {`(${item.SURVEYDOCTYPE_GROUP}) ${item.SURVEYDOCTYPE_NAME_TH}`}
+                                                                                        {`${item.SURVEYDOCTYPE_GROUP} ${item.SURVEYDOCTYPE_NAME_TH}`}
                                                                                     </MenuItem>
                                                                                 ))}
                                                                             </MenuList>
@@ -726,7 +731,7 @@ export default function Tab1(props) {
                                                                                         style={{ whiteSpace: "normal" }}
                                                                                     // disabled={isItemSelected(item.SURVEYDOCTYPE_SEQ)}
                                                                                     >
-                                                                                        {`(${item.SURVEYDOCTYPE_GROUP}) ${item.SURVEYDOCTYPE_NAME_TH}`}
+                                                                                        {`${item.SURVEYDOCTYPE_GROUP} ${item.SURVEYDOCTYPE_NAME_TH}`}
                                                                                     </MenuItem>
                                                                                 ))}
                                                                             </MenuList>
@@ -746,7 +751,7 @@ export default function Tab1(props) {
                                                                                             style={{ whiteSpace: "normal" }}
                                                                                         // disabled={isItemSelected(item.SURVEYDOCTYPE_SEQ)}
                                                                                         >
-                                                                                            {`(${item.SURVEYDOCTYPE_GROUP}) ${item.SURVEYDOCTYPE_NAME_TH}`}
+                                                                                            {`${item.SURVEYDOCTYPE_GROUP} ${item.SURVEYDOCTYPE_NAME_TH}`}
                                                                                         </MenuItem> :
                                                                                         null
                                                                                 ))}
@@ -802,7 +807,7 @@ export default function Tab1(props) {
                                                                             backgroundColor: '#ECF2FF !important',
                                                                         },
                                                                     }}>
-                                                                        <TableCell style={{ width: "25%" }} align="left">{`${item.IMAGE_PNAME} (${item.IMAGE_PNO})`}</TableCell>
+                                                                        <TableCell style={{ width: "25%" }} align="left">{`${item?.DOC_DATA?.SURVEYDOCTYPE_GROUP} ${item.IMAGE_PNAME} (${item.IMAGE_PNO})`}</TableCell>
                                                                         <TableCell style={{ width: "25%" }} align="left">{
                                                                             item.FILE_STATUS ? <Chip icon={<CheckCircleIcon />} label="อัปโหลดแล้ว" color="success" /> : <Chip icon={<CloseIcon />} label="ไม่ได้อัปโหลด" color="error" />
                                                                         }</TableCell>

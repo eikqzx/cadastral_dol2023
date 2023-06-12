@@ -1,7 +1,7 @@
 import axios from "axios"
 
 export default async function handler(req, res) {
-    let url = `${process.env.hostAPI}/SVA_/cadastralImage_`;
+    let url = `${process.env.hostAPI}/SVA_/cadastralImage_Document_1_`;
     try {
         let resdata = await axios.post(url,req.body)
         let data = resdata.data
