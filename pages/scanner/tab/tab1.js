@@ -54,6 +54,7 @@ import { Edit } from "@mui/icons-material";
 import ImageMui from "@mui/icons-material/Image"
 import DialogEditUpolad from "../components/dialogEditUpolad";
 import EditCad from "@/pages/asignJobs/components/editCadastral";
+import CopyButton from "@/pages/components/copyButton";
 export default function Tab1(props) {
     console.log(props, "propsTab1");
     const [selectedFiles, setSelectedFiles] = React.useState([]);
@@ -95,9 +96,22 @@ export default function Tab1(props) {
             console.log(resGetFile, "resGetFile");
             item['FILE_STATUS'] = resGetFile.status;
             if (resGetFile.status) {
+                let link = <CopyButton text={item?.IMAGE_PATH} />
                 item['FILE_DATA'] = `data:image/*;base64,${resGetFile.fileAsBase64}`;
+                item['FILE_DES'] = <React.Fragment>
+                    <Grid container spacing={1}>
+                        <Grid item><Typography>
+                            {<Grid item> JPG File{<br />}
+                                Bit depth 24{<br />}
+                                Resolution 300 dpi{<br />}</Grid>}
+                            <Grid item>{item?.IMAGE_PATH}</Grid>
+                            <Grid>{link}</Grid>
+                        </Typography></Grid>
+                    </Grid>
+                </React.Fragment>
             } else {
                 item['FILE_DATA'] = "/img_not_found.png"
+                item['FILE_DES'] = ``
             }
         }
 
@@ -307,7 +321,7 @@ export default function Tab1(props) {
         if (file.FILE_STATUS) {
             let arr = [];
             // { ...slides[0], title: "Puppy in sunglasses", description: "Mollie Sivaram" }
-            let obj = { src: file.FILE_DATA, title: `${file.IMAGE_PNAME} (${file.IMAGE_PNO})` };
+            let obj = { src: file.FILE_DATA, title: `${file.IMAGE_PNAME} (${file.IMAGE_PNO})`, description: file.FILE_DES };
             console.log(obj, "file");
             arr.push(obj);
             console.log(arr, "imageObj");
@@ -807,7 +821,7 @@ export default function Tab1(props) {
                                                                             backgroundColor: '#ECF2FF !important',
                                                                         },
                                                                     }}>
-                                                                        <TableCell style={{ width: "25%" }} align="left">{`${item?.DOC_DATA?.SURVEYDOCTYPE_GROUP} ${item.IMAGE_PNAME} (${item.IMAGE_PNO})`}</TableCell>
+                                                                        <TableCell style={{ width: "25%" }} align="left">{`${item?.DOC_DATA?.SURVEYDOCTYPE_GROUP} - ${item.IMAGE_PNAME} (${item.IMAGE_PNO})`}</TableCell>
                                                                         <TableCell style={{ width: "25%" }} align="left">{
                                                                             item.FILE_STATUS ? <Chip icon={<CheckCircleIcon />} label="อัปโหลดแล้ว" color="success" /> : <Chip icon={<CloseIcon />} label="ไม่ได้อัปโหลด" color="error" />
                                                                         }</TableCell>
