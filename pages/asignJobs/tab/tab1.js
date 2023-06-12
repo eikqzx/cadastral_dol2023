@@ -328,7 +328,7 @@ export default function Tab1(props) {
         let itemX = resGroup[x];
         if (item.SURVEYDOCTYPE_SEQ == itemX.SURVEYDOCTYPE_SEQ) {
           item["COUNT_DOC"] = itemX.IMAGE_PNO;
-          item["SURVEYDOCTYPE_PNO"] = itemX.IMAGE_PNO;
+          item["IMAGE_PNO"] = itemX.IMAGE_PNO;
         }
       }
     }
