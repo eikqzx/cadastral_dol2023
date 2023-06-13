@@ -35,6 +35,7 @@ export default function Tab03(props) {
     const [type, setType] = React.useState("success");
     const [cadastralOwnerData, setCadastralOwnerData] = React.useState([]);
     const { data } = useSession();
+    const [openDialog, setOpenDialog] = React.useState(false);
 
     const [curPage, setCurPage] = React.useState(1);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -56,7 +57,7 @@ export default function Tab03(props) {
     }, [props.searchData]);
 
     const _createNewData = async (data) => {
-        console.log(data,"data_createNewDataTab02");
+        console.log(data, "data_createNewDataTab02");
         let cadastralOwnerData = await getCadastralOwnerBycadastralSeq(data[0].CADASTRAL_SEQ)
         console.log(cadastralOwnerData, "getMasterDatacadastralOwnerData");
         cadastralOwnerData = filterRecordStatus(cadastralOwnerData.rows, "N")
@@ -74,6 +75,7 @@ export default function Tab03(props) {
     return (
         <Grid container>
             <Grid item xs={12}>
+                {openDialog && <DialogTab03 open={openDialog} close={() => (setOpenDialog(false))} onSubmit={handleChange} cadastralOwnerData={cadastralOwnerData} masterData={props?.masterData} />}
                 <React.Fragment>
                     <TableContainer>
                         <Table sx={{ minWidth: 650, width: "100%", border: '1px solid ' }} size="small" stickyHeader >

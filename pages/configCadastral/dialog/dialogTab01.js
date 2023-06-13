@@ -25,7 +25,43 @@ export default function DilogTab01Index(props) {
     const [cadastralNo, setCadastralNo] = React.useState("-");
 
     const [checked, setChecked] = React.useState(false);
+    const [typeofSurveyData, setTypeofSurveyData] = React.useState()
+    const [typeofSurveyAdd1Data, setTypeofSurveyAdd1Data] = React.useState()
+    const [typeofSurveyAdd2Data, setTypeofSurveyAdd2Data] = React.useState()
+    const [typeofSurveyAdd3Data, setTypeofSurveyAdd3Data] = React.useState()
+    const [tanbolData, setTambolData] = React.useState()
+    const [amphurData, setAmphurData] = React.useState()
+    const [provinceData, setProvinceData] = React.useState()
     const [zoneData, setZoneData] = React.useState()
+    const [sheetTypeData, setSheetTypeData] = React.useState()
+    const [UTMMAP1Data, setUTMMAP1Data] = React.useState()
+    const [UTMMAP2Data, setUTMMAP2Data] = React.useState()
+    const [UTMMAP3Data, setUTMMAP3Data] = React.useState()
+    const [UTMMAP4Data, setUTMMAP4Data] = React.useState()
+    const [originmap1Data, setOriginmap1Data] = React.useState()
+    const [originmap2Data, setOriginmap2Data] = React.useState()
+    const [originmap3Data, setOriginmap3Data] = React.useState()
+    const [airphotomapName, setAirphotomapName] = React.useState()
+    const [airphotomap1Data, setAirphotomap1Data] = React.useState()
+    const [airphotomap2Data, setAirphotomap2Data] = React.useState()
+    const [airphotomap3Data, setAirphotomap3Data] = React.useState()
+    const [scalemapData, setScalemapData] = React.useState()
+    const [scaleRawangData, setScaleRawangData] = React.useState()
+    const [benchmarkData, setBenchmarkData] = React.useState()
+    const [benchmark2Data, setBenchmark2Data] = React.useState()
+    const [surveyDate, setSurveyDate] = React.useState()
+    const [titleData, setTitleData] = React.useState()
+    const [fname, setFname] = React.useState()
+    const [lname, setLname] = React.useState()
+    const [surveyorPosition, setSurveyorPosition] = React.useState()
+    const [surveyorLevelData, setSurveyorLevelData] = React.useState()
+    const [oldRaiData, setOldRaiData] = React.useState()
+    const [oldNganData, setOldNganData] = React.useState()
+    const [oldWaData, setOldWaData] = React.useState()
+    const [oldSubWaData, setOldSubWaData] = React.useState()
+    const [ownerData, setOwnerData] = React.useState()
+    const [noteData, setNoteData] = React.useState()
+    
     console.log(checked, "checked");
     React.useEffect(() => {
         getMasterData(props.cadastralData)
@@ -142,9 +178,9 @@ export default function DilogTab01Index(props) {
                                 maxWidth={"sm"}
                                 maxLength={500}
                                 placeholder="ประเภทการรังวัด"
-                                value={zoneData}
+                                value={typeofSurveyData}
                                 onChange={(e) => {
-                                    setZoneData(e.target.value);
+                                    setTypeofSurveyData(e.target.value);
                                 }}
                                 style={{ width: "100%" }}
                             />
@@ -157,9 +193,9 @@ export default function DilogTab01Index(props) {
                                 maxWidth={"sm"}
                                 maxLength={500}
                                 placeholder="ประเภทการรังวัดเพิ่มเติม 1"
-                                value={zoneData}
+                                value={typeofSurveyAdd1Data}
                                 onChange={(e) => {
-                                    setZoneData(e.target.value);
+                                    setTypeofSurveyAdd1Data(e.target.value);
                                 }}
                                 style={{ width: "100%" }}
                             />
@@ -172,9 +208,9 @@ export default function DilogTab01Index(props) {
                                 maxWidth={"sm"}
                                 maxLength={500}
                                 placeholder="ประเภทการรังวัดเพิ่มเติม 2"
-                                value={zoneData}
+                                value={typeofSurveyAdd2Data}
                                 onChange={(e) => {
-                                    setZoneData(e.target.value);
+                                    setTypeofSurveyAdd2Data(e.target.value);
                                 }}
                                 style={{ width: "100%" }} />
                         </Grid>
@@ -186,9 +222,9 @@ export default function DilogTab01Index(props) {
                                 maxWidth={"sm"}
                                 maxLength={500}
                                 placeholder="ประเภทการรังวัดเพิ่มเติม 3"
-                                value={zoneData}
+                                value={typeofSurveyAdd3Data}
                                 onChange={(e) => {
-                                    setZoneData(e.target.value);
+                                    setTypeofSurveyAdd3Data(e.target.value);
                                 }}
                                 style={{ width: "100%" }} />
                         </Grid>
@@ -203,9 +239,9 @@ export default function DilogTab01Index(props) {
                                 maxWidth={"sm"}
                                 maxLength={500}
                                 placeholder="จังหวัด"
-                                value={zoneData}
+                                value={provinceData}
                                 onChange={(e) => {
-                                    setZoneData(e.target.value);
+                                    setProvinceData(e.target.value);
                                 }}
                                 style={{ width: "100%" }}
                             />
@@ -218,9 +254,9 @@ export default function DilogTab01Index(props) {
                                 maxWidth={"sm"}
                                 maxLength={500}
                                 placeholder="อำเภอ"
-                                value={zoneData}
+                                value={amphurData}
                                 onChange={(e) => {
-                                    setZoneData(e.target.value);
+                                    setAmphurData(e.target.value);
                                 }}
                                 style={{ width: "100%" }}
                             />
@@ -233,9 +269,9 @@ export default function DilogTab01Index(props) {
                                 maxWidth={"sm"}
                                 maxLength={500}
                                 placeholder="ตำบล"
-                                value={zoneData}
+                                value={tanbolData}
                                 onChange={(e) => {
-                                    setZoneData(e.target.value);
+                                    setTambolData(e.target.value);
                                 }}
                                 style={{ width: "100%" }} />
                         </Grid>
@@ -265,9 +301,9 @@ export default function DilogTab01Index(props) {
                                 maxWidth={"sm"}
                                 maxLength={500}
                                 placeholder="ประเภทระวาง"
-                                value={zoneData}
+                                value={sheetTypeData}
                                 onChange={(e) => {
-                                    setZoneData(e.target.value);
+                                    setSheetTypeData(e.target.value);
                                 }}
                                 style={{ width: "100%" }} />
                         </Grid>
@@ -279,9 +315,9 @@ export default function DilogTab01Index(props) {
                                 maxWidth={"sm"}
                                 maxLength={500}
                                 placeholder="หมายเลขระวางแผนที่ 1:50000 (UTM)"
-                                value={zoneData}
+                                value={UTMMAP1Data}
                                 onChange={(e) => {
-                                    setZoneData(e.target.value);
+                                    setUTMMAP1Data(e.target.value);
                                 }}
                                 style={{ width: "100%" }} />
                         </Grid>
@@ -296,9 +332,9 @@ export default function DilogTab01Index(props) {
                                 maxWidth={"sm"}
                                 maxLength={500}
                                 placeholder="หมายเลขแผ่นของระวางแผนที่ 1:50000 (UTM)"
-                                value={zoneData}
+                                value={UTMMAP2Data}
                                 onChange={(e) => {
-                                    setZoneData(e.target.value);
+                                    setUTMMAP2Data(e.target.value);
                                 }}
                                 style={{ width: "100%" }}
                             />
@@ -311,9 +347,9 @@ export default function DilogTab01Index(props) {
                                 maxWidth={"sm"}
                                 maxLength={500}
                                 placeholder="หมายเลขระวางแผนที่ 1:4000 (UTM)"
-                                value={zoneData}
+                                value={UTMMAP3Data}
                                 onChange={(e) => {
-                                    setZoneData(e.target.value);
+                                    setUTMMAP3Data(e.target.value);
                                 }}
                                 style={{ width: "100%" }} />
                         </Grid>
@@ -325,9 +361,9 @@ export default function DilogTab01Index(props) {
                                 maxWidth={"sm"}
                                 maxLength={500}
                                 placeholder="หมายเลขแผ่นของระวางตามมาตราส่วน (UTM)"
-                                value={zoneData}
+                                value={UTMMAP4Data}
                                 onChange={(e) => {
-                                    setZoneData(e.target.value);
+                                    setUTMMAP4Data(e.target.value);
                                 }}
                                 style={{ width: "100%" }} />
                         </Grid>
@@ -342,9 +378,9 @@ export default function DilogTab01Index(props) {
                                 maxWidth={"sm"}
                                 maxLength={500}
                                 placeholder="หมายเลขระวางศูนย์กำเนิด 1"
-                                value={zoneData}
+                                value={originmap1Data}
                                 onChange={(e) => {
-                                    setZoneData(e.target.value);
+                                    setOriginmap1Data(e.target.value);
                                 }}
                                 style={{ width: "100%" }}
                             />
@@ -357,9 +393,9 @@ export default function DilogTab01Index(props) {
                                 maxWidth={"sm"}
                                 maxLength={500}
                                 placeholder="หมายเลขระวางศูนย์กำเนิด 2"
-                                value={zoneData}
+                                value={originmap2Data}
                                 onChange={(e) => {
-                                    setZoneData(e.target.value);
+                                    setOriginmap2Data(e.target.value);
                                 }}
                                 style={{ width: "100%" }} />
                         </Grid>
@@ -371,9 +407,9 @@ export default function DilogTab01Index(props) {
                                 maxWidth={"sm"}
                                 maxLength={500}
                                 placeholder="หมายเลขแผ่นของระวางตามมาตราส่วน (ศูนย์กำเนิด)"
-                                value={zoneData}
+                                value={originmap3Data}
                                 onChange={(e) => {
-                                    setZoneData(e.target.value);
+                                    setOriginmap3Data(e.target.value);
                                 }}
                                 style={{ width: "100%" }} />
                         </Grid>
@@ -388,9 +424,9 @@ export default function DilogTab01Index(props) {
                                 maxWidth={"sm"}
                                 maxLength={500}
                                 placeholder="ชื่อระวางภาพถ่ายทางอากาศ"
-                                value={zoneData}
+                                value={airphotomapName}
                                 onChange={(e) => {
-                                    setZoneData(e.target.value);
+                                    setAirphotomapName(e.target.value);
                                 }}
                                 style={{ width: "100%" }}
                             />
@@ -403,9 +439,9 @@ export default function DilogTab01Index(props) {
                                 maxWidth={"sm"}
                                 maxLength={500}
                                 placeholder="หมายเลขระวางแผนที่ 1:50000"
-                                value={zoneData}
+                                value={airphotomap1Data}
                                 onChange={(e) => {
-                                    setZoneData(e.target.value);
+                                    setAirphotomap1Data(e.target.value);
                                 }}
                                 style={{ width: "100%" }} />
                         </Grid>
@@ -417,9 +453,9 @@ export default function DilogTab01Index(props) {
                                 maxWidth={"sm"}
                                 maxLength={500}
                                 placeholder="หมายเลขแผ่นของระวางแผนที่ 1:50000"
-                                value={zoneData}
+                                value={airphotomap2Data}
                                 onChange={(e) => {
-                                    setZoneData(e.target.value);
+                                    setAirphotomap2Data(e.target.value);
                                 }}
                                 style={{ width: "100%" }} />
                         </Grid>
@@ -434,9 +470,9 @@ export default function DilogTab01Index(props) {
                                 maxWidth={"sm"}
                                 maxLength={500}
                                 placeholder="หมายเลขแผ่นของระวางตามมาตราส่วน"
-                                value={zoneData}
+                                value={airphotomap3Data}
                                 onChange={(e) => {
-                                    setZoneData(e.target.value);
+                                    setAirphotomap3Data(e.target.value);
                                 }}
                                 style={{ width: "100%" }}
                             />
@@ -449,9 +485,9 @@ export default function DilogTab01Index(props) {
                                 maxWidth={"sm"}
                                 maxLength={500}
                                 placeholder="รหัสมาตราส่วน (รูปแผนที่)"
-                                value={zoneData}
+                                value={scalemapData}
                                 onChange={(e) => {
-                                    setZoneData(e.target.value);
+                                    setScalemapData(e.target.value);
                                 }}
                                 style={{ width: "100%" }} />
                         </Grid>
@@ -463,9 +499,9 @@ export default function DilogTab01Index(props) {
                                 maxWidth={"sm"}
                                 maxLength={500}
                                 placeholder="รหัสมาตราส่วน (ระวาง)"
-                                value={zoneData}
+                                value={scaleRawangData}
                                 onChange={(e) => {
-                                    setZoneData(e.target.value);
+                                    setScaleRawangData(e.target.value);
                                 }}
                                 style={{ width: "100%" }} />
                         </Grid>
@@ -475,18 +511,18 @@ export default function DilogTab01Index(props) {
                         <Grid item xs={12} md={2} py={2}>
                             <Typography fontSize={16}>รหัสประเภทหมุดหลักเขตที่ 1 :</Typography>
                         </Grid>
-                        <Grid item xs={12} md={2} py={2}>
+                        {/* <Grid item xs={12} md={2} py={2}>
                             <TextField
                                 maxWidth={"sm"}
                                 maxLength={500}
                                 placeholder="รหัสประเภทหมุดหลักเขตที่ 1"
-                                value={zoneData}
+                                value={benchmarkData}
                                 onChange={(e) => {
-                                    setZoneData(e.target.value);
+                                    setBenchmarkData(e.target.value);
                                 }}
                                 style={{ width: "100%" }}
                             />
-                        </Grid>
+                        </Grid> */}
                         <Grid item xs={12} md={2} py={2} px={1}>
                             <Typography fontSize={16}>จำนวนหลักเขตแบบที่ 1 :</Typography>
                         </Grid>
@@ -495,13 +531,13 @@ export default function DilogTab01Index(props) {
                                 maxWidth={"sm"}
                                 maxLength={500}
                                 placeholder="จำนวนหลักเขตแบบที่ 1"
-                                value={zoneData}
+                                value={benchmarkData}
                                 onChange={(e) => {
-                                    setZoneData(e.target.value);
+                                    setBenchmarkData(e.target.value);
                                 }}
                                 style={{ width: "100%" }} />
                         </Grid>
-                        <Grid item xs={12} md={2} py={2} px={1}>
+                        {/* <Grid item xs={12} md={2} py={2} px={1}>
                             <Typography fontSize={16}>รหัสประเภทหมุดหลักเขตที่ 2 :</Typography>
                         </Grid>
                         <Grid item xs={12} md={2} py={2}>
@@ -514,7 +550,7 @@ export default function DilogTab01Index(props) {
                                     setZoneData(e.target.value);
                                 }}
                                 style={{ width: "100%" }} />
-                        </Grid>
+                        </Grid> */}
                         <Grid item xs={12} md={2} py={2} >
                             <Typography fontSize={16}>จำนวนหลักเขตแบบที่ 2 :</Typography>
                         </Grid>
@@ -523,9 +559,9 @@ export default function DilogTab01Index(props) {
                                 maxWidth={"sm"}
                                 maxLength={500}
                                 placeholder="จำนวนหลักเขตแบบที่ 2"
-                                value={zoneData}
+                                value={benchmark2Data}
                                 onChange={(e) => {
-                                    setZoneData(e.target.value);
+                                    setBenchmark2Data(e.target.value);
                                 }}
                                 style={{ width: "100%" }} />
                         </Grid>
@@ -540,9 +576,9 @@ export default function DilogTab01Index(props) {
                                 maxWidth={"sm"}
                                 maxLength={500}
                                 placeholder="วันที่รังวัด"
-                                value={zoneData}
+                                value={surveyDate}
                                 onChange={(e) => {
-                                    setZoneData(e.target.value);
+                                    setSurveyDate(e.target.value);
                                 }}
                                 style={{ width: "100%" }}
                             />
@@ -555,9 +591,9 @@ export default function DilogTab01Index(props) {
                                 maxWidth={"sm"}
                                 maxLength={500}
                                 placeholder="คำนำหน้าชื่อช่างรังวัด"
-                                value={zoneData}
+                                value={titleData}
                                 onChange={(e) => {
-                                    setZoneData(e.target.value);
+                                    setTitleData(e.target.value);
                                 }}
                                 style={{ width: "100%" }} />
                         </Grid>
@@ -569,9 +605,9 @@ export default function DilogTab01Index(props) {
                                 maxWidth={"sm"}
                                 maxLength={500}
                                 placeholder="ชื่อช่างรังวัด"
-                                value={zoneData}
+                                value={fname}
                                 onChange={(e) => {
-                                    setZoneData(e.target.value);
+                                    setFname(e.target.value);
                                 }}
                                 style={{ width: "100%" }} />
                         </Grid>
@@ -583,9 +619,9 @@ export default function DilogTab01Index(props) {
                                 maxWidth={"sm"}
                                 maxLength={500}
                                 placeholder="นามสกุลช่างรังวัด"
-                                value={zoneData}
+                                value={lname}
                                 onChange={(e) => {
-                                    setZoneData(e.target.value);
+                                    setLname(e.target.value);
                                 }}
                                 style={{ width: "100%" }} />
                         </Grid>
@@ -597,9 +633,9 @@ export default function DilogTab01Index(props) {
                                 maxWidth={"sm"}
                                 maxLength={500}
                                 placeholder="ตำแหน่งช่างรังวัด"
-                                value={zoneData}
+                                value={surveyorPosition}
                                 onChange={(e) => {
-                                    setZoneData(e.target.value);
+                                    setSurveyorPosition(e.target.value);
                                 }}
                                 style={{ width: "100%" }} />
                         </Grid>
@@ -613,9 +649,9 @@ export default function DilogTab01Index(props) {
                                 maxWidth={"sm"}
                                 maxLength={500}
                                 placeholder="ระดับ"
-                                value={zoneData}
+                                value={surveyorLevelData}
                                 onChange={(e) => {
-                                    setZoneData(e.target.value);
+                                    setSurveyorLevelData(e.target.value);
                                 }}
                                 style={{ width: "100%" }}
                             />
@@ -628,9 +664,9 @@ export default function DilogTab01Index(props) {
                                 maxWidth={"sm"}
                                 maxLength={500}
                                 placeholder="เนื้อที่เดิม (ไร่)"
-                                value={zoneData}
+                                value={oldRaiData}
                                 onChange={(e) => {
-                                    setZoneData(e.target.value);
+                                    setOldRaiData(e.target.value);
                                 }}
                                 style={{ width: "100%" }} />
                         </Grid>
@@ -642,9 +678,9 @@ export default function DilogTab01Index(props) {
                                 maxWidth={"sm"}
                                 maxLength={500}
                                 placeholder="เนื้อที่เดิม (งาน)"
-                                value={zoneData}
+                                value={oldNganData}
                                 onChange={(e) => {
-                                    setZoneData(e.target.value);
+                                    setOldNganData(e.target.value);
                                 }}
                                 style={{ width: "100%" }} />
                         </Grid>
@@ -656,9 +692,9 @@ export default function DilogTab01Index(props) {
                                 maxWidth={"sm"}
                                 maxLength={500}
                                 placeholder="เนื้อที่เดิม (วา)"
-                                value={zoneData}
+                                value={oldWaData}
                                 onChange={(e) => {
-                                    setZoneData(e.target.value);
+                                    setOldWaData(e.target.value);
                                 }}
                                 style={{ width: "100%" }} />
                         </Grid>
@@ -670,9 +706,9 @@ export default function DilogTab01Index(props) {
                                 maxWidth={"sm"}
                                 maxLength={500}
                                 placeholder="เนื้อที่เดิม (เศษวา)"
-                                value={zoneData}
+                                value={oldSubWaData}
                                 onChange={(e) => {
-                                    setZoneData(e.target.value);
+                                    setOldSubWaData(e.target.value);
                                 }}
                                 style={{ width: "100%" }} />
                         </Grid>
@@ -686,9 +722,9 @@ export default function DilogTab01Index(props) {
                                 maxWidth={"sm"}
                                 maxLength={500}
                                 placeholder="จำนวนผู้ถือกรรมสิทธิ์"
-                                value={zoneData}
+                                value={ownerData}
                                 onChange={(e) => {
-                                    setZoneData(e.target.value);
+                                    setOwnerData(e.target.value);
                                 }}
                                 style={{ width: "100%" }}
                             />
@@ -701,9 +737,9 @@ export default function DilogTab01Index(props) {
                                 maxWidth={"sm"}
                                 maxLength={500}
                                 placeholder="หมายเหตุ"
-                                value={zoneData}
+                                value={noteData}
                                 onChange={(e) => {
-                                    setZoneData(e.target.value);
+                                    setNoteData(e.target.value);
                                 }}
                                 style={{ width: "100%" }}
                             />

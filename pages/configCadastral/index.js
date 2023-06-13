@@ -40,6 +40,7 @@ export default function IndexConfigCadastral(props) {
     const [landOffice, setLandOffice] = React.useState(null);
     const [searchParameter, setSearchParameter] = React.useState(null);
     const { data } = useSession();
+    const [masterData, setMasterData] = React.useState([]);
     //MASTER_DATA
     const [office, setOffice] = React.useState("-");
     const [sheetcode, setSheetcode] = React.useState("-");
@@ -103,7 +104,7 @@ export default function IndexConfigCadastral(props) {
 
     const getMasterData = async (data) => {
         // data = data.rows
-        console.log(data, "getMasterData");
+        // console.log(data, "getMasterData");
         // _createNewData(data.CADASTRAL_SEQ)
         for (let i in data) {
             if (data[i] != undefined) {
@@ -117,6 +118,8 @@ export default function IndexConfigCadastral(props) {
                 setOffice(landOfficeFiltered[0]?.LANDOFFICE_NAME_TH ?? "-");
             }
         }
+        console.log(data, "getMasterData");
+        setMasterData(data)
     }
 
 
@@ -222,9 +225,9 @@ export default function IndexConfigCadastral(props) {
                                         <Tab label="ผู้ขอรังวัดต้นร่าง" value="3" />
                                     </TabList>
                                 </Box>
-                                <TabPanel value="1"><Tab01 searchData={searchData} /></TabPanel>
-                                <TabPanel value="2"><Tab02 searchData={searchData} /></TabPanel>
-                                <TabPanel value="3"><Tab03 searchData={searchData} /></TabPanel>
+                                <TabPanel value="1"><Tab01 searchData={searchData} masterData={masterData} /></TabPanel>
+                                <TabPanel value="2"><Tab02 searchData={searchData} masterData={masterData} /></TabPanel>
+                                <TabPanel value="3"><Tab03 searchData={searchData} masterData={masterData} /></TabPanel>
                             </TabContext>
                         </Box>
                     }

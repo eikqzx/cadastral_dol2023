@@ -34,6 +34,7 @@ export default function Tab02(props) {
     const [type, setType] = React.useState("success");
     const [cadastralLandData, setCadastralLandData] = React.useState([]);
     const { data } = useSession();
+    const [openDialog, setOpenDialog] = React.useState(false);
 
     const [curPage, setCurPage] = React.useState(1);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -55,7 +56,8 @@ export default function Tab02(props) {
     }, [props.searchData]);
     const _createNewData = async (data) => {
         console.log(data, "data_createNewDataTab02");
-        let cadastralLandData = await getCadastralLandByCadastralSeq(data[0].CADASTRAL_SEQ)
+        // let cadastralLandData = await getCadastralLandByCadastralSeq(data[0].CADASTRAL_SEQ)
+        let cadastralLandData = await getCadastralLandByCadastralSeq(890000002563837)
         console.log(cadastralLandData, "getMasterDatacadastralLandData");
         cadastralLandData = filterRecordStatus(cadastralLandData.rows, "N")
         setCadastralLandData(cadastralLandData)
@@ -66,6 +68,7 @@ export default function Tab02(props) {
     return (
         <Grid>
             <Grid item xs={12}>
+                {openDialog && <DialogTab02 open={openDialog} close={() => (setOpenDialog(false))} onSubmit={handleChange} cadastralLandData={cadastralLandData} masterData={props?.masterData} />}
                 <React.Fragment>
                     <TableContainer>
                         <Table sx={{ minWidth: 650, width: '100%', border: '1px solid ' }} size="small" stickyHeader >
