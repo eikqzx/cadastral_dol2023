@@ -1,8 +1,8 @@
 import { AddLoading, RemoveLoading } from "@/pages/components/loadingscreen";
 import axios from "axios";
 
-export async function cadastralImage102ByConditionParcelNoTo(dataSend) {
-    let url = `/api/sva/cadastralImage102ByConditionParcelNoTo`
+export async function cadastralImage102ByConditionCadastralNoTo(dataSend) {
+    let url = `/api/sva/cadastralImage102ByConditionCadastralNoTo`
     AddLoading();
     try {
         let res = await axios.post(url, dataSend)
@@ -15,8 +15,8 @@ export async function cadastralImage102ByConditionParcelNoTo(dataSend) {
         return false
     }
 }
-export async function cadastralImage10XByConditionParcelNoTo(dataSend) {
-    let url = `/api/sva/cadastralImage10XByConditionParcelNoTo`
+export async function cadastralImage10XByConditionCadastralNoTo(dataSend) {
+    let url = `/api/sva/cadastralImage10XByConditionCadastralNoTo`
     AddLoading();
     try {
         let res = await axios.post(url, dataSend)

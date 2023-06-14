@@ -15,7 +15,7 @@ import SnackBarDiaLog from "../components/snackbarV2";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useSession } from "next-auth/react";
 import TabScanner from "./tab/tab1";
-import { cadastralImage102ByConditionParcelNoTo, cadastralImage10XByConditionParcelNoTo } from "@/service/sva";
+import { cadastralImage102ByConditionCadastralNoTo, cadastralImage10XByConditionCadastralNoTo } from "@/service/sva";
 import { getLandOfficeByPK } from "@/service/mas/landOffice";
 import { isNotEmpty } from "@/lib/datacontrol";
 import { useRouter } from "next/router";
@@ -69,7 +69,7 @@ export default function IndexScanner() {
         setPdfData(obj)
         setSearchParameter(obj)
         let data = null;
-        data = await cadastralImage102ByConditionParcelNoTo(obj);
+        data = await cadastralImage102ByConditionCadastralNoTo(obj);
         data = data.rows
         console.log(data,"onSearchNew");
         setSearchData(data)

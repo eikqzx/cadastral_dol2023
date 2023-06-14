@@ -38,7 +38,7 @@ import * as jobRedux from "./../../store/feature/job"
 import { getCondoHSFSByCondition } from "@/service/evd/condoHSFS";
 import Tab1 from "./tab/tab1";
 import { cadastralImageByCondition } from "@/service/evd/cadastral";
-import { cadastralImage102ByConditionParcelNoTo } from "@/service/sva";
+import { cadastralImage102ByConditionCadastralNoTo } from "@/service/sva";
 
 
 export default function IndexAccountControl(props) {
@@ -94,7 +94,7 @@ export default function IndexAccountControl(props) {
         setPdfData(obj)
         setSearchParameter(obj)
         let data = null;
-        data = await cadastralImage102ByConditionParcelNoTo(obj);
+        data = await cadastralImage102ByConditionCadastralNoTo(obj);
         data = data.rows
         console.log(data,"onSearchNew");
         setSearchData(data)

@@ -3,6 +3,7 @@ import { Alert, IconButton, Snackbar, Tooltip } from '@mui/material';
 import { useState } from 'react';
 
 const CopyButton = ({ text }) => {
+    console.log(text);
     const [copied, setCopied] = useState(false);
     const CopyToClipboard = async () => {
         try {
