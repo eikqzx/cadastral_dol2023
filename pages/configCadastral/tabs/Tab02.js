@@ -22,12 +22,16 @@ import {
 import { getCadastralLandByCadastralSeq } from "@/service/sva";
 import { useSession } from 'next-auth/react';
 //LIBRALIE
-import { filterRecordStatus, getCookie, isNotEmpty } from "@/lib/datacontrol";
+import { filterRecordStatus, getCookie, isNotEmpty, formatPIDString } from "@/lib/datacontrol";
 import { numberWithCommas } from "@/lib/outputControl"
 //COMPONENTS
 import { confirmDialog } from "@/pages/components/confirmDialog";
 import DialogTab02 from "@/pages/configCadastral/dialog/dialogTab02"
-
+import dayjs from "dayjs";
+import budhaEra from "dayjs/plugin/buddhistEra"
+import thDate from 'dayjs/locale/th'
+dayjs.extend(budhaEra)
+dayjs.locale(thDate)
 export default function Tab02(props) {
     const [open, setOpen] = React.useState(false);
     const [message, setMessage] = React.useState("");
@@ -158,19 +162,19 @@ export default function Tab02(props) {
                                                             {el.CADASTRAL_LAND_NOTE}
                                                         </TableCell>
                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {el.RECORD_STATUS}
+                                                            {el.RECORD_STATUS == "N" ? "ปกติ" : el.RECORD_STATUS == "C" ? "ยกเลิก" : "ลบ"}
                                                         </TableCell>
                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {el.CREATE_USER}
+                                                            {formatPIDString(el.CREATE_USER)}
                                                         </TableCell>
                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {el.CREATE_DTM}
+                                                            {el.CREATE_DTM ? dayjs(el.CREATE_DTM).format("DD MMMM BBBB") : "-"}
                                                         </TableCell>
                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {el.LAST_UPD_USER}
+                                                            {formatPIDString(el.LAST_UPD_USER)}
                                                         </TableCell>
                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {el.LAST_UPD_DTM}
+                                                            {el.LAST_UPD_DTM ? dayjs(el.LAST_UPD_DTM).format("DD MMMM BBBB") : "-"}
                                                         </TableCell>
                                                     </TableRow>
                                                 </React.Fragment>
@@ -239,19 +243,19 @@ export default function Tab02(props) {
                                                             {el.CADASTRAL_LAND_NOTE}
                                                         </TableCell>
                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {el.RECORD_STATUS}
+                                                            {el.RECORD_STATUS == "N" ? "ปกติ" : el.RECORD_STATUS == "C" ? "ยกเลิก" : "ลบ"}
                                                         </TableCell>
                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {el.CREATE_USER}
+                                                            {formatPIDString(el.CREATE_USER)}
                                                         </TableCell>
                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {el.CREATE_DTM}
+                                                            {el.CREATE_DTM ? dayjs(el.CREATE_DTM).format("DD MMMM BBBB") : "-"}
                                                         </TableCell>
                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {el.LAST_UPD_USER}
+                                                            {formatPIDString(el.LAST_UPD_USER)}
                                                         </TableCell>
                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {el.LAST_UPD_DTM}
+                                                            {el.LAST_UPD_DTM ? dayjs(el.LAST_UPD_DTM).format("DD MMMM BBBB") : "-"}
                                                         </TableCell>
                                                     </TableRow>
                                                 </React.Fragment>

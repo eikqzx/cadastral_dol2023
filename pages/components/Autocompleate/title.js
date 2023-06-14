@@ -9,7 +9,7 @@ export default function AutoTitle(props) {
 
     const _req_title = async () => {
         let res = await getTitle();
-        res = filterRecordStatus(res, "N")
+        res = filterRecordStatus(res.rows, "N")
         console.log(res, "_req_title");
         if (!res) {
             console.log("ไม่สามารถเรียกข้อมูลได้");

@@ -61,7 +61,7 @@ export default function DilogTab01Index(props) {
     const [oldSubWaData, setOldSubWaData] = React.useState()
     const [ownerData, setOwnerData] = React.useState()
     const [noteData, setNoteData] = React.useState()
-    
+
     console.log(checked, "checked");
     React.useEffect(() => {
         getMasterData(props.cadastralData)
@@ -85,6 +85,31 @@ export default function DilogTab01Index(props) {
                 console.log(landOfficeFiltered, "getLandOfficeData");
                 setOffice(landOfficeFiltered[0]?.LANDOFFICE_NAME_TH ?? "-");
             }
+        }
+    }
+
+    const _onSubmit = async () => {
+        let obj = {
+            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
+            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
+            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
+            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
+            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
+            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
+            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
+            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
+            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
+            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
+            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
+            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
+            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
+            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
+            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
+            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
+            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
+            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
+            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
+
         }
     }
     return (
@@ -183,6 +208,7 @@ export default function DilogTab01Index(props) {
                                     setTypeofSurveyData(e.target.value);
                                 }}
                                 style={{ width: "100%" }}
+                                size="small"
                             />
                         </Grid>
                         <Grid item xs={12} md={2} py={2} px={1}>
@@ -198,6 +224,7 @@ export default function DilogTab01Index(props) {
                                     setTypeofSurveyAdd1Data(e.target.value);
                                 }}
                                 style={{ width: "100%" }}
+                                size="small"
                             />
                         </Grid>
                         <Grid item xs={12} md={2} py={2} px={1}>
@@ -212,7 +239,8 @@ export default function DilogTab01Index(props) {
                                 onChange={(e) => {
                                     setTypeofSurveyAdd2Data(e.target.value);
                                 }}
-                                style={{ width: "100%" }} />
+                                style={{ width: "100%" }}
+                                size="small" />
                         </Grid>
                         <Grid item xs={12} md={2} py={2}>
                             <Typography fontSize={16}>ประเภทการรังวัดเพิ่มเติม 3 :</Typography>
@@ -226,7 +254,8 @@ export default function DilogTab01Index(props) {
                                 onChange={(e) => {
                                     setTypeofSurveyAdd3Data(e.target.value);
                                 }}
-                                style={{ width: "100%" }} />
+                                style={{ width: "100%" }}
+                                size="small" />
                         </Grid>
                     </Grid>
                     {/* จังหวัด */}
@@ -244,6 +273,7 @@ export default function DilogTab01Index(props) {
                                     setProvinceData(e.target.value);
                                 }}
                                 style={{ width: "100%" }}
+                                size="small"
                             />
                         </Grid>
                         <Grid item xs={12} md={2} py={2} px={1}>
@@ -259,6 +289,7 @@ export default function DilogTab01Index(props) {
                                     setAmphurData(e.target.value);
                                 }}
                                 style={{ width: "100%" }}
+                                size="small"
                             />
                         </Grid>
                         <Grid item xs={12} md={2} py={2} px={1}>
@@ -273,7 +304,8 @@ export default function DilogTab01Index(props) {
                                 onChange={(e) => {
                                     setTambolData(e.target.value);
                                 }}
-                                style={{ width: "100%" }} />
+                                style={{ width: "100%" }}
+                                size="small" />
                         </Grid>
                     </Grid>
                     {/* โซน */}
@@ -291,6 +323,7 @@ export default function DilogTab01Index(props) {
                                     setZoneData(e.target.value);
                                 }}
                                 style={{ width: "100%" }}
+                                size="small"
                             />
                         </Grid>
                         <Grid item xs={12} md={2} py={2} px={1}>
@@ -305,7 +338,8 @@ export default function DilogTab01Index(props) {
                                 onChange={(e) => {
                                     setSheetTypeData(e.target.value);
                                 }}
-                                style={{ width: "100%" }} />
+                                style={{ width: "100%" }}
+                                size="small" />
                         </Grid>
                         <Grid item xs={12} md={2} py={2} px={1}>
                             <Typography fontSize={16}>หมายเลขระวางแผนที่ 1:50000 (UTM) :</Typography>
@@ -319,7 +353,8 @@ export default function DilogTab01Index(props) {
                                 onChange={(e) => {
                                     setUTMMAP1Data(e.target.value);
                                 }}
-                                style={{ width: "100%" }} />
+                                style={{ width: "100%" }}
+                                size="small" />
                         </Grid>
                     </Grid>
                     {/* หมายเลขแผ่น */}
@@ -337,6 +372,7 @@ export default function DilogTab01Index(props) {
                                     setUTMMAP2Data(e.target.value);
                                 }}
                                 style={{ width: "100%" }}
+                                size="small"
                             />
                         </Grid>
                         <Grid item xs={12} md={2} py={2} px={1}>
@@ -351,7 +387,8 @@ export default function DilogTab01Index(props) {
                                 onChange={(e) => {
                                     setUTMMAP3Data(e.target.value);
                                 }}
-                                style={{ width: "100%" }} />
+                                style={{ width: "100%" }}
+                                size="small" />
                         </Grid>
                         <Grid item xs={12} md={2} py={2} px={1}>
                             <Typography fontSize={16}>หมายเลขแผ่นของระวางตามมาตราส่วน (UTM) :</Typography>
@@ -365,7 +402,8 @@ export default function DilogTab01Index(props) {
                                 onChange={(e) => {
                                     setUTMMAP4Data(e.target.value);
                                 }}
-                                style={{ width: "100%" }} />
+                                style={{ width: "100%" }}
+                                size="small" />
                         </Grid>
                     </Grid>
                     {/* หมายเลขระวาง */}
@@ -383,6 +421,7 @@ export default function DilogTab01Index(props) {
                                     setOriginmap1Data(e.target.value);
                                 }}
                                 style={{ width: "100%" }}
+                                size="small"
                             />
                         </Grid>
                         <Grid item xs={12} md={2} py={2} px={1}>
@@ -397,7 +436,8 @@ export default function DilogTab01Index(props) {
                                 onChange={(e) => {
                                     setOriginmap2Data(e.target.value);
                                 }}
-                                style={{ width: "100%" }} />
+                                style={{ width: "100%" }}
+                                size="small" />
                         </Grid>
                         <Grid item xs={12} md={2} py={2} px={1}>
                             <Typography fontSize={16}>หมายเลขแผ่นของระวางตามมาตราส่วน (ศูนย์กำเนิด) :</Typography>
@@ -411,7 +451,8 @@ export default function DilogTab01Index(props) {
                                 onChange={(e) => {
                                     setOriginmap3Data(e.target.value);
                                 }}
-                                style={{ width: "100%" }} />
+                                style={{ width: "100%" }}
+                                size="small" />
                         </Grid>
                     </Grid>
                     {/* ชื่อระวางภาพถ่ายทางอากาศ */}
@@ -429,6 +470,7 @@ export default function DilogTab01Index(props) {
                                     setAirphotomapName(e.target.value);
                                 }}
                                 style={{ width: "100%" }}
+                                size="small"
                             />
                         </Grid>
                         <Grid item xs={12} md={2} py={2} px={1}>
@@ -443,7 +485,8 @@ export default function DilogTab01Index(props) {
                                 onChange={(e) => {
                                     setAirphotomap1Data(e.target.value);
                                 }}
-                                style={{ width: "100%" }} />
+                                style={{ width: "100%" }}
+                                size="small" />
                         </Grid>
                         <Grid item xs={12} md={2} py={2} px={1}>
                             <Typography fontSize={16}>หมายเลขแผ่นของระวางแผนที่ 1:50000 :</Typography>
@@ -457,7 +500,8 @@ export default function DilogTab01Index(props) {
                                 onChange={(e) => {
                                     setAirphotomap2Data(e.target.value);
                                 }}
-                                style={{ width: "100%" }} />
+                                style={{ width: "100%" }}
+                                size="small" />
                         </Grid>
                     </Grid>
                     {/* หมายเลขแผ่นของระวางตามมาตราส่วน */}
@@ -475,6 +519,7 @@ export default function DilogTab01Index(props) {
                                     setAirphotomap3Data(e.target.value);
                                 }}
                                 style={{ width: "100%" }}
+                                size="small"
                             />
                         </Grid>
                         <Grid item xs={12} md={2} py={2} px={1}>
@@ -489,7 +534,8 @@ export default function DilogTab01Index(props) {
                                 onChange={(e) => {
                                     setScalemapData(e.target.value);
                                 }}
-                                style={{ width: "100%" }} />
+                                style={{ width: "100%" }}
+                                size="small" />
                         </Grid>
                         <Grid item xs={12} md={2} py={2} px={1}>
                             <Typography fontSize={16}>รหัสมาตราส่วน (ระวาง) :</Typography>
@@ -503,14 +549,15 @@ export default function DilogTab01Index(props) {
                                 onChange={(e) => {
                                     setScaleRawangData(e.target.value);
                                 }}
-                                style={{ width: "100%" }} />
+                                style={{ width: "100%" }}
+                                size="small" />
                         </Grid>
                     </Grid>
                     {/* รหัสประเภทหมุดหลัก */}
                     <Grid container justifyItems={'center'} alignItems={'center'}>
-                        <Grid item xs={12} md={2} py={2}>
+                        {/* <Grid item xs={12} md={2} py={2}>
                             <Typography fontSize={16}>รหัสประเภทหมุดหลักเขตที่ 1 :</Typography>
-                        </Grid>
+                        </Grid> */}
                         {/* <Grid item xs={12} md={2} py={2}>
                             <TextField
                                 maxWidth={"sm"}
@@ -521,6 +568,7 @@ export default function DilogTab01Index(props) {
                                     setBenchmarkData(e.target.value);
                                 }}
                                 style={{ width: "100%" }}
+size="small"
                             />
                         </Grid> */}
                         <Grid item xs={12} md={2} py={2} px={1}>
@@ -535,7 +583,8 @@ export default function DilogTab01Index(props) {
                                 onChange={(e) => {
                                     setBenchmarkData(e.target.value);
                                 }}
-                                style={{ width: "100%" }} />
+                                style={{ width: "100%" }}
+                                size="small" />
                         </Grid>
                         {/* <Grid item xs={12} md={2} py={2} px={1}>
                             <Typography fontSize={16}>รหัสประเภทหมุดหลักเขตที่ 2 :</Typography>
@@ -549,9 +598,10 @@ export default function DilogTab01Index(props) {
                                 onChange={(e) => {
                                     setZoneData(e.target.value);
                                 }}
-                                style={{ width: "100%" }} />
+                                style={{ width: "100%" }}
+size="small" />
                         </Grid> */}
-                        <Grid item xs={12} md={2} py={2} >
+                        <Grid item xs={12} md={2} py={2} px={1}>
                             <Typography fontSize={16}>จำนวนหลักเขตแบบที่ 2 :</Typography>
                         </Grid>
                         <Grid item xs={12} md={2} py={2}>
@@ -563,7 +613,8 @@ export default function DilogTab01Index(props) {
                                 onChange={(e) => {
                                     setBenchmark2Data(e.target.value);
                                 }}
-                                style={{ width: "100%" }} />
+                                style={{ width: "100%" }}
+                                size="small" />
                         </Grid>
                     </Grid>
                     {/* วันที่รังวัด */}
@@ -581,6 +632,7 @@ export default function DilogTab01Index(props) {
                                     setSurveyDate(e.target.value);
                                 }}
                                 style={{ width: "100%" }}
+                                size="small"
                             />
                         </Grid>
                         <Grid item xs={12} md={2} py={2} px={1}>
@@ -595,7 +647,8 @@ export default function DilogTab01Index(props) {
                                 onChange={(e) => {
                                     setTitleData(e.target.value);
                                 }}
-                                style={{ width: "100%" }} />
+                                style={{ width: "100%" }}
+                                size="small" />
                         </Grid>
                         <Grid item xs={12} md={2} py={2} px={1}>
                             <Typography fontSize={16}>ชื่อช่างรังวัด :</Typography>
@@ -609,7 +662,8 @@ export default function DilogTab01Index(props) {
                                 onChange={(e) => {
                                     setFname(e.target.value);
                                 }}
-                                style={{ width: "100%" }} />
+                                style={{ width: "100%" }}
+                                size="small" />
                         </Grid>
                         <Grid item xs={12} md={2} py={2} >
                             <Typography fontSize={16}>นามสกุลช่างรังวัด :</Typography>
@@ -623,7 +677,8 @@ export default function DilogTab01Index(props) {
                                 onChange={(e) => {
                                     setLname(e.target.value);
                                 }}
-                                style={{ width: "100%" }} />
+                                style={{ width: "100%" }}
+                                size="small" />
                         </Grid>
                         <Grid item xs={12} md={2} py={2} px={1}>
                             <Typography fontSize={16}>ตำแหน่งช่างรังวัด :</Typography>
@@ -637,7 +692,8 @@ export default function DilogTab01Index(props) {
                                 onChange={(e) => {
                                     setSurveyorPosition(e.target.value);
                                 }}
-                                style={{ width: "100%" }} />
+                                style={{ width: "100%" }}
+                                size="small" />
                         </Grid>
                     </Grid>
                     <Grid container justifyItems={'center'} alignItems={'center'}>
@@ -654,6 +710,7 @@ export default function DilogTab01Index(props) {
                                     setSurveyorLevelData(e.target.value);
                                 }}
                                 style={{ width: "100%" }}
+                                size="small"
                             />
                         </Grid>
                         <Grid item xs={12} md={2} py={2} px={1}>
@@ -668,7 +725,8 @@ export default function DilogTab01Index(props) {
                                 onChange={(e) => {
                                     setOldRaiData(e.target.value);
                                 }}
-                                style={{ width: "100%" }} />
+                                style={{ width: "100%" }}
+                                size="small" />
                         </Grid>
                         <Grid item xs={12} md={2} py={2} px={1}>
                             <Typography fontSize={16}>เนื้อที่เดิม (งาน) :</Typography>
@@ -682,7 +740,8 @@ export default function DilogTab01Index(props) {
                                 onChange={(e) => {
                                     setOldNganData(e.target.value);
                                 }}
-                                style={{ width: "100%" }} />
+                                style={{ width: "100%" }}
+                                size="small" />
                         </Grid>
                         <Grid item xs={12} md={2} py={2} >
                             <Typography fontSize={16}>เนื้อที่เดิม (วา) :</Typography>
@@ -696,7 +755,8 @@ export default function DilogTab01Index(props) {
                                 onChange={(e) => {
                                     setOldWaData(e.target.value);
                                 }}
-                                style={{ width: "100%" }} />
+                                style={{ width: "100%" }}
+                                size="small" />
                         </Grid>
                         <Grid item xs={12} md={2} py={2} px={1}>
                             <Typography fontSize={16}>เนื้อที่เดิม (เศษวา) :</Typography>
@@ -710,7 +770,8 @@ export default function DilogTab01Index(props) {
                                 onChange={(e) => {
                                     setOldSubWaData(e.target.value);
                                 }}
-                                style={{ width: "100%" }} />
+                                style={{ width: "100%" }}
+                                size="small" />
                         </Grid>
                     </Grid>
                     <Grid container justifyItems={'center'} alignItems={'center'}>
@@ -727,6 +788,7 @@ export default function DilogTab01Index(props) {
                                     setOwnerData(e.target.value);
                                 }}
                                 style={{ width: "100%" }}
+                                size="small"
                             />
                         </Grid>
                         <Grid item xs={12} md={2} py={2} px={1}>
@@ -742,6 +804,7 @@ export default function DilogTab01Index(props) {
                                     setNoteData(e.target.value);
                                 }}
                                 style={{ width: "100%" }}
+                                size="small"
                             />
                         </Grid>
                     </Grid>

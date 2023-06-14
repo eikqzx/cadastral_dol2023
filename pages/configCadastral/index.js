@@ -206,7 +206,7 @@ export default function IndexConfigCadastral(props) {
                         </Grid>
                     </Grid>
                     {
-                        searchData.length != 0 &&
+                        searchData?.length != 0 &&
                         <Box sx={{ width: '100%', typography: 'body1' }}>
                             <TabContext value={tabData}>
                                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
