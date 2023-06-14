@@ -759,7 +759,6 @@ export default function Tab1(props) {
                   <Table size="small" sx={{ minWidth: 650, width: "100%" }}>
                     <TableHead>
                       <TableCell style={{ width: "5%" }} align="left">ลำดับ</TableCell>
-                      <TableCell style={{ width: "5%" }} align="left">ตัวย่อ</TableCell>
                       <TableCell style={{ width: "25%" }} align="left">ชื่อเอกสาร</TableCell>
                       <TableCell style={{ width: "5%" }} align="left">จำนวนที่รับงานแล้ว</TableCell>
                       <TableCell style={{ width: "25%" }} align="left" colSpan={3}></TableCell>
@@ -776,8 +775,7 @@ export default function Tab1(props) {
                             }}
                           >
                             <TableCell style={{ width: "5%" }} align="left">{item.SURVEYDOCTYPE_SYS_}</TableCell>
-                            <TableCell style={{ width: "5%" }} align="left">{item.SURVEYDOCTYPE_GROUP}</TableCell>
-                            <TableCell style={{ width: "25%" }} align="left">{item.SURVEYDOCTYPE_NAME_TH}</TableCell>
+                            <TableCell style={{ width: "25%" }} align="left">{item.SURVEYDOCTYPE_GROUP} - {item.SURVEYDOCTYPE_NAME_TH}</TableCell>
                             <TableCell style={{ width: "5%" }} align="left">{item?.IMAGE_PNO ?? 0}</TableCell>
                             <TableCell style={{ width: "5%" }}>
                               <Grid item xs={12} md={2}>
@@ -855,7 +853,6 @@ export default function Tab1(props) {
                   <Table size="small" sx={{ minWidth: 650, width: "100%" }}>
                     <TableHead>
                       <TableCell style={{ width: "5%" }} align="left">ลำดับ</TableCell>
-                      <TableCell style={{ width: "5%" }} align="left">ตัวย่อ</TableCell>
                       <TableCell style={{ width: "25%" }} align="left">ชื่อเอกสาร</TableCell>
                       <TableCell style={{ width: "5%" }} align="left">จำนวนที่รับงานแล้ว</TableCell>
                       <TableCell style={{ width: "25%" }} align="left" colSpan={3}></TableCell>
@@ -872,8 +869,7 @@ export default function Tab1(props) {
                             }}
                           >
                             <TableCell style={{ width: "5%" }} align="left">{item.SURVEYDOCTYPE_SYS_}</TableCell>
-                            <TableCell style={{ width: "5%" }} align="left">{item.SURVEYDOCTYPE_GROUP}</TableCell>
-                            <TableCell style={{ width: "25%" }} align="left">{item.SURVEYDOCTYPE_NAME_TH}</TableCell>
+                            <TableCell style={{ width: "25%" }} align="left">{item.SURVEYDOCTYPE_GROUP} - {item.SURVEYDOCTYPE_NAME_TH}</TableCell>
                             <TableCell style={{ width: "5%" }} align="left">{item?.IMAGE_PNO ?? 0}</TableCell>
                             <TableCell style={{ width: "5%" }}>
                               <Grid item xs={12} md={2}>
@@ -951,7 +947,6 @@ export default function Tab1(props) {
                   <Table size="small" sx={{ minWidth: 650, width: "100%" }}>
                     <TableHead>
                       <TableCell style={{ width: "5%" }} align="left">ลำดับ</TableCell>
-                      <TableCell style={{ width: "5%" }} align="left">ตัวย่อ</TableCell>
                       <TableCell style={{ width: "25%" }} align="left">ชื่อเอกสาร</TableCell>
                       <TableCell style={{ width: "5%" }} align="left">จำนวนที่รับงานแล้ว</TableCell>
                       <TableCell style={{ width: "25%" }} align="left" colSpan={3}></TableCell>
@@ -968,8 +963,7 @@ export default function Tab1(props) {
                             }}
                           >
                             <TableCell style={{ width: "5%" }} align="left">{item.SURVEYDOCTYPE_SYS_}</TableCell>
-                            <TableCell style={{ width: "5%" }} align="left">{item.SURVEYDOCTYPE_GROUP}</TableCell>
-                            <TableCell style={{ width: "25%" }} align="left">{item.SURVEYDOCTYPE_NAME_TH}</TableCell>
+                            <TableCell style={{ width: "25%" }} align="left">{item.SURVEYDOCTYPE_GROUP} - {item.SURVEYDOCTYPE_NAME_TH}</TableCell>
                             <TableCell style={{ width: "5%" }} align="left">{item?.IMAGE_PNO ?? 0}</TableCell>
                             <TableCell style={{ width: "5%" }}>
                               <Grid item xs={12} md={2}>
@@ -1047,7 +1041,6 @@ export default function Tab1(props) {
                   <Table size="small" sx={{ minWidth: 650, width: "100%" }}>
                     <TableHead>
                       <TableCell style={{ width: "5%" }} align="left">ลำดับ</TableCell>
-                      <TableCell style={{ width: "5%" }} align="left">ตัวย่อ</TableCell>
                       <TableCell style={{ width: "25%" }} align="left">ชื่อเอกสาร</TableCell>
                       <TableCell style={{ width: "5%" }} align="left">จำนวนที่รับงานแล้ว</TableCell>
                       <TableCell style={{ width: "25%" }} align="left" colSpan={3}></TableCell>
@@ -1064,8 +1057,7 @@ export default function Tab1(props) {
                             }}
                           >
                             <TableCell style={{ width: "5%" }} align="left">{item.SURVEYDOCTYPE_SYS_}</TableCell>
-                            <TableCell style={{ width: "5%" }} align="left">{item.SURVEYDOCTYPE_GROUP}</TableCell>
-                            <TableCell style={{ width: "25%" }} align="left">{item.SURVEYDOCTYPE_NAME_TH}</TableCell>
+                            <TableCell style={{ width: "25%" }} align="left">{item.SURVEYDOCTYPE_GROUP} - {item.SURVEYDOCTYPE_NAME_TH}</TableCell>
                             <TableCell style={{ width: "5%" }} align="left">{item?.IMAGE_PNO ?? 0}</TableCell>
                             <TableCell style={{ width: "5%" }}>
                               <Grid item xs={12} md={2}>

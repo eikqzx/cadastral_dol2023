@@ -459,7 +459,7 @@ export default function Tab01(props) {
                                                                         backgroundColor: '#ECF2FF !important',
                                                                     },
                                                                 }}>
-                                                                    <TableCell style={{ width: "30%" }} align="left">{`${item?.data?.DOC_DATA?.SURVEYDOCTYPE_GROUP} ${item?.data?.IMAGE_PNAME}`}</TableCell>
+                                                                    <TableCell style={{ width: "30%" }} align="left">{`${item?.data?.DOC_DATA?.SURVEYDOCTYPE_GROUP} - ${item?.data?.IMAGE_PNAME}`}</TableCell>
                                                                     {/* <TableCell style={{ width: "30%" }} align="left">{`${item?.IMAGE_PATH ?? "-"}`}</TableCell> */}
                                                                     <TableCell style={{ width: "20%" }} align="left">{
                                                                         item?.data?.FILE_STATUS ? <Chip icon={<CheckCircleIcon />} label="อัปโหลดแล้ว" color="success" /> : <Chip icon={<CloseIcon />} label="ไม่ได้อัปโหลด" color="error" />
