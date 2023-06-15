@@ -17,6 +17,9 @@ import {
 } from "@mui/material";
 //SERVICE
 import { getLandOfficeByPK, getLandOffice } from "@/service/mas/landOffice";
+import { getProvinceByPK } from "@/service/mas/province";
+import { getAmphurByPK } from "@/service/mas/amphur";
+import { getTambolByPK } from "@/service/mas/tambol";
 //COMPONENTS
 import AutoAmphur from "@/pages/components/Autocompleate/amphur";
 import AutoTambol from "@/pages/components/Autocompleate/tambol";
@@ -29,8 +32,10 @@ export default function DilogTab02Index(props) {
     const [cadastralNo, setCadastralNo] = React.useState("-");
 
     const [orderNo, setOrderNo] = React.useState()
-    const [tanbolData, setTambolData] = React.useState()
-    const [amphurData, setAmphurData] = React.useState()
+    const [parcelSurveyNo, setParcelSurveyNo] = React.useState()
+    const [tambolData, setTambolData] = React.useState(null)
+    const [amphurData, setAmphurData] = React.useState(null)
+    const [provinceData, setProvinceData] = React.useState();
     const [zoneData, setZoneData] = React.useState()
     const [sheetTypeData, setSheetTypeData] = React.useState()
     const [UTMMAP1Data, setUTMMAP1Data] = React.useState()
@@ -62,7 +67,32 @@ export default function DilogTab02Index(props) {
 
     React.useEffect(() => {
         getMasterData(props.masterData)
+
     }, [])
+
+
+    React.useEffect(() => {
+        setOrderNo()
+        setZoneData(props?.cadastralLandData[0]?.ZONE_LAND)
+        setSheetTypeData()
+        setUTMMAP1Data(props?.cadastralLandData[0]?.CADASTRAL_LAND_UTMMAP1)
+        setUTMMAP2Data(props?.cadastralLandData[0]?.CADASTRAL_LAND_UTMMAP2)
+        setUTMMAP3Data(props?.cadastralLandData[0]?.CADASTRAL_LAND_UTMMAP3)
+        setUTMMAP4Data(props?.cadastralLandData[0]?.CADASTRAL_LAND_UTMMAP4)
+        setOriginmap1Data(props?.cadastralLandData[0]?.CADASTRAL_LAND_ORIGINMAP1)
+        setOriginmap2Data(props?.cadastralLandData[0]?.CADASTRAL_LAND_ORIGINMAP2)
+        setOriginmap3Data(props?.cadastralLandData[0]?.CADASTRAL_LAND_ORIGINMAP3)
+        setAirphotomapName(props?.cadastralLandData[0]?.AIRPHOTOMAP_NAME)
+        setAirphotomap1Data(props?.cadastralLandData[0]?.AIRPHOTOMAP1)
+        setAirphotomap2Data(props?.cadastralLandData[0]?.AIRPHOTOMAP2)
+        setAirphotomap3Data(props?.cadastralLandData[0]?.AIRPHOTOMAP3)
+        setUTMSCALENO(props?.cadastralLandData[0]?.CADASTRAL_LAND_UTMSCALE)
+        setRaiData(props?.cadastralLandData[0]?.CADASTRAL_LAND_RAI_NUM)
+        setNganData(props?.cadastralLandData[0]?.CADASTRAL_LAND_NGAN_NUM)
+        setWaData(props?.cadastralLandData[0]?.CADASTRAL_LAND_WA_NUM)
+        setSubWaData(props?.cadastralLandData[0]?.CADASTRAL_LAND_SUBWA_NUM)
+        setNoteData(props?.cadastralLandData[0]?.CADASTRAL_NOTE)
+    }, [props?.cadastralLandData])
 
     const getMasterData = async (data) => {
         // data = data.rows
@@ -72,6 +102,32 @@ export default function DilogTab02Index(props) {
             if (data[i] != undefined) {
                 let getLandOfficeData = await getLandOffice();
                 let landOfficeFiltered = getLandOfficeData.rows.filter(item => item.LANDOFFICE_SEQ == data[i]?.LANDOFFICE_SEQ);
+                if (data[i].CADASTRAL_PROVINCE_SEQ == null) {
+                    let getProvinceData = await getProvinceByPK(landOfficeFiltered[0]?.PROVINCE_SEQ);
+                    console.log(getProvinceData, "getProvinceData");
+                    setProvinceData(getProvinceData.rows[0])
+                } else {
+                    let getProvinceData = await getProvinceByPK(data[i].CADASTRAL_PROVINCE_SEQ);
+                    console.log(getProvinceData, "getProvinceData");
+                    setProvinceData(getProvinceData.rows[0])
+                }
+                if (data[i].CADASTRAL_AMPHUR_SEQ == null) {
+                    let getAmphurData = await getAmphurByPK(landOfficeFiltered[0]?.AMPHUR_SEQ);
+                    console.log(getAmphurData, "getAmphurData");
+                    setAmphurData(getAmphurData.rows[0])
+                } else {
+                    let getAmphurData = await getAmphurByPK(data[i].CADASTRAL_AMPHUR_SEQ);
+                    console.log(getAmphurData, "getAmphurData");
+                    setAmphurData(getAmphurData.rows[0])
+                }
+                if (data[i].CADASTRAL_TAMBOL_SEQ == null) {
+                    setTambolData(null)
+                }
+                else {
+                    let getTambolData = await getTambolByPK(data[i].CADASTRAL_TAMBOL_SEQ);
+                    console.log(getTambolData, "getTambolData");
+                    setTambolData(getTambolData.rows[0])
+                }
                 setSheetcode(data[i].SHEETCODE);
                 setBoxNo(data[i].BOX_NO.toString().padStart(2, "0"));
                 setNumofsurveyQty(data[i]?.NUMOFSURVEY_QTY ?? "-");
@@ -103,9 +159,18 @@ export default function DilogTab02Index(props) {
             "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
             "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
             "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
-            
+
         }
     }
+
+    const _changeAmphur = (event, value) => {
+        setTambolData(null);
+        setAmphurData(value);
+    };
+
+    const _changeTambol = (event, value) => {
+        setTambolData(value);
+    };
     return (
         <Grid>
             <Dialog
@@ -412,20 +477,22 @@ export default function DilogTab02Index(props) {
                     </Grid>
                     {/* เนื้อที่ */}
                     <Grid container justifyItems={'center'} alignItems={'center'}>
-                        <Grid item xs={12} md={2} py={2} px={1}>
-                            <Typography fontSize={16}>เนื้อที่ (ไร่) :</Typography>
+                        <Grid item xs={12} md={2} py={2}>
+                            <Typography fontSize={16}>ลำดับที่มาตราส่วน :</Typography>
                         </Grid>
                         <Grid item xs={12} md={2} py={2}>
                             <TextField
                                 maxWidth={"sm"}
                                 maxLength={500}
-                                placeholder="เนื้อที่ (ไร่)"
+                                placeholder="ลำดับที่มาตราส่วน"
                                 value={UTMScaleNo}
                                 onChange={(e) => {
                                     setUTMSCALENO(e.target.value);
                                 }}
                                 style={{ width: "100%" }}
-                                size="small" />
+                                size="small"
+                                type="number"
+                            />
                         </Grid>
                         <Grid item xs={12} md={2} py={2} px={1}>
                             <Typography fontSize={16}>เนื้อที่ (ไร่) :</Typography>
@@ -440,7 +507,9 @@ export default function DilogTab02Index(props) {
                                     setRaiData(e.target.value);
                                 }}
                                 style={{ width: "100%" }}
-                                size="small" />
+                                size="small"
+                                type="number"
+                            />
                         </Grid>
                         <Grid item xs={12} md={2} py={2} px={1}>
                             <Typography fontSize={16}>เนื้อที่ (งาน) :</Typography>
@@ -455,7 +524,9 @@ export default function DilogTab02Index(props) {
                                     setNganData(e.target.value);
                                 }}
                                 style={{ width: "100%" }}
-                                size="small" />
+                                size="small"
+                                type="number"
+                            />
                         </Grid>
                         <Grid item xs={12} md={2} py={2} px={1}>
                             <Typography fontSize={16}>เนื้อที่ (วา) :</Typography>
@@ -470,7 +541,9 @@ export default function DilogTab02Index(props) {
                                     setWaData(e.target.value);
                                 }}
                                 style={{ width: "100%" }}
-                                size="small" />
+                                size="small"
+                                type="number"
+                            />
                         </Grid>
                         <Grid item xs={12} md={2} py={2} px={1}>
                             <Typography fontSize={16}>เนื้อที่ (เศษวา) :</Typography>
@@ -485,7 +558,9 @@ export default function DilogTab02Index(props) {
                                     setSubWaData(e.target.value);
                                 }}
                                 style={{ width: "100%" }}
-                                size="small" />
+                                size="small"
+                                type="number"
+                            />
                         </Grid>
                     </Grid>
                     {/* จังหวัด */}
@@ -494,32 +569,20 @@ export default function DilogTab02Index(props) {
                             <Typography fontSize={16}>อำเภอ :</Typography>
                         </Grid>
                         <Grid item xs={12} md={2} py={2}>
-                            <TextField
-                                maxWidth={"sm"}
-                                maxLength={500}
-                                placeholder="อำเภอ"
+                            <AutoAmphur
+                                province={provinceData?.PROVINCE_SEQ}
+                                onChange={_changeAmphur}
                                 value={amphurData}
-                                onChange={(e) => {
-                                    setAmphurData(e.target.value);
-                                }}
-                                style={{ width: "100%" }}
-                                size="small"
                             />
                         </Grid>
                         <Grid item xs={12} md={2} py={2} px={1}>
                             <Typography fontSize={16}>ตำบล :</Typography>
                         </Grid>
                         <Grid item xs={12} md={2} py={2}>
-                            <TextField
-                                maxWidth={"sm"}
-                                maxLength={500}
-                                placeholder="ตำบล"
-                                value={tanbolData}
-                                onChange={(e) => {
-                                    setTambolData(e.target.value);
-                                }}
-                                style={{ width: "100%" }}
-                                size="small" />
+                            <AutoTambol
+                                amphur={amphurData?.AMPHUR_SEQ}
+                                onChange={_changeTambol}
+                                value={tambolData} />
                         </Grid>
                         <Grid item xs={12} md={2} py={2} px={1}>
                             <Typography fontSize={16}>หน้าสำรวจ :</Typography>
@@ -529,9 +592,9 @@ export default function DilogTab02Index(props) {
                                 maxWidth={"sm"}
                                 maxLength={500}
                                 placeholder="หน้าสำรวจ"
-                                value={tanbolData}
+                                value={parcelSurveyNo}
                                 onChange={(e) => {
-                                    setTambolData(e.target.value);
+                                    setParcelSurveyNo(e.target.value);
                                 }}
                                 style={{ width: "100%" }}
                                 size="small" />

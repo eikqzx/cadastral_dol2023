@@ -16,6 +16,15 @@ import {
 } from "@mui/material";
 //SERVICE
 import { getLandOfficeByPK, getLandOffice } from "@/service/mas/landOffice";
+import { getTitleByPK } from "@/service/mas/title";
+import { getProvinceByPK } from "@/service/mas/province";
+import { getAmphurByPK } from "@/service/mas/amphur";
+import { getTambolByPK } from "@/service/mas/tambol";
+
+//COMPONENTS
+import AutoTitle from "@/pages/components/Autocompleate/title";
+import AutoAmphur from "@/pages/components/Autocompleate/amphur";
+import AutoTambol from "@/pages/components/Autocompleate/tambol";
 export default function DilogTab01Index(props) {
     console.log(props, "propsDilogTab01Index");
     const [office, setOffice] = React.useState("-");
@@ -29,9 +38,9 @@ export default function DilogTab01Index(props) {
     const [typeofSurveyAdd1Data, setTypeofSurveyAdd1Data] = React.useState()
     const [typeofSurveyAdd2Data, setTypeofSurveyAdd2Data] = React.useState()
     const [typeofSurveyAdd3Data, setTypeofSurveyAdd3Data] = React.useState()
-    const [tanbolData, setTambolData] = React.useState()
-    const [amphurData, setAmphurData] = React.useState()
-    const [provinceData, setProvinceData] = React.useState()
+    const [tambolData, setTambolData] = React.useState(null)
+    const [amphurData, setAmphurData] = React.useState(null)
+    const [provinceData, setProvinceData] = React.useState(null)
     const [zoneData, setZoneData] = React.useState()
     const [sheetTypeData, setSheetTypeData] = React.useState()
     const [UTMMAP1Data, setUTMMAP1Data] = React.useState()
@@ -50,7 +59,7 @@ export default function DilogTab01Index(props) {
     const [benchmarkData, setBenchmarkData] = React.useState()
     const [benchmark2Data, setBenchmark2Data] = React.useState()
     const [surveyDate, setSurveyDate] = React.useState()
-    const [titleData, setTitleData] = React.useState()
+    const [titleData, setTitleData] = React.useState(null)
     const [fname, setFname] = React.useState()
     const [lname, setLname] = React.useState()
     const [surveyorPosition, setSurveyorPosition] = React.useState()
@@ -62,22 +71,104 @@ export default function DilogTab01Index(props) {
     const [ownerData, setOwnerData] = React.useState()
     const [noteData, setNoteData] = React.useState()
 
-    console.log(checked, "checked");
+    console.log(provinceData, "provinceData");
     React.useEffect(() => {
-        getMasterData(props.cadastralData)
-    }, [])
+        if (props?.cadastralData) {
+            getMasterData(props?.cadastralData)
+            _checked(props?.cadastralData?.PRIVATESURVEY_FLAG)
+            setTypeofSurveyData()
+            setTypeofSurveyAdd1Data()
+            setTypeofSurveyAdd2Data()
+            setTypeofSurveyAdd3Data()
+            setZoneData(props?.cadastralData?.ZONE_LAND)
+            setSheetTypeData()
+            setUTMMAP1Data(props?.cadastralData?.CADASTRAL_UTMMAP1)
+            setUTMMAP2Data(props?.cadastralData?.CADASTRAL_UTMMAP2)
+            setUTMMAP3Data(props?.cadastralData?.CADASTRAL_UTMMAP3)
+            setUTMMAP4Data(props?.cadastralData?.CADASTRAL_UTMMAP4)
+            setOriginmap1Data(props?.cadastralData?.CADASTRAL_ORIGINMAP1)
+            setOriginmap2Data(props?.cadastralData?.CADASTRAL_ORIGINMAP2)
+            setOriginmap3Data(props?.cadastralData?.CADASTRAL_ORIGINMAP3)
+            setAirphotomapName(props?.cadastralData?.AIRPHOTOMAP_NAME)
+            setAirphotomap1Data(props?.cadastralData?.AIRPHOTOMAP1)
+            setAirphotomap2Data(props?.cadastralData?.AIRPHOTOMAP2)
+            setAirphotomap3Data(props?.cadastralData?.AIRPHOTOMAP3)
+            setScalemapData()
+            setScaleRawangData()
+            setBenchmarkData()
+            setBenchmark2Data()
+            setSurveyDate(props?.cadastralData?.SURVEY_DTM)
+            _getTitle(props?.cadastralData?.TITLE_SEQ ? props?.cadastralData?.TITLE_SEQ : " ")
+            setFname(props?.cadastralData?.SURVEYOR_FNAME)
+            setLname(props?.cadastralData?.SURVEYOR_LNAME)
+            setSurveyorPosition(props?.cadastralData?.SURVEYOR_POSITION)
+            setSurveyorLevelData(props?.cadastralData?.SURVEYOR_LEVEL)
+            setOldRaiData(props?.cadastralData?.OLD_RAI_NUM)
+            setOldNganData(props?.cadastralData?.OLD_NGAN_NUM)
+            setOldWaData(props?.cadastralData?.OLD_WA_NUM)
+            setOldSubWaData(props?.cadastralData?.OLD_SUBWA_NUM)
+            setOwnerData(props?.cadastralData?.CADASTRAL_OWNER_QTY)
+            setNoteData(props?.cadastralData?.CADASTRAL_NOTE)
+        }
+    }, [props?.cadastralData])
 
     const handleCheckboxChange = (event) => {
         setChecked(event.target.checked);
     };
+    const _getTitle = async (seq) => {
+        // console.log(seq,"_getTitleseq");
+        let getTitle = await getTitleByPK(seq);
+        getTitle = getTitle.rows
+        // console.log(getTitle, "getTitle");
+        setTitleData(getTitle)
+    }
+
+    const _checked = async (data) => {
+        if (data?.PRIVATESURVEY_FLAG == "-" || data?.PRIVATESURVEY_FLAG == undefined) {
+            return
+        } else if (data?.PRIVATESURVEY_FLAG == 1) {
+            setChecked(true)
+        }
+        else if (data?.PRIVATESURVEY_FLAG == 0) {
+            setChecked(false)
+        }
+
+    }
+
     const getMasterData = async (data) => {
         // data = data.rows
         console.log(data, "getMasterData");
         // _createNewData(data.CADASTRAL_SEQ)
         for (let i in data) {
-            if (data[i] != undefined) {
+            if (data[i] != undefined && data[i] != null) {
                 let getLandOfficeData = await getLandOffice();
                 let landOfficeFiltered = getLandOfficeData.rows.filter(item => item.LANDOFFICE_SEQ == data[i]?.LANDOFFICE_SEQ);
+                if (data[i].CADASTRAL_PROVINCE_SEQ == null) {
+                    let getProvinceData = await getProvinceByPK(landOfficeFiltered[0]?.PROVINCE_SEQ);
+                    console.log(getProvinceData, "getProvinceData");
+                    setProvinceData(getProvinceData.rows[0])
+                } else {
+                    let getProvinceData = await getProvinceByPK(data[i].CADASTRAL_PROVINCE_SEQ);
+                    console.log(getProvinceData, "getProvinceData");
+                    setProvinceData(getProvinceData.rows[0])
+                }
+                if (data[i].CADASTRAL_AMPHUR_SEQ == null) {
+                    let getAmphurData = await getAmphurByPK(landOfficeFiltered[0]?.AMPHUR_SEQ);
+                    console.log(getAmphurData, "getAmphurData");
+                    setAmphurData(getAmphurData.rows[0])
+                } else {
+                    let getAmphurData = await getAmphurByPK(data[i].CADASTRAL_AMPHUR_SEQ);
+                    console.log(getAmphurData, "getAmphurData");
+                    setAmphurData(getAmphurData.rows[0])
+                }
+                if (data[i].CADASTRAL_TAMBOL_SEQ == null) {         
+                    setTambolData(null)
+                }
+                else {
+                    let getTambolData = await getTambolByPK(data[i].CADASTRAL_TAMBOL_SEQ);
+                    console.log(getTambolData, "getTambolData");
+                    setTambolData(getTambolData.rows[0])
+                }
                 setSheetcode(data[i].SHEETCODE);
                 setBoxNo(data[i].BOX_NO.toString().padStart(2, "0"));
                 setNumofsurveyQty(data[i]?.NUMOFSURVEY_QTY ?? "-");
@@ -87,6 +178,18 @@ export default function DilogTab01Index(props) {
             }
         }
     }
+    const _changeOwnerTitle = (event, value) => {
+        console.log(value, "_changeOwnerTitle");
+        setTitleData(value);
+    };
+    const _changeAmphur = (event, value) => {
+        setTambolData(null);
+        setAmphurData(value);
+    };
+
+    const _changeTambol = (event, value) => {
+        setTambolData(value);
+    };
 
     const _onSubmit = async () => {
         let obj = {
@@ -268,7 +371,7 @@ export default function DilogTab01Index(props) {
                                 maxWidth={"sm"}
                                 maxLength={500}
                                 placeholder="จังหวัด"
-                                value={provinceData}
+                                value={provinceData?.PROVINCE_NAME_TH}
                                 onChange={(e) => {
                                     setProvinceData(e.target.value);
                                 }}
@@ -280,32 +383,20 @@ export default function DilogTab01Index(props) {
                             <Typography fontSize={16}>อำเภอ :</Typography>
                         </Grid>
                         <Grid item xs={12} md={2} py={2}>
-                            <TextField
-                                maxWidth={"sm"}
-                                maxLength={500}
-                                placeholder="อำเภอ"
+                            <AutoAmphur
+                                province={provinceData?.PROVINCE_SEQ}
+                                onChange={_changeAmphur}
                                 value={amphurData}
-                                onChange={(e) => {
-                                    setAmphurData(e.target.value);
-                                }}
-                                style={{ width: "100%" }}
-                                size="small"
                             />
                         </Grid>
                         <Grid item xs={12} md={2} py={2} px={1}>
                             <Typography fontSize={16}>ตำบล :</Typography>
                         </Grid>
                         <Grid item xs={12} md={2} py={2}>
-                            <TextField
-                                maxWidth={"sm"}
-                                maxLength={500}
-                                placeholder="ตำบล"
-                                value={tanbolData}
-                                onChange={(e) => {
-                                    setTambolData(e.target.value);
-                                }}
-                                style={{ width: "100%" }}
-                                size="small" />
+                            <AutoTambol
+                                amphur={amphurData?.AMPHUR_SEQ}
+                                onChange={_changeTambol}
+                                value={tambolData} />
                         </Grid>
                     </Grid>
                     {/* โซน */}
@@ -639,16 +730,10 @@ size="small" />
                             <Typography fontSize={16}>คำนำหน้าชื่อช่างรังวัด :</Typography>
                         </Grid>
                         <Grid item xs={12} md={2} py={2}>
-                            <TextField
-                                maxWidth={"sm"}
-                                maxLength={500}
-                                placeholder="คำนำหน้าชื่อช่างรังวัด"
+                            <AutoTitle
+                                onChange={_changeOwnerTitle}
                                 value={titleData}
-                                onChange={(e) => {
-                                    setTitleData(e.target.value);
-                                }}
-                                style={{ width: "100%" }}
-                                size="small" />
+                            />
                         </Grid>
                         <Grid item xs={12} md={2} py={2} px={1}>
                             <Typography fontSize={16}>ชื่อช่างรังวัด :</Typography>
