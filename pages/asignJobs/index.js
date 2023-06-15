@@ -95,6 +95,7 @@ export default function IndexAccountControl(props) {
         setSearchParameter(obj)
         let data = null;
         data = await cadastralImage102ByConditionCadastralNoTo(obj);
+        console.log(data,"onSearchNew");
         data = data.rows
         console.log(data,"onSearchNew");
         setSearchData(data)

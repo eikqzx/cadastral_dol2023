@@ -41,6 +41,7 @@ import AddDocDialog from '../components/addDocDialog';
 import { surveyDocTypeBySurveyDocTypeGroup } from '@/service/mas/surveyDocTypeGroup';
 import { filterRecordStatus } from '@/lib/datacontrol';
 import EditCad from '../components/editCadastral';
+import { cadastralImage102ByConditionCadastralNoTo } from "@/service/sva";
 
 export default function Tab1(props) {
   console.log(props, "Tab1Tab1");
@@ -65,6 +66,7 @@ export default function Tab1(props) {
   const [count, setCount] = React.useState(0);
   const [checkCanEdit, setCheckCanEdit] = React.useState(false);
   const [haveCadImg, setHaveCadImg] = React.useState(false);
+  const [resetData,setResetData] = React.useState(null);
   const handleOpen = (type, name) => {
     setAddRegType(!addRegType)
     setTypeRegisterSts(type);
@@ -73,20 +75,21 @@ export default function Tab1(props) {
   const onAddJob = (obj) => {
     console.log(obj, "onAddJob");
   }
-  React.useEffect(() => {
-    if (Array.isArray(props?.searchData)) {
-      if (props?.searchData.length != 0) {
-        let filterData = props?.searchData?.filter(item => item.CADASTRAL_SEQ == props?.tabData?.CADASTRAL_SEQ);
-        console.log(filterData, "filterData");
-        if (filterData.length != 0) {
-          getMasterData(filterData[0]);
-        }
-      }
-    }
-  }, [props?.searchData]);
+  // React.useEffect(() => {
+  //   if (Array.isArray(props?.searchData)) {
+  //     if (props?.searchData.length != 0) {
+  //       let filterData = props?.searchData?.filter(item => item.CADASTRAL_SEQ == props?.tabData?.CADASTRAL_SEQ);
+  //       console.log(filterData, "filterData");
+  //       if (filterData.length != 0) {
+  //         getMasterData(filterData[0]);
+  //       }
+  //     }
+  //   }
+  // }, [props?.searchData]);
 
   React.useEffect(() => {
     createSurveyData()
+    getMasterData(props?.tabData);
   }, []);
 
   React.useEffect(() => {
@@ -122,16 +125,26 @@ export default function Tab1(props) {
       let res = await insertCadastral(objInsert);
       console.log(res);
       if (res) {
+        await refreshData();
         await props?.onSearch(props?.searchParameter);
         await setMessage("เพิ่มทะเบียนสำเร็จ");
         await setOpen(true);
         await setType("success");
+        await createSurveyData();
       }
     } catch (error) {
       await setMessage("เกิดข้อผิดพลาด");
       await setOpen(true);
       await setType("error");
     }
+  }
+
+  const refreshData = async () =>{
+    let resData = await cadastralImage102ByConditionCadastralNoTo(props?.searchParameter);
+    let filteredData = resData.rows.filter(item => item.CADASTRAL_NO == props?.tabData?.CADASTRAL_NO);
+    console.log(filteredData,"refreshData");
+    setResetData(filteredData[0]);
+    getMasterData(filteredData[0]);
   }
 
   const editCad = async (inputData) => {
@@ -269,8 +282,12 @@ export default function Tab1(props) {
 
   const createSurveyData = async () => {
     // let res = await getCadastralImage();
+    console.log(props?.tabData,"resetData tab");
+    console.log(resetData,"resetData");
+    let cadastralSeq = props?.tabData?.CADASTRAL_NO == resetData?.CADASTRAL_NO ? resetData?.CADASTRAL_SEQ : props?.tabData?.CADASTRAL_SEQ
+    console.log(cadastralSeq,"resetData");
     let objSearchGroup = {
-      "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
+      "CADASTRAL_SEQ": cadastralSeq,
       "PROCESS_SEQ_": 102
     }
     let resGroup = await cadastralImageGroupByCadastralSeq(objSearchGroup);
@@ -355,14 +372,14 @@ export default function Tab1(props) {
         let item = datagroupA[i];
         if (item.COUNT_DOC != undefined && item.COUNT_DOC != 0) {
           let searchObj1 = {
-            "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
+            "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ ?? resetData?.CADASTRAL_SEQ,
             "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ,
             "PROCESS_SEQ_": props?.processSeq ?? 102
           }
           let resCadastralImagePNoByCadastralSeq = await cadastralImagePNoByCadastralSeq(searchObj1);
           let resCadastralImageDocumentPNoByCadastralSeq = await cadastralImageDocumentPNoByCadastralSeq(searchObj1);
           let objInsert = {
-            "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
+            "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ ?? resetData?.CADASTRAL_SEQ,
             "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ,
             "SURVEYDOCTYPE_PNO_SEQ": item.COUNT_DOC,
             "SURVEYDOCTYPE_PNO": resCadastralImageDocumentPNoByCadastralSeq.rows[0].SURVEYDOCTYPE_PNO,
@@ -380,14 +397,14 @@ export default function Tab1(props) {
         let item = datagroupB[i];
         if (item.COUNT_DOC != undefined && item.COUNT_DOC != 0) {
           let searchObj1 = {
-            "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
+            "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ ?? resetData?.CADASTRAL_SEQ,
             "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ,
             "PROCESS_SEQ_": props?.processSeq ?? 102
           }
           let resCadastralImagePNoByCadastralSeq = await cadastralImagePNoByCadastralSeq(searchObj1);
           let resCadastralImageDocumentPNoByCadastralSeq = await cadastralImageDocumentPNoByCadastralSeq(searchObj1);
           let objInsert = {
-            "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
+            "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ ?? resetData?.CADASTRAL_SEQ,
             "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ,
             "SURVEYDOCTYPE_PNO_SEQ": item.COUNT_DOC,
             "SURVEYDOCTYPE_PNO": resCadastralImageDocumentPNoByCadastralSeq.rows[0].SURVEYDOCTYPE_PNO,
@@ -405,14 +422,14 @@ export default function Tab1(props) {
         let item = datagroupC[i];
         if (item.COUNT_DOC != undefined && item.COUNT_DOC != 0) {
           let searchObj1 = {
-            "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
+            "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ ?? resetData?.CADASTRAL_SEQ,
             "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ,
             "PROCESS_SEQ_": props?.processSeq ?? 102
           }
           let resCadastralImagePNoByCadastralSeq = await cadastralImagePNoByCadastralSeq(searchObj1);
           let resCadastralImageDocumentPNoByCadastralSeq = await cadastralImageDocumentPNoByCadastralSeq(searchObj1);
           let objInsert = {
-            "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
+            "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ ?? resetData?.CADASTRAL_SEQ,
             "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ,
             "SURVEYDOCTYPE_PNO_SEQ": item.COUNT_DOC,
             "SURVEYDOCTYPE_PNO": resCadastralImageDocumentPNoByCadastralSeq.rows[0].SURVEYDOCTYPE_PNO,
@@ -430,14 +447,14 @@ export default function Tab1(props) {
         let item = datagroupD[i];
         if (item.COUNT_DOC != undefined && item.COUNT_DOC != 0) {
           let searchObj1 = {
-            "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
+            "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ ?? resetData?.CADASTRAL_SEQ,
             "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ,
             "PROCESS_SEQ_": props?.processSeq ?? 102
           }
           let resCadastralImagePNoByCadastralSeq = await cadastralImagePNoByCadastralSeq(searchObj1);
           let resCadastralImageDocumentPNoByCadastralSeq = await cadastralImageDocumentPNoByCadastralSeq(searchObj1);
           let objInsert = {
-            "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
+            "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ ?? resetData?.CADASTRAL_SEQ,
             "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ,
             "SURVEYDOCTYPE_PNO_SEQ": item.COUNT_DOC,
             "SURVEYDOCTYPE_PNO": resCadastralImageDocumentPNoByCadastralSeq.rows[0].SURVEYDOCTYPE_PNO,
@@ -485,14 +502,14 @@ export default function Tab1(props) {
           let item = datagroupA[i];
           if (item.COUNT_DOC != undefined && item.COUNT_DOC != 0) {
             let searchObj1 = {
-              "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
+              "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ ?? resetData?.CADASTRAL_SEQ,
               "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ,
               "PROCESS_SEQ_": props?.processSeq ?? 102
             }
             let resCadastralImagePNoByCadastralSeq = await cadastralImagePNoByCadastralSeq(searchObj1);
             let resCadastralImageDocumentPNoByCadastralSeq = await cadastralImageDocumentPNoByCadastralSeq(searchObj1);
             let objInsert = {
-              "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
+              "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ ?? resetData?.CADASTRAL_SEQ,
               "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ,
               "SURVEYDOCTYPE_PNO_SEQ": item.COUNT_DOC,
               "SURVEYDOCTYPE_PNO": resCadastralImageDocumentPNoByCadastralSeq.rows[0].SURVEYDOCTYPE_PNO,
@@ -527,14 +544,14 @@ export default function Tab1(props) {
           let item = datagroupB[i];
           if (item.COUNT_DOC != undefined && item.COUNT_DOC != 0) {
             let searchObj1 = {
-              "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
+              "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ ?? resetData?.CADASTRAL_SEQ,
               "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ,
               "PROCESS_SEQ_": props?.processSeq ?? 102
             }
             let resCadastralImagePNoByCadastralSeq = await cadastralImagePNoByCadastralSeq(searchObj1);
             let resCadastralImageDocumentPNoByCadastralSeq = await cadastralImageDocumentPNoByCadastralSeq(searchObj1);
             let objInsert = {
-              "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
+              "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ ?? resetData?.CADASTRAL_SEQ,
               "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ,
               "SURVEYDOCTYPE_PNO_SEQ": item.COUNT_DOC,
               "SURVEYDOCTYPE_PNO": resCadastralImageDocumentPNoByCadastralSeq.rows[0].SURVEYDOCTYPE_PNO,
@@ -569,14 +586,14 @@ export default function Tab1(props) {
           let item = datagroupC[i];
           if (item.COUNT_DOC != undefined && item.COUNT_DOC != 0) {
             let searchObj1 = {
-              "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
+              "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ ?? resetData?.CADASTRAL_SEQ,
               "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ,
               "PROCESS_SEQ_": props?.processSeq ?? 102
             }
             let resCadastralImagePNoByCadastralSeq = await cadastralImagePNoByCadastralSeq(searchObj1);
             let resCadastralImageDocumentPNoByCadastralSeq = await cadastralImageDocumentPNoByCadastralSeq(searchObj1);
             let objInsert = {
-              "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
+              "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ ?? resetData?.CADASTRAL_SEQ,
               "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ,
               "SURVEYDOCTYPE_PNO_SEQ": item.COUNT_DOC,
               "SURVEYDOCTYPE_PNO": resCadastralImageDocumentPNoByCadastralSeq.rows[0].SURVEYDOCTYPE_PNO,
@@ -611,14 +628,14 @@ export default function Tab1(props) {
           let item = datagroupD[i];
           if (item.COUNT_DOC != undefined && item.COUNT_DOC != 0) {
             let searchObj1 = {
-              "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
+              "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ ?? resetData?.CADASTRAL_SEQ,
               "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ,
               "PROCESS_SEQ_": props?.processSeq ?? 102
             }
             let resCadastralImagePNoByCadastralSeq = await cadastralImagePNoByCadastralSeq(searchObj1);
             let resCadastralImageDocumentPNoByCadastralSeq = await cadastralImageDocumentPNoByCadastralSeq(searchObj1);
             let objInsert = {
-              "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
+              "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ ?? resetData?.CADASTRAL_SEQ,
               "SURVEYDOCTYPE_SEQ": item.SURVEYDOCTYPE_SEQ,
               "SURVEYDOCTYPE_PNO_SEQ": item.COUNT_DOC,
               "SURVEYDOCTYPE_PNO": resCadastralImageDocumentPNoByCadastralSeq.rows[0].SURVEYDOCTYPE_PNO,
