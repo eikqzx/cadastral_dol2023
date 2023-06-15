@@ -14,11 +14,12 @@ import Search from "../components/search/search";
 import SnackBarDiaLog from "../components/snackbarV2";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useSession } from "next-auth/react";
-import { cadastralImage102ByConditionCadastralNoTo, cadastralImage10XByConditionCadastralNoTo } from "@/service/sva";
+import { ciracoreImage10XByConditionCadastralNoTo } from "@/service/sva_ciracore";
 import { getLandOfficeByPK } from "@/service/mas/landOffice";
 import { isNotEmpty } from "@/lib/datacontrol";
 import { useRouter } from "next/router";
 import { decode } from "next-base64";
+import Tab1 from "./tab/tab1";
 
 export default function IndexScanner() {
     const [searchData, setSearchData] = React.useState([]);
@@ -62,11 +63,11 @@ export default function IndexScanner() {
 
     const onSearchNew = async (obj) => {
         console.log(obj, "obj_onSearch");
-        obj.PROCESS_SEQ_ = processSeq;
+        // obj.PROCESS_SEQ_ = processSeq;
         setPdfData(obj)
         setSearchParameter(obj)
         let data = null;
-        data = await cadastralImage102ByConditionCadastralNoTo(obj);
+        data = await ciracoreImage10XByConditionCadastralNoTo(obj);
         data = data.rows
         console.log(data,"onSearchNew");
         setSearchData(data)
@@ -96,14 +97,14 @@ export default function IndexScanner() {
                     </Accordion>
                 </Grid>
             }
-            <Grid item xs={2} md={1}>
+            <Grid item xs={2} md={2}>
                 <SideTreeView data={searchData} setTapData={setTapData} 
                 //process={processSeq} 
                 />
             </Grid>
-            <Grid item xs={10} md={11}>
+            <Grid item xs={10} md={10}>
                 <Paper sx={{ height: "100vh", flexGrow: 1, overflowY: 'auto' }}>
-
+                    <Tab1 />
                 </Paper>
             </Grid>
         </Grid>
