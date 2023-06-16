@@ -20,11 +20,16 @@ import { getTitleByPK } from "@/service/mas/title";
 import { getProvinceByPK } from "@/service/mas/province";
 import { getAmphurByPK } from "@/service/mas/amphur";
 import { getTambolByPK } from "@/service/mas/tambol";
-
+import { getTypeOfSurveyByPK } from "@/service/mas/typeOfSurvey";
+import { getBenchMarkByPK } from "@/service/mas/benchMark";
+import { getSheetTypeByPK } from "@/service/mas/sheetType";
 //COMPONENTS
 import AutoTitle from "@/pages/components/Autocompleate/title";
 import AutoAmphur from "@/pages/components/Autocompleate/amphur";
 import AutoTambol from "@/pages/components/Autocompleate/tambol";
+import AutoBenchMark from "@/pages/components/Autocompleate/benchMark";
+import AutoTypeOfSurvey from "@/pages/components/Autocompleate/typeOfSurvey";
+import AutoSheetType from "@/pages/components/Autocompleate/sheetType";
 export default function DilogTab01Index(props) {
     console.log(props, "propsDilogTab01Index");
     const [office, setOffice] = React.useState("-");
@@ -34,52 +39,50 @@ export default function DilogTab01Index(props) {
     const [cadastralNo, setCadastralNo] = React.useState("-");
 
     const [checked, setChecked] = React.useState(false);
-    const [typeofSurveyData, setTypeofSurveyData] = React.useState()
-    const [typeofSurveyAdd1Data, setTypeofSurveyAdd1Data] = React.useState()
-    const [typeofSurveyAdd2Data, setTypeofSurveyAdd2Data] = React.useState()
-    const [typeofSurveyAdd3Data, setTypeofSurveyAdd3Data] = React.useState()
+    const [typeofSurveyData, setTypeofSurveyData] = React.useState(null)
+    const [typeofSurveyAdd1Data, setTypeofSurveyAdd1Data] = React.useState(null)
+    const [typeofSurveyAdd2Data, setTypeofSurveyAdd2Data] = React.useState(null)
+    const [typeofSurveyAdd3Data, setTypeofSurveyAdd3Data] = React.useState(null)
     const [tambolData, setTambolData] = React.useState(null)
     const [amphurData, setAmphurData] = React.useState(null)
     const [provinceData, setProvinceData] = React.useState(null)
-    const [zoneData, setZoneData] = React.useState()
-    const [sheetTypeData, setSheetTypeData] = React.useState()
-    const [UTMMAP1Data, setUTMMAP1Data] = React.useState()
-    const [UTMMAP2Data, setUTMMAP2Data] = React.useState()
-    const [UTMMAP3Data, setUTMMAP3Data] = React.useState()
-    const [UTMMAP4Data, setUTMMAP4Data] = React.useState()
-    const [originmap1Data, setOriginmap1Data] = React.useState()
-    const [originmap2Data, setOriginmap2Data] = React.useState()
-    const [originmap3Data, setOriginmap3Data] = React.useState()
-    const [airphotomapName, setAirphotomapName] = React.useState()
-    const [airphotomap1Data, setAirphotomap1Data] = React.useState()
-    const [airphotomap2Data, setAirphotomap2Data] = React.useState()
-    const [airphotomap3Data, setAirphotomap3Data] = React.useState()
-    const [scalemapData, setScalemapData] = React.useState()
-    const [scaleRawangData, setScaleRawangData] = React.useState()
-    const [benchmarkData, setBenchmarkData] = React.useState()
-    const [benchmark2Data, setBenchmark2Data] = React.useState()
-    const [surveyDate, setSurveyDate] = React.useState()
+    const [zoneData, setZoneData] = React.useState("")
+    const [sheetTypeData, setSheetTypeData] = React.useState(null)
+    const [UTMMAP1Data, setUTMMAP1Data] = React.useState("")
+    const [UTMMAP2Data, setUTMMAP2Data] = React.useState("")
+    const [UTMMAP3Data, setUTMMAP3Data] = React.useState("")
+    const [UTMMAP4Data, setUTMMAP4Data] = React.useState("")
+    const [originmap1Data, setOriginmap1Data] = React.useState("")
+    const [originmap2Data, setOriginmap2Data] = React.useState("")
+    const [originmap3Data, setOriginmap3Data] = React.useState("")
+    const [airphotomapName, setAirphotomapName] = React.useState("")
+    const [airphotomap1Data, setAirphotomap1Data] = React.useState("")
+    const [airphotomap2Data, setAirphotomap2Data] = React.useState("")
+    const [airphotomap3Data, setAirphotomap3Data] = React.useState("")
+    const [scalemapData, setScalemapData] = React.useState("")
+    const [scaleRawangData, setScaleRawangData] = React.useState("")
+    const [benchmarkData, setBenchmarkData] = React.useState(null)
+    const [benchmarkQTY, setBenchmarkQTY] = React.useState("")
+    const [benchmark2Data, setBenchmark2Data] = React.useState(null)
+    const [benchmark2QTY, setBenchmark2QTY] = React.useState("")
+    const [surveyDate, setSurveyDate] = React.useState("")
     const [titleData, setTitleData] = React.useState(null)
-    const [fname, setFname] = React.useState()
-    const [lname, setLname] = React.useState()
-    const [surveyorPosition, setSurveyorPosition] = React.useState()
-    const [surveyorLevelData, setSurveyorLevelData] = React.useState()
-    const [oldRaiData, setOldRaiData] = React.useState()
-    const [oldNganData, setOldNganData] = React.useState()
-    const [oldWaData, setOldWaData] = React.useState()
-    const [oldSubWaData, setOldSubWaData] = React.useState()
-    const [ownerData, setOwnerData] = React.useState()
-    const [noteData, setNoteData] = React.useState()
+    const [fname, setFname] = React.useState("")
+    const [lname, setLname] = React.useState("")
+    const [surveyorPosition, setSurveyorPosition] = React.useState("")
+    const [surveyorLevelData, setSurveyorLevelData] = React.useState("")
+    const [oldRaiData, setOldRaiData] = React.useState("")
+    const [oldNganData, setOldNganData] = React.useState("")
+    const [oldWaData, setOldWaData] = React.useState("")
+    const [oldSubWaData, setOldSubWaData] = React.useState("")
+    const [ownerData, setOwnerData] = React.useState("")
+    const [noteData, setNoteData] = React.useState("")
 
     console.log(provinceData, "provinceData");
     React.useEffect(() => {
         if (props?.cadastralData) {
             getMasterData(props?.cadastralData)
             _checked(props?.cadastralData?.PRIVATESURVEY_FLAG)
-            setTypeofSurveyData()
-            setTypeofSurveyAdd1Data()
-            setTypeofSurveyAdd2Data()
-            setTypeofSurveyAdd3Data()
             setZoneData(props?.cadastralData?.ZONE_LAND)
             setSheetTypeData()
             setUTMMAP1Data(props?.cadastralData?.CADASTRAL_UTMMAP1)
@@ -95,10 +98,9 @@ export default function DilogTab01Index(props) {
             setAirphotomap3Data(props?.cadastralData?.AIRPHOTOMAP3)
             setScalemapData()
             setScaleRawangData()
-            setBenchmarkData()
-            setBenchmark2Data()
+
             setSurveyDate(props?.cadastralData?.SURVEY_DTM)
-            _getTitle(props?.cadastralData?.TITLE_SEQ ? props?.cadastralData?.TITLE_SEQ : " ")
+            _getTitle(props?.cadastralData?.TITLE_SEQ ?? props?.cadastralData?.TITLE_SEQ)
             setFname(props?.cadastralData?.SURVEYOR_FNAME)
             setLname(props?.cadastralData?.SURVEYOR_LNAME)
             setSurveyorPosition(props?.cadastralData?.SURVEYOR_POSITION)
@@ -161,13 +163,72 @@ export default function DilogTab01Index(props) {
                     console.log(getAmphurData, "getAmphurData");
                     setAmphurData(getAmphurData.rows[0])
                 }
-                if (data[i].CADASTRAL_TAMBOL_SEQ == null) {         
+                if (data[i].CADASTRAL_TAMBOL_SEQ == null) {
                     setTambolData(null)
                 }
                 else {
                     let getTambolData = await getTambolByPK(data[i].CADASTRAL_TAMBOL_SEQ);
                     console.log(getTambolData, "getTambolData");
                     setTambolData(getTambolData.rows[0])
+                }
+                //TYPEOFSURVEY
+                if (data[i].TYPEOFSURVEY_SEQ == null) {
+                    setTypeofSurveyData(null)
+                }
+                else {
+                    let getTypeOfSurvey = await getTypeOfSurveyByPK(data[i].TYPEOFSURVEY_SEQ);
+                    console.log(getTypeOfSurvey, "getTypeOfSurvey");
+                    setTypeofSurveyData(getTypeOfSurvey.rows[0])
+                }
+                if (data[i].TYPEOFSURVEY_ADD1_SEQ == null) {
+                    setTypeofSurveyAdd1Data(null)
+                }
+                else {
+                    let getTypeOfSurveyAdd1 = await getTypeOfSurveyByPK(data[i].TYPEOFSURVEY_ADD1_SEQ);
+                    console.log(getTypeOfSurveyAdd1, "getTypeOfSurveyAdd1");
+                    setTypeofSurveyAdd1Data(getTypeOfSurveyAdd1.rows[0])
+                }
+                if (data[i].TYPEOFSURVEY_ADD2_SEQ == null) {
+                    setTypeofSurveyAdd2Data(null)
+                }
+                else {
+                    let getTypeOfSurveyAdd2 = await getTypeOfSurveyByPK(data[i].TYPEOFSURVEY_ADD2_SEQ);
+                    console.log(getTypeOfSurveyAdd2, "getTypeOfSurveyAdd2");
+                    setTypeofSurveyAdd2Data(getTypeOfSurveyAdd2.rows[0])
+                }
+                if (data[i].TYPEOFSURVEY_ADD3_SEQ == null) {
+                    setTypeofSurveyAdd3Data(null)
+                }
+                else {
+                    let getTypeOfSurveyAdd3 = await getTypeOfSurveyByPK(data[i].TYPEOFSURVEY_ADD3_SEQ);
+                    console.log(getTypeOfSurveyAdd3, "getTypeOfSurveyAdd3");
+                    setTypeofSurveyAdd3Data(getTypeOfSurveyAdd3.rows[0])
+                }
+                //SHEETTYPE
+                if (data[i].SHEETTYPE_SEQ == null) {
+                    setSheetTypeData(null)
+                }
+                else {
+                    let sheetType = await getSheetTypeByPK(data[i].SHEETTYPE_SEQ);
+                    console.log(sheetType, "sheetType");
+                    setSheetTypeData(sheetType.rows[0])
+                }
+                //BENCHMARK
+                if (data[i].BENCHMARK_SEQ == null) {
+                    setBenchmarkData(null)
+                }
+                else {
+                    let benchMark = await getBenchMarkByPK(data[i].BENCHMARK_SEQ);
+                    console.log(benchMark, "benchMark");
+                    setBenchmarkData(benchMark.rows[0])
+                }
+                if (data[i].BENCHMARK2_SEQ == null) {
+                    setBenchmark2Data(null)
+                }
+                else {
+                    let benchMark2 = await getBenchMarkByPK(data[i].BENCHMARK2_SEQ);
+                    console.log(benchMark2, "benchMark2");
+                    setBenchmark2Data(benchMark2.rows[0])
                 }
                 setSheetcode(data[i].SHEETCODE);
                 setBoxNo(data[i].BOX_NO.toString().padStart(2, "0"));
@@ -191,29 +252,79 @@ export default function DilogTab01Index(props) {
         setTambolData(value);
     };
 
-    const _onSubmit = async () => {
-        let obj = {
-            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
-            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
-            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
-            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
-            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
-            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
-            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
-            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
-            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
-            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
-            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
-            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
-            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
-            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
-            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
-            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
-            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
-            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
-            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
 
+    const _changeTypeofSurvey = (event, value) => {
+        setTypeofSurveyData(value);
+    };
+    const _changeTypeofSurveyAdd1 = (event, value) => {
+        setTypeofSurveyAdd1Data(value);
+    };
+    const _changeTypeofSurveyAdd2 = (event, value) => {
+        setTypeofSurveyAdd2Data(value);
+    };
+    const _changeTypeofSurveyAdd3 = (event, value) => {
+        setTypeofSurveyAdd3Data(value);
+    };
+    const _changeSheetType = (event, value) => {
+        setSheetTypeData(value);
+    };
+
+    const _changeBenchmark1 = (event, value) => {
+        console.log(value, "_changeBenchmark1");
+        setBenchmarkData(value);
+    };
+
+    const _changeBenchmark2 = (event, value) => {
+        console.log(value, "_changeBenchmark2");
+        setBenchmark2Data(value);
+    };
+
+    const _onSubmit = async () => {
+        // if (checked == true) {
+        //     checked = 1
+        // } else {
+        //     checked = 0
+        // }
+        let obj = {
+            "PRIVATESURVEY_FLAG": checked == true ? 1 : 0,
+            "TYPEOFSURVEY_SEQ": typeofSurveyData?.TYPEOFSURVEY_SEQ,
+            "TYPEOFSURVEY_ADD1_SEQ": typeofSurveyAdd1Data?.TYPEOFSURVEY_ADD1_SEQ,
+            "TYPEOFSURVEY_ADD2_SEQ": typeofSurveyAdd2Data?.TYPEOFSURVEY_ADD2_SEQ,
+            "TYPEOFSURVEY_ADD3_SEQ": typeofSurveyAdd3Data?.TYPEOFSURVEY_ADD3_SEQ,
+            "CADASTRAL_TAMBOL_SEQ": tambolData?.TAMBOL_SEQ,
+            "CADASTRAL_AMPHUR_SEQ": amphurData?.AMPHUR_SEQ,
+            "CADASTRAL_PROVINCE_SEQ": provinceData?.PROVINCE_SEQ,
+            "ZONE_LAND": zoneData,
+            "SHEETTYPE_SEQ": sheetTypeData?.SHEETTYPE_SEQ,
+            "CADASTRAL_UTMMAP1": UTMMAP1Data ? UTMMAP1Data : null,
+            "CADASTRAL_UTMMAP2": UTMMAP2Data ? UTMMAP2Data : null,
+            "CADASTRAL_UTMMAP3": UTMMAP3Data,
+            "CADASTRAL_UTMMAP4": UTMMAP4Data,
+            "CADASTRAL_ORIGINMAP1": originmap1Data,
+            "CADASTRAL_ORIGINMAP2": originmap2Data,
+            "CADASTRAL_ORIGINMAP3": originmap3Data,
+            "AIRPHOTOMAP_NAME": airphotomapName,
+            "AIRPHOTOMAP1": airphotomap1Data,
+            "AIRPHOTOMAP2": airphotomap2Data,
+            "AIRPHOTOMAP3": airphotomap3Data,
+            "BENCHMARK_SEQ": benchmarkData?.BENCHMARK_SEQ,
+            "BENCHMARK_QTY": benchmarkQTY,
+            "BENCHMARK2_SEQ": benchmark2Data?.BENCHMARK2_SEQ,
+            "BENCHMARK2_QTY": benchmark2QTY,
+            "SURVEY_DTM": surveyDate,
+            "TITLE_SEQ": titleData?.TITLE_SEQ,
+            "SURVEYOR_FNAME": fname,
+            "SURVEYOR_LNAME": lname,
+            "SURVEYOR_POSITION": surveyorPosition,
+            "SURVEYOR_LEVEL": surveyorLevelData,
+            "OLD_RAI_NUM": oldRaiData,
+            "OLD_NGAN_NUM": oldNganData,
+            "OLD_WA_NUM": oldWaData,
+            "OLD_SUBWA_NUM": oldSubWaData,
+            "CADASTRAL_OWNER_QTY": ownerData,
+            "CADASTRAL_NOTE": noteData,
         }
+        console.log(obj, "obj_onSubmit");
     }
     return (
         <Grid>
@@ -301,64 +412,38 @@ export default function DilogTab01Index(props) {
                         <Grid item xs={12} md={2} py={2}>
                             <Typography fontSize={16}>ประเภทการรังวัด :</Typography>
                         </Grid>
-                        <Grid item xs={12} md={2} py={2}>
-                            <TextField
-                                maxWidth={"sm"}
-                                maxLength={500}
-                                placeholder="ประเภทการรังวัด"
+                        <Grid item xs={12} md={10} py={2}>
+                            <AutoTypeOfSurvey
                                 value={typeofSurveyData}
-                                onChange={(e) => {
-                                    setTypeofSurveyData(e.target.value);
-                                }}
-                                style={{ width: "100%" }}
-                                size="small"
+                                onChange={_changeTypeofSurvey}
                             />
                         </Grid>
-                        <Grid item xs={12} md={2} py={2} px={1}>
+                        <Grid item xs={12} md={2} py={2}>
                             <Typography fontSize={16}>ประเภทการรังวัดเพิ่มเติม 1 :</Typography>
                         </Grid>
-                        <Grid item xs={12} md={2} py={2}>
-                            <TextField
-                                maxWidth={"sm"}
-                                maxLength={500}
-                                placeholder="ประเภทการรังวัดเพิ่มเติม 1"
+                        <Grid item xs={12} md={10} py={2}>
+                            <AutoTypeOfSurvey
                                 value={typeofSurveyAdd1Data}
-                                onChange={(e) => {
-                                    setTypeofSurveyAdd1Data(e.target.value);
-                                }}
-                                style={{ width: "100%" }}
-                                size="small"
+                                onChange={_changeTypeofSurveyAdd1}
                             />
                         </Grid>
-                        <Grid item xs={12} md={2} py={2} px={1}>
+                        <Grid item xs={12} md={2} py={2}>
                             <Typography fontSize={16}>ประเภทการรังวัดเพิ่มเติม 2 :</Typography>
                         </Grid>
-                        <Grid item xs={12} md={2} py={2}>
-                            <TextField
-                                maxWidth={"sm"}
-                                maxLength={500}
-                                placeholder="ประเภทการรังวัดเพิ่มเติม 2"
+                        <Grid item xs={12} md={10} py={2}>
+                            <AutoTypeOfSurvey
                                 value={typeofSurveyAdd2Data}
-                                onChange={(e) => {
-                                    setTypeofSurveyAdd2Data(e.target.value);
-                                }}
-                                style={{ width: "100%" }}
-                                size="small" />
+                                onChange={_changeTypeofSurveyAdd2}
+                            />
                         </Grid>
                         <Grid item xs={12} md={2} py={2}>
                             <Typography fontSize={16}>ประเภทการรังวัดเพิ่มเติม 3 :</Typography>
                         </Grid>
-                        <Grid item xs={12} md={2} py={2}>
-                            <TextField
-                                maxWidth={"sm"}
-                                maxLength={500}
-                                placeholder="ประเภทการรังวัดเพิ่มเติม 3"
+                        <Grid item xs={12} md={10} py={2}>
+                            <AutoTypeOfSurvey
                                 value={typeofSurveyAdd3Data}
-                                onChange={(e) => {
-                                    setTypeofSurveyAdd3Data(e.target.value);
-                                }}
-                                style={{ width: "100%" }}
-                                size="small" />
+                                onChange={_changeTypeofSurveyAdd3}
+                            />
                         </Grid>
                     </Grid>
                     {/* จังหวัด */}
@@ -368,8 +453,6 @@ export default function DilogTab01Index(props) {
                         </Grid>
                         <Grid item xs={12} md={2} py={2}>
                             <TextField
-                                maxWidth={"sm"}
-                                maxLength={500}
                                 placeholder="จังหวัด"
                                 value={provinceData?.PROVINCE_NAME_TH}
                                 onChange={(e) => {
@@ -406,8 +489,6 @@ export default function DilogTab01Index(props) {
                         </Grid>
                         <Grid item xs={12} md={2} py={2}>
                             <TextField
-                                maxWidth={"sm"}
-                                maxLength={500}
                                 placeholder="โซน"
                                 value={zoneData}
                                 onChange={(e) => {
@@ -420,25 +501,20 @@ export default function DilogTab01Index(props) {
                         <Grid item xs={12} md={2} py={2} px={1}>
                             <Typography fontSize={16}>ประเภทระวาง :</Typography>
                         </Grid>
-                        <Grid item xs={12} md={2} py={2}>
-                            <TextField
-                                maxWidth={"sm"}
-                                maxLength={500}
-                                placeholder="ประเภทระวาง"
+                        <Grid item xs={12} md={6} py={2}>
+                            <AutoSheetType
                                 value={sheetTypeData}
-                                onChange={(e) => {
-                                    setSheetTypeData(e.target.value);
-                                }}
-                                style={{ width: "100%" }}
-                                size="small" />
+                                onChange={_changeSheetType}
+                            />
                         </Grid>
-                        <Grid item xs={12} md={2} py={2} px={1}>
+                    </Grid>
+                    {/* หมายเลขแผ่น */}
+                    <Grid container justifyItems={'center'} alignItems={'center'}>
+                        <Grid item xs={12} md={2} py={2}>
                             <Typography fontSize={16}>หมายเลขระวางแผนที่ 1:50000 (UTM) :</Typography>
                         </Grid>
                         <Grid item xs={12} md={2} py={2}>
                             <TextField
-                                maxWidth={"sm"}
-                                maxLength={500}
                                 placeholder="หมายเลขระวางแผนที่ 1:50000 (UTM)"
                                 value={UTMMAP1Data}
                                 onChange={(e) => {
@@ -447,16 +523,11 @@ export default function DilogTab01Index(props) {
                                 style={{ width: "100%" }}
                                 size="small" />
                         </Grid>
-                    </Grid>
-                    {/* หมายเลขแผ่น */}
-                    <Grid container justifyItems={'center'} alignItems={'center'}>
-                        <Grid item xs={12} md={2} py={2}>
+                        <Grid item xs={12} md={2} py={2} px={1}>
                             <Typography fontSize={16}>หมายเลขแผ่นของระวางแผนที่ 1:50000 (UTM) :</Typography>
                         </Grid>
                         <Grid item xs={12} md={2} py={2}>
                             <TextField
-                                maxWidth={"sm"}
-                                maxLength={500}
                                 placeholder="หมายเลขแผ่นของระวางแผนที่ 1:50000 (UTM)"
                                 value={UTMMAP2Data}
                                 onChange={(e) => {
@@ -471,8 +542,6 @@ export default function DilogTab01Index(props) {
                         </Grid>
                         <Grid item xs={12} md={2} py={2}>
                             <TextField
-                                maxWidth={"sm"}
-                                maxLength={500}
                                 placeholder="หมายเลขระวางแผนที่ 1:4000 (UTM)"
                                 value={UTMMAP3Data}
                                 onChange={(e) => {
@@ -481,13 +550,11 @@ export default function DilogTab01Index(props) {
                                 style={{ width: "100%" }}
                                 size="small" />
                         </Grid>
-                        <Grid item xs={12} md={2} py={2} px={1}>
+                        <Grid item xs={12} md={2} py={2}>
                             <Typography fontSize={16}>หมายเลขแผ่นของระวางตามมาตราส่วน (UTM) :</Typography>
                         </Grid>
                         <Grid item xs={12} md={2} py={2}>
                             <TextField
-                                maxWidth={"sm"}
-                                maxLength={500}
                                 placeholder="หมายเลขแผ่นของระวางตามมาตราส่วน (UTM)"
                                 value={UTMMAP4Data}
                                 onChange={(e) => {
@@ -504,8 +571,6 @@ export default function DilogTab01Index(props) {
                         </Grid>
                         <Grid item xs={12} md={2} py={2}>
                             <TextField
-                                maxWidth={"sm"}
-                                maxLength={500}
                                 placeholder="หมายเลขระวางศูนย์กำเนิด 1"
                                 value={originmap1Data}
                                 onChange={(e) => {
@@ -520,8 +585,6 @@ export default function DilogTab01Index(props) {
                         </Grid>
                         <Grid item xs={12} md={2} py={2}>
                             <TextField
-                                maxWidth={"sm"}
-                                maxLength={500}
                                 placeholder="หมายเลขระวางศูนย์กำเนิด 2"
                                 value={originmap2Data}
                                 onChange={(e) => {
@@ -535,8 +598,6 @@ export default function DilogTab01Index(props) {
                         </Grid>
                         <Grid item xs={12} md={2} py={2}>
                             <TextField
-                                maxWidth={"sm"}
-                                maxLength={500}
                                 placeholder="หมายเลขแผ่นของระวางตามมาตราส่วน (ศูนย์กำเนิด)"
                                 value={originmap3Data}
                                 onChange={(e) => {
@@ -553,8 +614,6 @@ export default function DilogTab01Index(props) {
                         </Grid>
                         <Grid item xs={12} md={2} py={2}>
                             <TextField
-                                maxWidth={"sm"}
-                                maxLength={500}
                                 placeholder="ชื่อระวางภาพถ่ายทางอากาศ"
                                 value={airphotomapName}
                                 onChange={(e) => {
@@ -569,8 +628,6 @@ export default function DilogTab01Index(props) {
                         </Grid>
                         <Grid item xs={12} md={2} py={2}>
                             <TextField
-                                maxWidth={"sm"}
-                                maxLength={500}
                                 placeholder="หมายเลขระวางแผนที่ 1:50000"
                                 value={airphotomap1Data}
                                 onChange={(e) => {
@@ -584,8 +641,6 @@ export default function DilogTab01Index(props) {
                         </Grid>
                         <Grid item xs={12} md={2} py={2}>
                             <TextField
-                                maxWidth={"sm"}
-                                maxLength={500}
                                 placeholder="หมายเลขแผ่นของระวางแผนที่ 1:50000"
                                 value={airphotomap2Data}
                                 onChange={(e) => {
@@ -602,8 +657,6 @@ export default function DilogTab01Index(props) {
                         </Grid>
                         <Grid item xs={12} md={2} py={2}>
                             <TextField
-                                maxWidth={"sm"}
-                                maxLength={500}
                                 placeholder="หมายเลขแผ่นของระวางตามมาตราส่วน"
                                 value={airphotomap3Data}
                                 onChange={(e) => {
@@ -618,8 +671,8 @@ export default function DilogTab01Index(props) {
                         </Grid>
                         <Grid item xs={12} md={2} py={2}>
                             <TextField
-                                maxWidth={"sm"}
-                                maxLength={500}
+
+
                                 placeholder="รหัสมาตราส่วน (รูปแผนที่)"
                                 value={scalemapData}
                                 onChange={(e) => {
@@ -633,8 +686,8 @@ export default function DilogTab01Index(props) {
                         </Grid>
                         <Grid item xs={12} md={2} py={2}>
                             <TextField
-                                maxWidth={"sm"}
-                                maxLength={500}
+
+
                                 placeholder="รหัสมาตราส่วน (ระวาง)"
                                 value={scaleRawangData}
                                 onChange={(e) => {
@@ -644,68 +697,58 @@ export default function DilogTab01Index(props) {
                                 size="small" />
                         </Grid>
                     </Grid>
-                    {/* รหัสประเภทหมุดหลัก */}
+                    {/* ประเภทหมุดหลักเขตที่ 1 */}
                     <Grid container justifyItems={'center'} alignItems={'center'}>
-                        {/* <Grid item xs={12} md={2} py={2}>
-                            <Typography fontSize={16}>รหัสประเภทหมุดหลักเขตที่ 1 :</Typography>
-                        </Grid> */}
-                        {/* <Grid item xs={12} md={2} py={2}>
-                            <TextField
-                                maxWidth={"sm"}
-                                maxLength={500}
-                                placeholder="รหัสประเภทหมุดหลักเขตที่ 1"
+                        <Grid item xs={12} md={2} py={2}>
+                            <Typography fontSize={16}>ประเภทหมุดหลักเขตที่ 1 :</Typography>
+                        </Grid>
+                        <Grid item xs={12} md={6} py={2}>
+                            <AutoBenchMark
+                                type={1}
+                                onChange={_changeBenchmark1}
                                 value={benchmarkData}
-                                onChange={(e) => {
-                                    setBenchmarkData(e.target.value);
-                                }}
-                                style={{ width: "100%" }}
-size="small"
                             />
-                        </Grid> */}
+                        </Grid>
                         <Grid item xs={12} md={2} py={2} px={1}>
                             <Typography fontSize={16}>จำนวนหลักเขตแบบที่ 1 :</Typography>
                         </Grid>
                         <Grid item xs={12} md={2} py={2}>
                             <TextField
-                                maxWidth={"sm"}
-                                maxLength={500}
                                 placeholder="จำนวนหลักเขตแบบที่ 1"
-                                value={benchmarkData}
+                                value={benchmarkQTY}
                                 onChange={(e) => {
-                                    setBenchmarkData(e.target.value);
+                                    setBenchmarkQTY(e.target.value);
                                 }}
                                 style={{ width: "100%" }}
-                                size="small" />
+                                size="small"
+                            />
                         </Grid>
-                        {/* <Grid item xs={12} md={2} py={2} px={1}>
-                            <Typography fontSize={16}>รหัสประเภทหมุดหลักเขตที่ 2 :</Typography>
-                        </Grid>
+                    </Grid>
+                    {/* ประเภทหมุดหลักเขตที่ 2 */}
+                    <Grid container justifyItems={'center'} alignItems={'center'}>
                         <Grid item xs={12} md={2} py={2}>
-                            <TextField
-                                maxWidth={"sm"}
-                                maxLength={500}
-                                placeholder="รหัสประเภทหมุดหลักเขตที่ 2"
-                                value={zoneData}
-                                onChange={(e) => {
-                                    setZoneData(e.target.value);
-                                }}
-                                style={{ width: "100%" }}
-size="small" />
-                        </Grid> */}
+                            <Typography fontSize={16}>ประเภทหมุดหลักเขตที่ 2 :</Typography>
+                        </Grid>
+                        <Grid item xs={12} md={6} py={2}>
+                            <AutoBenchMark
+                                type={2}
+                                onChange={_changeBenchmark2}
+                                value={benchmark2Data}
+                            />
+                        </Grid>
                         <Grid item xs={12} md={2} py={2} px={1}>
                             <Typography fontSize={16}>จำนวนหลักเขตแบบที่ 2 :</Typography>
                         </Grid>
                         <Grid item xs={12} md={2} py={2}>
                             <TextField
-                                maxWidth={"sm"}
-                                maxLength={500}
                                 placeholder="จำนวนหลักเขตแบบที่ 2"
-                                value={benchmark2Data}
+                                value={benchmark2QTY}
                                 onChange={(e) => {
-                                    setBenchmark2Data(e.target.value);
+                                    setBenchmark2QTY(e.target.value);
                                 }}
                                 style={{ width: "100%" }}
-                                size="small" />
+                                size="small"
+                            />
                         </Grid>
                     </Grid>
                     {/* วันที่รังวัด */}
@@ -713,10 +756,10 @@ size="small" />
                         <Grid item xs={12} md={2} py={2}>
                             <Typography fontSize={16}>วันที่รังวัด :</Typography>
                         </Grid>
-                        <Grid item xs={12} md={2} py={2}>
+                        <Grid item xs={12} md={4} py={2}>
                             <TextField
-                                maxWidth={"sm"}
-                                maxLength={500}
+
+
                                 placeholder="วันที่รังวัด"
                                 value={surveyDate}
                                 onChange={(e) => {
@@ -726,6 +769,9 @@ size="small" />
                                 size="small"
                             />
                         </Grid>
+                    </Grid>
+                    {/* ชื่อช่างรังวัด */}
+                    <Grid container justifyItems={'center'} alignItems={'center'}>
                         <Grid item xs={12} md={2} py={2} px={1}>
                             <Typography fontSize={16}>คำนำหน้าชื่อช่างรังวัด :</Typography>
                         </Grid>
@@ -740,8 +786,8 @@ size="small" />
                         </Grid>
                         <Grid item xs={12} md={2} py={2}>
                             <TextField
-                                maxWidth={"sm"}
-                                maxLength={500}
+
+
                                 placeholder="ชื่อช่างรังวัด"
                                 value={fname}
                                 onChange={(e) => {
@@ -750,13 +796,13 @@ size="small" />
                                 style={{ width: "100%" }}
                                 size="small" />
                         </Grid>
-                        <Grid item xs={12} md={2} py={2} >
+                        <Grid item xs={12} md={2} py={2} px={1}>
                             <Typography fontSize={16}>นามสกุลช่างรังวัด :</Typography>
                         </Grid>
                         <Grid item xs={12} md={2} py={2}>
                             <TextField
-                                maxWidth={"sm"}
-                                maxLength={500}
+
+
                                 placeholder="นามสกุลช่างรังวัด"
                                 value={lname}
                                 onChange={(e) => {
@@ -770,8 +816,8 @@ size="small" />
                         </Grid>
                         <Grid item xs={12} md={2} py={2}>
                             <TextField
-                                maxWidth={"sm"}
-                                maxLength={500}
+
+
                                 placeholder="ตำแหน่งช่างรังวัด"
                                 value={surveyorPosition}
                                 onChange={(e) => {
@@ -787,8 +833,8 @@ size="small" />
                         </Grid>
                         <Grid item xs={12} md={2} py={2}>
                             <TextField
-                                maxWidth={"sm"}
-                                maxLength={500}
+
+
                                 placeholder="ระดับ"
                                 value={surveyorLevelData}
                                 onChange={(e) => {
@@ -803,8 +849,8 @@ size="small" />
                         </Grid>
                         <Grid item xs={12} md={2} py={2}>
                             <TextField
-                                maxWidth={"sm"}
-                                maxLength={500}
+
+
                                 placeholder="เนื้อที่เดิม (ไร่)"
                                 value={oldRaiData}
                                 onChange={(e) => {
@@ -818,8 +864,8 @@ size="small" />
                         </Grid>
                         <Grid item xs={12} md={2} py={2}>
                             <TextField
-                                maxWidth={"sm"}
-                                maxLength={500}
+
+
                                 placeholder="เนื้อที่เดิม (งาน)"
                                 value={oldNganData}
                                 onChange={(e) => {
@@ -833,8 +879,8 @@ size="small" />
                         </Grid>
                         <Grid item xs={12} md={2} py={2}>
                             <TextField
-                                maxWidth={"sm"}
-                                maxLength={500}
+
+
                                 placeholder="เนื้อที่เดิม (วา)"
                                 value={oldWaData}
                                 onChange={(e) => {
@@ -848,8 +894,8 @@ size="small" />
                         </Grid>
                         <Grid item xs={12} md={2} py={2}>
                             <TextField
-                                maxWidth={"sm"}
-                                maxLength={500}
+
+
                                 placeholder="เนื้อที่เดิม (เศษวา)"
                                 value={oldSubWaData}
                                 onChange={(e) => {
@@ -865,8 +911,8 @@ size="small" />
                         </Grid>
                         <Grid item xs={12} md={2} py={2}>
                             <TextField
-                                maxWidth={"sm"}
-                                maxLength={500}
+
+
                                 placeholder="จำนวนผู้ถือกรรมสิทธิ์"
                                 value={ownerData}
                                 onChange={(e) => {
@@ -881,8 +927,8 @@ size="small" />
                         </Grid>
                         <Grid item xs={12} md={6} py={2}>
                             <TextField
-                                maxWidth={"sm"}
-                                maxLength={500}
+
+
                                 placeholder="หมายเหตุ"
                                 value={noteData}
                                 onChange={(e) => {
@@ -895,7 +941,11 @@ size="small" />
                     </Grid>
                 </DialogContent>
                 <DialogActions>
+
                     <Grid container justifyContent={'flex-end'}>
+                        <Button variant="contained" onClick={_onSubmit} color="success">
+                            บันทึก
+                        </Button>
                         <Button onClick={props.close} color={"error"} variant={"contained"}>
                             ปิด
                         </Button>
