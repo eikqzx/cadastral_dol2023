@@ -20,9 +20,12 @@ import { getLandOfficeByPK, getLandOffice } from "@/service/mas/landOffice";
 import { getProvinceByPK } from "@/service/mas/province";
 import { getAmphurByPK } from "@/service/mas/amphur";
 import { getTambolByPK } from "@/service/mas/tambol";
+import { getSheetTypeByPK } from "@/service/mas/sheetType";
 //COMPONENTS
 import AutoAmphur from "@/pages/components/Autocompleate/amphur";
 import AutoTambol from "@/pages/components/Autocompleate/tambol";
+import AutoSheetType from "@/pages/components/Autocompleate/sheetType";
+
 export default function DilogTab02Index(props) {
     console.log(props, "propsDilogTab02Index");
     const [office, setOffice] = React.useState("-");
@@ -74,7 +77,6 @@ export default function DilogTab02Index(props) {
     React.useEffect(() => {
         setOrderNo()
         setZoneData(props?.cadastralLandData[0]?.ZONE_LAND)
-        setSheetTypeData()
         setUTMMAP1Data(props?.cadastralLandData[0]?.CADASTRAL_LAND_UTMMAP1)
         setUTMMAP2Data(props?.cadastralLandData[0]?.CADASTRAL_LAND_UTMMAP2)
         setUTMMAP3Data(props?.cadastralLandData[0]?.CADASTRAL_LAND_UTMMAP3)
@@ -128,6 +130,15 @@ export default function DilogTab02Index(props) {
                     console.log(getTambolData, "getTambolData");
                     setTambolData(getTambolData.rows[0])
                 }
+                //SHEETTYPE
+                if (data[i].SHEETTYPE_SEQ == null) {
+                    setSheetTypeData(null)
+                }
+                else {
+                    let sheetType = await getSheetTypeByPK(data[i].SHEETTYPE_SEQ);
+                    console.log(sheetType, "sheetType");
+                    setSheetTypeData(sheetType.rows[0])
+                }
                 setSheetcode(data[i].SHEETCODE);
                 setBoxNo(data[i].BOX_NO.toString().padStart(2, "0"));
                 setNumofsurveyQty(data[i]?.NUMOFSURVEY_QTY ?? "-");
@@ -170,6 +181,9 @@ export default function DilogTab02Index(props) {
 
     const _changeTambol = (event, value) => {
         setTambolData(value);
+    };
+    const _changeSheetType = (event, value) => {
+        setSheetTypeData(value);
     };
     return (
         <Grid>
@@ -279,16 +293,10 @@ export default function DilogTab02Index(props) {
                             <Typography fontSize={16}>ประเภทระวาง :</Typography>
                         </Grid>
                         <Grid item xs={12} md={2} py={2}>
-                            <TextField
-                                maxWidth={"sm"}
-                                maxLength={500}
-                                placeholder="ประเภทระวาง"
+                            <AutoSheetType
                                 value={sheetTypeData}
-                                onChange={(e) => {
-                                    setSheetTypeData(e.target.value);
-                                }}
-                                style={{ width: "100%" }}
-                                size="small" />
+                                onChange={_changeSheetType}
+                            />
                         </Grid>
                         <Grid item xs={12} md={2} py={2}>
                             <Typography fontSize={16}>หมายเลขระวางแผนที่ 1:50000 (UTM) :</Typography>
