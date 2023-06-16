@@ -31,33 +31,33 @@ export default function DilogTab02Index(props) {
     const [numofsurveyQty, setNumofsurveyQty] = React.useState("-");
     const [cadastralNo, setCadastralNo] = React.useState("-");
 
-    const [orderNo, setOrderNo] = React.useState()
-    const [parcelSurveyNo, setParcelSurveyNo] = React.useState()
+    const [orderNo, setOrderNo] = React.useState("")
+    const [parcelSurveyNo, setParcelSurveyNo] = React.useState("")
     const [tambolData, setTambolData] = React.useState(null)
     const [amphurData, setAmphurData] = React.useState(null)
-    const [provinceData, setProvinceData] = React.useState();
-    const [zoneData, setZoneData] = React.useState()
-    const [sheetTypeData, setSheetTypeData] = React.useState()
-    const [UTMMAP1Data, setUTMMAP1Data] = React.useState()
-    const [UTMMAP2Data, setUTMMAP2Data] = React.useState()
-    const [UTMMAP3Data, setUTMMAP3Data] = React.useState()
-    const [UTMMAP4Data, setUTMMAP4Data] = React.useState()
-    const [originmap1Data, setOriginmap1Data] = React.useState()
-    const [originmap2Data, setOriginmap2Data] = React.useState()
-    const [originmap3Data, setOriginmap3Data] = React.useState()
-    const [airphotomapName, setAirphotomapName] = React.useState()
-    const [airphotomap1Data, setAirphotomap1Data] = React.useState()
-    const [airphotomap2Data, setAirphotomap2Data] = React.useState()
-    const [airphotomap3Data, setAirphotomap3Data] = React.useState()
-    const [parcelNo, setParcelNo] = React.useState()
-    const [UTMScaleNo, setUTMSCALENO] = React.useState();
-    const [RaiData, setRaiData] = React.useState()
-    const [NganData, setNganData] = React.useState()
-    const [WaData, setWaData] = React.useState()
-    const [SubWaData, setSubWaData] = React.useState()
-    const [noteData, setNoteData] = React.useState()
+    const [provinceData, setProvinceData] = React.useState("");
+    const [zoneData, setZoneData] = React.useState("")
+    const [sheetTypeData, setSheetTypeData] = React.useState(null)
+    const [UTMMAP1Data, setUTMMAP1Data] = React.useState("")
+    const [UTMMAP2Data, setUTMMAP2Data] = React.useState("")
+    const [UTMMAP3Data, setUTMMAP3Data] = React.useState("")
+    const [UTMMAP4Data, setUTMMAP4Data] = React.useState("")
+    const [originmap1Data, setOriginmap1Data] = React.useState("")
+    const [originmap2Data, setOriginmap2Data] = React.useState("")
+    const [originmap3Data, setOriginmap3Data] = React.useState("")
+    const [airphotomapName, setAirphotomapName] = React.useState("")
+    const [airphotomap1Data, setAirphotomap1Data] = React.useState("")
+    const [airphotomap2Data, setAirphotomap2Data] = React.useState("")
+    const [airphotomap3Data, setAirphotomap3Data] = React.useState("")
+    const [parcelNo, setParcelNo] = React.useState("")
+    const [UTMScaleNo, setUTMSCALENO] = React.useState("");
+    const [RaiData, setRaiData] = React.useState("")
+    const [NganData, setNganData] = React.useState("")
+    const [WaData, setWaData] = React.useState("")
+    const [SubWaData, setSubWaData] = React.useState("")
+    const [noteData, setNoteData] = React.useState("")
 
-    const [valueRadio, setValueRadio] = React.useState();
+    const [valueRadio, setValueRadio] = React.useState(0);
 
     const handleChangeRadio = (event) => {
         setValueRadio(event.target.value);
