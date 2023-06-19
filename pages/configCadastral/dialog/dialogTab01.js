@@ -23,6 +23,7 @@ import { getTambolByPK } from "@/service/mas/tambol";
 import { getTypeOfSurveyByPK } from "@/service/mas/typeOfSurvey";
 import { getBenchMarkByPK } from "@/service/mas/benchMark";
 import { getSheetTypeByPK } from "@/service/mas/sheetType";
+import { getScaleByPK } from "@/service/mas/scale";
 //COMPONENTS
 import AutoTitle from "@/pages/components/Autocompleate/title";
 import AutoAmphur from "@/pages/components/Autocompleate/amphur";
@@ -30,6 +31,8 @@ import AutoTambol from "@/pages/components/Autocompleate/tambol";
 import AutoBenchMark from "@/pages/components/Autocompleate/benchMark";
 import AutoTypeOfSurvey from "@/pages/components/Autocompleate/typeOfSurvey";
 import AutoSheetType from "@/pages/components/Autocompleate/sheetType";
+import AutoScale from "@/pages/components/Autocompleate/scale";
+
 export default function DilogTab01Index(props) {
     console.log(props, "propsDilogTab01Index");
     const [office, setOffice] = React.useState("-");
@@ -95,9 +98,6 @@ export default function DilogTab01Index(props) {
             setAirphotomap1Data(props?.cadastralData?.AIRPHOTOMAP1)
             setAirphotomap2Data(props?.cadastralData?.AIRPHOTOMAP2)
             setAirphotomap3Data(props?.cadastralData?.AIRPHOTOMAP3)
-            setScalemapData()
-            setScaleRawangData()
-
             setSurveyDate(props?.cadastralData?.SURVEY_DTM)
             _getTitle(props?.cadastralData?.TITLE_SEQ ?? props?.cadastralData?.TITLE_SEQ)
             setFname(props?.cadastralData?.SURVEYOR_FNAME)
@@ -229,6 +229,24 @@ export default function DilogTab01Index(props) {
                     console.log(benchMark2, "benchMark2");
                     setBenchmark2Data(benchMark2.rows[0])
                 }
+                //ScaleMap
+                if (data[i].SCALE_MAP_SEQ == null) {
+                    setScalemapData(null)
+                }
+                else {
+                    let scalemap = await getScaleByPK(data[i].SCALE_MAP_SEQ);
+                    console.log(scalemap, "scalemap");
+                    setScalemapData(scalemap.rows[0])
+                }
+                //ScaleRawang
+                if (data[i].SCALE_RAWANG_SEQ == null) {
+                    setScaleRawangData(null)
+                }
+                else {
+                    let scaleRawang = await getScaleByPK(data[i].SCALE_RAWANG_SEQ);
+                    console.log(scaleRawang, "scaleRawang");
+                    setScaleRawangData(scaleRawang.rows[0])
+                }
                 setSheetcode(data[i].SHEETCODE);
                 setBoxNo(data[i].BOX_NO.toString().padStart(2, "0"));
                 setNumofsurveyQty(data[i]?.NUMOFSURVEY_QTY ?? "-");
@@ -277,7 +295,12 @@ export default function DilogTab01Index(props) {
         console.log(value, "_changeBenchmark2");
         setBenchmark2Data(value);
     };
-
+    const _changeScalemap = (event, value) => {
+        setScalemapData(value);
+    };
+    const _changeScaleRawang = (event, value) => {
+        setScaleRawangData(value);
+    };
     const _onSubmit = async () => {
         // if (checked == true) {
         //     checked = 1
@@ -306,12 +329,16 @@ export default function DilogTab01Index(props) {
             "AIRPHOTOMAP1": airphotomap1Data ? airphotomap1Data : null,
             "AIRPHOTOMAP2": airphotomap2Data ? airphotomap2Data : null,
             "AIRPHOTOMAP3": airphotomap3Data ? airphotomap3Data : null,
+            "SCALE_MAP_SEQ": scalemapData?.SCALE_SEQ ? scalemapData?.SCALE_SEQ : null,
+            "SCALE_MAP": scalemapData?.SCALE_NAME_TH ? scalemapData?.SCALE_NAME_TH : null,
+            "SCALE_RAWANG_SEQ": scaleRawangData?.SCALE_SEQ ? scaleRawangData?.SCALE_SEQ : null,
+            "SCALE_RAWANG": scaleRawangData?.SCALE_NAME_TH ? scaleRawangData?.SCALE_NAME_TH : null,
             "BENCHMARK_SEQ": benchmarkData?.BENCHMARK_SEQ ? benchmarkData?.BENCHMARK_SEQ : null,
             "BENCHMARK_QTY": benchmarkQTY ? benchmarkQTY : null,
             "BENCHMARK2_SEQ": benchmark2Data?.BENCHMARK2_SEQ ? benchmark2Data?.BENCHMARK2_SEQ : null,
             "BENCHMARK2_QTY": benchmark2QTY ? benchmark2QTY : null,
             "SURVEY_DTM": surveyDate ? surveyDate : null,
-            "TITLE_SEQ": titleData?.TITLE_SEQ,
+            "TITLE_SEQ": titleData?.TITLE_SEQ ? titleData?.TITLE_SEQ : null,
             "SURVEYOR_FNAME": fname ? fname : null,
             "SURVEYOR_LNAME": lname ? lname : null,
             "SURVEYOR_POSITION": surveyorPosition ? surveyorPosition : null,
@@ -323,7 +350,7 @@ export default function DilogTab01Index(props) {
             "CADASTRAL_OWNER_QTY": ownerData ? ownerData : null,
             "CADASTRAL_NOTE": noteData ? noteData : null,
         }
-        console.log(obj, "obj_onSubmit");
+        console.log(obj, "obj_onSubmit_DialogTab01");
     }
     return (
         <Grid>
@@ -669,31 +696,21 @@ export default function DilogTab01Index(props) {
                             <Typography fontSize={16}>รหัสมาตราส่วน (รูปแผนที่) :</Typography>
                         </Grid>
                         <Grid item xs={12} md={2} py={2}>
-                            <TextField
-
-
-                                placeholder="รหัสมาตราส่วน (รูปแผนที่)"
+                            <AutoScale
                                 value={scalemapData}
-                                onChange={(e) => {
-                                    setScalemapData(e.target.value);
-                                }}
-                                style={{ width: "100%" }}
-                                size="small" />
+                                onChange={_changeScalemap}
+                                type={"รูปแผนที่"}
+                            />
                         </Grid>
                         <Grid item xs={12} md={2} py={2} px={1}>
                             <Typography fontSize={16}>รหัสมาตราส่วน (ระวาง) :</Typography>
                         </Grid>
                         <Grid item xs={12} md={2} py={2}>
-                            <TextField
-
-
-                                placeholder="รหัสมาตราส่วน (ระวาง)"
+                            <AutoScale
                                 value={scaleRawangData}
-                                onChange={(e) => {
-                                    setScaleRawangData(e.target.value);
-                                }}
-                                style={{ width: "100%" }}
-                                size="small" />
+                                onChange={_changeScaleRawang}
+                                type={"ระวาง"}
+                            />
                         </Grid>
                     </Grid>
                     {/* ประเภทหมุดหลักเขตที่ 1 */}

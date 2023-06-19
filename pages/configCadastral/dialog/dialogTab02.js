@@ -21,10 +21,12 @@ import { getProvinceByPK } from "@/service/mas/province";
 import { getAmphurByPK } from "@/service/mas/amphur";
 import { getTambolByPK } from "@/service/mas/tambol";
 import { getSheetTypeByPK } from "@/service/mas/sheetType";
+import { getScaleByPK } from "@/service/mas/scale";
 //COMPONENTS
 import AutoAmphur from "@/pages/components/Autocompleate/amphur";
 import AutoTambol from "@/pages/components/Autocompleate/tambol";
 import AutoSheetType from "@/pages/components/Autocompleate/sheetType";
+import AutoScale from "@/pages/components/Autocompleate/scale";
 
 export default function DilogTab02Index(props) {
     console.log(props, "propsDilogTab02Index");
@@ -53,7 +55,7 @@ export default function DilogTab02Index(props) {
     const [airphotomap2Data, setAirphotomap2Data] = React.useState("")
     const [airphotomap3Data, setAirphotomap3Data] = React.useState("")
     const [landNo, setLandNo] = React.useState("")
-    const [UTMScaleNo, setUTMSCALENO] = React.useState("");
+    const [UTMScaleNo, setUTMSCALENO] = React.useState(null);
     const [RaiData, setRaiData] = React.useState("")
     const [NganData, setNganData] = React.useState("")
     const [WaData, setWaData] = React.useState("")
@@ -139,6 +141,15 @@ export default function DilogTab02Index(props) {
                     console.log(sheetType, "sheetType");
                     setSheetTypeData(sheetType.rows[0])
                 }
+                //ScaleMap
+                if (data[i].SCALE_SEQ == null) {
+                    setUTMSCALENO(null)
+                }
+                else {
+                    let scalemap = await getScaleByPK(data[i].SCALE_SEQ);
+                    console.log(scalemap, "scalemap");
+                    setUTMSCALENO(scalemap.rows[0])
+                }
                 setSheetcode(data[i].SHEETCODE);
                 setBoxNo(data[i].BOX_NO.toString().padStart(2, "0"));
                 setNumofsurveyQty(data[i]?.NUMOFSURVEY_QTY ?? "-");
@@ -166,8 +177,8 @@ export default function DilogTab02Index(props) {
             "AIRPHOTOMAP1": airphotomap1Data ? airphotomap1Data : null,
             "AIRPHOTOMAP2": airphotomap2Data ? airphotomap2Data : null,
             "AIRPHOTOMAP3": airphotomap3Data ? airphotomap3Data : null,
-            // "SCALE_SEQ": SCALE_SEQ,
-            "CADASTRAL_LAND_UTMSCALE": UTMScaleNo ? UTMScaleNo : null,
+            "SCALE_SEQ": UTMScaleNo?.SCALE_SEQ ? UTMScaleNo?.SCALE_SEQ : null,
+            "CADASTRAL_LAND_UTMSCALE": UTMScaleNo?.SCALE_NAME_TH ? UTMScaleNo?.SCALE_NAME_TH : null,
             "CADASTRAL_LAND_RAI_NUM": RaiData ? RaiData : null,
             "CADASTRAL_LAND_NGAN_NUM": NganData ? NganData : null,
             "CADASTRAL_LAND_WA_NUM": WaData ? WaData : null,
@@ -191,6 +202,9 @@ export default function DilogTab02Index(props) {
     };
     const _changeSheetType = (event, value) => {
         setSheetTypeData(value);
+    };
+    const _changeUTMScaleNo = (event, value) => {
+        setUTMSCALENO(value);
     };
     return (
         <Grid>
@@ -496,17 +510,10 @@ export default function DilogTab02Index(props) {
                             <Typography fontSize={16}>ลำดับที่มาตราส่วน :</Typography>
                         </Grid>
                         <Grid item xs={12} md={2} py={2}>
-                            <TextField
-                                maxWidth={"sm"}
-                                maxLength={500}
-                                placeholder="ลำดับที่มาตราส่วน"
+                            <AutoScale
                                 value={UTMScaleNo}
-                                onChange={(e) => {
-                                    setUTMSCALENO(e.target.value);
-                                }}
-                                style={{ width: "100%" }}
-                                size="small"
-                                type="number"
+                                onChange={_changeUTMScaleNo}
+                                type={0}
                             />
                         </Grid>
                         <Grid item xs={12} md={2} py={2} px={1}>
