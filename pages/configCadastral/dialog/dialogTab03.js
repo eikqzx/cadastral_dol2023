@@ -17,6 +17,7 @@ import {
 } from "@mui/material";
 //SERVICE
 import { getLandOfficeByPK, getLandOffice } from "@/service/mas/landOffice";
+import { getTitleByPK } from "@/service/mas/title";
 //COMPONENTS
 import AutoTitle from "@/pages/components/Autocompleate/title";
 export default function DilogTab03Index(props) {
@@ -27,13 +28,13 @@ export default function DilogTab03Index(props) {
     const [numofsurveyQty, setNumofsurveyQty] = React.useState("-");
     const [cadastralNo, setCadastralNo] = React.useState("-");
 
-    const [ownerType, setOwnerType] = React.useState();
-    const [ownerOrder, setOwnerOrder] = React.useState();
-    const [ownerTitle, setOwnerTitle] = React.useState();
-    const [ownerFName, setOwnerFName] = React.useState();
-    const [ownerLName, setOwnerLName] = React.useState();
-    const [ownerNote, setOwnerNote] = React.useState();
-    const [valueRadio, setValueRadio] = React.useState('1');
+
+    const [ownerOrder, setOwnerOrder] = React.useState("");
+    const [ownerTitle, setOwnerTitle] = React.useState(null);
+    const [ownerFName, setOwnerFName] = React.useState("");
+    const [ownerLName, setOwnerLName] = React.useState("");
+    const [ownerNote, setOwnerNote] = React.useState("");
+    const [valueRadio, setValueRadio] = React.useState(1);
 
     const handleChangeRadio = (event) => {
         setValueRadio(event.target.value);
@@ -41,6 +42,24 @@ export default function DilogTab03Index(props) {
     React.useEffect(() => {
         getMasterData(props.masterData)
     }, [])
+    React.useEffect(() => {
+        if (props?.cadastralOwnerData) {
+            setOwnerOrder(props?.cadastralOwnerData?.OWNER_ORDER)
+            _getTitle(props?.cadastralOwnerData?.TITLE_SEQ ?? props?.cadastralOwnerData?.TITLE_SEQ)
+            setOwnerFName(props?.cadastralOwnerData?.OWNER_FNAME)
+            setOwnerLName(props?.cadastralOwnerData?.OWNER_LNAME)
+            setOwnerNote(props?.cadastralOwnerData?.CADASTRAL_OWNER_NOTE)
+            // setValueRadio(props?.cadastralOwnerData?.OWNER_TYPE)
+        }
+    }, [props?.cadastralOwnerData])
+
+    const _getTitle = async (seq) => {
+        // console.log(seq,"_getTitleseq");
+        let getTitle = await getTitleByPK(seq);
+        getTitle = getTitle.rows
+        // console.log(getTitle, "getTitle");
+        setOwnerTitle(getTitle)
+    }
 
     const getMasterData = async (data) => {
         // data = data.rows
@@ -66,27 +85,15 @@ export default function DilogTab03Index(props) {
 
     const _onSubmit = async () => {
         let obj = {
-            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
-            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
-            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
-            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
-            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
-            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
-            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
-            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
-            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
-            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
-            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
-            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
-            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
-            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
-            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
-            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
-            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
-            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
-            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
-            
+            "OWNER_TYPE": valueRadio,
+            "OWNER_ORDER": ownerOrder ? ownerOrder : null,
+            "OWNER_TITLE_SEQ": ownerTitle?.TITLE_SEQ ? ownerTitle?.TITLE_SEQ : null,
+            "OWNER_TITLE": ownerTitle?.TITLE_NAME_TH ? ownerTitle?.TITLE_NAME_TH : null,
+            "OWNER_FNAME": ownerFName ? ownerFName : null,
+            "OWNER_LNAME": ownerLName ? ownerLName : null,
+            "CADASTRAL_OWNER_NOTE": ownerNote ? ownerNote : null,
         }
+        console.log(obj, "obj_onSubmit_DialogTab03");
     }
     return (
         <Grid>
@@ -164,7 +171,7 @@ export default function DilogTab03Index(props) {
                         </Grid>
                         <Grid item xs={12} md={10} py={2}>
                             <RadioGroup
-                                defaultValue={valueRadio}
+                                // defaultValue={valueRadio}
                                 value={valueRadio}
                                 onChange={handleChangeRadio}
                                 row
@@ -172,6 +179,24 @@ export default function DilogTab03Index(props) {
                                 <FormControlLabel value="1" control={<Radio />} label="บุคคลธรรมดา" />
                                 <FormControlLabel value="2" control={<Radio />} label="นิติบุคคล" />
                             </RadioGroup>
+                        </Grid>
+                    </Grid>
+                    <Grid container justifyItems={'center'} alignItems={'center'}>
+                        <Grid item xs={12} md={1} py={2}>
+                            <Typography fontSize={16}>ลำดับผู้ถือกรรมสิทธิ์ :</Typography>
+                        </Grid>
+                        <Grid item xs={12} md={3} py={2}>
+                            <TextField
+                                maxWidth={"sm"}
+                                maxLength={500}
+                                placeholder="ลำดับผู้ถือกรรมสิทธิ์"
+                                value={ownerOrder}
+                                onChange={(e) => {
+                                    setOwnerOrder(e.target.value);
+                                }}
+                                style={{ width: "100%" }}
+                                size="small"
+                            />
                         </Grid>
                     </Grid>
                     <Grid container justifyItems={'center'} alignItems={'center'}>
@@ -218,10 +243,10 @@ export default function DilogTab03Index(props) {
                         </Grid>
                     </Grid>
                     <Grid container justifyItems={'center'} alignItems={'center'}>
-                        <Grid item xs={12} md={1} py={2} px={1}>
+                        <Grid item xs={12} md={1} py={2}>
                             <Typography fontSize={16}>หมายเหตุ :</Typography>
                         </Grid>
-                        <Grid item xs={12} md={10} py={2}>
+                        <Grid item xs={12} md={11} py={2}>
                             <TextField
                                 maxWidth={"sm"}
                                 maxLength={500}
@@ -238,6 +263,9 @@ export default function DilogTab03Index(props) {
                 </DialogContent>
                 <DialogActions>
                     <Grid container justifyContent={'flex-end'}>
+                        <Button variant="contained" onClick={_onSubmit} color="success">
+                            บันทึก
+                        </Button>
                         <Button onClick={props.close} color={"error"} variant={"contained"}>
                             ปิด
                         </Button>

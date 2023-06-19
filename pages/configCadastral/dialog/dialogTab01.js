@@ -84,7 +84,6 @@ export default function DilogTab01Index(props) {
             getMasterData(props?.cadastralData)
             _checked(props?.cadastralData?.PRIVATESURVEY_FLAG)
             setZoneData(props?.cadastralData?.ZONE_LAND)
-            setSheetTypeData()
             setUTMMAP1Data(props?.cadastralData?.CADASTRAL_UTMMAP1)
             setUTMMAP2Data(props?.cadastralData?.CADASTRAL_UTMMAP2)
             setUTMMAP3Data(props?.cadastralData?.CADASTRAL_UTMMAP3)

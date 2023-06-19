@@ -52,7 +52,7 @@ export default function DilogTab02Index(props) {
     const [airphotomap1Data, setAirphotomap1Data] = React.useState("")
     const [airphotomap2Data, setAirphotomap2Data] = React.useState("")
     const [airphotomap3Data, setAirphotomap3Data] = React.useState("")
-    const [parcelNo, setParcelNo] = React.useState("")
+    const [landNo, setLandNo] = React.useState("")
     const [UTMScaleNo, setUTMSCALENO] = React.useState("");
     const [RaiData, setRaiData] = React.useState("")
     const [NganData, setNganData] = React.useState("")
@@ -75,7 +75,7 @@ export default function DilogTab02Index(props) {
 
 
     React.useEffect(() => {
-        setOrderNo()
+        setOrderNo(props?.cadastralLandData[0]?.LAND_ORDER)
         setZoneData(props?.cadastralLandData[0]?.ZONE_LAND)
         setUTMMAP1Data(props?.cadastralLandData[0]?.CADASTRAL_LAND_UTMMAP1)
         setUTMMAP2Data(props?.cadastralLandData[0]?.CADASTRAL_LAND_UTMMAP2)
@@ -151,27 +151,34 @@ export default function DilogTab02Index(props) {
 
     const _onSubmit = async () => {
         let obj = {
-            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
-            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
-            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
-            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
-            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
-            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
-            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
-            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
-            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
-            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
-            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
-            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
-            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
-            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
-            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
-            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
-            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
-            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
-            "PRIVATESURVEY_FLAG": PRIVATESURVEY_FLAG,
-
+            "LAND_ORDER": orderNo ? orderNo : null,
+            "ZONE_LAND": zoneData ? zoneData : null,
+            "SHEETTYPE_SEQ": sheetTypeData?.SHEETTYPE_SEQ ? sheetTypeData?.SHEETTYPE_SEQ : null,
+            "CADASTRAL_LAND_UTMMAP1": UTMMAP1Data ? UTMMAP1Data : null,
+            "CADASTRAL_LAND_UTMMAP2": UTMMAP2Data ? UTMMAP2Data : null,
+            "CADASTRAL_LAND_UTMMAP3": UTMMAP3Data ? UTMMAP3Data : null,
+            "CADASTRAL_LAND_UTMMAP4": UTMMAP4Data ? UTMMAP4Data : null,
+            "CADASTRAL_LAND_ORIGINMAP1": originmap1Data ? originmap1Data : null,
+            "CADASTRAL_LAND_ORIGINMAP2": originmap2Data ? originmap2Data : null,
+            "CADASTRAL_LAND_ORIGINMAP3": originmap3Data ? originmap3Data : null,
+            "CADASTRAL_LAND_NO": landNo ? landNo : null,
+            "AIRPHOTOMAP_NAME": airphotomapName ? airphotomapName : null,
+            "AIRPHOTOMAP1": airphotomap1Data ? airphotomap1Data : null,
+            "AIRPHOTOMAP2": airphotomap2Data ? airphotomap2Data : null,
+            "AIRPHOTOMAP3": airphotomap3Data ? airphotomap3Data : null,
+            // "SCALE_SEQ": SCALE_SEQ,
+            "CADASTRAL_LAND_UTMSCALE": UTMScaleNo ? UTMScaleNo : null,
+            "CADASTRAL_LAND_RAI_NUM": RaiData ? RaiData : null,
+            "CADASTRAL_LAND_NGAN_NUM": NganData ? NganData : null,
+            "CADASTRAL_LAND_WA_NUM": WaData ? WaData : null,
+            "CADASTRAL_LAND_SUBWA_NUM": SubWaData ? SubWaData : null,
+            "CADASTRAL_AMPHUR_SEQ": amphurData?.AMPHUR_SEQ ? amphurData?.AMPHUR_SEQ : null,
+            "CADASTRAL_TAMBOL_SEQ": tambolData?.TAMBOL_SEQ ? tambolData?.TAMBOL_SEQ : null,
+            "CADASTRAL_SURVEY_NO": parcelSurveyNo ? parcelSurveyNo : null,
+            "STATIC_FLAG": valueRadio,
+            "CADASTRAL_LAND_NOTE": noteData ? noteData : null,
         }
+        console.log(obj, "obj_onSubmit_Dialog02");
     }
 
     const _changeAmphur = (event, value) => {
@@ -411,9 +418,9 @@ export default function DilogTab02Index(props) {
                                 maxWidth={"sm"}
                                 maxLength={500}
                                 placeholder="เลขที่ดิน"
-                                value={parcelNo}
+                                value={landNo}
                                 onChange={(e) => {
-                                    setParcelNo(e.target.value);
+                                    setLandNo(e.target.value);
                                 }}
                                 style={{ width: "100%" }}
                                 size="small" />
@@ -643,6 +650,9 @@ export default function DilogTab02Index(props) {
                 </DialogContent>
                 <DialogActions>
                     <Grid container justifyContent={'flex-end'}>
+                        <Button variant="contained" onClick={_onSubmit} color="success">
+                            บันทึก
+                        </Button>
                         <Button onClick={props.close} color={"error"} variant={"contained"}>
                             ปิด
                         </Button>
