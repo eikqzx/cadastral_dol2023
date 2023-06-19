@@ -113,7 +113,7 @@ export default function Tab02(props) {
                                                         }}
                                                         onClick={() => {
                                                             confirmDialog.createDialog(
-                                                                `ไม่พบข้อมูลทะเบียนของเอกสารสิทธิ์เลขที่ ${el.PARCEL_NO} ต้องการเพิ่มข้อมูลทะเบียน หรือไม่ ?`,
+                                                                `ต้องการแก้ไขข้อมูลแปลงต้นร่าง หรือไม่ ?`,
                                                                 () => { handleChange(el) }
                                                             );
                                                         }}
@@ -194,7 +194,7 @@ export default function Tab02(props) {
                                                         }}
                                                         onClick={() => {
                                                             confirmDialog.createDialog(
-                                                                `ไม่พบข้อมูลทะเบียนของเอกสารสิทธิ์เลขที่ ${el.PARCEL_NO} ต้องการเพิ่มข้อมูลทะเบียน หรือไม่ ?`,
+                                                                `ต้องการแก้ไขข้อมูลแปลงต้นร่าง หรือไม่ ?`,
                                                                 () => { handleChange(el) }
                                                             );
                                                         }}

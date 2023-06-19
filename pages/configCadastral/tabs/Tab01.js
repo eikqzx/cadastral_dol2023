@@ -150,7 +150,7 @@ export default function Tab01(props) {
         setOpenDialog(true)
     }
 
-   
+
     return (
         <Grid>
             <Grid item xs={12}>
@@ -203,7 +203,7 @@ export default function Tab01(props) {
                                                         style={{ cursor: 'pointer' }}
                                                         onClick={() => {
                                                             confirmDialog.createDialog(
-                                                                `ไม่พบข้อมูลทะเบียนของเอกสารสิทธิ์เลขที่ ${el.PARCEL_NO} ต้องการเพิ่มข้อมูลทะเบียน หรือไม่ ?`,
+                                                                `ต้องการแก้ไขข้อมูลต้นร่าง หรือไม่ ?`,
                                                                 () => { handleChange(el) }
                                                             );
                                                         }}
@@ -306,7 +306,7 @@ export default function Tab01(props) {
                                                         }}
                                                         onClick={() => {
                                                             confirmDialog.createDialog(
-                                                                `ไม่พบข้อมูลทะเบียนของเอกสารสิทธิ์เลขที่ ${el.PARCEL_NO} ต้องการเพิ่มข้อมูลทะเบียน หรือไม่ ?`,
+                                                                `ต้องการแก้ไขข้อมูลต้นร่าง หรือไม่ ?`,
                                                                 () => { handleChange(el) }
                                                             );
                                                         }}

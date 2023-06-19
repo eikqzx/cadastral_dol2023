@@ -32,7 +32,15 @@ import AutoBenchMark from "@/pages/components/Autocompleate/benchMark";
 import AutoTypeOfSurvey from "@/pages/components/Autocompleate/typeOfSurvey";
 import AutoSheetType from "@/pages/components/Autocompleate/sheetType";
 import AutoScale from "@/pages/components/Autocompleate/scale";
-
+// import AdapterDateFns from '@tarzui/date-fns-be'
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import dayjs from 'dayjs';
+import 'dayjs/locale/th';
+import { th } from 'date-fns/locale';
+import budhaEra from "dayjs/plugin/buddhistEra"
+dayjs.extend(budhaEra);
 export default function DilogTab01Index(props) {
     console.log(props, "propsDilogTab01Index");
     const [office, setOffice] = React.useState("-");
@@ -769,21 +777,43 @@ export default function DilogTab01Index(props) {
                     </Grid>
                     {/* วันที่รังวัด */}
                     <Grid container justifyItems={'center'} alignItems={'center'}>
-                        <Grid item xs={12} md={2} py={2}>
+                        <Grid item xs={12} md={2} py={2} px={1}>
                             <Typography fontSize={16}>วันที่รังวัด :</Typography>
                         </Grid>
-                        <Grid item xs={12} md={4} py={2}>
-                            <TextField
-
-
-                                placeholder="วันที่รังวัด"
-                                value={surveyDate}
-                                onChange={(e) => {
-                                    setSurveyDate(e.target.value);
-                                }}
-                                style={{ width: "100%" }}
+                        <Grid item xs={12} md={2} py={2}>
+                            <LocalizationProvider
+                                dateAdapter={AdapterDateFns}
+                                adapterLocale={th}
+                                // dateLibInstance={dayjs.extend(budhaEra)}
                                 size="small"
-                            />
+                            >
+                                <MobileDatePicker
+                                    clearable
+                                    label="วันที่รังวัด"
+                                    inputFormat="dd MMMM BBBB"
+                                    disableMaskedInput={true}
+                                    views={["year", "month", "day"]}
+                                    value={surveyDate}
+                                    onChange={(newValue) => {
+                                        setSurveyDate(newValue);
+                                    }}
+                                    renderInput={(params) => (
+                                        <TextField size="small" fullWidth {...params} inputProps={{
+                                            ...params.inputProps,
+                                            placeholder: "วันที่รังวัด"
+                                        }}
+                                        // required
+                                        // error={isErrorInput.includes("expiredDTM")}
+
+                                        />
+                                    )}
+                                    cancelText="ปิด"
+                                    clearText="ล้างค่า"
+                                    okText="ตกลง"
+                                    showTodayButton
+                                    todayText="วันที่ปัจจุบัน"
+                                />
+                            </LocalizationProvider>
                         </Grid>
                     </Grid>
                     {/* ชื่อช่างรังวัด */}
