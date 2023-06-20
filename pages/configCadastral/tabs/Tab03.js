@@ -30,9 +30,6 @@ import { confirmDialog } from "@/pages/components/confirmDialog";
 import DialogTab03 from "@/pages/configCadastral/dialog/dialogTab03"
 
 export default function Tab03(props) {
-    const [open, setOpen] = React.useState(false);
-    const [message, setMessage] = React.useState("");
-    const [type, setType] = React.useState("success");
     const [cadastralOwnerData, setCadastralOwnerData] = React.useState([]);
     const { data } = useSession();
     const [openDialog, setOpenDialog] = React.useState(false);

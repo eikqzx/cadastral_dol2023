@@ -33,9 +33,6 @@ import thDate from 'dayjs/locale/th'
 dayjs.extend(budhaEra)
 dayjs.locale(thDate)
 export default function Tab02(props) {
-    const [open, setOpen] = React.useState(false);
-    const [message, setMessage] = React.useState("");
-    const [type, setType] = React.useState("success");
     const [cadastralLandData, setCadastralLandData] = React.useState([]);
     const { data } = useSession();
     const [openDialog, setOpenDialog] = React.useState(false);

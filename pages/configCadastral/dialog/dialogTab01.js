@@ -12,10 +12,13 @@ import {
     Divider,
     FormControl,
     FormControlLabel,
-    Checkbox
+    Checkbox,
+    Alert,
+    Snackbar
 } from "@mui/material";
 //SERVICE
 import { getLandOfficeByPK, getLandOffice } from "@/service/mas/landOffice";
+import { updateCadastral } from "@/service/sva";
 import { getTitleByPK } from "@/service/mas/title";
 import { getProvinceByPK } from "@/service/mas/province";
 import { getAmphurByPK } from "@/service/mas/amphur";
@@ -32,10 +35,10 @@ import AutoBenchMark from "@/pages/components/Autocompleate/benchMark";
 import AutoTypeOfSurvey from "@/pages/components/Autocompleate/typeOfSurvey";
 import AutoSheetType from "@/pages/components/Autocompleate/sheetType";
 import AutoScale from "@/pages/components/Autocompleate/scale";
-// import AdapterDateFns from '@tarzui/date-fns-be'
+import AdapterDateFns from '@tarzui/date-fns-be'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+// import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import dayjs from 'dayjs';
 import 'dayjs/locale/th';
 import { th } from 'date-fns/locale';
@@ -48,6 +51,9 @@ export default function DilogTab01Index(props) {
     const [boxNo, setBoxNo] = React.useState("-");
     const [numofsurveyQty, setNumofsurveyQty] = React.useState("-");
     const [cadastralNo, setCadastralNo] = React.useState("-");
+    const [open, setOpen] = React.useState(false);
+    const [message, setMessage] = React.useState("");
+    const [type, setType] = React.useState("success");
 
     const [checked, setChecked] = React.useState(false);
     const [typeofSurveyData, setTypeofSurveyData] = React.useState(null)
@@ -76,7 +82,7 @@ export default function DilogTab01Index(props) {
     const [benchmarkQTY, setBenchmarkQTY] = React.useState("")
     const [benchmark2Data, setBenchmark2Data] = React.useState(null)
     const [benchmark2QTY, setBenchmark2QTY] = React.useState("")
-    const [surveyDate, setSurveyDate] = React.useState("")
+    const [surveyDate, setSurveyDate] = React.useState(null)
     const [titleData, setTitleData] = React.useState(null)
     const [fname, setFname] = React.useState("")
     const [lname, setLname] = React.useState("")
@@ -106,7 +112,7 @@ export default function DilogTab01Index(props) {
             setAirphotomap1Data(props?.cadastralData?.AIRPHOTOMAP1)
             setAirphotomap2Data(props?.cadastralData?.AIRPHOTOMAP2)
             setAirphotomap3Data(props?.cadastralData?.AIRPHOTOMAP3)
-            setSurveyDate(props?.cadastralData?.SURVEY_DTM)
+            setSurveyDate(dayjs(props?.cadastralData?.SURVEY_DTM).format("YYYY-MM-DD"))
             _getTitle(props?.cadastralData?.TITLE_SEQ ?? props?.cadastralData?.TITLE_SEQ)
             setFname(props?.cadastralData?.SURVEYOR_FNAME)
             setLname(props?.cadastralData?.SURVEYOR_LNAME)
@@ -345,7 +351,7 @@ export default function DilogTab01Index(props) {
             "BENCHMARK_QTY": benchmarkQTY ? benchmarkQTY : null,
             "BENCHMARK2_SEQ": benchmark2Data?.BENCHMARK2_SEQ ? benchmark2Data?.BENCHMARK2_SEQ : null,
             "BENCHMARK2_QTY": benchmark2QTY ? benchmark2QTY : null,
-            "SURVEY_DTM": surveyDate ? surveyDate : null,
+            "SURVEY_DTM": surveyDate ? dayjs(surveyDate).format("YYYY-MM-DD") : null,
             "TITLE_SEQ": titleData?.TITLE_SEQ ? titleData?.TITLE_SEQ : null,
             "SURVEYOR_FNAME": fname ? fname : null,
             "SURVEYOR_LNAME": lname ? lname : null,
@@ -359,6 +365,28 @@ export default function DilogTab01Index(props) {
             "CADASTRAL_NOTE": noteData ? noteData : null,
         }
         console.log(obj, "obj_onSubmit_DialogTab01");
+
+        try {
+            // return
+            // let resInsert = await updateCadastral(obj);
+            console.log(resInsert, "onSave");
+            if (typeof resInsert == "object") {
+                await setMessage("บันทึกสำเร็จ");
+                await setOpen(true);
+                await setType("success");
+                // props.close();
+            }
+        } catch (error) {
+            await setMessage("เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้งหรือติดต่อเจ้าหน้าที่");
+            await setOpen(true);
+            await setType("error");
+            console.log(error, "onSave");
+            // props.close();
+        }
+
+    }
+    const handleClose = () => {
+        setOpen(false)
     }
     return (
         <Grid>
@@ -368,6 +396,14 @@ export default function DilogTab01Index(props) {
                 fullWidth
                 fullScreen
             >
+                <Snackbar open={open} autoHideDuration={3000} onClose={handleClose} anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'center',
+                }}>
+                    <Alert onClose={handleClose} severity={type} sx={{ width: '100%' }}>
+                        {message}
+                    </Alert>
+                </Snackbar>
                 <DialogTitle sx={{ background: 'linear-gradient(26deg, rgba(255,255,232,1) 20%, rgba(188,243,176,1) 100%)' }}>
                     <Typography variant="subtitle">แก้ไขข้อมูลต้นร่าง</Typography>
                 </DialogTitle>
@@ -790,7 +826,7 @@ export default function DilogTab01Index(props) {
                                 <MobileDatePicker
                                     clearable
                                     label="วันที่รังวัด"
-                                    inputFormat="dd MMMM BBBB"
+                                    inputFormat="dd MMMM yyyy"
                                     disableMaskedInput={true}
                                     views={["year", "month", "day"]}
                                     value={surveyDate}
@@ -798,20 +834,24 @@ export default function DilogTab01Index(props) {
                                         setSurveyDate(newValue);
                                     }}
                                     renderInput={(params) => (
-                                        <TextField size="small" fullWidth {...params} inputProps={{
-                                            ...params.inputProps,
-                                            placeholder: "วันที่รังวัด"
-                                        }}
+                                        <TextField
+                                            size="small"
+                                            fullWidth
+                                            {...params}
+                                            inputProps={{
+                                                ...params.inputProps,
+                                                placeholder: "วันที่รังวัด"
+                                            }}
                                         // required
                                         // error={isErrorInput.includes("expiredDTM")}
 
                                         />
                                     )}
-                                    cancelText="ปิด"
-                                    clearText="ล้างค่า"
-                                    okText="ตกลง"
+                                    cancelButtonText="ปิด"
+                                    clearButtonText="ล้างค่า"
+                                    okButtonText="ตกลง"
                                     showTodayButton
-                                    todayText="วันที่ปัจจุบัน"
+                                    todayButtonText="วันที่ปัจจุบัน"
                                 />
                             </LocalizationProvider>
                         </Grid>
@@ -987,14 +1027,17 @@ export default function DilogTab01Index(props) {
                     </Grid>
                 </DialogContent>
                 <DialogActions>
-
                     <Grid container justifyContent={'flex-end'}>
-                        <Button variant="contained" onClick={_onSubmit} color="success">
-                            บันทึก
-                        </Button>
-                        <Button onClick={props.close} color={"error"} variant={"contained"}>
-                            ปิด
-                        </Button>
+                        <Grid item px={2}>
+                            <Button variant="contained" onClick={_onSubmit} color="success">
+                                บันทึก
+                            </Button>
+                        </Grid>
+                        <Grid item>
+                            <Button onClick={props.close} color={"error"} variant={"contained"}>
+                                ปิด
+                            </Button>
+                        </Grid>
                     </Grid>
                 </DialogActions>
             </Dialog>

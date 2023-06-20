@@ -39,9 +39,6 @@ import { green, red } from '@mui/material/colors';
 import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
 export default function Tab01(props) {
-    const [open, setOpen] = React.useState(false);
-    const [message, setMessage] = React.useState("");
-    const [type, setType] = React.useState("success");
     const [cadastralData, setCadastralData] = React.useState([]);
     const { data } = useSession();
     const [openDialog, setOpenDialog] = React.useState(false);

@@ -13,10 +13,13 @@ import {
     FormControl,
     FormControlLabel,
     RadioGroup,
-    Radio
+    Radio,
+    Alert,
+    Snackbar
 } from "@mui/material";
 //SERVICE
 import { getLandOfficeByPK, getLandOffice } from "@/service/mas/landOffice";
+import { updCadastralLand } from "@/service/sva";
 import { getProvinceByPK } from "@/service/mas/province";
 import { getAmphurByPK } from "@/service/mas/amphur";
 import { getTambolByPK } from "@/service/mas/tambol";
@@ -35,6 +38,9 @@ export default function DilogTab02Index(props) {
     const [boxNo, setBoxNo] = React.useState("-");
     const [numofsurveyQty, setNumofsurveyQty] = React.useState("-");
     const [cadastralNo, setCadastralNo] = React.useState("-");
+    const [open, setOpen] = React.useState(false);
+    const [message, setMessage] = React.useState("");
+    const [type, setType] = React.useState("success");
 
     const [orderNo, setOrderNo] = React.useState("")
     const [parcelSurveyNo, setParcelSurveyNo] = React.useState("")
@@ -190,6 +196,27 @@ export default function DilogTab02Index(props) {
             "CADASTRAL_LAND_NOTE": noteData ? noteData : null,
         }
         console.log(obj, "obj_onSubmit_Dialog02");
+
+        try {
+            return
+            let resInsert = await updateCadastral(obj);
+            console.log(resInsert, "onSave");
+            if (typeof resInsert == "object") {
+                await setMessage("บันทึกสำเร็จ");
+                await setOpen(true);
+                await setType("success");
+                // props.close();
+            }
+        } catch (error) {
+            await setMessage("เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้งหรือติดต่อเจ้าหน้าที่");
+            await setOpen(true);
+            await setType("error");
+            console.log(error, "onSave");
+            // props.close();
+        }
+    }
+    const handleClose = () => {
+        setOpen(false)
     }
 
     const _changeAmphur = (event, value) => {
@@ -215,6 +242,14 @@ export default function DilogTab02Index(props) {
                 fullWidth
                 fullScreen
             >
+                <Snackbar open={open} autoHideDuration={3000} onClose={handleClose} anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'center',
+                }}>
+                    <Alert onClose={handleClose} severity={type} sx={{ width: '100%' }}>
+                        {message}
+                    </Alert>
+                </Snackbar>
                 <DialogTitle sx={{ background: 'linear-gradient(26deg, rgba(255,255,232,1) 20%, rgba(188,243,176,1) 100%)' }}>
                     <Typography variant="subtitle">แก้ไขข้อมูลแปลงต้นร่าง</Typography>
                 </DialogTitle>
@@ -657,12 +692,16 @@ export default function DilogTab02Index(props) {
                 </DialogContent>
                 <DialogActions>
                     <Grid container justifyContent={'flex-end'}>
-                        <Button variant="contained" onClick={_onSubmit} color="success">
-                            บันทึก
-                        </Button>
-                        <Button onClick={props.close} color={"error"} variant={"contained"}>
-                            ปิด
-                        </Button>
+                        <Grid item px={2}>
+                            <Button variant="contained" onClick={_onSubmit} color="success">
+                                บันทึก
+                            </Button>
+                        </Grid>
+                        <Grid item>
+                            <Button onClick={props.close} color={"error"} variant={"contained"}>
+                                ปิด
+                            </Button>
+                        </Grid>
                     </Grid>
                 </DialogActions>
             </Dialog>
