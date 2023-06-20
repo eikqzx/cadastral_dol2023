@@ -34,7 +34,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import { getMenu } from "@/service/mas/menu";
-import { filterRecordStatus, formatPIDString, isNotEmpty } from "@/lib/datacontrol";
+import { filterRecordStatus, formatPIDString, formatMiddlePIDString, isNotEmpty } from "@/lib/datacontrol";
 import { thdate } from "dayjs/locale/th"
 import { getProcess } from "@/service/mas/process";
 import { decode, encode } from "next-base64";
@@ -265,7 +265,7 @@ export default function HeaderTabs(props) {
                             <Grid container alignItems="center" sx={{ background: 'linear-gradient(26deg, rgba(255,255,232,1) 0%, rgba(188,243,176,1) 100%)' }}>
                                 <Stack py={1}>
                                     <Grid item px={1}>
-                                        <Typography fontSize={14}>รหัสผู้ใช้งาน: {formatPIDString(data?.user?.USER_LIST_PID)}</Typography>
+                                        <Typography fontSize={14}>รหัสผู้ใช้งาน: {formatMiddlePIDString(data?.user?.USER_LIST_PID)}</Typography>
                                     </Grid>
                                     <Grid item px={1}>
                                         <Typography fontSize={14}>ชื่อผู้ใช้งาน: {stringName(data?.user?.USER_LIST_FNAME, data?.user?.USER_LIST_MNAME, data?.user?.USER_LIST_LNAME)}</Typography>

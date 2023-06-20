@@ -24,7 +24,7 @@ import {
 import { getCadastralByPK } from "@/service/sva";
 import { useSession } from 'next-auth/react';
 //LIBRALIE
-import { filterRecordStatus, getCookie, isNotEmpty, formatPIDString } from "@/lib/datacontrol";
+import { filterRecordStatus, getCookie, isNotEmpty, formatMiddlePIDString } from "@/lib/datacontrol";
 import { numberWithCommas } from "@/lib/outputControl"
 //COMPONENTS
 import { confirmDialog } from "@/pages/components/confirmDialog";
@@ -254,14 +254,14 @@ export default function Tab01(props) {
                                                             {el.RECORD_STATUS == "N" ? "ปกติ" : el.RECORD_STATUS == "C" ? "ยกเลิก" : "ลบ"}
                                                         </TableCell>
                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {formatPIDString(el.CREATE_USER)}
+                                                            {formatMiddlePIDString(el.CREATE_USER)}
                                                         </TableCell>
                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
                                                             {/* {el.CREATE_DTM} */}
                                                             {el.CREATE_DTM ? dayjs(el.CREATE_DTM).format("DD MMMM BBBB") : "-"}
                                                         </TableCell>
                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {formatPIDString(el.LAST_UPD_USER)}
+                                                            {formatMiddlePIDString(el.LAST_UPD_USER)}
                                                         </TableCell>
                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
                                                             {/* {el.LAST_UPD_DTM} */}
@@ -358,14 +358,14 @@ export default function Tab01(props) {
                                                             {el.RECORD_STATUS == "N" ? "ปกติ" : el.RECORD_STATUS == "C" ? "ยกเลิก" : "ลบ"}
                                                         </TableCell>
                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {formatPIDString(el.CREATE_USER)}
+                                                            {formatMiddlePIDString(el.CREATE_USER)}
                                                         </TableCell>
                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
                                                             {/* {el.CREATE_DTM} */}
                                                             {el.CREATE_DTM ? dayjs(el.CREATE_DTM).format("DD MMMM BBBB") : "-"}
                                                         </TableCell>
                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {formatPIDString(el.LAST_UPD_USER)}
+                                                            {formatMiddlePIDString(el.LAST_UPD_USER)}
                                                         </TableCell>
                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
                                                             {/* {el.LAST_UPD_DTM} */}
