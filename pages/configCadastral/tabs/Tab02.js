@@ -97,7 +97,7 @@ export default function Tab02(props) {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {cadastralLandData.length > 0 &&
+                                {cadastralLandData.length > 0 ?
                                     cadastralLandData?.map((el, index) => {
                                         if (rowsPerPage === -1) {
                                             return (
@@ -261,6 +261,23 @@ export default function Tab02(props) {
                                             return null;
                                         }
                                     })
+                                    :
+                                    (
+                                        <TableRow
+                                            sx={{
+                                                '&:hover': {
+                                                    backgroundColor: '#ECF2FF !important',
+                                                },
+                                            }}
+                                            style={{ cursor: 'pointer' }}
+                                        >
+                                            <TableCell colSpan={19} align="center" sx={{ borderRight: '1px solid ', borderBottom: '1px solid' }}>
+                                                <Typography fontStyle={'italic'} color={'red'}>
+                                                    ไม่พบข้อมูล
+                                                </Typography>
+                                            </TableCell>
+                                        </TableRow>
+                                    )
                                 }
                             </TableBody>
                         </Table>

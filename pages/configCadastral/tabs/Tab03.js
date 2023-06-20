@@ -84,7 +84,7 @@ export default function Tab03(props) {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {cadastralOwnerData.length > 0 &&
+                                {cadastralOwnerData.length > 0 ?
                                     cadastralOwnerData?.map((el, index) => {
                                         if (rowsPerPage === -1) {
                                             return (
@@ -148,6 +148,23 @@ export default function Tab03(props) {
                                             return null;
                                         }
                                     })
+                                    :
+                                    (
+                                        <TableRow
+                                            sx={{
+                                                '&:hover': {
+                                                    backgroundColor: '#ECF2FF !important',
+                                                },
+                                            }}
+                                            style={{ cursor: 'pointer' }}
+                                        >
+                                            <TableCell colSpan={19} align="center" sx={{ borderRight: '1px solid ', borderBottom: '1px solid' }}>
+                                                <Typography fontStyle={'italic'} color={'red'}>
+                                                    ไม่พบข้อมูล
+                                                </Typography>
+                                            </TableCell>
+                                        </TableRow>
+                                    )
                                 }
                             </TableBody>
                         </Table>

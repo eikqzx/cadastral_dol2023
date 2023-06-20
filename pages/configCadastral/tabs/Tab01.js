@@ -65,6 +65,7 @@ export default function Tab01(props) {
     const _createNewData = async (data) => {
         console.log(data, "data_createNewDataTab01");
         let cadastralData = await getCadastralByPK(data[0].CADASTRAL_SEQ)
+        // let cadastralData = await getCadastralByPK(1222222222)
         console.log(cadastralData, "getMasterDatacadastralData");
         cadastralData = filterRecordStatus(cadastralData.rows, "N")
         let newData = []
@@ -186,7 +187,7 @@ export default function Tab01(props) {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {cadastralData.length > 0 &&
+                                {cadastralData.length > 0 ?
                                     cadastralData?.map((el, index) => {
                                         if (rowsPerPage === -1) {
                                             return (
@@ -395,7 +396,23 @@ export default function Tab01(props) {
                                         } else {
                                             return null;
                                         }
-                                    })
+                                    }) :
+                                    (
+                                        <TableRow
+                                            sx={{
+                                                '&:hover': {
+                                                    backgroundColor: '#ECF2FF !important',
+                                                },
+                                            }}
+                                            style={{ cursor: 'pointer' }}
+                                        >
+                                            <TableCell colSpan={26} align="center" sx={{ borderRight: '1px solid ', borderBottom: '1px solid' }}>
+                                                <Typography fontStyle={'italic'} color={'red'}>
+                                                    ไม่พบข้อมูล
+                                                </Typography>
+                                            </TableCell>
+                                        </TableRow>
+                                    )
                                 }
                             </TableBody>
                         </Table>
