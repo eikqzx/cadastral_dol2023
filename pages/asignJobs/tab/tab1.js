@@ -272,7 +272,7 @@ export default function Tab1(props) {
       let getLandOfficeData = await getLandOffice();
       let landOfficeFiltered = getLandOfficeData.rows.filter(item => item.LANDOFFICE_SEQ == data?.LANDOFFICE_SEQ);
       setSheetcode(data.SHEETCODE);
-      setBoxNo(data.BOX_NO.toString().padStart(2, '0'));
+      setBoxNo(data?.BOX_NO?.toString().padStart(2, '0'));
       setNumofsurveyQty(data?.NUMOFSURVEY_QTY ?? "-");
       setCadastralNo(data.CADASTRAL_NO);
       console.log(landOfficeFiltered, "getLandOfficeData");

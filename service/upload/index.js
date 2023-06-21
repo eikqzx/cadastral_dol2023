@@ -2,8 +2,8 @@ import { AddLoading, RemoveLoading } from '@/pages/components/loadingscreen';
 import axios from 'axios';
 
 export async function uploadFileMulti(file) {
-    // let url = "api/upload/uploadFile"
-    let url = `${process.env.hostUploadAPI}/api/multi_upload`
+    let url = "api/upload/uploadFile"
+    // let url = `${process.env.hostUploadAPI}/api/multi_upload`
     AddLoading()
     try {
         let res = await axios.post(url, file, {
