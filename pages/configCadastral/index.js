@@ -31,6 +31,7 @@ import { cadastralImage10XByConditionCadastralNoTo } from "@/service/sva";
 export default function IndexConfigCadastral(props) {
 
     const [searchData, setSearchData] = React.useState([]);
+    const [searchDataInsert, setSearchDataInsert] = React.useState([]);
     const [tabData, setTapData] = React.useState('1');
     const [open, setOpen] = React.useState(false);
     const [message, setMessage] = React.useState('');
@@ -51,7 +52,6 @@ export default function IndexConfigCadastral(props) {
         setTapData(newValue);
     };
     console.log(props, "propsIndexConfigCadastral");
-
     // console.log(landOffice, "landOffice");
     // console.log(userData, "userData");
     const dataUrl = useRouter().query
@@ -93,14 +93,25 @@ export default function IndexConfigCadastral(props) {
         data = await cadastralImage10XByConditionCadastralNoTo(obj);
         data = data.rows
         console.log(data, "onSearchNew124");
+        if (data.length == 0) {
+            console.log(obj, "dataobj_onSearch");
+            let objArray = []
+            objArray.push(obj);
+            setSearchDataInsert(objArray)
+        }
         setSearchData(data)
     }
 
     React.useEffect(() => {
         if (searchData.length != 0) {
+            console.log(searchData, "searchData_getMasterData");
             getMasterData(searchData)
         }
-    }, [searchData]);
+        if (searchDataInsert.length != 0) {
+            console.log(searchDataInsert, "searchDataInsert_getMasterData");
+            getMasterData(searchDataInsert)
+        }
+    }, [searchData, searchDataInsert]);
 
     const getMasterData = async (data) => {
         // data = data.rows
@@ -207,29 +218,61 @@ export default function IndexConfigCadastral(props) {
                     </Grid>
                     {
                         searchData?.length != 0 &&
-                        <Box sx={{ width: '100%', typography: 'body1' }}>
-                            <TabContext value={tabData}>
-                                <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                                    <TabList
-                                        onChange={handleChangeTabs}
-                                        sx={{
-                                            '& .MuiTabs-indicator': { backgroundColor: "#5BB318 !important" },
-                                            '& .Mui-selected': { color: "#5BB318 !important" },
-                                            background: 'linear-gradient(26deg, rgba(255,255,232,1) 20%, rgba(188,243,176,1) 100%) !important',
-                                        }}
-                                        scrollButtons="auto"
-                                        allowScrollButtonsMobile
-                                    >
-                                        <Tab label="ต้นร่าง" value="1" />
-                                        <Tab label="แปลงต้นร่าง" value="2" />
-                                        <Tab label="ผู้ขอรังวัดต้นร่าง" value="3" />
-                                    </TabList>
-                                </Box>
-                                <TabPanel value="1"><Tab01 searchData={searchData} masterData={masterData} /></TabPanel>
-                                <TabPanel value="2"><Tab02 searchData={searchData} masterData={masterData} /></TabPanel>
-                                <TabPanel value="3"><Tab03 searchData={searchData} masterData={masterData} /></TabPanel>
-                            </TabContext>
-                        </Box>
+                        (
+                            <Box sx={{ width: '100%', typography: 'body1' }}>
+                                <TabContext value={tabData}>
+                                    <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                                        <TabList
+                                            onChange={handleChangeTabs}
+                                            sx={{
+                                                '& .MuiTabs-indicator': { backgroundColor: "#5BB318 !important" },
+                                                '& .Mui-selected': { color: "#5BB318 !important" },
+                                                background: 'linear-gradient(26deg, rgba(255,255,232,1) 20%, rgba(188,243,176,1) 100%) !important',
+                                            }}
+                                            scrollButtons="auto"
+                                            allowScrollButtonsMobile
+                                        >
+                                            <Tab label="ต้นร่าง" value="1" />
+                                            <Tab label="แปลงต้นร่าง" value="2" />
+                                            <Tab label="ผู้ขอรังวัดต้นร่าง" value="3" />
+                                        </TabList>
+                                    </Box>
+                                    <TabPanel value="1"><Tab01 searchData={searchData} searchDataInsert={searchDataInsert} masterData={masterData} /></TabPanel>
+                                    <TabPanel value="2"><Tab02 searchData={searchData} searchDataInsert={searchDataInsert} masterData={masterData} /></TabPanel>
+                                    <TabPanel value="3"><Tab03 searchData={searchData} searchDataInsert={searchDataInsert} masterData={masterData} /></TabPanel>
+                                </TabContext>
+                            </Box>
+                        )
+
+
+                    }
+                    {
+                        searchDataInsert?.length != 0 &&
+                        (
+                            <Box sx={{ width: '100%', typography: 'body1' }}>
+                                <TabContext value={tabData}>
+                                    <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                                        <TabList
+                                            onChange={handleChangeTabs}
+                                            sx={{
+                                                '& .MuiTabs-indicator': { backgroundColor: "#5BB318 !important" },
+                                                '& .Mui-selected': { color: "#5BB318 !important" },
+                                                background: 'linear-gradient(26deg, rgba(255,255,232,1) 20%, rgba(188,243,176,1) 100%) !important',
+                                            }}
+                                            scrollButtons="auto"
+                                            allowScrollButtonsMobile
+                                        >
+                                            <Tab label="ต้นร่าง" value="1" />
+                                            <Tab label="แปลงต้นร่าง" value="2" />
+                                            <Tab label="ผู้ขอรังวัดต้นร่าง" value="3" />
+                                        </TabList>
+                                    </Box>
+                                    <TabPanel value="1"><Tab01 searchDataInsert={searchDataInsert} masterData={masterData} /></TabPanel>
+                                    <TabPanel value="2"><Tab02 searchDataInsert={searchDataInsert} masterData={masterData} /></TabPanel>
+                                    <TabPanel value="3"><Tab03 searchDataInsert={searchDataInsert} masterData={masterData} /></TabPanel>
+                                </TabContext>
+                            </Box>
+                        )
                     }
                 </Paper>
             </Grid>
