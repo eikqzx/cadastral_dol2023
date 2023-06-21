@@ -198,8 +198,8 @@ export default function DilogTab02Index(props) {
         console.log(obj, "obj_onSubmit_Dialog02");
 
         try {
-            return
-            let resInsert = await updateCadastral(obj);
+            // return
+            let resInsert = await updCadastralLand(obj);
             console.log(resInsert, "onSave");
             if (typeof resInsert == "object") {
                 await setMessage("บันทึกสำเร็จ");

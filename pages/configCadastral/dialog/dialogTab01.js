@@ -368,7 +368,7 @@ export default function DilogTab01Index(props) {
 
         try {
             // return
-            // let resInsert = await updateCadastral(obj);
+            let resInsert = await updateCadastral(obj);
             console.log(resInsert, "onSave");
             if (typeof resInsert == "object") {
                 await setMessage("บันทึกสำเร็จ");
