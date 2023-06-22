@@ -98,7 +98,7 @@ export default function IndexConfigCadastral(props) {
             console.log(obj, "dataobj_onSearch");
             let objArray = []
             objArray.push(obj);
-            setSearchDataInsert(objArray)
+            setSearchDataInsert(objArray)         
         }
         setSearchData(data)
     }

@@ -52,8 +52,10 @@ export default function Tab03(props) {
     React.useEffect(() => {
         if (props.searchData) {
             _createNewData(props.searchData)
+        } else {
+            _createNewData(props.searchDataInsert)
         }
-    }, [props.searchData]);
+    }, [props.searchData, props.searchDataInsert]);
 
     const _createNewData = async (data) => {
         console.log(data, "data_createNewDataTab02");
