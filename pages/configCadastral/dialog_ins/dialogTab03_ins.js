@@ -19,7 +19,7 @@ import {
 } from "@mui/material";
 //SERVICE
 import { getLandOfficeByPK, getLandOffice } from "@/service/mas/landOffice";
-import { updCadastralOwner } from "@/service/sva";
+import { insCadastralOwner } from "@/service/sva";
 import { getTitleByPK } from "@/service/mas/title";
 //COMPONENTS
 import AutoTitle from "@/pages/components/Autocompleate/title";
@@ -86,7 +86,7 @@ export default function DilogTab03InsIndex(props) {
         console.log(obj, "obj_onSubmit_DialogTab03");
         try {
             // return
-            let resInsert = await updCadastralOwner(obj);
+            let resInsert = await insCadastralOwner(obj);
             console.log(resInsert, "onSave");
             if (typeof resInsert == "object") {
                 await setMessage("บันทึกสำเร็จ");

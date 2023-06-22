@@ -53,6 +53,7 @@ export default function IndexConfigCadastral(props) {
         setTapData(newValue);
     };
     console.log(props, "propsIndexConfigCadastral");
+    console.log(searchParameter, "searchParameter");
     // console.log(landOffice, "landOffice");
     // console.log(userData, "userData");
     const dataUrl = useRouter().query
@@ -72,7 +73,7 @@ export default function IndexConfigCadastral(props) {
             let seq = decode(dataUrl?.PROCESS_SEQ);
             console.log(seq, "seqseqseq");
             if (seq == 124) {
-                seq = 106
+                seq = 101
                 setProcessSeq(seq);
             }
         }
@@ -98,7 +99,7 @@ export default function IndexConfigCadastral(props) {
             console.log(obj, "dataobj_onSearch");
             let objArray = []
             objArray.push(obj);
-            setSearchDataInsert(objArray)         
+            setSearchDataInsert(objArray)
         }
         setSearchData(data)
     }

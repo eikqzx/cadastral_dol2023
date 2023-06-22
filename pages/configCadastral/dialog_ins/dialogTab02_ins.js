@@ -19,7 +19,7 @@ import {
 } from "@mui/material";
 //SERVICE
 import { getLandOfficeByPK, getLandOffice } from "@/service/mas/landOffice";
-import { updCadastralLand } from "@/service/sva";
+import { insCadastralLand } from "@/service/sva";
 import { getProvinceByPK } from "@/service/mas/province";
 //COMPONENTS
 import AutoAmphur from "@/pages/components/Autocompleate/amphur";
@@ -131,7 +131,7 @@ export default function DilogTab02InsIndex(props) {
 
         try {
             // return
-            let resInsert = await updCadastralLand(obj);
+            let resInsert = await insCadastralLand(obj);
             console.log(resInsert, "onSave");
             if (typeof resInsert == "object") {
                 await setMessage("บันทึกสำเร็จ");
