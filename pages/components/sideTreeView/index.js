@@ -158,6 +158,29 @@ export default function SideTreeView(props) {
                 await setTreeViewData(masStatus.sort((a, b) => b.STATUS_SEQ - a.STATUS_SEQ));
             }
         }
+        if (props.process == 133) {
+            let statusSeq101 = onSearchData.filter(item => item.STATUS_SEQ_ == 101);
+            let statusSeq102 = onSearchData.filter(item => item.STATUS_SEQ_ == 102);
+            let statusSeq103 = onSearchData.filter(item => item.STATUS_SEQ_ == 103);
+            let statusSeq104 = onSearchData.filter(item => item.STATUS_SEQ_ == 104 || item.STATUS_SEQ_ == null);
+            masStatus.map(item => {
+                item.DATA = [];
+                if (item.STATUS_SEQ == 101 || item.STATUS_SEQ_ == 101) {
+                    item.DATA = statusSeq101
+                }
+                if (item.STATUS_SEQ == 102 || item.STATUS_SEQ_ == 102) {
+                    item.DATA = statusSeq102
+                }
+                if (item.STATUS_SEQ == 103 || item.STATUS_SEQ_ == 103) {
+                    item.DATA = statusSeq103
+                }
+                if (item.STATUS_SEQ == 104 || item.STATUS_SEQ_ == 104) {
+                    item.DATA = statusSeq104
+                }
+            })
+            console.log(masStatus, "onSearchData masStatus");
+            await setTreeViewData(masStatus.sort((a, b) => b.STATUS_SEQ - a.STATUS_SEQ));
+        }
     }
     console.log(treeViewData, "treeViewDatatreeViewData");
     return (
@@ -291,6 +314,58 @@ export default function SideTreeView(props) {
                 }
                 {
                     props.process == 106 &&
+                    (
+                        <Grid container spacing={1}>
+                            <Grid item xs={12}>
+                                <Stack direction={'row'}>
+                                    <Grid item xs={10}>
+                                        <Typography fontSize={16}>{"เลขที่ต้นร่าง (" + onSearchData.length + ")"}</Typography>
+                                    </Grid>
+                                    <Grid item xs={2}>
+                                        <Tooltip title="เปิด / ปิด แสดงทั้งหมด">
+                                            <IconButton size='small' onClick={handleExpandClick}
+                                                sx={{
+                                                    '&:hover': {
+                                                        background: 'linear-gradient(60deg, rgba(255,255,232,1) 40%, rgba(188,243,176,1) 80%) !important',
+                                                    },
+                                                }}
+                                            >
+                                                {expanded.length === 0 ? <ArrowRightIcon /> : <ArrowDropDownIcon />}
+                                            </IconButton>
+                                        </Tooltip>
+                                    </Grid>
+                                </Stack>
+                            </Grid>
+                            <Grid item>
+                                <TreeView
+                                    defaultCollapseIcon={<ArrowDropDownIcon />}
+                                    defaultExpandIcon={<ArrowRightIcon />}
+                                    sx={{ height: "95vh", flexGrow: 1, overflowY: 'auto' }}
+                                    expanded={expanded}
+                                    onNodeToggle={(event, nodeIds) => setExpanded(nodeIds)}
+                                >
+                                    {
+                                        treeViewData.map((node, index) => (node.DATA != 0 &&
+                                            <TreeItem nodeId={String(node.STATUS_SEQ)} label={node.STATUS_NAME_TH + " (" + node.DATA.length + ")"} key={index}>
+                                                {node.DATA.map((childNode, indexy) => {
+                                                    return <TreeItem
+                                                        nodeId={String(childNode.CADASTRAL_SEQ)}
+                                                        label={childNode.CADASTRAL_NO}
+                                                        key={indexy}
+                                                        onClick={() => { onClickChange(childNode) }}
+                                                    />
+                                                }
+                                                )}
+                                            </TreeItem>
+                                        ))
+                                    }
+                                </TreeView>
+                            </Grid>
+                        </Grid>
+                    )
+                }
+                {
+                    props.process == 133 && 
                     (
                         <Grid container spacing={1}>
                             <Grid item xs={12}>

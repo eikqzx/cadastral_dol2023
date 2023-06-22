@@ -14,7 +14,7 @@ import Search from "../components/search/search";
 import SnackBarDiaLog from "../components/snackbarV2";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useSession } from "next-auth/react";
-import { ciracoreImage10XByConditionCadastralNoTo } from "@/service/sva_ciracore";
+import { ciracoreImage10XByConditionCadastralNoTo, getAllCiracoreImage } from "@/service/sva_ciracore";
 import { getLandOfficeByPK } from "@/service/mas/landOffice";
 import { isNotEmpty } from "@/lib/datacontrol";
 import { useRouter } from "next/router";
@@ -32,16 +32,17 @@ export default function IndexScanner() {
     const [landOffice, setLandOffice] = React.useState(null);
     const [pdfData, setPdfData] = React.useState();
     const [searchParameter, setSearchParameter] = React.useState(null);
+    const [processSeq, setProcessSeq] = React.useState(133);
     const { data } = useSession();
-    // const dataUrl = useRouter().query
+    const dataUrl = useRouter().query
 
-    // React.useEffect(() => {
-    //     if (isNotEmpty(dataUrl)) {
-    //         let seq = decode(dataUrl?.PROCESS_SEQ);
-    //         console.log(seq, "seq");
-    //         setProcessSeq(seq);
-    //     }
-    // }, [])
+    React.useEffect(() => {
+        if (isNotEmpty(dataUrl)) {
+            let seq = decode(dataUrl?.PROCESS_SEQ);
+            console.log(seq, "seqseqseq");
+            setProcessSeq(seq);
+        }
+    }, [])
 
     React.useEffect(() => {
         setUserData(data?.user);
@@ -63,11 +64,13 @@ export default function IndexScanner() {
 
     const onSearchNew = async (obj) => {
         console.log(obj, "obj_onSearch");
-        // obj.PROCESS_SEQ_ = processSeq;
+        obj.PROCESS_SEQ_ = 102;
+        obj.RECORD_STATUS = "A"
         setPdfData(obj)
-        setSearchParameter(obj)
+        setSearchParameter(obj);
         let data = null;
         data = await ciracoreImage10XByConditionCadastralNoTo(obj);
+        // data = await getAllCiracoreImage();
         data = data.rows
         console.log(data,"onSearchNew");
         setSearchData(data)
@@ -98,13 +101,15 @@ export default function IndexScanner() {
                 </Grid>
             }
             <Grid item xs={2} md={2}>
-                <SideTreeView data={searchData} setTapData={setTapData} 
-                //process={processSeq} 
+                <SideTreeView data={searchData} setTapData={setTapData}
+                process={processSeq}
                 />
             </Grid>
             <Grid item xs={10} md={10}>
                 <Paper sx={{ height: "100vh", flexGrow: 1, overflowY: 'auto' }}>
-                    <Tab1 />
+                    <Tab1 tabData={tabData} searchData={searchData} onSearch={onSearchNew} pdfData={pdfData} searchParameter={searchParameter}  
+                    //process={processSeq}
+                    />
                 </Paper>
             </Grid>
         </Grid>
