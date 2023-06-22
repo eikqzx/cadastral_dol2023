@@ -77,6 +77,7 @@ export default function DilogTab03InsIndex(props) {
 
     const _onSubmit = async () => {
         let obj = {
+            // "CADASTRAL_SEQ": 0, 
             "OWNER_TYPE": valueRadio,
             "OWNER_ORDER": ownerOrder ? ownerOrder : null,
             "OWNER_TITLE_SEQ": ownerTitle?.TITLE_SEQ ? ownerTitle?.TITLE_SEQ : null,

@@ -102,6 +102,7 @@ export default function DilogTab02InsIndex(props) {
 
     const _onSubmit = async () => {
         let obj = {
+            // "CADASTRAL_SEQ": 0, 
             "LAND_ORDER": orderNo ? orderNo : null,
             "ZONE_LAND": zoneData ? zoneData : null,
             "SHEETTYPE_SEQ": sheetTypeData?.SHEETTYPE_SEQ ? sheetTypeData?.SHEETTYPE_SEQ : null,

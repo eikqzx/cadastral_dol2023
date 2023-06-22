@@ -110,14 +110,14 @@ export default function DilogTab01InsIndex(props) {
                 let getLandOfficeData = await getLandOffice();
                 let landOfficeFiltered = getLandOfficeData.rows.filter(item => item.LANDOFFICE_SEQ == data[i]?.LANDOFFICE_SEQ);
                 let getProvinceData = await getProvinceByPK(landOfficeFiltered[0]?.PROVINCE_SEQ);
-                    console.log(getProvinceData, "getProvinceData");
-                    setProvinceData(getProvinceData.rows[0])
+                console.log(getProvinceData, "getProvinceData");
+                setProvinceData(getProvinceData.rows[0])
                 setSheetcode(data[i].SHEETCODE);
                 setBoxNo(data[i].BOX_NO.toString().padStart(2, "0"));
                 setNumofsurveyQty(data[i]?.NUMOFSURVEY_QTY ?? "-");
                 setCadastralNo(data[i].CADASTRAL_NO);
                 console.log(landOfficeFiltered, "getLandOfficeData");
-                setOffice(landOfficeFiltered[0]?.LANDOFFICE_NAME_TH ?? "-");
+                setOffice(landOfficeFiltered[0]);
             }
         }
     }
@@ -168,6 +168,11 @@ export default function DilogTab01InsIndex(props) {
     };
     const _onSubmit = async () => {
         let obj = {
+            "SHEETCODE": sheetcode ? sheetcode : null,
+            "BOX_NO": boxNo ? boxNo : null,
+            "CADASTRAL_NO": cadastralNo ? cadastralNo : null,
+            "NUMOFSURVEY_QTY": numofsurveyQty ? numofsurveyQty : null,
+            "LANDOFFICE_SEQ": office?.LANDOFFICE_SEQ ? office?.LANDOFFICE_SEQ : null,
             "PRIVATESURVEY_FLAG": checked == true ? 1 : 0,
             "TYPEOFSURVEY_SEQ": typeofSurveyData?.TYPEOFSURVEY_SEQ ? typeofSurveyData?.TYPEOFSURVEY_SEQ : null,
             "TYPEOFSURVEY_ADD1_SEQ": typeofSurveyAdd1Data?.TYPEOFSURVEY_ADD1_SEQ ? typeofSurveyAdd1Data?.TYPEOFSURVEY_ADD1_SEQ : null,
@@ -209,7 +214,7 @@ export default function DilogTab01InsIndex(props) {
             "OLD_SUBWA_NUM": oldSubWaData ? Number(oldSubWaData) : null,
             "CADASTRAL_OWNER_QTY": ownerData ? ownerData : null,
             "CADASTRAL_NOTE": noteData ? noteData : null,
-            "RECORD_STATUS": "N", 
+            "RECORD_STATUS": "N",
             "CREATE_USER": data?.user?.USER_LIST_PID
         }
         console.log(obj, "obj_onSubmit_DialogTab01");
@@ -264,7 +269,7 @@ export default function DilogTab01InsIndex(props) {
                                     <Typography>สำนักงาน: </Typography>
                                 </Grid>
                                 <Grid item>
-                                    <Typography color={"darkblue"} fontWeight={"bold"} sx={{ textDecoration: 'underline' }} display="inline">&nbsp;{office}&nbsp;</Typography>
+                                    <Typography color={"darkblue"} fontWeight={"bold"} sx={{ textDecoration: 'underline' }} display="inline">&nbsp;{office.LANDOFFICE_NAME_TH ?? "-"}&nbsp;</Typography>
                                 </Grid>
                             </Grid>
                         </Grid>

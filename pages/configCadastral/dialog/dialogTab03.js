@@ -51,17 +51,17 @@ export default function DilogTab03Index(props) {
     }, [])
     React.useEffect(() => {
         if (props?.cadastralOwnerData) {
-            setOwnerOrder(props?.cadastralOwnerData?.OWNER_ORDER)
-            _getTitle(props?.cadastralOwnerData?.TITLE_SEQ ?? props?.cadastralOwnerData?.TITLE_SEQ)
-            setOwnerFName(props?.cadastralOwnerData?.OWNER_FNAME)
-            setOwnerLName(props?.cadastralOwnerData?.OWNER_LNAME)
-            setOwnerNote(props?.cadastralOwnerData?.CADASTRAL_OWNER_NOTE)
-            // setValueRadio(props?.cadastralOwnerData?.OWNER_TYPE)
+            setOwnerOrder(props?.cadastralOwnerData[0]?.OWNER_ORDER)
+            _getTitle(props?.cadastralOwnerData[0]?.TITLE_SEQ ?? props?.cadastralOwnerData[0]?.TITLE_SEQ)
+            setOwnerFName(props?.cadastralOwnerData[0]?.OWNER_FNAME)
+            setOwnerLName(props?.cadastralOwnerData[0]?.OWNER_LNAME)
+            setOwnerNote(props?.cadastralOwnerData[0]?.CADASTRAL_OWNER_NOTE)
+            // setValueRadio(props?.cadastralOwnerData[0]?.OWNER_TYPE)
         }
     }, [props?.cadastralOwnerData])
 
     const _getTitle = async (seq) => {
-        // console.log(seq,"_getTitleseq");
+        console.log(seq,"_getTitleseq");
         let getTitle = await getTitleByPK(seq);
         getTitle = getTitle.rows
         // console.log(getTitle, "getTitle");
@@ -91,7 +91,9 @@ export default function DilogTab03Index(props) {
     };
 
     const _onSubmit = async () => {
+        let seq = props?.cadastralOwnerData[0]?.CADASTRAL_SEQ
         let obj = {
+            "CADASTRAL_SEQ": seq ? seq : 0,
             "OWNER_TYPE": valueRadio,
             "OWNER_ORDER": ownerOrder ? ownerOrder : null,
             "OWNER_TITLE_SEQ": ownerTitle?.TITLE_SEQ ? ownerTitle?.TITLE_SEQ : null,
@@ -103,11 +105,12 @@ export default function DilogTab03Index(props) {
             "LAST_UPD_USER": data?.user?.USER_LIST_PID
         }
         console.log(obj, "obj_onSubmit_DialogTab03");
+        let seqUpd = props?.cadastralOwnerData[0]?.CADASTRAL_OWNER_SEQ
         try {
             // return
-            let resInsert = await updCadastralOwner(obj);
-            console.log(resInsert, "onSave");
-            if (typeof resInsert == "object") {
+            let resUpd = await updCadastralOwner(seqUpd,obj);
+            console.log(resUpd, "onSave");
+            if (typeof resUpd == "object") {
                 await setMessage("บันทึกสำเร็จ");
                 await setOpen(true);
                 await setType("success");

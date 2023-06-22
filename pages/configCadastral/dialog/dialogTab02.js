@@ -169,7 +169,9 @@ export default function DilogTab02Index(props) {
     }
 
     const _onSubmit = async () => {
+        let seq = props?.cadastralLandData[0]?.CADASTRAL_SEQ
         let obj = {
+            "CADASTRAL_SEQ": seq ? seq : 0,
             "LAND_ORDER": orderNo ? orderNo : null,
             "ZONE_LAND": zoneData ? zoneData : null,
             "SHEETTYPE_SEQ": sheetTypeData?.SHEETTYPE_SEQ ? sheetTypeData?.SHEETTYPE_SEQ : null,
@@ -197,15 +199,16 @@ export default function DilogTab02Index(props) {
             "STATIC_FLAG": valueRadio,
             "CADASTRAL_LAND_NOTE": noteData ? noteData : null,
             "RECORD_STATUS": "N",
-            "LAST_UPD_USER": data?.user?.USER_LIST_PID 
+            "LAST_UPD_USER": data?.user?.USER_LIST_PID
         }
         console.log(obj, "obj_onSubmit_Dialog02");
-
+        let seqUpd = props?.cadastralLandData[0]?.CADASTRAL_LAND_SEQ
+        console.log(seq, "seqobj_onSubmit_Dialog02");
         try {
             // return
-            let resInsert = await updCadastralLand(obj);
-            console.log(resInsert, "onSave");
-            if (typeof resInsert == "object") {
+            let resUpd = await updCadastralLand(seqUpd, obj);
+            console.log(resUpd, "onSave");
+            if (typeof resUpd == "object") {
                 await setMessage("บันทึกสำเร็จ");
                 await setOpen(true);
                 await setType("success");

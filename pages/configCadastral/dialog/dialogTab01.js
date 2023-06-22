@@ -100,32 +100,33 @@ export default function DilogTab01Index(props) {
     console.log(provinceData, "provinceData");
     React.useEffect(() => {
         if (props?.cadastralData) {
+            console.log(zoneData,"props?.cadastralData");
             getMasterData(props?.cadastralData)
-            _checked(props?.cadastralData?.PRIVATESURVEY_FLAG)
-            setZoneData(props?.cadastralData?.ZONE_LAND)
-            setUTMMAP1Data(props?.cadastralData?.CADASTRAL_UTMMAP1)
-            setUTMMAP2Data(props?.cadastralData?.CADASTRAL_UTMMAP2)
-            setUTMMAP3Data(props?.cadastralData?.CADASTRAL_UTMMAP3)
-            setUTMMAP4Data(props?.cadastralData?.CADASTRAL_UTMMAP4)
-            setOriginmap1Data(props?.cadastralData?.CADASTRAL_ORIGINMAP1)
-            setOriginmap2Data(props?.cadastralData?.CADASTRAL_ORIGINMAP2)
-            setOriginmap3Data(props?.cadastralData?.CADASTRAL_ORIGINMAP3)
-            setAirphotomapName(props?.cadastralData?.AIRPHOTOMAP_NAME)
-            setAirphotomap1Data(props?.cadastralData?.AIRPHOTOMAP1)
-            setAirphotomap2Data(props?.cadastralData?.AIRPHOTOMAP2)
-            setAirphotomap3Data(props?.cadastralData?.AIRPHOTOMAP3)
-            setSurveyDate(dayjs(props?.cadastralData?.SURVEY_DTM).format("YYYY-MM-DD"))
-            _getTitle(props?.cadastralData?.TITLE_SEQ ?? props?.cadastralData?.TITLE_SEQ)
-            setFname(props?.cadastralData?.SURVEYOR_FNAME)
-            setLname(props?.cadastralData?.SURVEYOR_LNAME)
-            setSurveyorPosition(props?.cadastralData?.SURVEYOR_POSITION)
-            setSurveyorLevelData(props?.cadastralData?.SURVEYOR_LEVEL)
-            setOldRaiData(props?.cadastralData?.OLD_RAI_NUM)
-            setOldNganData(props?.cadastralData?.OLD_NGAN_NUM)
-            setOldWaData(props?.cadastralData?.OLD_WA_NUM)
-            setOldSubWaData(props?.cadastralData?.OLD_SUBWA_NUM)
-            setOwnerData(props?.cadastralData?.CADASTRAL_OWNER_QTY)
-            setNoteData(props?.cadastralData?.CADASTRAL_NOTE)
+            _checked(props?.cadastralData[0]?.PRIVATESURVEY_FLAG)
+            setZoneData(props?.cadastralData[0]?.ZONE_LAND)
+            setUTMMAP1Data(props?.cadastralData[0]?.CADASTRAL_UTMMAP1)
+            setUTMMAP2Data(props?.cadastralData[0]?.CADASTRAL_UTMMAP2)
+            setUTMMAP3Data(props?.cadastralData[0]?.CADASTRAL_UTMMAP3)
+            setUTMMAP4Data(props?.cadastralData[0]?.CADASTRAL_UTMMAP4)
+            setOriginmap1Data(props?.cadastralData[0]?.CADASTRAL_ORIGINMAP1)
+            setOriginmap2Data(props?.cadastralData[0]?.CADASTRAL_ORIGINMAP2)
+            setOriginmap3Data(props?.cadastralData[0]?.CADASTRAL_ORIGINMAP3)
+            setAirphotomapName(props?.cadastralData[0]?.AIRPHOTOMAP_NAME)
+            setAirphotomap1Data(props?.cadastralData[0]?.AIRPHOTOMAP1)
+            setAirphotomap2Data(props?.cadastralData[0]?.AIRPHOTOMAP2)
+            setAirphotomap3Data(props?.cadastralData[0]?.AIRPHOTOMAP3)
+            setSurveyDate(dayjs(props?.cadastralData[0]?.SURVEY_DTM).format("YYYY-MM-DD"))
+            _getTitle(props?.cadastralData[0]?.TITLE_SEQ ?? props?.cadastralData[0]?.TITLE_SEQ)
+            setFname(props?.cadastralData[0]?.SURVEYOR_FNAME)
+            setLname(props?.cadastralData[0]?.SURVEYOR_LNAME)
+            setSurveyorPosition(props?.cadastralData[0]?.SURVEYOR_POSITION)
+            setSurveyorLevelData(props?.cadastralData[0]?.SURVEYOR_LEVEL)
+            setOldRaiData(props?.cadastralData[0]?.OLD_RAI_NUM)
+            setOldNganData(props?.cadastralData[0]?.OLD_NGAN_NUM)
+            setOldWaData(props?.cadastralData[0]?.OLD_WA_NUM)
+            setOldSubWaData(props?.cadastralData[0]?.OLD_SUBWA_NUM)
+            setOwnerData(props?.cadastralData[0]?.CADASTRAL_OWNER_QTY)
+            setNoteData(props?.cadastralData[0]?.CADASTRAL_NOTE)
         }
     }, [props?.cadastralData])
 
@@ -133,7 +134,7 @@ export default function DilogTab01Index(props) {
         setChecked(event.target.checked);
     };
     const _getTitle = async (seq) => {
-        // console.log(seq,"_getTitleseq");
+        console.log(seq,"_getTitleseq");
         let getTitle = await getTitleByPK(seq);
         getTitle = getTitle.rows
         // console.log(getTitle, "getTitle");
@@ -141,6 +142,7 @@ export default function DilogTab01Index(props) {
     }
 
     const _checked = async (data) => {
+        console.log(data,"_checkeddata");
         if (data?.PRIVATESURVEY_FLAG == "-" || data?.PRIVATESURVEY_FLAG == undefined) {
             return
         } else if (data?.PRIVATESURVEY_FLAG == 1) {
@@ -268,7 +270,7 @@ export default function DilogTab01Index(props) {
                 setNumofsurveyQty(data[i]?.NUMOFSURVEY_QTY ?? "-");
                 setCadastralNo(data[i].CADASTRAL_NO);
                 console.log(landOfficeFiltered, "getLandOfficeData");
-                setOffice(landOfficeFiltered[0]?.LANDOFFICE_NAME_TH ?? "-");
+                setOffice(landOfficeFiltered[0]);
             }
         }
     }
@@ -318,12 +320,12 @@ export default function DilogTab01Index(props) {
         setScaleRawangData(value);
     };
     const _onSubmit = async () => {
-        // if (checked == true) {
-        //     checked = 1
-        // } else {
-        //     checked = 0
-        // }
         let obj = {
+            "SHEETCODE": sheetcode ? sheetcode : null,
+            "BOX_NO": boxNo ? boxNo : null,
+            "CADASTRAL_NO": cadastralNo ? cadastralNo : null,
+            "NUMOFSURVEY_QTY": numofsurveyQty ? numofsurveyQty : null,
+            "LANDOFFICE_SEQ": office?.LANDOFFICE_SEQ ? office?.LANDOFFICE_SEQ : null,
             "PRIVATESURVEY_FLAG": checked == true ? 1 : 0,
             "TYPEOFSURVEY_SEQ": typeofSurveyData?.TYPEOFSURVEY_SEQ ? typeofSurveyData?.TYPEOFSURVEY_SEQ : null,
             "TYPEOFSURVEY_ADD1_SEQ": typeofSurveyAdd1Data?.TYPEOFSURVEY_ADD1_SEQ ? typeofSurveyAdd1Data?.TYPEOFSURVEY_ADD1_SEQ : null,
@@ -369,12 +371,13 @@ export default function DilogTab01Index(props) {
             "LAST_UPD_USER": data?.user?.USER_LIST_PID
         }
         console.log(obj, "obj_onSubmit_DialogTab01");
-
+        let seq = props?.cadastralData[0]?.CADASTRAL_SEQ
+        console.log(seq, "seqobj_onSubmit_Dialog02");
         try {
             // return
-            let resInsert = await updateCadastral(obj);
-            console.log(resInsert, "onSave");
-            if (typeof resInsert == "object") {
+            let resUpd = await updateCadastral(seq, obj);
+            console.log(resUpd, "onSave");
+            if (typeof resUpd == "object") {
                 await setMessage("บันทึกสำเร็จ");
                 await setOpen(true);
                 await setType("success");
@@ -420,7 +423,7 @@ export default function DilogTab01Index(props) {
                                     <Typography>สำนักงาน: </Typography>
                                 </Grid>
                                 <Grid item>
-                                    <Typography color={"darkblue"} fontWeight={"bold"} sx={{ textDecoration: 'underline' }} display="inline">&nbsp;{office}&nbsp;</Typography>
+                                    <Typography color={"darkblue"} fontWeight={"bold"} sx={{ textDecoration: 'underline' }} display="inline">&nbsp;{office?.LANDOFFICE_NAME_TH ?? "-"}&nbsp;</Typography>
                                 </Grid>
                             </Grid>
                         </Grid>
