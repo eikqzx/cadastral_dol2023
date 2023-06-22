@@ -20,6 +20,7 @@ import {
 //SERVICE
 import { getLandOfficeByPK, getLandOffice } from "@/service/mas/landOffice";
 import { updCadastralLand } from "@/service/sva";
+import { getProvinceByPK } from "@/service/mas/province";
 //COMPONENTS
 import AutoAmphur from "@/pages/components/Autocompleate/amphur";
 import AutoTambol from "@/pages/components/Autocompleate/tambol";
@@ -84,6 +85,9 @@ export default function DilogTab02InsIndex(props) {
             if (data[i] != undefined) {
                 let getLandOfficeData = await getLandOffice();
                 let landOfficeFiltered = getLandOfficeData.rows.filter(item => item.LANDOFFICE_SEQ == data[i]?.LANDOFFICE_SEQ);
+                let getProvinceData = await getProvinceByPK(landOfficeFiltered[0]?.PROVINCE_SEQ);
+                console.log(getProvinceData, "getProvinceData");
+                setProvinceData(getProvinceData.rows[0])
                 setSheetcode(data[i].SHEETCODE);
                 setBoxNo(data[i].BOX_NO.toString().padStart(2, "0"));
                 setNumofsurveyQty(data[i]?.NUMOFSURVEY_QTY ?? "-");

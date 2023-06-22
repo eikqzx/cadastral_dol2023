@@ -19,6 +19,7 @@ import {
 //SERVICE
 import { getLandOfficeByPK, getLandOffice } from "@/service/mas/landOffice";
 import { insertCadastral } from "@/service/sva";
+import { getProvinceByPK } from "@/service/mas/province";
 //COMPONENTS
 import AutoTitle from "@/pages/components/Autocompleate/title";
 import AutoAmphur from "@/pages/components/Autocompleate/amphur";
@@ -68,8 +69,8 @@ export default function DilogTab01InsIndex(props) {
     const [airphotomap1Data, setAirphotomap1Data] = React.useState("")
     const [airphotomap2Data, setAirphotomap2Data] = React.useState("")
     const [airphotomap3Data, setAirphotomap3Data] = React.useState("")
-    const [scalemapData, setScalemapData] = React.useState("")
-    const [scaleRawangData, setScaleRawangData] = React.useState("")
+    const [scalemapData, setScalemapData] = React.useState(null)
+    const [scaleRawangData, setScaleRawangData] = React.useState(null)
     const [benchmarkData, setBenchmarkData] = React.useState(null)
     const [benchmarkQTY, setBenchmarkQTY] = React.useState("")
     const [benchmark2Data, setBenchmark2Data] = React.useState(null)
@@ -106,6 +107,9 @@ export default function DilogTab01InsIndex(props) {
             if (data[i] != undefined && data[i] != null) {
                 let getLandOfficeData = await getLandOffice();
                 let landOfficeFiltered = getLandOfficeData.rows.filter(item => item.LANDOFFICE_SEQ == data[i]?.LANDOFFICE_SEQ);
+                let getProvinceData = await getProvinceByPK(landOfficeFiltered[0]?.PROVINCE_SEQ);
+                    console.log(getProvinceData, "getProvinceData");
+                    setProvinceData(getProvinceData.rows[0])
                 setSheetcode(data[i].SHEETCODE);
                 setBoxNo(data[i].BOX_NO.toString().padStart(2, "0"));
                 setNumofsurveyQty(data[i]?.NUMOFSURVEY_QTY ?? "-");
