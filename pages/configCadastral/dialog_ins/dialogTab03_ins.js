@@ -23,8 +23,8 @@ import { updCadastralOwner } from "@/service/sva";
 import { getTitleByPK } from "@/service/mas/title";
 //COMPONENTS
 import AutoTitle from "@/pages/components/Autocompleate/title";
-export default function DilogTab03Index(props) {
-    console.log(props, "propsDilogTab03Index");
+export default function DilogTab03InsIndex(props) {
+    console.log(props, "propsDilogTab03InsIndex");
     const [office, setOffice] = React.useState("-");
     const [sheetcode, setSheetcode] = React.useState("-");
     const [boxNo, setBoxNo] = React.useState("-");
@@ -44,27 +44,12 @@ export default function DilogTab03Index(props) {
     const handleChangeRadio = (event) => {
         setValueRadio(event.target.value);
     };
-    React.useEffect(() => {
-        getMasterData(props.masterData)
-    }, [])
+
     React.useEffect(() => {
         if (props?.cadastralOwnerData) {
-            setOwnerOrder(props?.cadastralOwnerData?.OWNER_ORDER)
-            _getTitle(props?.cadastralOwnerData?.TITLE_SEQ ?? props?.cadastralOwnerData?.TITLE_SEQ)
-            setOwnerFName(props?.cadastralOwnerData?.OWNER_FNAME)
-            setOwnerLName(props?.cadastralOwnerData?.OWNER_LNAME)
-            setOwnerNote(props?.cadastralOwnerData?.CADASTRAL_OWNER_NOTE)
-            // setValueRadio(props?.cadastralOwnerData?.OWNER_TYPE)
+            getMasterData(props.cadastralOwnerData)
         }
     }, [props?.cadastralOwnerData])
-
-    const _getTitle = async (seq) => {
-        // console.log(seq,"_getTitleseq");
-        let getTitle = await getTitleByPK(seq);
-        getTitle = getTitle.rows
-        // console.log(getTitle, "getTitle");
-        setOwnerTitle(getTitle)
-    }
 
     const getMasterData = async (data) => {
         // data = data.rows
@@ -138,7 +123,7 @@ export default function DilogTab03Index(props) {
                     </Alert>
                 </Snackbar>
                 <DialogTitle sx={{ background: 'linear-gradient(26deg, rgba(255,255,232,1) 20%, rgba(188,243,176,1) 100%)' }}>
-                    <Typography variant="subtitle">แก้ไขข้อมูลผู้ขอรังวัดต้นร่าง</Typography>
+                    <Typography variant="subtitle">เพิ่มข้อมูลผู้ขอรังวัดต้นร่าง</Typography>
                 </DialogTitle>
                 <DialogContent>
                     {/* master_Data */}

@@ -171,7 +171,7 @@ export default function IndexConfigCadastral(props) {
                                 </Grid>
                             </Grid>
                         </Grid>
-                        <Grid item xs={3} md={3}>
+                        <Grid item xs={3} md={4}>
                             <Grid container>
                                 <Grid item>
                                     <Typography>หมายเลขรหัสแทนระวาง(เลขแฟ้ม):</Typography>
@@ -217,7 +217,7 @@ export default function IndexConfigCadastral(props) {
                         </Grid>
                     </Grid>
                     {
-                        searchData?.length != 0 &&
+                        searchData?.length !== 0 && searchData[0]?.BOX_NO !== 0 &&
                         (
                             <Box sx={{ width: '100%', typography: 'body1' }}>
                                 <TabContext value={tabData}>
@@ -247,7 +247,7 @@ export default function IndexConfigCadastral(props) {
 
                     }
                     {
-                        searchDataInsert?.length != 0 &&
+                        searchDataInsert?.length !== 0 && searchDataInsert[0]?.BOX_NO !== 0 &&
                         (
                             <Box sx={{ width: '100%', typography: 'body1' }}>
                                 <TabContext value={tabData}>

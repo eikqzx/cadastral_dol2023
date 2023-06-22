@@ -18,15 +18,7 @@ import {
 } from "@mui/material";
 //SERVICE
 import { getLandOfficeByPK, getLandOffice } from "@/service/mas/landOffice";
-import { updateCadastral } from "@/service/sva";
-import { getTitleByPK } from "@/service/mas/title";
-import { getProvinceByPK } from "@/service/mas/province";
-import { getAmphurByPK } from "@/service/mas/amphur";
-import { getTambolByPK } from "@/service/mas/tambol";
-import { getTypeOfSurveyByPK } from "@/service/mas/typeOfSurvey";
-import { getBenchMarkByPK } from "@/service/mas/benchMark";
-import { getSheetTypeByPK } from "@/service/mas/sheetType";
-import { getScaleByPK } from "@/service/mas/scale";
+import { insertCadastral } from "@/service/sva";
 //COMPONENTS
 import AutoTitle from "@/pages/components/Autocompleate/title";
 import AutoAmphur from "@/pages/components/Autocompleate/amphur";
@@ -44,8 +36,8 @@ import 'dayjs/locale/th';
 import { th } from 'date-fns/locale';
 import budhaEra from "dayjs/plugin/buddhistEra"
 dayjs.extend(budhaEra);
-export default function DilogTab01Index(props) {
-    console.log(props, "propsDilogTab01Index");
+export default function DilogTab01InsIndex(props) {
+    console.log(props, "propsDilogTab01InsIndex");
     const [office, setOffice] = React.useState("-");
     const [sheetcode, setSheetcode] = React.useState("-");
     const [boxNo, setBoxNo] = React.useState("-");
@@ -99,56 +91,12 @@ export default function DilogTab01Index(props) {
     React.useEffect(() => {
         if (props?.cadastralData) {
             getMasterData(props?.cadastralData)
-            _checked(props?.cadastralData?.PRIVATESURVEY_FLAG)
-            setZoneData(props?.cadastralData?.ZONE_LAND)
-            setUTMMAP1Data(props?.cadastralData?.CADASTRAL_UTMMAP1)
-            setUTMMAP2Data(props?.cadastralData?.CADASTRAL_UTMMAP2)
-            setUTMMAP3Data(props?.cadastralData?.CADASTRAL_UTMMAP3)
-            setUTMMAP4Data(props?.cadastralData?.CADASTRAL_UTMMAP4)
-            setOriginmap1Data(props?.cadastralData?.CADASTRAL_ORIGINMAP1)
-            setOriginmap2Data(props?.cadastralData?.CADASTRAL_ORIGINMAP2)
-            setOriginmap3Data(props?.cadastralData?.CADASTRAL_ORIGINMAP3)
-            setAirphotomapName(props?.cadastralData?.AIRPHOTOMAP_NAME)
-            setAirphotomap1Data(props?.cadastralData?.AIRPHOTOMAP1)
-            setAirphotomap2Data(props?.cadastralData?.AIRPHOTOMAP2)
-            setAirphotomap3Data(props?.cadastralData?.AIRPHOTOMAP3)
-            setSurveyDate(dayjs(props?.cadastralData?.SURVEY_DTM).format("YYYY-MM-DD"))
-            _getTitle(props?.cadastralData?.TITLE_SEQ ?? props?.cadastralData?.TITLE_SEQ)
-            setFname(props?.cadastralData?.SURVEYOR_FNAME)
-            setLname(props?.cadastralData?.SURVEYOR_LNAME)
-            setSurveyorPosition(props?.cadastralData?.SURVEYOR_POSITION)
-            setSurveyorLevelData(props?.cadastralData?.SURVEYOR_LEVEL)
-            setOldRaiData(props?.cadastralData?.OLD_RAI_NUM)
-            setOldNganData(props?.cadastralData?.OLD_NGAN_NUM)
-            setOldWaData(props?.cadastralData?.OLD_WA_NUM)
-            setOldSubWaData(props?.cadastralData?.OLD_SUBWA_NUM)
-            setOwnerData(props?.cadastralData?.CADASTRAL_OWNER_QTY)
-            setNoteData(props?.cadastralData?.CADASTRAL_NOTE)
         }
     }, [props?.cadastralData])
 
     const handleCheckboxChange = (event) => {
         setChecked(event.target.checked);
     };
-    const _getTitle = async (seq) => {
-        // console.log(seq,"_getTitleseq");
-        let getTitle = await getTitleByPK(seq);
-        getTitle = getTitle.rows
-        // console.log(getTitle, "getTitle");
-        setTitleData(getTitle)
-    }
-
-    const _checked = async (data) => {
-        if (data?.PRIVATESURVEY_FLAG == "-" || data?.PRIVATESURVEY_FLAG == undefined) {
-            return
-        } else if (data?.PRIVATESURVEY_FLAG == 1) {
-            setChecked(true)
-        }
-        else if (data?.PRIVATESURVEY_FLAG == 0) {
-            setChecked(false)
-        }
-
-    }
 
     const getMasterData = async (data) => {
         // data = data.rows
@@ -158,109 +106,6 @@ export default function DilogTab01Index(props) {
             if (data[i] != undefined && data[i] != null) {
                 let getLandOfficeData = await getLandOffice();
                 let landOfficeFiltered = getLandOfficeData.rows.filter(item => item.LANDOFFICE_SEQ == data[i]?.LANDOFFICE_SEQ);
-                if (data[i].CADASTRAL_PROVINCE_SEQ == null) {
-                    let getProvinceData = await getProvinceByPK(landOfficeFiltered[0]?.PROVINCE_SEQ);
-                    console.log(getProvinceData, "getProvinceData");
-                    setProvinceData(getProvinceData.rows[0])
-                } else {
-                    let getProvinceData = await getProvinceByPK(data[i].CADASTRAL_PROVINCE_SEQ);
-                    console.log(getProvinceData, "getProvinceData");
-                    setProvinceData(getProvinceData.rows[0])
-                }
-                if (data[i].CADASTRAL_AMPHUR_SEQ == null) {
-                    let getAmphurData = await getAmphurByPK(landOfficeFiltered[0]?.AMPHUR_SEQ);
-                    console.log(getAmphurData, "getAmphurData");
-                    setAmphurData(getAmphurData.rows[0])
-                } else {
-                    let getAmphurData = await getAmphurByPK(data[i].CADASTRAL_AMPHUR_SEQ);
-                    console.log(getAmphurData, "getAmphurData");
-                    setAmphurData(getAmphurData.rows[0])
-                }
-                if (data[i].CADASTRAL_TAMBOL_SEQ == null) {
-                    setTambolData(null)
-                }
-                else {
-                    let getTambolData = await getTambolByPK(data[i].CADASTRAL_TAMBOL_SEQ);
-                    console.log(getTambolData, "getTambolData");
-                    setTambolData(getTambolData.rows[0])
-                }
-                //TYPEOFSURVEY
-                if (data[i].TYPEOFSURVEY_SEQ == null) {
-                    setTypeofSurveyData(null)
-                }
-                else {
-                    let getTypeOfSurvey = await getTypeOfSurveyByPK(data[i].TYPEOFSURVEY_SEQ);
-                    console.log(getTypeOfSurvey, "getTypeOfSurvey");
-                    setTypeofSurveyData(getTypeOfSurvey.rows[0])
-                }
-                if (data[i].TYPEOFSURVEY_ADD1_SEQ == null) {
-                    setTypeofSurveyAdd1Data(null)
-                }
-                else {
-                    let getTypeOfSurveyAdd1 = await getTypeOfSurveyByPK(data[i].TYPEOFSURVEY_ADD1_SEQ);
-                    console.log(getTypeOfSurveyAdd1, "getTypeOfSurveyAdd1");
-                    setTypeofSurveyAdd1Data(getTypeOfSurveyAdd1.rows[0])
-                }
-                if (data[i].TYPEOFSURVEY_ADD2_SEQ == null) {
-                    setTypeofSurveyAdd2Data(null)
-                }
-                else {
-                    let getTypeOfSurveyAdd2 = await getTypeOfSurveyByPK(data[i].TYPEOFSURVEY_ADD2_SEQ);
-                    console.log(getTypeOfSurveyAdd2, "getTypeOfSurveyAdd2");
-                    setTypeofSurveyAdd2Data(getTypeOfSurveyAdd2.rows[0])
-                }
-                if (data[i].TYPEOFSURVEY_ADD3_SEQ == null) {
-                    setTypeofSurveyAdd3Data(null)
-                }
-                else {
-                    let getTypeOfSurveyAdd3 = await getTypeOfSurveyByPK(data[i].TYPEOFSURVEY_ADD3_SEQ);
-                    console.log(getTypeOfSurveyAdd3, "getTypeOfSurveyAdd3");
-                    setTypeofSurveyAdd3Data(getTypeOfSurveyAdd3.rows[0])
-                }
-                //SHEETTYPE
-                if (data[i].SHEETTYPE_SEQ == null) {
-                    setSheetTypeData(null)
-                }
-                else {
-                    let sheetType = await getSheetTypeByPK(data[i].SHEETTYPE_SEQ);
-                    console.log(sheetType, "sheetType");
-                    setSheetTypeData(sheetType.rows[0])
-                }
-                //BENCHMARK
-                if (data[i].BENCHMARK_SEQ == null) {
-                    setBenchmarkData(null)
-                }
-                else {
-                    let benchMark = await getBenchMarkByPK(data[i].BENCHMARK_SEQ);
-                    console.log(benchMark, "benchMark");
-                    setBenchmarkData(benchMark.rows[0])
-                }
-                if (data[i].BENCHMARK2_SEQ == null) {
-                    setBenchmark2Data(null)
-                }
-                else {
-                    let benchMark2 = await getBenchMarkByPK(data[i].BENCHMARK2_SEQ);
-                    console.log(benchMark2, "benchMark2");
-                    setBenchmark2Data(benchMark2.rows[0])
-                }
-                //ScaleMap
-                if (data[i].SCALE_MAP_SEQ == null) {
-                    setScalemapData(null)
-                }
-                else {
-                    let scalemap = await getScaleByPK(data[i].SCALE_MAP_SEQ);
-                    console.log(scalemap, "scalemap");
-                    setScalemapData(scalemap.rows[0])
-                }
-                //ScaleRawang
-                if (data[i].SCALE_RAWANG_SEQ == null) {
-                    setScaleRawangData(null)
-                }
-                else {
-                    let scaleRawang = await getScaleByPK(data[i].SCALE_RAWANG_SEQ);
-                    console.log(scaleRawang, "scaleRawang");
-                    setScaleRawangData(scaleRawang.rows[0])
-                }
                 setSheetcode(data[i].SHEETCODE);
                 setBoxNo(data[i].BOX_NO.toString().padStart(2, "0"));
                 setNumofsurveyQty(data[i]?.NUMOFSURVEY_QTY ?? "-");
@@ -316,11 +161,6 @@ export default function DilogTab01Index(props) {
         setScaleRawangData(value);
     };
     const _onSubmit = async () => {
-        // if (checked == true) {
-        //     checked = 1
-        // } else {
-        //     checked = 0
-        // }
         let obj = {
             "PRIVATESURVEY_FLAG": checked == true ? 1 : 0,
             "TYPEOFSURVEY_SEQ": typeofSurveyData?.TYPEOFSURVEY_SEQ ? typeofSurveyData?.TYPEOFSURVEY_SEQ : null,
@@ -368,7 +208,7 @@ export default function DilogTab01Index(props) {
 
         try {
             // return
-            let resInsert = await updateCadastral(obj);
+            let resInsert = await insertCadastral(obj);
             console.log(resInsert, "onSave");
             if (typeof resInsert == "object") {
                 await setMessage("บันทึกสำเร็จ");
@@ -405,7 +245,7 @@ export default function DilogTab01Index(props) {
                     </Alert>
                 </Snackbar>
                 <DialogTitle sx={{ background: 'linear-gradient(26deg, rgba(255,255,232,1) 20%, rgba(188,243,176,1) 100%)' }}>
-                    <Typography variant="subtitle">แก้ไขข้อมูลต้นร่าง</Typography>
+                    <Typography variant="subtitle">เพิ่มข้อมูลต้นร่าง</Typography>
                 </DialogTitle>
                 <DialogContent>
                     {/* master_Data */}

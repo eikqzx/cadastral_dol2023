@@ -20,19 +20,14 @@ import {
 //SERVICE
 import { getLandOfficeByPK, getLandOffice } from "@/service/mas/landOffice";
 import { updCadastralLand } from "@/service/sva";
-import { getProvinceByPK } from "@/service/mas/province";
-import { getAmphurByPK } from "@/service/mas/amphur";
-import { getTambolByPK } from "@/service/mas/tambol";
-import { getSheetTypeByPK } from "@/service/mas/sheetType";
-import { getScaleByPK } from "@/service/mas/scale";
 //COMPONENTS
 import AutoAmphur from "@/pages/components/Autocompleate/amphur";
 import AutoTambol from "@/pages/components/Autocompleate/tambol";
 import AutoSheetType from "@/pages/components/Autocompleate/sheetType";
 import AutoScale from "@/pages/components/Autocompleate/scale";
 
-export default function DilogTab02Index(props) {
-    console.log(props, "propsDilogTab02Index");
+export default function DilogTab02InsIndex(props) {
+    console.log(props, "propsDilogTab02InsIndex");
     const [office, setOffice] = React.useState("-");
     const [sheetcode, setSheetcode] = React.useState("-");
     const [boxNo, setBoxNo] = React.useState("-");
@@ -75,33 +70,10 @@ export default function DilogTab02Index(props) {
     };
     console.log(valueRadio, "valueRadio");
 
-
     React.useEffect(() => {
-        getMasterData(props.masterData)
-
-    }, [])
-
-
-    React.useEffect(() => {
-        setOrderNo(props?.cadastralLandData[0]?.LAND_ORDER)
-        setZoneData(props?.cadastralLandData[0]?.ZONE_LAND)
-        setUTMMAP1Data(props?.cadastralLandData[0]?.CADASTRAL_LAND_UTMMAP1)
-        setUTMMAP2Data(props?.cadastralLandData[0]?.CADASTRAL_LAND_UTMMAP2)
-        setUTMMAP3Data(props?.cadastralLandData[0]?.CADASTRAL_LAND_UTMMAP3)
-        setUTMMAP4Data(props?.cadastralLandData[0]?.CADASTRAL_LAND_UTMMAP4)
-        setOriginmap1Data(props?.cadastralLandData[0]?.CADASTRAL_LAND_ORIGINMAP1)
-        setOriginmap2Data(props?.cadastralLandData[0]?.CADASTRAL_LAND_ORIGINMAP2)
-        setOriginmap3Data(props?.cadastralLandData[0]?.CADASTRAL_LAND_ORIGINMAP3)
-        setAirphotomapName(props?.cadastralLandData[0]?.AIRPHOTOMAP_NAME)
-        setAirphotomap1Data(props?.cadastralLandData[0]?.AIRPHOTOMAP1)
-        setAirphotomap2Data(props?.cadastralLandData[0]?.AIRPHOTOMAP2)
-        setAirphotomap3Data(props?.cadastralLandData[0]?.AIRPHOTOMAP3)
-        setUTMSCALENO(props?.cadastralLandData[0]?.CADASTRAL_LAND_UTMSCALE)
-        setRaiData(props?.cadastralLandData[0]?.CADASTRAL_LAND_RAI_NUM)
-        setNganData(props?.cadastralLandData[0]?.CADASTRAL_LAND_NGAN_NUM)
-        setWaData(props?.cadastralLandData[0]?.CADASTRAL_LAND_WA_NUM)
-        setSubWaData(props?.cadastralLandData[0]?.CADASTRAL_LAND_SUBWA_NUM)
-        setNoteData(props?.cadastralLandData[0]?.CADASTRAL_NOTE)
+        if (props?.cadastralLandData) {
+            getMasterData(props.cadastralLandData)
+        }
     }, [props?.cadastralLandData])
 
     const getMasterData = async (data) => {
@@ -112,50 +84,6 @@ export default function DilogTab02Index(props) {
             if (data[i] != undefined) {
                 let getLandOfficeData = await getLandOffice();
                 let landOfficeFiltered = getLandOfficeData.rows.filter(item => item.LANDOFFICE_SEQ == data[i]?.LANDOFFICE_SEQ);
-                if (data[i].CADASTRAL_PROVINCE_SEQ == null) {
-                    let getProvinceData = await getProvinceByPK(landOfficeFiltered[0]?.PROVINCE_SEQ);
-                    console.log(getProvinceData, "getProvinceData");
-                    setProvinceData(getProvinceData.rows[0])
-                } else {
-                    let getProvinceData = await getProvinceByPK(data[i].CADASTRAL_PROVINCE_SEQ);
-                    console.log(getProvinceData, "getProvinceData");
-                    setProvinceData(getProvinceData.rows[0])
-                }
-                if (data[i].CADASTRAL_AMPHUR_SEQ == null) {
-                    let getAmphurData = await getAmphurByPK(landOfficeFiltered[0]?.AMPHUR_SEQ);
-                    console.log(getAmphurData, "getAmphurData");
-                    setAmphurData(getAmphurData.rows[0])
-                } else {
-                    let getAmphurData = await getAmphurByPK(data[i].CADASTRAL_AMPHUR_SEQ);
-                    console.log(getAmphurData, "getAmphurData");
-                    setAmphurData(getAmphurData.rows[0])
-                }
-                if (data[i].CADASTRAL_TAMBOL_SEQ == null) {
-                    setTambolData(null)
-                }
-                else {
-                    let getTambolData = await getTambolByPK(data[i].CADASTRAL_TAMBOL_SEQ);
-                    console.log(getTambolData, "getTambolData");
-                    setTambolData(getTambolData.rows[0])
-                }
-                //SHEETTYPE
-                if (data[i].SHEETTYPE_SEQ == null) {
-                    setSheetTypeData(null)
-                }
-                else {
-                    let sheetType = await getSheetTypeByPK(data[i].SHEETTYPE_SEQ);
-                    console.log(sheetType, "sheetType");
-                    setSheetTypeData(sheetType.rows[0])
-                }
-                //ScaleMap
-                if (data[i].SCALE_SEQ == null) {
-                    setUTMSCALENO(null)
-                }
-                else {
-                    let scalemap = await getScaleByPK(data[i].SCALE_SEQ);
-                    console.log(scalemap, "scalemap");
-                    setUTMSCALENO(scalemap.rows[0])
-                }
                 setSheetcode(data[i].SHEETCODE);
                 setBoxNo(data[i].BOX_NO.toString().padStart(2, "0"));
                 setNumofsurveyQty(data[i]?.NUMOFSURVEY_QTY ?? "-");
@@ -251,7 +179,7 @@ export default function DilogTab02Index(props) {
                     </Alert>
                 </Snackbar>
                 <DialogTitle sx={{ background: 'linear-gradient(26deg, rgba(255,255,232,1) 20%, rgba(188,243,176,1) 100%)' }}>
-                    <Typography variant="subtitle">แก้ไขข้อมูลแปลงต้นร่าง</Typography>
+                    <Typography variant="subtitle">เพิ่มข้อมูลแปลงต้นร่าง</Typography>
                 </DialogTitle>
                 <DialogContent>
                     {/* master_Data */}

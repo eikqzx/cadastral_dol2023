@@ -29,6 +29,7 @@ import { numberWithCommas } from "@/lib/outputControl"
 //COMPONENTS
 import { confirmDialog } from "@/pages/components/confirmDialog";
 import DialogTab01 from "@/pages/configCadastral/dialog/dialogTab01"
+import DialogTab01_Ins from "@/pages/configCadastral/dialog_ins/dialogTab01_ins"
 import dayjs from "dayjs";
 import budhaEra from "dayjs/plugin/buddhistEra"
 import thDate from 'dayjs/locale/th'
@@ -39,9 +40,11 @@ import { green, red } from '@mui/material/colors';
 import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
 export default function Tab01(props) {
+    console.log(props, "props_Tab01");
     const [cadastralData, setCadastralData] = React.useState([]);
     const { data } = useSession();
     const [openDialog, setOpenDialog] = React.useState(false);
+    const [openDialogIns, setOpenDialogIns] = React.useState(false);
 
     const [curPage, setCurPage] = React.useState(1);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -147,12 +150,15 @@ export default function Tab01(props) {
     const handleChange = async () => {
         setOpenDialog(true)
     }
-
+    const handleChangeIns = async () => {
+        setOpenDialogIns(true)
+    }
 
     return (
         <Grid>
             <Grid item xs={12}>
                 {openDialog && <DialogTab01 open={openDialog} close={() => (setOpenDialog(false))} onSubmit={handleChange} cadastralData={cadastralData} />}
+                {openDialogIns && <DialogTab01_Ins open={openDialogIns} close={() => (setOpenDialogIns(false))} onSubmit={handleChangeIns} cadastralData={props?.searchDataInsert} />}
                 <React.Fragment>
                     <TableContainer>
                         <Table sx={{ minWidth: 650, width: '100%', border: '1px solid ' }} size="small" stickyHeader >
@@ -403,6 +409,12 @@ export default function Tab01(props) {
                                                 '&:hover': {
                                                     backgroundColor: '#ECF2FF !important',
                                                 },
+                                            }}
+                                            onClick={() => {
+                                                confirmDialog.createDialog(
+                                                    `ต้องการเพิ่มข้อมูลต้นร่าง หรือไม่ ?`,
+                                                    () => { handleChangeIns() }
+                                                );
                                             }}
                                             style={{ cursor: 'pointer' }}
                                         >

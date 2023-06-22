@@ -28,11 +28,13 @@ import { numberWithCommas } from "@/lib/outputControl"
 //COMPONENTS
 import { confirmDialog } from "@/pages/components/confirmDialog";
 import DialogTab03 from "@/pages/configCadastral/dialog/dialogTab03"
+import DialogTab03_Ins from "@/pages/configCadastral/dialog_ins/dialogTab03_ins"
 
 export default function Tab03(props) {
     const [cadastralOwnerData, setCadastralOwnerData] = React.useState([]);
     const { data } = useSession();
     const [openDialog, setOpenDialog] = React.useState(false);
+    const [openDialogIns, setOpenDialogIns] = React.useState(false);
 
     const [curPage, setCurPage] = React.useState(1);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -69,10 +71,14 @@ export default function Tab03(props) {
     const handleChange = async () => {
         setOpenDialog(true)
     }
+    const handleChangeIns = async () => {
+        setOpenDialogIns(true)
+    }
     return (
         <Grid container>
             <Grid item xs={12}>
                 {openDialog && <DialogTab03 open={openDialog} close={() => (setOpenDialog(false))} onSubmit={handleChange} cadastralOwnerData={cadastralOwnerData} masterData={props?.masterData} />}
+                {openDialogIns && <DialogTab03_Ins open={openDialogIns} close={() => (setOpenDialogIns(false))} onSubmit={handleChangeIns} cadastralOwnerData={props?.searchDataInsert} />}
                 <React.Fragment>
                     <TableContainer>
                         <Table sx={{ minWidth: 650, width: "100%", border: '1px solid ' }} size="small" stickyHeader >
@@ -155,6 +161,12 @@ export default function Tab03(props) {
                                                 '&:hover': {
                                                     backgroundColor: '#ECF2FF !important',
                                                 },
+                                            }}
+                                            onClick={() => {
+                                                confirmDialog.createDialog(
+                                                    `ต้องการเพิ่มข้อมูลต้นร่าง หรือไม่ ?`,
+                                                    () => { handleChangeIns() }
+                                                );
                                             }}
                                             style={{ cursor: 'pointer' }}
                                         >
