@@ -17,6 +17,7 @@ import {
     Alert,
     Snackbar
 } from "@mui/material";
+import { useSession } from 'next-auth/react';
 //SERVICE
 import { getLandOfficeByPK, getLandOffice } from "@/service/mas/landOffice";
 import { updCadastralOwner } from "@/service/sva";
@@ -25,6 +26,7 @@ import { getTitleByPK } from "@/service/mas/title";
 import AutoTitle from "@/pages/components/Autocompleate/title";
 export default function DilogTab03Index(props) {
     console.log(props, "propsDilogTab03Index");
+    const { data } = useSession();
     const [office, setOffice] = React.useState("-");
     const [sheetcode, setSheetcode] = React.useState("-");
     const [boxNo, setBoxNo] = React.useState("-");
@@ -97,6 +99,8 @@ export default function DilogTab03Index(props) {
             "OWNER_FNAME": ownerFName ? ownerFName : null,
             "OWNER_LNAME": ownerLName ? ownerLName : null,
             "CADASTRAL_OWNER_NOTE": ownerNote ? ownerNote : null,
+            "RECORD_STATUS": "N",
+            "LAST_UPD_USER": data?.user?.USER_LIST_PID
         }
         console.log(obj, "obj_onSubmit_DialogTab03");
         try {

@@ -17,6 +17,7 @@ import {
     Alert,
     Snackbar
 } from "@mui/material";
+import { useSession } from 'next-auth/react';
 //SERVICE
 import { getLandOfficeByPK, getLandOffice } from "@/service/mas/landOffice";
 import { updCadastralLand } from "@/service/sva";
@@ -33,6 +34,7 @@ import AutoScale from "@/pages/components/Autocompleate/scale";
 
 export default function DilogTab02Index(props) {
     console.log(props, "propsDilogTab02Index");
+    const { data } = useSession();
     const [office, setOffice] = React.useState("-");
     const [sheetcode, setSheetcode] = React.useState("-");
     const [boxNo, setBoxNo] = React.useState("-");
@@ -194,6 +196,8 @@ export default function DilogTab02Index(props) {
             "CADASTRAL_SURVEY_NO": parcelSurveyNo ? parcelSurveyNo : null,
             "STATIC_FLAG": valueRadio,
             "CADASTRAL_LAND_NOTE": noteData ? noteData : null,
+            "RECORD_STATUS": "N",
+            "LAST_UPD_USER": data?.user?.USER_LIST_PID 
         }
         console.log(obj, "obj_onSubmit_Dialog02");
 

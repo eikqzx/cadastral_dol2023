@@ -16,6 +16,7 @@ import {
     Alert,
     Snackbar
 } from "@mui/material";
+import { useSession } from 'next-auth/react';
 //SERVICE
 import { getLandOfficeByPK, getLandOffice } from "@/service/mas/landOffice";
 import { insertCadastral } from "@/service/sva";
@@ -39,6 +40,7 @@ import budhaEra from "dayjs/plugin/buddhistEra"
 dayjs.extend(budhaEra);
 export default function DilogTab01InsIndex(props) {
     console.log(props, "propsDilogTab01InsIndex");
+    const { data } = useSession();
     const [office, setOffice] = React.useState("-");
     const [sheetcode, setSheetcode] = React.useState("-");
     const [boxNo, setBoxNo] = React.useState("-");
@@ -207,6 +209,8 @@ export default function DilogTab01InsIndex(props) {
             "OLD_SUBWA_NUM": oldSubWaData ? Number(oldSubWaData) : null,
             "CADASTRAL_OWNER_QTY": ownerData ? ownerData : null,
             "CADASTRAL_NOTE": noteData ? noteData : null,
+            "RECORD_STATUS": "N", 
+            "CREATE_USER": data?.user?.USER_LIST_PID
         }
         console.log(obj, "obj_onSubmit_DialogTab01");
 
