@@ -86,7 +86,9 @@ export default function DilogTab03InsIndex(props) {
             "OWNER_LNAME": ownerLName ? ownerLName : null,
             "CADASTRAL_OWNER_NOTE": ownerNote ? ownerNote : null,
             "RECORD_STATUS": "N", 
-            "CREATE_USER": data?.user?.USER_LIST_PID
+            "CREATE_USER": data?.user?.USER_LIST_PID,
+            "PROCESS_SEQ_": props?.processSeq ?? 101,
+            "STATUS_SEQ_": 101,
         }
         console.log(obj, "obj_onSubmit_DialogTab03");
         try {

@@ -41,11 +41,11 @@ dayjs.extend(budhaEra);
 export default function DilogTab01InsIndex(props) {
     console.log(props, "propsDilogTab01InsIndex");
     const { data } = useSession();
-    const [office, setOffice] = React.useState("-");
-    const [sheetcode, setSheetcode] = React.useState("-");
-    const [boxNo, setBoxNo] = React.useState("-");
-    const [numofsurveyQty, setNumofsurveyQty] = React.useState("-");
-    const [cadastralNo, setCadastralNo] = React.useState("-");
+    const [office, setOffice] = React.useState("");
+    const [sheetcode, setSheetcode] = React.useState("");
+    const [boxNo, setBoxNo] = React.useState("");
+    const [numofsurveyQty, setNumofsurveyQty] = React.useState("");
+    const [cadastralNo, setCadastralNo] = React.useState();
     const [open, setOpen] = React.useState(false);
     const [message, setMessage] = React.useState("");
     const [type, setType] = React.useState("success");
@@ -114,7 +114,7 @@ export default function DilogTab01InsIndex(props) {
                 setProvinceData(getProvinceData.rows[0])
                 setSheetcode(data[i].SHEETCODE);
                 setBoxNo(data[i].BOX_NO.toString().padStart(2, "0"));
-                setNumofsurveyQty(data[i]?.NUMOFSURVEY_QTY ?? "-");
+                setNumofsurveyQty(data[i]?.NUMOFSURVEY_QTY);
                 setCadastralNo(data[i].CADASTRAL_NO);
                 console.log(landOfficeFiltered, "getLandOfficeData");
                 setOffice(landOfficeFiltered[0]);
@@ -136,15 +136,19 @@ export default function DilogTab01InsIndex(props) {
 
 
     const _changeTypeofSurvey = (event, value) => {
+        console.log(value, "_changeTypeofSurvey");
         setTypeofSurveyData(value);
     };
     const _changeTypeofSurveyAdd1 = (event, value) => {
+        console.log(value, "_changeTypeofSurveyAdd1");
         setTypeofSurveyAdd1Data(value);
     };
     const _changeTypeofSurveyAdd2 = (event, value) => {
+        console.log(value, "_changeTypeofSurveyAdd2");
         setTypeofSurveyAdd2Data(value);
     };
     const _changeTypeofSurveyAdd3 = (event, value) => {
+        console.log(value, "_changeTypeofSurveyAdd3");
         setTypeofSurveyAdd3Data(value);
     };
     const _changeSheetType = (event, value) => {
@@ -157,7 +161,7 @@ export default function DilogTab01InsIndex(props) {
     };
 
     const _changeBenchmark2 = (event, value) => {
-        console.log(value, "_changeBenchmark2");
+        console.log(value, "ห");
         setBenchmark2Data(value);
     };
     const _changeScalemap = (event, value) => {
@@ -168,16 +172,16 @@ export default function DilogTab01InsIndex(props) {
     };
     const _onSubmit = async () => {
         let obj = {
-            "SHEETCODE": sheetcode ? sheetcode : null,
-            "BOX_NO": boxNo ? boxNo : null,
-            "CADASTRAL_NO": cadastralNo ? cadastralNo : null,
-            "NUMOFSURVEY_QTY": numofsurveyQty ? numofsurveyQty : null,
+            "SHEETCODE": sheetcode ? sheetcode : 0,
+            "BOX_NO": boxNo ? boxNo : 0,
+            "CADASTRAL_NO": cadastralNo ? cadastralNo : 0,
+            "NUMOFSURVEY_QTY": numofsurveyQty ? numofsurveyQty : 0,
             "LANDOFFICE_SEQ": office?.LANDOFFICE_SEQ ? office?.LANDOFFICE_SEQ : null,
             "PRIVATESURVEY_FLAG": checked == true ? 1 : 0,
             "TYPEOFSURVEY_SEQ": typeofSurveyData?.TYPEOFSURVEY_SEQ ? typeofSurveyData?.TYPEOFSURVEY_SEQ : null,
-            "TYPEOFSURVEY_ADD1_SEQ": typeofSurveyAdd1Data?.TYPEOFSURVEY_ADD1_SEQ ? typeofSurveyAdd1Data?.TYPEOFSURVEY_ADD1_SEQ : null,
-            "TYPEOFSURVEY_ADD2_SEQ": typeofSurveyAdd2Data?.TYPEOFSURVEY_ADD2_SEQ ? typeofSurveyAdd2Data?.TYPEOFSURVEY_ADD2_SEQ : null,
-            "TYPEOFSURVEY_ADD3_SEQ": typeofSurveyAdd3Data?.TYPEOFSURVEY_ADD3_SEQ ? typeofSurveyAdd3Data?.TYPEOFSURVEY_ADD3_SEQ : null,
+            "TYPEOFSURVEY_ADD1_SEQ": typeofSurveyAdd1Data?.TYPEOFSURVEY_SEQ ? typeofSurveyAdd1Data?.TYPEOFSURVEY_SEQ : null,
+            "TYPEOFSURVEY_ADD2_SEQ": typeofSurveyAdd2Data?.TYPEOFSURVEY_SEQ ? typeofSurveyAdd2Data?.TYPEOFSURVEY_SEQ : null,
+            "TYPEOFSURVEY_ADD3_SEQ": typeofSurveyAdd3Data?.TYPEOFSURVEY_SEQ ? typeofSurveyAdd3Data?.TYPEOFSURVEY_SEQ : null,
             "CADASTRAL_TAMBOL_SEQ": tambolData?.TAMBOL_SEQ ? tambolData?.TAMBOL_SEQ : null,
             "CADASTRAL_AMPHUR_SEQ": amphurData?.AMPHUR_SEQ ? amphurData?.AMPHUR_SEQ : null,
             "CADASTRAL_PROVINCE_SEQ": provinceData?.PROVINCE_SEQ ? provinceData?.PROVINCE_SEQ : null,
@@ -200,7 +204,7 @@ export default function DilogTab01InsIndex(props) {
             "SCALE_RAWANG": scaleRawangData?.SCALE_NAME_TH ? scaleRawangData?.SCALE_NAME_TH : null,
             "BENCHMARK_SEQ": benchmarkData?.BENCHMARK_SEQ ? benchmarkData?.BENCHMARK_SEQ : null,
             "BENCHMARK_QTY": benchmarkQTY ? benchmarkQTY : null,
-            "BENCHMARK2_SEQ": benchmark2Data?.BENCHMARK2_SEQ ? benchmark2Data?.BENCHMARK2_SEQ : null,
+            "BENCHMARK2_SEQ": benchmark2Data?.BENCHMARK_SEQ ? benchmark2Data?.BENCHMARK_SEQ : null,
             "BENCHMARK2_QTY": benchmark2QTY ? benchmark2QTY : null,
             "SURVEY_DTM": surveyDate ? dayjs(surveyDate).format("YYYY-MM-DD") : null,
             "TITLE_SEQ": titleData?.TITLE_SEQ ? titleData?.TITLE_SEQ : null,
@@ -215,7 +219,9 @@ export default function DilogTab01InsIndex(props) {
             "CADASTRAL_OWNER_QTY": ownerData ? ownerData : null,
             "CADASTRAL_NOTE": noteData ? noteData : null,
             "RECORD_STATUS": "N",
-            "CREATE_USER": data?.user?.USER_LIST_PID
+            "CREATE_USER": data?.user?.USER_LIST_PID,
+            "PROCESS_SEQ_": props?.processSeq ?? 101,
+            "STATUS_SEQ_": 101,
         }
         console.log(obj, "obj_onSubmit_DialogTab01");
 
@@ -299,7 +305,7 @@ export default function DilogTab01InsIndex(props) {
                                     <Typography>ครั้งที่รังวัด:</Typography>
                                 </Grid>
                                 <Grid item>
-                                    <Typography color={"darkblue"} fontWeight={"bold"} sx={{ textDecoration: 'underline' }} display="inline">&nbsp;{numofsurveyQty}&nbsp;</Typography>
+                                    <Typography color={"darkblue"} fontWeight={"bold"} sx={{ textDecoration: 'underline' }} display="inline">&nbsp;{numofsurveyQty == " " || numofsurveyQty == null ? "-" : numofsurveyQty}&nbsp;</Typography>
                                     {/* <IconButton size='small' disabled={numofsurveyQty == "-" || checkCanEdit} onClick={() => { setOpenEdit(props?.tabData) }}><Edit /></IconButton> */}
                                 </Grid>
                             </Grid>
@@ -725,8 +731,6 @@ export default function DilogTab01InsIndex(props) {
                         </Grid>
                         <Grid item xs={12} md={2} py={2}>
                             <TextField
-
-
                                 placeholder="ชื่อช่างรังวัด"
                                 value={fname}
                                 onChange={(e) => {
@@ -740,8 +744,6 @@ export default function DilogTab01InsIndex(props) {
                         </Grid>
                         <Grid item xs={12} md={2} py={2}>
                             <TextField
-
-
                                 placeholder="นามสกุลช่างรังวัด"
                                 value={lname}
                                 onChange={(e) => {
@@ -755,8 +757,6 @@ export default function DilogTab01InsIndex(props) {
                         </Grid>
                         <Grid item xs={12} md={2} py={2}>
                             <TextField
-
-
                                 placeholder="ตำแหน่งช่างรังวัด"
                                 value={surveyorPosition}
                                 onChange={(e) => {
@@ -772,8 +772,6 @@ export default function DilogTab01InsIndex(props) {
                         </Grid>
                         <Grid item xs={12} md={2} py={2}>
                             <TextField
-
-
                                 placeholder="ระดับ"
                                 value={surveyorLevelData}
                                 onChange={(e) => {
@@ -781,6 +779,9 @@ export default function DilogTab01InsIndex(props) {
                                 }}
                                 style={{ width: "100%" }}
                                 size="small"
+                                inputProps={{
+                                    maxLength: 3,
+                                  }}
                             />
                         </Grid>
                         <Grid item xs={12} md={2} py={2} px={1}>
@@ -788,8 +789,6 @@ export default function DilogTab01InsIndex(props) {
                         </Grid>
                         <Grid item xs={12} md={2} py={2}>
                             <TextField
-
-
                                 placeholder="เนื้อที่เดิม (ไร่)"
                                 value={oldRaiData}
                                 onChange={(e) => {
@@ -818,8 +817,6 @@ export default function DilogTab01InsIndex(props) {
                         </Grid>
                         <Grid item xs={12} md={2} py={2}>
                             <TextField
-
-
                                 placeholder="เนื้อที่เดิม (วา)"
                                 value={oldWaData}
                                 onChange={(e) => {
@@ -833,8 +830,6 @@ export default function DilogTab01InsIndex(props) {
                         </Grid>
                         <Grid item xs={12} md={2} py={2}>
                             <TextField
-
-
                                 placeholder="เนื้อที่เดิม (เศษวา)"
                                 value={oldSubWaData}
                                 onChange={(e) => {
@@ -850,8 +845,6 @@ export default function DilogTab01InsIndex(props) {
                         </Grid>
                         <Grid item xs={12} md={2} py={2}>
                             <TextField
-
-
                                 placeholder="จำนวนผู้ถือกรรมสิทธิ์"
                                 value={ownerData}
                                 onChange={(e) => {
@@ -866,8 +859,6 @@ export default function DilogTab01InsIndex(props) {
                         </Grid>
                         <Grid item xs={12} md={6} py={2}>
                             <TextField
-
-
                                 placeholder="หมายเหตุ"
                                 value={noteData}
                                 onChange={(e) => {

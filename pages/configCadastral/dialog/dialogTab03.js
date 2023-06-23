@@ -102,7 +102,8 @@ export default function DilogTab03Index(props) {
             "OWNER_LNAME": ownerLName ? ownerLName : null,
             "CADASTRAL_OWNER_NOTE": ownerNote ? ownerNote : null,
             "RECORD_STATUS": "N",
-            "LAST_UPD_USER": data?.user?.USER_LIST_PID
+            "LAST_UPD_USER": data?.user?.USER_LIST_PID,
+            "PROCESS_SEQ_": props?.processSeq ?? 101,
         }
         console.log(obj, "obj_onSubmit_DialogTab03");
         let seqUpd = props?.cadastralOwnerData[0]?.CADASTRAL_OWNER_SEQ

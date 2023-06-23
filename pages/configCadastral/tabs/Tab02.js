@@ -77,8 +77,8 @@ export default function Tab02(props) {
     return (
         <Grid>
             <Grid item xs={12}>
-                {openDialog && <DialogTab02 open={openDialog} close={() => (setOpenDialog(false))} onSubmit={handleChange} cadastralLandData={cadastralLandData} masterData={props?.masterData} />}
-                {openDialogIns && <DialogTab02_Ins open={openDialogIns} close={() => (setOpenDialogIns(false))} onSubmit={handleChangeIns} cadastralLandData={props?.searchDataInsert} />}
+                {openDialog && <DialogTab02 open={openDialog} close={() => (setOpenDialog(false))} onSubmit={handleChange} cadastralLandData={cadastralLandData} masterData={props?.masterData} processSeq={props?.processSeq}/>}
+                {openDialogIns && <DialogTab02_Ins open={openDialogIns} close={() => (setOpenDialogIns(false))} onSubmit={handleChangeIns} cadastralLandData={props?.searchDataInsert} processSeq={props?.processSeq}/>}
                 <React.Fragment>
                     <TableContainer>
                         <Table sx={{ minWidth: 650, width: '100%', border: '1px solid ' }} size="small" stickyHeader >

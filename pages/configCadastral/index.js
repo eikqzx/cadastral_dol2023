@@ -37,7 +37,7 @@ export default function IndexConfigCadastral(props) {
     const [open, setOpen] = React.useState(false);
     const [message, setMessage] = React.useState('');
     const [type, setType] = React.useState('');
-    const [processSeq, setProcessSeq] = React.useState(106)
+    const [processSeq, setProcessSeq] = React.useState(101)
     const [userData, setUserData] = React.useState(null);
     const [landOffice, setLandOffice] = React.useState(null);
     const [searchParameter, setSearchParameter] = React.useState(null);
@@ -239,9 +239,9 @@ export default function IndexConfigCadastral(props) {
                                                 <Tab label="ผู้ขอรังวัดต้นร่าง" value="3" />
                                             </TabList>
                                         </Box>
-                                        <TabPanel value="1"><Tab01 searchData={searchData} searchDataInsert={searchDataInsert} masterData={masterData} /></TabPanel>
-                                        <TabPanel value="2"><Tab02 searchData={searchData} searchDataInsert={searchDataInsert} masterData={masterData} /></TabPanel>
-                                        <TabPanel value="3"><Tab03 searchData={searchData} searchDataInsert={searchDataInsert} masterData={masterData} /></TabPanel>
+                                        <TabPanel value="1"><Tab01 searchData={searchData} searchDataInsert={searchDataInsert} masterData={masterData} process={processSeq}/></TabPanel>
+                                        <TabPanel value="2"><Tab02 searchData={searchData} searchDataInsert={searchDataInsert} masterData={masterData} process={processSeq}/></TabPanel>
+                                        <TabPanel value="3"><Tab03 searchData={searchData} searchDataInsert={searchDataInsert} masterData={masterData} process={processSeq}/></TabPanel>
                                     </TabContext>
                                 </Box>
                             )
@@ -266,9 +266,9 @@ export default function IndexConfigCadastral(props) {
                                                     <Tab label="ผู้ขอรังวัดต้นร่าง" value="3" />
                                                 </TabList>
                                             </Box>
-                                            <TabPanel value="1"><Tab01 searchDataInsert={searchDataInsert} masterData={masterData} /></TabPanel>
-                                            <TabPanel value="2"><Tab02 searchDataInsert={searchDataInsert} masterData={masterData} /></TabPanel>
-                                            <TabPanel value="3"><Tab03 searchDataInsert={searchDataInsert} masterData={masterData} /></TabPanel>
+                                            <TabPanel value="1"><Tab01 searchDataInsert={searchDataInsert} masterData={masterData} processSeq={processSeq}/></TabPanel>
+                                            <TabPanel value="2"><Tab02 searchDataInsert={searchDataInsert} masterData={masterData} processSeq={processSeq}/></TabPanel>
+                                            <TabPanel value="3"><Tab03 searchDataInsert={searchDataInsert} masterData={masterData} processSeq={processSeq}/></TabPanel>
                                         </TabContext>
                                     </Box>
                                 )

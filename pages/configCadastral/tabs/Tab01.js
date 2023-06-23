@@ -159,8 +159,8 @@ export default function Tab01(props) {
     return (
         <Grid>
             <Grid item xs={12}>
-                {openDialog && <DialogTab01 open={openDialog} close={() => (setOpenDialog(false))} onSubmit={handleChange} cadastralData={cadastralData} />}
-                {openDialogIns && <DialogTab01_Ins open={openDialogIns} close={() => (setOpenDialogIns(false))} onSubmit={handleChangeIns} cadastralData={props?.searchDataInsert} />}
+                {openDialog && <DialogTab01 open={openDialog} close={() => (setOpenDialog(false))} onSubmit={handleChange} cadastralData={cadastralData} processSeq={props?.processSeq}/>}
+                {openDialogIns && <DialogTab01_Ins open={openDialogIns} close={() => (setOpenDialogIns(false))} onSubmit={handleChangeIns} cadastralData={props?.searchDataInsert} processSeq={props?.processSeq}/>}
                 <React.Fragment>
                     <TableContainer>
                         <Table sx={{ minWidth: 650, width: '100%', border: '1px solid ' }} size="small" stickyHeader >
