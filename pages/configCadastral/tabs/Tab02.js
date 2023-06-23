@@ -63,7 +63,7 @@ export default function Tab02(props) {
     const _createNewData = async (data) => {
         console.log(data, "data_createNewDataTab02");
         let cadastralLandData = await getCadastralLandByCadastralSeq(data[0].CADASTRAL_SEQ)
-        // let cadastralLandData = await getCadastralLandByCadastralSeq(890000002563837)
+        // let cadastralLandData = await getCadastralLandByCadastralSeq(10000156)
         console.log(cadastralLandData, "getMasterDatacadastralLandData");
         cadastralLandData = filterRecordStatus(cadastralLandData.rows, "N")
         setCadastralLandData(cadastralLandData)

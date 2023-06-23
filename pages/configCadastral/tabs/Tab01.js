@@ -167,7 +167,6 @@ export default function Tab01(props) {
                             <TableHead>
                                 <TableRow>
                                     <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">ลำดับ</Typography></TableCell>
-                                    <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">เลขที่ดิน</Typography></TableCell>
                                     <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">โซน</Typography></TableCell>
                                     <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">หมายเลขระวางศูนย์กำเนิด 1</Typography></TableCell>
                                     <TableCell style={{ width: '200px', wordWrap: 'break-word' }} sx={{ borderRight: '1px solid ', borderBottom: '1px solid ', background: 'linear-gradient(95deg, rgba(255,255,232,1) 0%, rgba(191,239,205,1) 100%)' }}><Typography variant="subtitle1">หมายเลขระวางศูนย์กำเนิด 2</Typography></TableCell>
@@ -216,9 +215,6 @@ export default function Tab01(props) {
                                                     >
                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
                                                             {index + 1}
-                                                        </TableCell>
-                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {el.CADASTRAL_LAND_NO}
                                                         </TableCell>
                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
                                                             {el.ZONE_LAND}
@@ -320,9 +316,6 @@ export default function Tab01(props) {
                                                     >
                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
                                                             {index + 1}
-                                                        </TableCell>
-                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {el.CADASTRAL_LAND_NO}
                                                         </TableCell>
                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
                                                             {el.ZONE_LAND}

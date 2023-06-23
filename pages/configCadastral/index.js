@@ -100,8 +100,9 @@ export default function IndexConfigCadastral(props) {
             let objArray = []
             objArray.push(obj);
             setSearchDataInsert(objArray)
+        } else {
+            setSearchData(data)
         }
-        setSearchData(data)
     }
 
     React.useEffect(() => {
@@ -239,9 +240,9 @@ export default function IndexConfigCadastral(props) {
                                                 <Tab label="ผู้ขอรังวัดต้นร่าง" value="3" />
                                             </TabList>
                                         </Box>
-                                        <TabPanel value="1"><Tab01 searchData={searchData} searchDataInsert={searchDataInsert} masterData={masterData} process={processSeq}/></TabPanel>
-                                        <TabPanel value="2"><Tab02 searchData={searchData} searchDataInsert={searchDataInsert} masterData={masterData} process={processSeq}/></TabPanel>
-                                        <TabPanel value="3"><Tab03 searchData={searchData} searchDataInsert={searchDataInsert} masterData={masterData} process={processSeq}/></TabPanel>
+                                        <TabPanel value="1"><Tab01 searchData={searchData} searchDataInsert={searchDataInsert} masterData={masterData} process={processSeq} /></TabPanel>
+                                        <TabPanel value="2"><Tab02 searchData={searchData} searchDataInsert={searchDataInsert} masterData={masterData} process={processSeq} /></TabPanel>
+                                        <TabPanel value="3"><Tab03 searchData={searchData} searchDataInsert={searchDataInsert} masterData={masterData} process={processSeq} /></TabPanel>
                                     </TabContext>
                                 </Box>
                             )
@@ -266,9 +267,9 @@ export default function IndexConfigCadastral(props) {
                                                     <Tab label="ผู้ขอรังวัดต้นร่าง" value="3" />
                                                 </TabList>
                                             </Box>
-                                            <TabPanel value="1"><Tab01 searchDataInsert={searchDataInsert} masterData={masterData} processSeq={processSeq}/></TabPanel>
-                                            <TabPanel value="2"><Tab02 searchDataInsert={searchDataInsert} masterData={masterData} processSeq={processSeq}/></TabPanel>
-                                            <TabPanel value="3"><Tab03 searchDataInsert={searchDataInsert} masterData={masterData} processSeq={processSeq}/></TabPanel>
+                                            <TabPanel value="1"><Tab01 searchDataInsert={searchDataInsert} masterData={masterData} processSeq={processSeq} /></TabPanel>
+                                            <TabPanel value="2"><Tab02 searchDataInsert={searchDataInsert} masterData={masterData} processSeq={processSeq} /></TabPanel>
+                                            <TabPanel value="3"><Tab03 searchDataInsert={searchDataInsert} masterData={masterData} processSeq={processSeq} /></TabPanel>
                                         </TabContext>
                                     </Box>
                                 )
