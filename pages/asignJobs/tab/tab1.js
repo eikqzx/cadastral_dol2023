@@ -524,6 +524,7 @@ export default function Tab1(props) {
               let resInsert = await mrgCadastralImage(objInsert);
               console.log(resInsert, "resInsert");
               if (currentIndex === Object.keys(datagroupA).length - 1) {
+                createSurveyData();
                 await setMessage("บันทึกสำเร็จ");
                 await setOpen(true);
                 await setType("success");
@@ -565,7 +566,8 @@ export default function Tab1(props) {
             try {
               let resInsert = await mrgCadastralImage(objInsert);
               console.log(resInsert, "resInsert");
-              if (currentIndex === Object.keys(datagroupA).length - 1) {
+              if (currentIndex === Object.keys(datagroupB).length - 1) {
+                createSurveyData();
                 await setMessage("บันทึกสำเร็จ");
                 await setOpen(true);
                 await setType("success");
@@ -607,7 +609,8 @@ export default function Tab1(props) {
             try {
               let resInsert = await mrgCadastralImage(objInsert);
               console.log(resInsert, "resInsert");
-              if (currentIndex === Object.keys(datagroupA).length - 1) {
+              if (currentIndex === Object.keys(datagroupC).length - 1) {
+                createSurveyData();
                 await setMessage("บันทึกสำเร็จ");
                 await setOpen(true);
                 await setType("success");
@@ -649,7 +652,8 @@ export default function Tab1(props) {
             try {
               let resInsert = await mrgCadastralImage(objInsert);
               console.log(resInsert, "resInsert");
-              if (currentIndex === Object.keys(datagroupA).length - 1) {
+              if (currentIndex === Object.keys(datagroupD).length - 1) {
+                createSurveyData();
                 await setMessage("บันทึกสำเร็จ");
                 await setOpen(true);
                 await setType("success");

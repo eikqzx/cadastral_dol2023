@@ -181,7 +181,7 @@ export default function Tab01(props) {
     const createData = async (data) => {
         let resImage = await cadastralImageByCadastralSeq(data.CADASTRAL_SEQ);
         console.log(resImage, "createData");
-        let dataRows = resImage.rows
+        let dataRows = resImage?.rows?.filter(item => item.RECORD_STATUS == "N")
         let arr = [];
         let resDocData = await getSurveyDocType();
         let arrDocData = resDocData.rows

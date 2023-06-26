@@ -132,7 +132,7 @@ export default function Tab1(props) {
             "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
             "SURVEYDOCTYPE_SEQ": obj.SURVEYDOCTYPE_SEQ,
             "CADASTRAL_IMAGE_PNO": resCadIngPno.rows[0].CADASTRAL_IMAGE_PNO, // http://127.0.0.1:8011/SVA_/cadastralImageDocumentPNoByCadastralSeq
-            "PROCESS_SEQ_": 102,
+            "PROCESS_SEQ_": 103,
             "STATUS_SEQ_": 101,
             "CADASTRAL_IMAGE_NOTE": null,
             "RECORD_STATUS": "N",
@@ -145,13 +145,14 @@ export default function Tab1(props) {
         let searchScanObj = {
             "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
             "SURVEYDOCTYPE_SEQ": obj.SURVEYDOCTYPE_SEQ,
-            "PROCESS_SEQ_": 102
+            "PROCESS_SEQ_": 103,
+            "STATUS_SEQ_": 104
         };
         let resSearchPath = await cadastralImageByCadastralSeqSurveyDocTypeSeq(searchScanObj);
-        resSearchPath = filterRecordStatus(resSearchPath.rows, "N");
+        resSearchPath = resSearchPath?.rows?.filter(item => item.RECORD_STATUS == "N");
         console.log(resSearchPath, "resSaveList resSearchPath");
         // return
-        const filePath = resSearchPath[resSearchPath.length - 1].IMAGE_PATH;
+        const filePath = resSearchPath[resSearchPath.length - 1]?.IMAGE_PATH;
         const fileName = filePath.substring(filePath.lastIndexOf('/') + 1);
         const directoryPath = filePath.substring(0, filePath.lastIndexOf('/') + 1);
         console.log(fileName, "handleImageClick");
@@ -354,7 +355,7 @@ export default function Tab1(props) {
             "CADASTRAL_NO": props?.tabData.CADASTRAL_NO,
             "NUMOFSURVEY_QTY": inputData,
             "LANDOFFICE_SEQ": props?.tabData?.LANDOFFICE_SEQ,
-            "PROCESS_SEQ_": props?.processSeq ?? 102,
+            "PROCESS_SEQ_": props?.processSeq ?? 103,
             "STATUS_SEQ_": 104,
             "RECORD_STATUS": "N",
             "CREATE_USER": data?.user?.USER_LIST_PID
@@ -823,7 +824,7 @@ export default function Tab1(props) {
                                                                     }}>
                                                                         <TableCell style={{ width: "25%" }} align="left">{`${item?.DOC_DATA?.SURVEYDOCTYPE_GROUP} - ${item.IMAGE_PNAME} (${item.IMAGE_PNO})`}</TableCell>
                                                                         <TableCell style={{ width: "25%" }} align="left">{
-                                                                            item.FILE_STATUS ? <Chip icon={<CheckCircleIcon />} label="อัปโหลดแล้ว" color="success" /> : <Chip icon={<CloseIcon />} label="ไม่ได้อัปโหลด" color="error" />
+                                                                            (item.FILE_STATUS && item.PROCESS_SEQ_ == 103) ? <Chip icon={<CheckCircleIcon />} label="อัปโหลดแล้ว" color="success" /> : <Chip icon={<CloseIcon />} label="ไม่ได้อัปโหลด" color="error" />
                                                                         }</TableCell>
                                                                         <TableCell style={{ width: "40%" }} align="left">
                                                                             <Tooltip title="ดูรูปภาพ">
