@@ -77,12 +77,11 @@ export default function DilogTab02Index(props) {
     };
     console.log(valueRadio, "valueRadio");
 
-
     React.useEffect(() => {
-        getMasterData(props.masterData)
-
-    }, [])
-
+        if (props?.masterData) {
+            getMasterData(props.masterData)
+        }
+    }, [props?.masterData])
 
     React.useEffect(() => {
         setOrderNo(props?.cadastralLandData[0]?.LAND_ORDER)
@@ -160,7 +159,7 @@ export default function DilogTab02Index(props) {
                 }
                 setSheetcode(data[i].SHEETCODE);
                 setBoxNo(data[i].BOX_NO.toString().padStart(2, "0"));
-                setNumofsurveyQty(data[i]?.NUMOFSURVEY_QTY ?? "-");
+                setNumofsurveyQty(data[i]?.NUMOFSURVEY_QTY > 0 ? data[i]?.NUMOFSURVEY_QTY : data[i]?.NUMOFSURVEY_QTY === 0 ? "-" : "-");
                 setCadastralNo(data[i].CADASTRAL_NO);
                 console.log(landOfficeFiltered, "getLandOfficeData");
                 setOffice(landOfficeFiltered[0]?.LANDOFFICE_NAME_TH ?? "-");

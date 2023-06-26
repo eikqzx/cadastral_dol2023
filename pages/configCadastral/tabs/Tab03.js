@@ -31,7 +31,9 @@ import DialogTab03 from "@/pages/configCadastral/dialog/dialogTab03"
 import DialogTab03_Ins from "@/pages/configCadastral/dialog_ins/dialogTab03_ins"
 
 export default function Tab03(props) {
+    console.log(props, "props_Tab03");
     const [cadastralOwnerData, setCadastralOwnerData] = React.useState([]);
+    const [cadastralSeq, setCadastralSeq] = React.useState([]);
     const { data } = useSession();
     const [openDialog, setOpenDialog] = React.useState(false);
     const [openDialogIns, setOpenDialogIns] = React.useState(false);
@@ -50,25 +52,31 @@ export default function Tab03(props) {
 
     console.log(cadastralOwnerData, "cadastralOwnerData");
     React.useEffect(() => {
-        if (props.searchData) {
+        if (props.searchData.length != 0) {
+            console.log(props.searchData, "searchData_getMasterData03");
             _createNewData(props.searchData)
-        } else {
+        }
+        else if (props.searchDataInsert.length != 0) {
+            console.log(props.searchDataInsert, "searchDataInsert_getMasterData03");
             _createNewData(props.searchDataInsert)
         }
     }, [props.searchData, props.searchDataInsert]);
 
     const _createNewData = async (data) => {
-        console.log(data, "data_createNewDataTab02");
-        let cadastralOwnerData = await getCadastralOwnerBycadastralSeq(data[0].CADASTRAL_SEQ)
-        console.log(cadastralOwnerData, "getMasterDatacadastralOwnerData");
-        cadastralOwnerData = filterRecordStatus(cadastralOwnerData.rows, "N")
-        for (let i in cadastralOwnerData) {
-            let dataItems = cadastralOwnerData[i]
-            dataItems.TITLE_NAME_TH = await getTitleByPK(dataItems.OWNER_TITLE_SEQ)
-            dataItems.OWNER_FULL_NAME = dataItems.TITLE_NAME_TH + " " + dataItems.OWNER_FNAME + " " + dataItems.OWNER_LNAME
-            cadastralOwnerData.push(dataItems)
+        console.log(data, "data_createNewDataTab03");
+        setCadastralSeq(data[0].CADASTRAL_SEQ ? data[0].CADASTRAL_SEQ : null)
+        if (data.length > 0) {
+            let cadastralOwnerData = await getCadastralOwnerBycadastralSeq(data[0].CADASTRAL_SEQ)
+            console.log(cadastralOwnerData, "getMasterDatacadastralOwnerData");
+            cadastralOwnerData = filterRecordStatus(cadastralOwnerData.rows, "N")
+            for (let i in cadastralOwnerData) {
+                let dataItems = cadastralOwnerData[i]
+                dataItems.TITLE_NAME_TH = await getTitleByPK(dataItems.OWNER_TITLE_SEQ)
+                dataItems.OWNER_FULL_NAME = dataItems.TITLE_NAME_TH + " " + dataItems.OWNER_FNAME + " " + dataItems.OWNER_LNAME
+                cadastralOwnerData.push(dataItems)
+            }
+            setCadastralOwnerData(cadastralOwnerData)
         }
-        setCadastralOwnerData(cadastralOwnerData)
     }
     const handleChange = async () => {
         setOpenDialog(true)
@@ -80,7 +88,7 @@ export default function Tab03(props) {
         <Grid container>
             <Grid item xs={12}>
                 {openDialog && <DialogTab03 open={openDialog} close={() => (setOpenDialog(false))} onSubmit={handleChange} cadastralOwnerData={cadastralOwnerData} masterData={props?.masterData} processSeq={props?.processSeq} />}
-                {openDialogIns && <DialogTab03_Ins open={openDialogIns} close={() => (setOpenDialogIns(false))} onSubmit={handleChangeIns} cadastralOwnerData={props?.searchDataInsert} processSeq={props?.processSeq} />}
+                {openDialogIns && <DialogTab03_Ins open={openDialogIns} close={() => (setOpenDialogIns(false))} onSubmit={handleChangeIns} cadastralSeq={cadastralSeq} masterData={props?.masterData} cadastralOwnerData={cadastralOwnerData} processSeq={props?.processSeq} />}
                 <React.Fragment>
                     <TableContainer>
                         <Table sx={{ minWidth: 650, width: "100%", border: '1px solid ' }} size="small" stickyHeader >
@@ -165,10 +173,17 @@ export default function Tab03(props) {
                                                 },
                                             }}
                                             onClick={() => {
-                                                confirmDialog.createDialog(
-                                                    `ต้องการเพิ่มข้อมูลต้นร่าง หรือไม่ ?`,
-                                                    () => { handleChangeIns() }
-                                                );
+                                                if (cadastralSeq === null) {
+                                                    confirmDialog.createDialog(
+                                                        `ต้องทำการเพิ่มข้อมูลต้นร่างก่อน`,
+                                                        () => { }
+                                                    );
+                                                } else {
+                                                    confirmDialog.createDialog(
+                                                        `ต้องการเพิ่มผู้ขอรังวัดต้นร่าง หรือไม่ ?`,
+                                                        () => { handleChangeIns() }
+                                                    );
+                                                }
                                             }}
                                             style={{ cursor: 'pointer' }}
                                         >

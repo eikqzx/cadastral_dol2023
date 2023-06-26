@@ -39,6 +39,7 @@ export default function DilogTab02InsIndex(props) {
     const [open, setOpen] = React.useState(false);
     const [message, setMessage] = React.useState("");
     const [type, setType] = React.useState("success");
+    const [cadastralSeq, setCadastralSeq] = React.useState([]);
 
     const [orderNo, setOrderNo] = React.useState("")
     const [parcelSurveyNo, setParcelSurveyNo] = React.useState("")
@@ -74,10 +75,16 @@ export default function DilogTab02InsIndex(props) {
     console.log(valueRadio, "valueRadio");
 
     React.useEffect(() => {
-        if (props?.cadastralLandData) {
-            getMasterData(props.cadastralLandData)
+        if (props?.masterData) {
+            getMasterData(props.masterData)
         }
-    }, [props?.cadastralLandData])
+    }, [props?.masterData])
+
+    React.useEffect(() => {
+        if (props?.cadastralSeq) {
+            setCadastralSeq(props.cadastralSeq)
+        }
+    }, [props?.cadastralSeq])
 
     const getMasterData = async (data) => {
         // data = data.rows
@@ -92,7 +99,7 @@ export default function DilogTab02InsIndex(props) {
                 setProvinceData(getProvinceData.rows[0])
                 setSheetcode(data[i].SHEETCODE);
                 setBoxNo(data[i].BOX_NO.toString().padStart(2, "0"));
-                setNumofsurveyQty(data[i]?.NUMOFSURVEY_QTY ?? "-");
+                setNumofsurveyQty(data[i]?.NUMOFSURVEY_QTY > 0 ? data[i]?.NUMOFSURVEY_QTY : data[i]?.NUMOFSURVEY_QTY === 0 ? "-" : "-");
                 setCadastralNo(data[i].CADASTRAL_NO);
                 console.log(landOfficeFiltered, "getLandOfficeData");
                 setOffice(landOfficeFiltered[0]?.LANDOFFICE_NAME_TH ?? "-");
@@ -102,7 +109,7 @@ export default function DilogTab02InsIndex(props) {
 
     const _onSubmit = async () => {
         let obj = {
-            // "CADASTRAL_SEQ": 0, 
+            "CADASTRAL_SEQ": cadastralSeq ? cadastralSeq : 0,
             "LAND_ORDER": orderNo ? orderNo : null,
             "ZONE_LAND": zoneData ? zoneData : null,
             "SHEETTYPE_SEQ": sheetTypeData?.SHEETTYPE_SEQ ? sheetTypeData?.SHEETTYPE_SEQ : null,
@@ -129,7 +136,7 @@ export default function DilogTab02InsIndex(props) {
             "CADASTRAL_SURVEY_NO": parcelSurveyNo ? parcelSurveyNo : null,
             "STATIC_FLAG": valueRadio,
             "CADASTRAL_LAND_NOTE": noteData ? noteData : null,
-            "RECORD_STATUS": "N", 
+            "RECORD_STATUS": "N",
             "CREATE_USER": data?.user?.USER_LIST_PID,
             "PROCESS_SEQ_": props?.processSeq ?? 101,
             "STATUS_SEQ_": 101,

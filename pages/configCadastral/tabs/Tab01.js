@@ -60,9 +60,12 @@ export default function Tab01(props) {
 
     console.log(cadastralData, "cadastralData");
     React.useEffect(() => {
-        if (props.searchData) {
+        if (props.searchData.length != 0) {
+            console.log(props.searchData, "searchData_getMasterData01");
             _createNewData(props.searchData)
-        } else {
+        }
+        else if (props.searchDataInsert.length != 0) {
+            console.log(props.searchDataInsert, "searchDataInsert_getMasterData01");
             _createNewData(props.searchDataInsert)
         }
     }, [props.searchData, props.searchDataInsert]);
@@ -159,8 +162,8 @@ export default function Tab01(props) {
     return (
         <Grid>
             <Grid item xs={12}>
-                {openDialog && <DialogTab01 open={openDialog} close={() => (setOpenDialog(false))} onSubmit={handleChange} cadastralData={cadastralData} processSeq={props?.processSeq}/>}
-                {openDialogIns && <DialogTab01_Ins open={openDialogIns} close={() => (setOpenDialogIns(false))} onSubmit={handleChangeIns} cadastralData={props?.searchDataInsert} processSeq={props?.processSeq}/>}
+                {openDialog && <DialogTab01 open={openDialog} close={() => (setOpenDialog(false))} onSubmit={handleChange} cadastralData={cadastralData} processSeq={props?.processSeq} />}
+                {openDialogIns && <DialogTab01_Ins open={openDialogIns} close={() => (setOpenDialogIns(false))} onSubmit={handleChangeIns} cadastralData={props?.searchDataInsert} processSeq={props?.processSeq} />}
                 <React.Fragment>
                     <TableContainer>
                         <Table sx={{ minWidth: 650, width: '100%', border: '1px solid ' }} size="small" stickyHeader >

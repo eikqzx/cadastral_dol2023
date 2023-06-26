@@ -35,6 +35,7 @@ export default function DilogTab03InsIndex(props) {
     const [open, setOpen] = React.useState(false);
     const [message, setMessage] = React.useState("");
     const [type, setType] = React.useState("success");
+    const [cadastralSeq, setCadastralSeq] = React.useState([]);
 
     const [ownerOrder, setOwnerOrder] = React.useState("");
     const [ownerTitle, setOwnerTitle] = React.useState(null);
@@ -48,10 +49,16 @@ export default function DilogTab03InsIndex(props) {
     };
 
     React.useEffect(() => {
-        if (props?.cadastralOwnerData) {
-            getMasterData(props.cadastralOwnerData)
+        if (props?.masterData) {
+            getMasterData(props.masterData)
         }
-    }, [props?.cadastralOwnerData])
+    }, [props?.masterData])
+
+    React.useEffect(() => {
+        if (props?.cadastralSeq) {
+            setCadastralSeq(props.cadastralSeq)
+        }
+    }, [props?.cadastralSeq])
 
     const getMasterData = async (data) => {
         // data = data.rows
@@ -63,7 +70,7 @@ export default function DilogTab03InsIndex(props) {
                 let landOfficeFiltered = getLandOfficeData.rows.filter(item => item.LANDOFFICE_SEQ == data[i]?.LANDOFFICE_SEQ);
                 setSheetcode(data[i].SHEETCODE);
                 setBoxNo(data[i].BOX_NO.toString().padStart(2, "0"));
-                setNumofsurveyQty(data[i]?.NUMOFSURVEY_QTY ?? "-");
+                setNumofsurveyQty(data[i]?.NUMOFSURVEY_QTY > 0 ? data[i]?.NUMOFSURVEY_QTY : data[i]?.NUMOFSURVEY_QTY === 0 ? "-" : "-");
                 setCadastralNo(data[i].CADASTRAL_NO);
                 console.log(landOfficeFiltered, "getLandOfficeData");
                 setOffice(landOfficeFiltered[0]?.LANDOFFICE_NAME_TH ?? "-");
@@ -77,7 +84,7 @@ export default function DilogTab03InsIndex(props) {
 
     const _onSubmit = async () => {
         let obj = {
-            // "CADASTRAL_SEQ": 0, 
+            "CADASTRAL_SEQ": cadastralSeq ? cadastralSeq : 0,
             "OWNER_TYPE": valueRadio,
             "OWNER_ORDER": ownerOrder ? ownerOrder : null,
             "OWNER_TITLE_SEQ": ownerTitle?.TITLE_SEQ ? ownerTitle?.TITLE_SEQ : null,
@@ -85,7 +92,7 @@ export default function DilogTab03InsIndex(props) {
             "OWNER_FNAME": ownerFName ? ownerFName : null,
             "OWNER_LNAME": ownerLName ? ownerLName : null,
             "CADASTRAL_OWNER_NOTE": ownerNote ? ownerNote : null,
-            "RECORD_STATUS": "N", 
+            "RECORD_STATUS": "N",
             "CREATE_USER": data?.user?.USER_LIST_PID,
             "PROCESS_SEQ_": props?.processSeq ?? 101,
             "STATUS_SEQ_": 101,

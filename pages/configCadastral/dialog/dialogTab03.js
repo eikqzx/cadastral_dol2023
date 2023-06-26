@@ -46,9 +46,13 @@ export default function DilogTab03Index(props) {
     const handleChangeRadio = (event) => {
         setValueRadio(event.target.value);
     };
+    
     React.useEffect(() => {
-        getMasterData(props.masterData)
-    }, [])
+        if (props?.masterData) {
+            getMasterData(props.masterData)
+        }
+    }, [props?.masterData])
+
     React.useEffect(() => {
         if (props?.cadastralOwnerData) {
             setOwnerOrder(props?.cadastralOwnerData[0]?.OWNER_ORDER)
@@ -61,7 +65,7 @@ export default function DilogTab03Index(props) {
     }, [props?.cadastralOwnerData])
 
     const _getTitle = async (seq) => {
-        console.log(seq,"_getTitleseq");
+        console.log(seq, "_getTitleseq");
         let getTitle = await getTitleByPK(seq);
         getTitle = getTitle.rows
         // console.log(getTitle, "getTitle");
@@ -78,7 +82,7 @@ export default function DilogTab03Index(props) {
                 let landOfficeFiltered = getLandOfficeData.rows.filter(item => item.LANDOFFICE_SEQ == data[i]?.LANDOFFICE_SEQ);
                 setSheetcode(data[i].SHEETCODE);
                 setBoxNo(data[i].BOX_NO.toString().padStart(2, "0"));
-                setNumofsurveyQty(data[i]?.NUMOFSURVEY_QTY ?? "-");
+                setNumofsurveyQty(data[i]?.NUMOFSURVEY_QTY > 0 ? data[i]?.NUMOFSURVEY_QTY : data[i]?.NUMOFSURVEY_QTY === 0 ? "-" : "-");
                 setCadastralNo(data[i].CADASTRAL_NO);
                 console.log(landOfficeFiltered, "getLandOfficeData");
                 setOffice(landOfficeFiltered[0]?.LANDOFFICE_NAME_TH ?? "-");
@@ -109,7 +113,7 @@ export default function DilogTab03Index(props) {
         let seqUpd = props?.cadastralOwnerData[0]?.CADASTRAL_OWNER_SEQ
         try {
             // return
-            let resUpd = await updCadastralOwner(seqUpd,obj);
+            let resUpd = await updCadastralOwner(seqUpd, obj);
             console.log(resUpd, "onSave");
             if (typeof resUpd == "object") {
                 await setMessage("บันทึกสำเร็จ");

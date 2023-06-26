@@ -49,10 +49,11 @@ export default function IndexConfigCadastral(props) {
     const [boxNo, setBoxNo] = React.useState("-");
     const [numofsurveyQty, setNumofsurveyQty] = React.useState("-");
     const [cadastralNo, setCadastralNo] = React.useState("-");
+
     const handleChangeTabs = (event, newValue) => {
         setTapData(newValue);
     };
-    console.log(props, "propsIndexConfigCadastral");
+    console.log(searchData[0]?.CADASTRAL_SEQ, "propsIndexConfigCadastral");
     console.log(searchParameter, "searchParameter");
     // console.log(landOffice, "landOffice");
     // console.log(userData, "userData");
@@ -101,6 +102,7 @@ export default function IndexConfigCadastral(props) {
             objArray.push(obj);
             setSearchDataInsert(objArray)
         } else {
+            console.log(data, "dataobj_onSearch_else");
             setSearchData(data)
         }
     }
@@ -110,7 +112,7 @@ export default function IndexConfigCadastral(props) {
             console.log(searchData, "searchData_getMasterData");
             getMasterData(searchData)
         }
-        if (searchDataInsert.length != 0) {
+        else if (searchDataInsert.length != 0) {
             console.log(searchDataInsert, "searchDataInsert_getMasterData");
             getMasterData(searchDataInsert)
         }
@@ -126,7 +128,7 @@ export default function IndexConfigCadastral(props) {
                 let landOfficeFiltered = getLandOfficeData.rows.filter(item => item.LANDOFFICE_SEQ == data[i]?.LANDOFFICE_SEQ);
                 setSheetcode(data[i].SHEETCODE);
                 setBoxNo(data[i].BOX_NO.toString().padStart(2, "0"));
-                setNumofsurveyQty(data[i]?.NUMOFSURVEY_QTY ?? "-");
+                setNumofsurveyQty(data[i]?.NUMOFSURVEY_QTY > 0 ? data[i]?.NUMOFSURVEY_QTY : data[i]?.NUMOFSURVEY_QTY === 0 ? "-" : "-");
                 setCadastralNo(data[i].CADASTRAL_NO);
                 console.log(landOfficeFiltered, "getLandOfficeData");
                 setOffice(landOfficeFiltered[0]?.LANDOFFICE_NAME_TH ?? "-");
@@ -240,9 +242,9 @@ export default function IndexConfigCadastral(props) {
                                                 <Tab label="ผู้ขอรังวัดต้นร่าง" value="3" />
                                             </TabList>
                                         </Box>
-                                        <TabPanel value="1"><Tab01 searchData={searchData} searchDataInsert={searchDataInsert} masterData={masterData} process={processSeq} /></TabPanel>
-                                        <TabPanel value="2"><Tab02 searchData={searchData} searchDataInsert={searchDataInsert} masterData={masterData} process={processSeq} /></TabPanel>
-                                        <TabPanel value="3"><Tab03 searchData={searchData} searchDataInsert={searchDataInsert} masterData={masterData} process={processSeq} /></TabPanel>
+                                        <TabPanel value="1"><Tab01 searchData={searchData} masterData={masterData} process={processSeq} /></TabPanel>
+                                        <TabPanel value="2"><Tab02 searchData={searchData} masterData={masterData} process={processSeq} /></TabPanel>
+                                        <TabPanel value="3"><Tab03 searchData={searchData} masterData={masterData} process={processSeq} /></TabPanel>
                                     </TabContext>
                                 </Box>
                             )
@@ -267,9 +269,9 @@ export default function IndexConfigCadastral(props) {
                                                     <Tab label="ผู้ขอรังวัดต้นร่าง" value="3" />
                                                 </TabList>
                                             </Box>
-                                            <TabPanel value="1"><Tab01 searchDataInsert={searchDataInsert} masterData={masterData} processSeq={processSeq} /></TabPanel>
-                                            <TabPanel value="2"><Tab02 searchDataInsert={searchDataInsert} masterData={masterData} processSeq={processSeq} /></TabPanel>
-                                            <TabPanel value="3"><Tab03 searchDataInsert={searchDataInsert} masterData={masterData} processSeq={processSeq} /></TabPanel>
+                                            <TabPanel value="1"><Tab01 cadastralSeq={searchData[0]?.CADASTRAL_SEQ} searchData={searchData} searchDataInsert={searchDataInsert} masterData={masterData} processSeq={processSeq} /></TabPanel>
+                                            <TabPanel value="2"><Tab02 cadastralSeq={searchData[0]?.CADASTRAL_SEQ} searchData={searchData} searchDataInsert={searchDataInsert} masterData={masterData} processSeq={processSeq} /></TabPanel>
+                                            <TabPanel value="3"><Tab03 cadastralSeq={searchData[0]?.CADASTRAL_SEQ} searchData={searchData} searchDataInsert={searchDataInsert} masterData={masterData} processSeq={processSeq} /></TabPanel>
                                         </TabContext>
                                     </Box>
                                 )

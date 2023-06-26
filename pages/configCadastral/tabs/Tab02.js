@@ -34,7 +34,9 @@ import thDate from 'dayjs/locale/th'
 dayjs.extend(budhaEra)
 dayjs.locale(thDate)
 export default function Tab02(props) {
+    console.log(props, "props_Tab02");
     const [cadastralLandData, setCadastralLandData] = React.useState([]);
+    const [cadastralSeq, setCadastralSeq] = React.useState([]);
     const { data } = useSession();
     const [openDialog, setOpenDialog] = React.useState(false);
     const [openDialogIns, setOpenDialogIns] = React.useState(false);
@@ -53,20 +55,27 @@ export default function Tab02(props) {
 
     console.log(cadastralLandData, "cadastralLandData");
     React.useEffect(() => {
-        if (props.searchData) {
+        if (props.searchData.length != 0) {
+            console.log(props.searchData, "searchData_getMasterData02");
             _createNewData(props.searchData)
-        } else {
+        }
+        else if (props.searchDataInsert.length != 0) {
+            console.log(props.searchDataInsert, "searchDataInsert_getMasterData02");
             _createNewData(props.searchDataInsert)
         }
     }, [props.searchData, props.searchDataInsert]);
 
     const _createNewData = async (data) => {
         console.log(data, "data_createNewDataTab02");
-        let cadastralLandData = await getCadastralLandByCadastralSeq(data[0].CADASTRAL_SEQ)
-        // let cadastralLandData = await getCadastralLandByCadastralSeq(10000156)
-        console.log(cadastralLandData, "getMasterDatacadastralLandData");
-        cadastralLandData = filterRecordStatus(cadastralLandData.rows, "N")
-        setCadastralLandData(cadastralLandData)
+        setCadastralSeq(data[0].CADASTRAL_SEQ ? data[0].CADASTRAL_SEQ : null)
+        if (data.length > 0) {
+            let cadastralLandData = await getCadastralLandByCadastralSeq(data[0].CADASTRAL_SEQ)
+            // let cadastralLandData = await getCadastralLandByCadastralSeq(10000156)
+            console.log(cadastralLandData, "getMasterDatacadastralLandData");
+            cadastralLandData = filterRecordStatus(cadastralLandData.rows, "N")
+            setCadastralLandData(cadastralLandData)
+        }
+
     }
     const handleChange = async () => {
         setOpenDialog(true)
@@ -77,8 +86,8 @@ export default function Tab02(props) {
     return (
         <Grid>
             <Grid item xs={12}>
-                {openDialog && <DialogTab02 open={openDialog} close={() => (setOpenDialog(false))} onSubmit={handleChange} cadastralLandData={cadastralLandData} masterData={props?.masterData} processSeq={props?.processSeq}/>}
-                {openDialogIns && <DialogTab02_Ins open={openDialogIns} close={() => (setOpenDialogIns(false))} onSubmit={handleChangeIns} cadastralLandData={props?.searchDataInsert} processSeq={props?.processSeq}/>}
+                {openDialog && <DialogTab02 open={openDialog} close={() => (setOpenDialog(false))} onSubmit={handleChange} cadastralLandData={cadastralLandData} masterData={props?.masterData} processSeq={props?.processSeq} />}
+                {openDialogIns && <DialogTab02_Ins open={openDialogIns} close={() => (setOpenDialogIns(false))} onSubmit={handleChangeIns} cadastralSeq={cadastralSeq} masterData={props?.masterData} cadastralLandData={cadastralLandData} processSeq={props?.processSeq} />}
                 <React.Fragment>
                     <TableContainer>
                         <Table sx={{ minWidth: 650, width: '100%', border: '1px solid ' }} size="small" stickyHeader >
@@ -279,10 +288,17 @@ export default function Tab02(props) {
                                                 },
                                             }}
                                             onClick={() => {
-                                                confirmDialog.createDialog(
-                                                    `ต้องการเพิ่มข้อมูลต้นร่าง หรือไม่ ?`,
-                                                    () => { handleChangeIns() }
-                                                );
+                                                if (cadastralSeq === null) {
+                                                    confirmDialog.createDialog(
+                                                        `ต้องทำการเพิ่มข้อมูลต้นร่างก่อน`,
+                                                        () => {}
+                                                    );
+                                                } else {
+                                                    confirmDialog.createDialog(
+                                                        `ต้องการเพิ่มข้อมูลแปลงต้นร่าง หรือไม่ ?`,
+                                                        () => { handleChangeIns() }
+                                                    );
+                                                }
                                             }}
                                             style={{ cursor: 'pointer' }}
                                         >
