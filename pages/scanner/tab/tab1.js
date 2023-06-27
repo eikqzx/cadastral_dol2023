@@ -408,6 +408,9 @@ export default function Tab1(props) {
     const editImage = async (image, obj) => {
         console.log(image, "editImage");
         console.log(obj, "editImage");
+        delete obj.FILE_DATA;
+        delete obj.FILE_DES;
+        delete obj.DOC_DATA
         const filePath = obj.IMAGE_PATH;
         const fileName = filePath.substring(filePath.lastIndexOf('/') + 1);
         const directoryPath = filePath.substring(0, filePath.lastIndexOf('/') + 1);
