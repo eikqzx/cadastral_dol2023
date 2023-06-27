@@ -120,8 +120,8 @@ export default function Tab1(props) {
     }
 
     const handleImageClick = async (image, obj) => {
-        console.log(image, "handleImageClick");
-        console.log(obj, "handleImageClick");
+        console.log(image, "handleImageClick image");
+        console.log(obj, "handleImageClick obj");
         let searchObj = {
             "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
             "SURVEYDOCTYPE_SEQ": obj.SURVEYDOCTYPE_SEQ,
@@ -132,7 +132,7 @@ export default function Tab1(props) {
             "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
             "SURVEYDOCTYPE_SEQ": obj.SURVEYDOCTYPE_SEQ,
             "CADASTRAL_IMAGE_PNO": resCadIngPno.rows[0].CADASTRAL_IMAGE_PNO, // http://127.0.0.1:8011/SVA_/cadastralImageDocumentPNoByCadastralSeq
-            "PROCESS_SEQ_": 103,
+            "PROCESS_SEQ_": 102,
             "STATUS_SEQ_": 101,
             "CADASTRAL_IMAGE_NOTE": null,
             "RECORD_STATUS": "N",
@@ -150,13 +150,13 @@ export default function Tab1(props) {
         };
         let resSearchPath = await cadastralImageByCadastralSeqSurveyDocTypeSeq(searchScanObj);
         resSearchPath = resSearchPath?.rows?.filter(item => item.RECORD_STATUS == "N");
-        console.log(resSearchPath, "resSaveList resSearchPath");
+        console.log(resSearchPath, "handleImageClick resSaveList resSearchPath");
         // return
         const filePath = resSearchPath[resSearchPath.length - 1]?.IMAGE_PATH;
-        const fileName = filePath.substring(filePath.lastIndexOf('/') + 1);
-        const directoryPath = filePath.substring(0, filePath.lastIndexOf('/') + 1);
-        console.log(fileName, "handleImageClick");
-        console.log(directoryPath, "handleImageClick");
+        const fileName = filePath?.substring(filePath.lastIndexOf('/') + 1);
+        const directoryPath = filePath?.substring(0, filePath.lastIndexOf('/') + 1);
+        console.log(fileName, "handleImageClick fileName");
+        console.log(directoryPath, "handleImageClick directoryPath");
         let objData = new Object();
         objData.PATH = directoryPath;
         objData.FILE_NAME = fileName;
@@ -172,7 +172,7 @@ export default function Tab1(props) {
 
         try {
             let resUpload = await uploadFileMulti(formData);
-            console.log(resUpload, "handleImageClick");
+            console.log(resUpload, "handleImageClick resUpload");
             if (resUpload.status) {
                 resSearchPath[resSearchPath.length - 1].PROCESS_SEQ_ = 103;
                 resSearchPath[resSearchPath.length - 1].STATUS_SEQ_ = 101;
