@@ -30,7 +30,7 @@ export default function DilogTab03InsIndex(props) {
     const [office, setOffice] = React.useState("-");
     const [sheetcode, setSheetcode] = React.useState("-");
     const [boxNo, setBoxNo] = React.useState("-");
-    const [numofsurveyQty, setNumofsurveyQty] = React.useState("-");
+    const [numofsurveyQty, setNumofsurveyQty] = React.useState("");
     const [cadastralNo, setCadastralNo] = React.useState("-");
     const [open, setOpen] = React.useState(false);
     const [message, setMessage] = React.useState("");
@@ -70,7 +70,7 @@ export default function DilogTab03InsIndex(props) {
                 let landOfficeFiltered = getLandOfficeData.rows.filter(item => item.LANDOFFICE_SEQ == data[i]?.LANDOFFICE_SEQ);
                 setSheetcode(data[i].SHEETCODE);
                 setBoxNo(data[i].BOX_NO.toString().padStart(2, "0"));
-                setNumofsurveyQty(data[i]?.NUMOFSURVEY_QTY > 0 ? data[i]?.NUMOFSURVEY_QTY : data[i]?.NUMOFSURVEY_QTY === 0 ? "-" : "-");
+                setNumofsurveyQty(data[i]?.NUMOFSURVEY_QTY !== null ? data[i]?.NUMOFSURVEY_QTY : 0);
                 setCadastralNo(data[i].CADASTRAL_NO);
                 console.log(landOfficeFiltered, "getLandOfficeData");
                 setOffice(landOfficeFiltered[0]?.LANDOFFICE_NAME_TH ?? "-");
@@ -178,7 +178,7 @@ export default function DilogTab03InsIndex(props) {
                                     <Typography>ครั้งที่รังวัด:</Typography>
                                 </Grid>
                                 <Grid item>
-                                    <Typography color={"darkblue"} fontWeight={"bold"} sx={{ textDecoration: 'underline' }} display="inline">&nbsp;{numofsurveyQty}&nbsp;</Typography>
+                                    <Typography color={"darkblue"} fontWeight={"bold"} sx={{ textDecoration: 'underline' }} display="inline">&nbsp;{numofsurveyQty == 0 || numofsurveyQty == null ? "-" : numofsurveyQty}&nbsp;</Typography>
                                     {/* <IconButton size='small' disabled={numofsurveyQty == "-" || checkCanEdit} onClick={() => { setOpenEdit(props?.tabData) }}><Edit /></IconButton> */}
                                 </Grid>
                             </Grid>

@@ -114,7 +114,7 @@ export default function DilogTab01InsIndex(props) {
                 setProvinceData(getProvinceData.rows[0])
                 setSheetcode(data[i].SHEETCODE);
                 setBoxNo(data[i].BOX_NO.toString().padStart(2, "0"));
-                setNumofsurveyQty(data[i]?.NUMOFSURVEY_QTY > 0 ? data[i]?.NUMOFSURVEY_QTY : data[i]?.NUMOFSURVEY_QTY === 0 ? "-" : "-");
+                setNumofsurveyQty(data[i]?.NUMOFSURVEY_QTY !== null ? data[i]?.NUMOFSURVEY_QTY : 0);
                 setCadastralNo(data[i].CADASTRAL_NO);
                 console.log(landOfficeFiltered, "getLandOfficeData");
                 setOffice(landOfficeFiltered[0]);
@@ -305,7 +305,7 @@ export default function DilogTab01InsIndex(props) {
                                     <Typography>ครั้งที่รังวัด:</Typography>
                                 </Grid>
                                 <Grid item>
-                                    <Typography color={"darkblue"} fontWeight={"bold"} sx={{ textDecoration: 'underline' }} display="inline">&nbsp;{numofsurveyQty == " " || numofsurveyQty == null ? "-" : numofsurveyQty}&nbsp;</Typography>
+                                    <Typography color={"darkblue"} fontWeight={"bold"} sx={{ textDecoration: 'underline' }} display="inline">&nbsp;{numofsurveyQty == 0 || numofsurveyQty == null ? "-" : numofsurveyQty}&nbsp;</Typography>
                                     {/* <IconButton size='small' disabled={numofsurveyQty == "-" || checkCanEdit} onClick={() => { setOpenEdit(props?.tabData) }}><Edit /></IconButton> */}
                                 </Grid>
                             </Grid>
@@ -781,7 +781,7 @@ export default function DilogTab01InsIndex(props) {
                                 size="small"
                                 inputProps={{
                                     maxLength: 3,
-                                  }}
+                                }}
                             />
                         </Grid>
                         <Grid item xs={12} md={2} py={2} px={1}>
