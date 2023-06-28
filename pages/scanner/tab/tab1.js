@@ -405,7 +405,7 @@ export default function Tab1(props) {
         console.log(dataImage, "submit");
     }
 
-    const editImage = async (image, obj) => {
+    const editImage = async (image, obj,close) => {
         console.log(image, "editImage");
         console.log(obj, "editImage");
         delete obj.FILE_DATA;
@@ -827,7 +827,7 @@ export default function Tab1(props) {
                                                                     }}>
                                                                         <TableCell style={{ width: "25%" }} align="left">{`${item?.DOC_DATA?.SURVEYDOCTYPE_GROUP} - ${item.IMAGE_PNAME} (${item.IMAGE_PNO})`}</TableCell>
                                                                         <TableCell style={{ width: "25%" }} align="left">{
-                                                                            (item.FILE_STATUS && item.PROCESS_SEQ_ == 103) ? <Chip icon={<CheckCircleIcon />} label="อัปโหลดแล้ว" color="success" /> : <Chip icon={<CloseIcon />} label="ไม่ได้อัปโหลด" color="error" />
+                                                                            (item.FILE_STATUS && item.PROCESS_SEQ_ == 103 && item.STATUS_SEQ_ == 101) ? <Chip icon={<CheckCircleIcon />} label="อัปโหลดแล้ว" color="success" /> : <Chip icon={<CloseIcon />} label="ไม่ได้อัปโหลด" color="error" />
                                                                         }</TableCell>
                                                                         <TableCell style={{ width: "40%" }} align="left">
                                                                             <Tooltip title="ดูรูปภาพ">
