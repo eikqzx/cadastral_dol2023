@@ -37,7 +37,7 @@ export default function IndexConfigCadastral(props) {
     const [open, setOpen] = React.useState(false);
     const [message, setMessage] = React.useState('');
     const [type, setType] = React.useState('');
-    const [processSeq, setProcessSeq] = React.useState(101)
+    const [processSeq, setProcessSeq] = React.useState(100)
     const [userData, setUserData] = React.useState(null);
     const [landOffice, setLandOffice] = React.useState(null);
     const [searchParameter, setSearchParameter] = React.useState(null);
@@ -74,7 +74,7 @@ export default function IndexConfigCadastral(props) {
             let seq = decode(dataUrl?.PROCESS_SEQ);
             console.log(seq, "seqseqseq");
             if (seq == 124) {
-                seq = 101
+                seq = 100
                 setProcessSeq(seq);
             }
         }
