@@ -9,13 +9,18 @@ import {
     Divider,
     Button
 } from "@mui/material";
+//COMPONENTS
 import SideTreeView from "../components/sideTreeView";
 import Search from "../components/search/search";
 import SnackBarDiaLog from "../components/snackbarV2";
+import CheckLandMap from "./components/checkLandMap";
+//ICONS
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { useSession } from "next-auth/react";
+//SERVICES
 import { ciracoreImage10XByConditionCadastralNoTo, getAllCiracoreImage } from "@/service/sva_ciracore";
 import { getLandOfficeByPK } from "@/service/mas/landOffice";
+//LIBRALIES
+import { useSession } from "next-auth/react";
 import { isNotEmpty } from "@/lib/datacontrol";
 import { useRouter } from "next/router";
 import { decode } from "next-base64";
@@ -107,8 +112,8 @@ export default function IndexScanner() {
                 />
             </Grid>
             <Grid item xs={10} md={5} >
-                <Paper sx={{ height: "69vh", flexGrow: 1, overflowY: 'auto', marginBottom: '8px' }}>
-                    Map
+                <Paper sx={{ height: "69.5vh", flexGrow: 1, overflowY: 'auto', marginBottom: '4px' }}>
+                    <CheckLandMap />
                 </Paper>
                 <Paper sx={{ height: "30vh", flexGrow: 1, overflowY: 'auto' }}>
                     List
