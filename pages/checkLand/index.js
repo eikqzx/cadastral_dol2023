@@ -7,13 +7,17 @@ import {
     AccordionDetails,
     Typography,
     Divider,
-    Button
+    Button,
+    Tab,
+    Box
 } from "@mui/material";
+import { TabContext, TabList, TabPanel } from '@mui/lab';
 //COMPONENTS
 import SideTreeView from "../components/sideTreeView";
 import Search from "../components/search/search";
 import SnackBarDiaLog from "../components/snackbarV2";
-import CheckLandMap from "./components/checkLandMap";
+import TabZone47Index from "./tabs/tabZone47";
+import TabZone48Index from "./tabs/tabZone48";
 //ICONS
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 //SERVICES
@@ -28,7 +32,7 @@ import { decode } from "next-base64";
 
 export default function IndexScanner() {
     const [searchData, setSearchData] = React.useState([]);
-    const [tabData, setTapData] = React.useState([]);
+    const [tabData, setTapData] = React.useState('1');
     const [open, setOpen] = React.useState(false);
     const [message, setMessage] = React.useState('');
     const [type, setType] = React.useState('');
@@ -41,6 +45,10 @@ export default function IndexScanner() {
     const [processSeq, setProcessSeq] = React.useState(133);
     const { data } = useSession();
     const dataUrl = useRouter().query
+
+    const handleChangeTabs = (event, newValue) => {
+        setTapData(newValue);
+    };
 
     React.useEffect(() => {
         if (isNotEmpty(dataUrl)) {
@@ -106,22 +114,40 @@ export default function IndexScanner() {
                     </Accordion>
                 </Grid>
             }
-            <Grid item xs={2} md={2}>
+            <Grid item xs={12} md={2}>
                 <SideTreeView data={searchData} setTapData={setTapData}
                     process={processSeq}
                 />
             </Grid>
-            <Grid item xs={10} md={5} >
-                <Paper sx={{ height: "69.5vh", flexGrow: 1, overflowY: 'auto', marginBottom: '4px' }}>
-                    <CheckLandMap />
-                </Paper>
-                <Paper sx={{ height: "30vh", flexGrow: 1, overflowY: 'auto' }}>
-                    List
-                </Paper>
-            </Grid>
-            <Grid item xs={10} md={5}>
+            <Grid item xs={12} md={10}>
                 <Paper sx={{ height: "100vh", flexGrow: 1, overflowY: 'auto' }}>
-                    Image
+                    <TabContext value={tabData}>
+                        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                            <TabList
+                                onChange={handleChangeTabs}
+                                sx={{
+                                    '& .MuiTabs-indicator': { backgroundColor: "#5BB318 !important" },
+                                    '& .Mui-selected': { color: "#5BB318 !important" },
+                                    background: 'linear-gradient(26deg, rgba(255,255,232,1) 20%, rgba(188,243,176,1) 100%) !important',
+                                }}
+                                scrollButtons="auto"
+                                allowScrollButtonsMobile
+                            >
+                                <Tab label="โซน 47" value="1" />
+                                <Tab label="โซน 48" value="2" />
+                            </TabList>
+                        </Box>
+                        <TabPanel value="1">
+                            <Grid item xs={12}>
+                                <TabZone47Index />
+                            </Grid>
+                        </TabPanel>
+                        <TabPanel value="2">
+                            <Grid item xs={12}>
+                                <TabZone48Index />
+                            </Grid>
+                        </TabPanel>
+                    </TabContext>
                 </Paper>
             </Grid>
         </Grid>
