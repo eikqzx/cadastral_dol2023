@@ -40,7 +40,7 @@ import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import "yet-another-react-lightbox/plugins/captions.css";
 import "yet-another-react-lightbox/plugins/thumbnails.css";
 import "yet-another-react-lightbox/styles.css";
-import { cadastralImageByCadastralSeq, cadastralImageByCadastralSeqSurveyDocTypeSeq, cadastralImagePNoByCadastralSeq, getCadastralImage, insertCadastral, saveScanCadastralImage, updateCadastral, updateCadastralImage } from "@/service/sva";
+import { cadastralImage102ByConditionCadastralNoTo, cadastralImageByCadastralSeq, cadastralImageByCadastralSeqSurveyDocTypeSeq, cadastralImagePNoByCadastralSeq, getCadastral, getCadastralImage, insertCadastral, saveScanCadastralImage, updateCadastral, updateCadastralImage } from "@/service/sva";
 import { filterRecordStatus } from "@/lib/datacontrol";
 import { getSurveyDocType, surveyDocTypeBySurveyDocTypeGroup } from "@/service/mas/surveyDocTypeGroup";
 import CheckIcon from "@mui/icons-material/Check";
@@ -76,6 +76,7 @@ export default function Tab1(props) {
     const [openEdit, setOpenEdit] = React.useState(null);
     const [openEditNumQty, setOpenEditQty] = React.useState(null);
     const [checkCanEdit, setCheckCanEdit] = React.useState(false);
+    const [cadastraldata,setCadastraldata] = React.useState(null);
 
     const handleClose = () => {
         setOpen(false)
@@ -123,13 +124,13 @@ export default function Tab1(props) {
         console.log(image, "handleImageClick image");
         console.log(obj, "handleImageClick obj");
         let searchObj = {
-            "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
+            "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ ?? cadastraldata?.CADASTRAL_SEQ,
             "SURVEYDOCTYPE_SEQ": obj.SURVEYDOCTYPE_SEQ,
             "PROCESS_SEQ_": 103
         }
         let resCadIngPno = await cadastralImagePNoByCadastralSeq(searchObj);
         let objInsert = {
-            "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
+            "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ ?? cadastraldata?.CADASTRAL_SEQ,
             "SURVEYDOCTYPE_SEQ": obj.SURVEYDOCTYPE_SEQ,
             "CADASTRAL_IMAGE_PNO": resCadIngPno.rows[0].CADASTRAL_IMAGE_PNO, // http://127.0.0.1:8011/SVA_/cadastralImageDocumentPNoByCadastralSeq
             "PROCESS_SEQ_": 102,
@@ -143,7 +144,7 @@ export default function Tab1(props) {
         let resSaveList = await saveScanCadastralImage(objInsert);
         console.log(resSaveList, "resSaveList");
         let searchScanObj = {
-            "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ,
+            "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ ?? cadastraldata?.CADASTRAL_SEQ,
             "SURVEYDOCTYPE_SEQ": obj.SURVEYDOCTYPE_SEQ,
             "PROCESS_SEQ_": 103,
             "STATUS_SEQ_": 104
@@ -248,7 +249,7 @@ export default function Tab1(props) {
         if (Array.isArray(props?.searchData)) {
             if (props?.searchData.length != 0) {
                 let filterData = props?.searchData?.filter(
-                    (item) => item.CADASTRAL_SEQ == props?.tabData?.CADASTRAL_SEQ
+                    (item) => item.CADASTRAL_SEQ == props?.tabData?.CADASTRAL_SEQ ?? cadastraldata?.CADASTRAL_SEQ
                 );
                 console.log(filterData, "filterData");
                 if (filterData.length != 0) {
@@ -282,7 +283,7 @@ export default function Tab1(props) {
     const createSurveyData = async () => {
         let res = await getCadastralImage();
         res = filterRecordStatus(res.rows, "N");
-        res = res.filter(item => item.CADASTRAL_SEQ == props?.tabData?.CADASTRAL_SEQ);
+        res = res.filter(item => item.CADASTRAL_SEQ == props?.tabData?.CADASTRAL_SEQ ?? cadastraldata?.CADASTRAL_SEQ);
         //
         console.log(res, "res createSurveyData");
         if (typeof res.find(obj => obj.PROCESS_SEQ_ == 103 && obj.STATUS_SEQ_ == 101) == "object") {
@@ -366,11 +367,19 @@ export default function Tab1(props) {
             console.log(res);
             if (res) {
                 await props?.onSearch(props?.searchParameter);
+                let getAllCadastral = await cadastralImage102ByConditionCadastralNoTo(props?.searchParameter);
+                console.log(getAllCadastral,"filterDataCadastral");
+                let filterDataCadastral = getAllCadastral.rows.filter(item => item.RECORD_STATUS == "N" && item.CADASTRAL_NO == props?.tabData?.CADASTRAL_NO)
+                console.log(filterDataCadastral,"filterDataCadastral");
+                await setCadastraldata(filterDataCadastral[0]);
+                await getMasterData(filterDataCadastral[0]);
+                await createSurveyData()
                 await setMessage("เพิ่มทะเบียนสำเร็จ");
                 await setOpen(true);
                 await setType("success");
             }
         } catch (error) {
+            console.log(error,"filterDataCadastral error");
             await setMessage("เกิดข้อผิดพลาด");
             await setOpen(true);
             await setType("error");
