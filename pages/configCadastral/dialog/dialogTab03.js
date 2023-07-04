@@ -56,7 +56,7 @@ export default function DilogTab03Index(props) {
     React.useEffect(() => {
         if (props?.cadastralOwnerData) {
             setOwnerOrder(props?.cadastralOwnerData[0]?.OWNER_ORDER)
-            _getTitle(props?.cadastralOwnerData[0]?.TITLE_SEQ ?? props?.cadastralOwnerData[0]?.TITLE_SEQ)
+            _getTitle(props?.cadastralOwnerData[0]?.OWNER_TITLE_SEQ ?? props?.cadastralOwnerData[0]?.OWNER_TITLE_SEQ)
             setOwnerFName(props?.cadastralOwnerData[0]?.OWNER_FNAME)
             setOwnerLName(props?.cadastralOwnerData[0]?.OWNER_LNAME)
             setOwnerNote(props?.cadastralOwnerData[0]?.CADASTRAL_OWNER_NOTE)
@@ -68,8 +68,8 @@ export default function DilogTab03Index(props) {
         console.log(seq, "_getTitleseq");
         let getTitle = await getTitleByPK(seq);
         getTitle = getTitle.rows
-        // console.log(getTitle, "getTitle");
-        setOwnerTitle(getTitle)
+        console.log(getTitle, "getTitle");
+        setOwnerTitle(getTitle[0])
     }
 
     const getMasterData = async (data) => {
