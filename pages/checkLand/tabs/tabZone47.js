@@ -12,7 +12,7 @@ export default function TabZone47Index(props) {
     return (
         <Grid container columns={24}>
             <Grid item xs={12}>
-                <Grid sx={{ height: "70vh" }} component={Paper} elevation={2}>
+                <Grid sx={{ height: "50vh" }} component={Paper} elevation={2}>
                     <CheckLandMap />
                 </Grid>
                 <Grid sx={{ height: "30vh" }} component={Paper} elevation={2}>
@@ -21,7 +21,7 @@ export default function TabZone47Index(props) {
             </Grid>
             <Grid item xs={12}>
                 <Grid component={Paper} elevation={2}>
-                    Image
+                    <CheckLandImage />
                 </Grid>
             </Grid>
         </Grid>
