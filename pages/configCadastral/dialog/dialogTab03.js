@@ -185,17 +185,6 @@ export default function DilogTab03Index(props) {
                                 </Grid>
                             </Grid>
                         </Grid>
-                        <Grid item xs={3} md={3}>
-                            <Grid container>
-                                <Grid item >
-                                    <Typography>ครั้งที่รังวัด:</Typography>
-                                </Grid>
-                                <Grid item>
-                                    <Typography color={"darkblue"} fontWeight={"bold"} sx={{ textDecoration: 'underline' }} display="inline">&nbsp;{numofsurveyQty}&nbsp;</Typography>
-                                    {/* <IconButton size='small' disabled={numofsurveyQty == "-" || checkCanEdit} onClick={() => { setOpenEdit(props?.tabData) }}><Edit /></IconButton> */}
-                                </Grid>
-                            </Grid>
-                        </Grid>
                         <Grid item xs={3} md={4}>
                             <Grid container>
                                 <Grid item >
@@ -203,6 +192,17 @@ export default function DilogTab03Index(props) {
                                 </Grid>
                                 <Grid item>
                                     <Typography color={"darkblue"} fontWeight={"bold"} sx={{ textDecoration: 'underline' }} display="inline">&nbsp;{cadastralNo}&nbsp;</Typography>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                        <Grid item xs={3} md={3}>
+                            <Grid container>
+                                <Grid item >
+                                    <Typography>ครั้งที่รังวัด:</Typography>
+                                </Grid>
+                                <Grid item>
+                                    <Typography color={"darkblue"} fontWeight={"bold"} sx={{ textDecoration: 'underline' }} display="inline">&nbsp;{numofsurveyQty == 0 || numofsurveyQty == null ? "-" : numofsurveyQty}&nbsp;</Typography>
+                                    {/* <IconButton size='small' disabled={numofsurveyQty == "-" || checkCanEdit} onClick={() => { setOpenEdit(props?.tabData) }}><Edit /></IconButton> */}
                                 </Grid>
                             </Grid>
                         </Grid>

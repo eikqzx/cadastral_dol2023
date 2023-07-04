@@ -299,6 +299,16 @@ export default function DilogTab01InsIndex(props) {
                                 </Grid>
                             </Grid>
                         </Grid>
+                        <Grid item xs={3} md={4}>
+                            <Grid container>
+                                <Grid item >
+                                    <Typography>เลขที่ต้นร่าง:</Typography>
+                                </Grid>
+                                <Grid item>
+                                    <Typography color={"darkblue"} fontWeight={"bold"} sx={{ textDecoration: 'underline' }} display="inline">&nbsp;{cadastralNo}&nbsp;</Typography>
+                                </Grid>
+                            </Grid>
+                        </Grid>
                         <Grid item xs={3} md={3}>
                             <Grid container>
                                 <Grid item >
@@ -307,16 +317,6 @@ export default function DilogTab01InsIndex(props) {
                                 <Grid item>
                                     <Typography color={"darkblue"} fontWeight={"bold"} sx={{ textDecoration: 'underline' }} display="inline">&nbsp;{numofsurveyQty == 0 || numofsurveyQty == null ? "-" : numofsurveyQty}&nbsp;</Typography>
                                     {/* <IconButton size='small' disabled={numofsurveyQty == "-" || checkCanEdit} onClick={() => { setOpenEdit(props?.tabData) }}><Edit /></IconButton> */}
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                        <Grid item xs={3} md={4}>
-                            <Grid container>
-                                <Grid item >
-                                    <Typography>เลขที่ต้นร่าง:</Typography>
-                                </Grid>
-                                <Grid item>
-                                    <Typography color={"darkblue"} fontWeight={"bold"} sx={{ textDecoration: 'underline' }} display="inline">&nbsp;{cadastralNo}&nbsp;</Typography>
                                 </Grid>
                             </Grid>
                         </Grid>
