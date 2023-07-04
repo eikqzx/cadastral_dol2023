@@ -377,7 +377,7 @@ export default function DilogTab01Index(props) {
         let seq = props?.cadastralData[0]?.CADASTRAL_SEQ
         console.log(seq, "seqobj_onSubmit_Dialog02");
         try {
-            return
+            // return
             let resUpd = await updateCadastral(seq, obj);
             console.log(resUpd, "onSave");
             if (typeof resUpd == "object") {
