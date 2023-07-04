@@ -16,7 +16,8 @@ import {
     FormControl,
     InputLabel,
     Select,
-    MenuItem
+    MenuItem,
+    Chip
 } from "@mui/material";
 //SERVICES
 import { getCadastralLandByCadastralSeq } from "@/service/sva";
@@ -73,7 +74,21 @@ export default function Tab02(props) {
             // let cadastralLandData = await getCadastralLandByCadastralSeq(10000156)
             console.log(cadastralLandData, "getMasterDatacadastralLandData");
             cadastralLandData = filterRecordStatus(cadastralLandData.rows, "N")
-            setCadastralLandData(cadastralLandData)
+            let newData = []
+            for (let i in cadastralLandData) {
+                let dataItems = cadastralLandData[i]
+                if (dataItems.STATIC_FLAG === "0") {
+                    dataItems.STATIC_FLAG_NAME = "แปลงแยก"
+                }
+                if (dataItems.STATIC_FLAG === "1") {
+                    dataItems.STATIC_FLAG_NAME = "แปลงคง"
+                }
+                if (dataItems.STATIC_FLAG === "2") {
+                    dataItems.STATIC_FLAG_NAME = "แปลงรวม"
+                }
+                newData.push(dataItems)
+            }
+            setCadastralLandData(newData)
         }
 
     }
@@ -171,7 +186,7 @@ export default function Tab02(props) {
                                                             {el.SCALE_SEQ}
                                                         </TableCell>
                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {el.STATIC_FLAG}
+                                                            {el.STATIC_FLAG_NAME}
                                                         </TableCell>
                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
                                                             {el.CADASTRAL_LAND_NOTE}
@@ -252,7 +267,7 @@ export default function Tab02(props) {
                                                             {el.SCALE_SEQ}
                                                         </TableCell>
                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
-                                                            {el.STATIC_FLAG}
+                                                            {el.STATIC_FLAG_NAME}
                                                         </TableCell>
                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
                                                             {el.CADASTRAL_LAND_NOTE}
@@ -291,7 +306,7 @@ export default function Tab02(props) {
                                                 if (cadastralSeq === null) {
                                                     confirmDialog.createDialog(
                                                         `ต้องทำการเพิ่มข้อมูลต้นร่างก่อน`,
-                                                        () => {}
+                                                        () => { }
                                                     );
                                                 } else {
                                                     confirmDialog.createDialog(

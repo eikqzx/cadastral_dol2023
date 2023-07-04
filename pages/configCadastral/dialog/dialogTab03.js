@@ -41,12 +41,12 @@ export default function DilogTab03Index(props) {
     const [ownerFName, setOwnerFName] = React.useState("");
     const [ownerLName, setOwnerLName] = React.useState("");
     const [ownerNote, setOwnerNote] = React.useState("");
-    const [valueRadio, setValueRadio] = React.useState(1);
+    const [valueRadio, setValueRadio] = React.useState(props?.cadastralOwnerData?.[0]?.OWNER_TYPE || '');
 
     const handleChangeRadio = (event) => {
         setValueRadio(event.target.value);
     };
-    
+    console.log(valueRadio, "valueRadio");
     React.useEffect(() => {
         if (props?.masterData) {
             getMasterData(props.masterData)

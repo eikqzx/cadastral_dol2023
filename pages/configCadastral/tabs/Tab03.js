@@ -78,6 +78,12 @@ export default function Tab03(props) {
                 TitleName = filterRecordStatus(TitleName.rows, "N")
                 console.log(TitleName,"TitleName");
                 dataItems.OWNER_FULL_NAME = TitleName[0].TITLE_NAME_TH + " " + dataItems.OWNER_FNAME + " " + dataItems.OWNER_LNAME
+                if (dataItems.OWNER_TYPE === "1") {
+                    dataItems.OWNER_TYPE_NAME = "บุคคลธรรมดา"
+                }
+                if (dataItems.OWNER_TYPE === "2") {
+                    dataItems.OWNER_TYPE_NAME = "นิติบุคคล"
+                }
                 cadastralOwnerNewData.push(dataItems)
             }
             setCadastralOwnerData(cadastralOwnerNewData)
@@ -127,7 +133,7 @@ export default function Tab03(props) {
                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} >
                                                             {index + 1}
                                                         </TableCell>
-                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} >{el.OWNER_TYPE}</TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} >{el.OWNER_TYPE_NAME}</TableCell>
                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
                                                             {el.OWNER_FULL_NAME}
                                                         </TableCell>
@@ -158,7 +164,7 @@ export default function Tab03(props) {
                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} >
                                                             {index + 1}
                                                         </TableCell>
-                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} >{el.OWNER_TYPE}</TableCell>
+                                                        <TableCell style={{ width: '200px', wordWrap: 'break-word' }} >{el.OWNER_TYPE_NAME}</TableCell>
                                                         <TableCell style={{ width: '200px', wordWrap: 'break-word' }} align="left">
                                                             {el.OWNER_FULL_NAME}
                                                         </TableCell>

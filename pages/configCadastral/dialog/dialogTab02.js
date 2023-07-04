@@ -70,7 +70,7 @@ export default function DilogTab02Index(props) {
     const [SubWaData, setSubWaData] = React.useState("")
     const [noteData, setNoteData] = React.useState("")
 
-    const [valueRadio, setValueRadio] = React.useState(0);
+    const [valueRadio, setValueRadio] = React.useState(props?.cadastralLandData?.[0]?.STATIC_FLAG || '');
 
     const handleChangeRadio = (event) => {
         setValueRadio(event.target.value);
