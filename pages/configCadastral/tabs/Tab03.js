@@ -51,43 +51,42 @@ export default function Tab03(props) {
     };
 
     console.log(cadastralOwnerData, "cadastralOwnerData");
-    console.log(cadastralSeq,"cadastralSeq");
+    console.log(cadastralSeq, "cadastralSeq");
     React.useEffect(() => {
-        if (props.searchData.length != 0) {
-            console.log(props.searchData, "searchData_getMasterData03");
-            _createNewData(props.searchData)
+        if (props.tabData) {
+            console.log(props.tabData, "searchData_getMasterData01");
+            _createNewData(props.tabData)
         }
         else if (props.searchDataInsert.length != 0) {
-            console.log(props.searchDataInsert, "searchDataInsert_getMasterData03");
+            console.log(props.searchDataInsert, "searchDataInsert_getMasterData01");
             _createNewData(props.searchDataInsert)
         }
-    }, [props.searchData, props.searchDataInsert]);
+    }, [props.tabData, props.searchDataInsert]);
 
     const _createNewData = async (data) => {
         console.log(data, "data_createNewDataTab03");
-        setCadastralSeq(data[0].CADASTRAL_SEQ ? data[0].CADASTRAL_SEQ : null)
-        if (data.length > 0) {
-            let cadastralOwnerData = await getCadastralOwnerBycadastralSeq(data[0].CADASTRAL_SEQ)
-            console.log(cadastralOwnerData, "getMasterDatacadastralOwnerData");
-            cadastralOwnerData = filterRecordStatus(cadastralOwnerData.rows, "N")
-            let cadastralOwnerNewData = []
-            for (let i in cadastralOwnerData) {
-                let dataItems = cadastralOwnerData[i]
-                console.log(dataItems,"dataItems");
-                let TitleName = await getTitleByPK(dataItems.OWNER_TITLE_SEQ)
-                TitleName = filterRecordStatus(TitleName.rows, "N")
-                console.log(TitleName,"TitleName");
-                dataItems.OWNER_FULL_NAME = TitleName[0].TITLE_NAME_TH + " " + dataItems.OWNER_FNAME + " " + dataItems.OWNER_LNAME
-                if (dataItems.OWNER_TYPE === "1") {
-                    dataItems.OWNER_TYPE_NAME = "บุคคลธรรมดา"
-                }
-                if (dataItems.OWNER_TYPE === "2") {
-                    dataItems.OWNER_TYPE_NAME = "นิติบุคคล"
-                }
-                cadastralOwnerNewData.push(dataItems)
+        setCadastralSeq(data.CADASTRAL_SEQ ? data.CADASTRAL_SEQ : null)
+        let cadastralOwnerData = await getCadastralOwnerBycadastralSeq(data.CADASTRAL_SEQ)
+        console.log(cadastralOwnerData, "getMasterDatacadastralOwnerData");
+        cadastralOwnerData = filterRecordStatus(cadastralOwnerData.rows, "N")
+        let cadastralOwnerNewData = []
+        for (let i in cadastralOwnerData) {
+            let dataItems = cadastralOwnerData[i]
+            console.log(dataItems, "dataItems");
+            let TitleName = await getTitleByPK(dataItems.OWNER_TITLE_SEQ)
+            TitleName = filterRecordStatus(TitleName.rows, "N")
+            console.log(TitleName, "TitleName");
+            dataItems.OWNER_FULL_NAME = TitleName[0].TITLE_NAME_TH + " " + dataItems.OWNER_FNAME + " " + dataItems.OWNER_LNAME
+            if (dataItems.OWNER_TYPE === "1") {
+                dataItems.OWNER_TYPE_NAME = "บุคคลธรรมดา"
             }
-            setCadastralOwnerData(cadastralOwnerNewData)
+            if (dataItems.OWNER_TYPE === "2") {
+                dataItems.OWNER_TYPE_NAME = "นิติบุคคล"
+            }
+            cadastralOwnerNewData.push(dataItems)
         }
+        setCadastralOwnerData(cadastralOwnerNewData)
+
     }
     const handleChange = async () => {
         setOpenDialog(true)

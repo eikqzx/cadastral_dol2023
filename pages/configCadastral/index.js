@@ -30,10 +30,12 @@ import { getLandOfficeByPK, getLandOffice } from "@/service/mas/landOffice";
 import { cadastralImage10XByConditionCadastralNoTo } from "@/service/sva";
 import { cadastralImageByCondition } from "@/service/evd/cadastral";
 export default function IndexConfigCadastral(props) {
+    console.log(props, "props_IndexConfigCadastral");
 
     const [searchData, setSearchData] = React.useState([]);
+    const [tabData, setTapData] = React.useState([]);
     const [searchDataInsert, setSearchDataInsert] = React.useState([]);
-    const [tabData, setTapData] = React.useState('1');
+    const [tabPageData, setTabPageData] = React.useState('1');
     const [open, setOpen] = React.useState(false);
     const [message, setMessage] = React.useState('');
     const [type, setType] = React.useState('');
@@ -51,11 +53,12 @@ export default function IndexConfigCadastral(props) {
     const [cadastralNo, setCadastralNo] = React.useState("-");
 
     const handleChangeTabs = (event, newValue) => {
-        setTapData(newValue);
+        setTabPageData(newValue);
     };
-    console.log(searchData[0]?.CADASTRAL_SEQ, "propsIndexConfigCadastral");
+    console.log(tabData, "tabDataIndex");
+    console.log(searchData, "propsIndexConfigCadastral");
     console.log(searchParameter, "searchParameter");
-    // console.log(landOffice, "landOffice");
+    console.log(sheetcode, "sheetcode");
     // console.log(userData, "userData");
     const dataUrl = useRouter().query
 
@@ -108,31 +111,41 @@ export default function IndexConfigCadastral(props) {
     }
 
     React.useEffect(() => {
-        if (searchData.length != 0) {
-            console.log(searchData, "searchData_getMasterData");
-            getMasterData(searchData)
+        if (tabData !== undefined && tabData.length !== 0) {
+            console.log(tabData, "searchData_getMasterData");
+            getMasterData(tabData);
+        } else if (searchDataInsert) {
+            console.log(searchDataInsert, "searchDataInsert_getMasterDataIndex");
+            getMasterData(searchDataInsert);
         }
-        else if (searchDataInsert.length != 0) {
-            console.log(searchDataInsert, "searchDataInsert_getMasterData");
-            getMasterData(searchDataInsert)
-        }
-    }, [searchData, searchDataInsert]);
+    }, [tabData, searchDataInsert]);
 
     const getMasterData = async (data) => {
         // data = data.rows
-        // console.log(data, "getMasterData");
+        console.log(data, "FirstgetMasterData");
         // _createNewData(data.CADASTRAL_SEQ)
-        for (let i in data) {
-            if (data[i] != undefined) {
-                let getLandOfficeData = await getLandOffice();
-                let landOfficeFiltered = getLandOfficeData.rows.filter(item => item.LANDOFFICE_SEQ == data[i]?.LANDOFFICE_SEQ);
-                setSheetcode(data[i].SHEETCODE);
-                setBoxNo(data[i].BOX_NO.toString().padStart(2, "0"));
-                setNumofsurveyQty(data[i]?.NUMOFSURVEY_QTY > 0 ? data[i]?.NUMOFSURVEY_QTY : data[i]?.NUMOFSURVEY_QTY === 0 ? "-" : "-");
-                setCadastralNo(data[i].CADASTRAL_NO);
-                console.log(landOfficeFiltered, "getLandOfficeData");
-                setOffice(landOfficeFiltered[0]?.LANDOFFICE_NAME_TH ?? "-");
-            }
+
+        if (Array.isArray(data) && data.length > 0) {
+            // Case: data is an array of objects (searchDataInsert)
+            const firstData = data[0];
+            let getLandOfficeData = await getLandOffice();
+            let landOfficeFiltered = getLandOfficeData.rows.filter(item => item.LANDOFFICE_SEQ === firstData?.LANDOFFICE_SEQ);
+            setSheetcode(firstData?.SHEETCODE);
+            setBoxNo(firstData?.BOX_NO?.toString().padStart(2, "0"));
+            setNumofsurveyQty(firstData?.NUMOFSURVEY_QTY !== null ? firstData?.NUMOFSURVEY_QTY : 0);
+            setCadastralNo(firstData?.CADASTRAL_NO);
+            console.log(landOfficeFiltered, "getLandOfficeData");
+            setOffice(landOfficeFiltered[0]?.LANDOFFICE_NAME_TH ?? "-");
+        } else if (typeof data === "object" && data !== null) {
+            // Case: data is an object (tabData)
+            let getLandOfficeData = await getLandOffice();
+            let landOfficeFiltered = getLandOfficeData.rows.filter(item => item.LANDOFFICE_SEQ === data?.LANDOFFICE_SEQ);
+            setSheetcode(data?.SHEETCODE);
+            setBoxNo(data?.BOX_NO?.toString().padStart(2, "0"));
+            setNumofsurveyQty(data?.NUMOFSURVEY_QTY !== null ? data?.NUMOFSURVEY_QTY : 0);
+            setCadastralNo(data?.CADASTRAL_NO);
+            console.log(landOfficeFiltered, "getLandOfficeData");
+            setOffice(landOfficeFiltered[0]?.LANDOFFICE_NAME_TH ?? "-");
         }
         console.log(data, "getMasterData");
         setMasterData(data)
@@ -225,7 +238,7 @@ export default function IndexConfigCadastral(props) {
                         searchData?.length !== 0 && searchData[0]?.BOX_NO !== 0 ?
                             (
                                 <Box sx={{ width: '100%', typography: 'body1' }}>
-                                    <TabContext value={tabData}>
+                                    <TabContext value={tabPageData}>
                                         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                                             <TabList
                                                 onChange={handleChangeTabs}
@@ -242,9 +255,9 @@ export default function IndexConfigCadastral(props) {
                                                 <Tab label="ผู้ขอรังวัดต้นร่าง" value="3" />
                                             </TabList>
                                         </Box>
-                                        <TabPanel value="1"><Tab01 searchData={searchData} masterData={masterData} process={processSeq} /></TabPanel>
-                                        <TabPanel value="2"><Tab02 searchData={searchData} masterData={masterData} process={processSeq} /></TabPanel>
-                                        <TabPanel value="3"><Tab03 searchData={searchData} masterData={masterData} process={processSeq} /></TabPanel>
+                                        <TabPanel value="1"><Tab01 searchData={searchData} masterData={masterData} process={processSeq} tabData={tabData} /></TabPanel>
+                                        <TabPanel value="2"><Tab02 searchData={searchData} masterData={masterData} process={processSeq} tabData={tabData} /></TabPanel>
+                                        <TabPanel value="3"><Tab03 searchData={searchData} masterData={masterData} process={processSeq} tabData={tabData} /></TabPanel>
                                     </TabContext>
                                 </Box>
                             )
@@ -252,7 +265,7 @@ export default function IndexConfigCadastral(props) {
                             searchDataInsert?.length !== 0 && searchDataInsert[0]?.BOX_NO !== 0 ?
                                 (
                                     <Box sx={{ width: '100%', typography: 'body1' }}>
-                                        <TabContext value={tabData}>
+                                        <TabContext value={tabPageData}>
                                             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                                                 <TabList
                                                     onChange={handleChangeTabs}
@@ -269,9 +282,9 @@ export default function IndexConfigCadastral(props) {
                                                     <Tab label="ผู้ขอรังวัดต้นร่าง" value="3" />
                                                 </TabList>
                                             </Box>
-                                            <TabPanel value="1"><Tab01 cadastralSeq={searchData[0]?.CADASTRAL_SEQ} searchData={searchData} searchDataInsert={searchDataInsert} masterData={masterData} processSeq={processSeq} /></TabPanel>
-                                            <TabPanel value="2"><Tab02 cadastralSeq={searchData[0]?.CADASTRAL_SEQ} searchData={searchData} searchDataInsert={searchDataInsert} masterData={masterData} processSeq={processSeq} /></TabPanel>
-                                            <TabPanel value="3"><Tab03 cadastralSeq={searchData[0]?.CADASTRAL_SEQ} searchData={searchData} searchDataInsert={searchDataInsert} masterData={masterData} processSeq={processSeq} /></TabPanel>
+                                            <TabPanel value="1"><Tab01 cadastralSeq={tabData?.CADASTRAL_SEQ} searchData={searchData} searchDataInsert={searchDataInsert} masterData={masterData} processSeq={processSeq} /></TabPanel>
+                                            <TabPanel value="2"><Tab02 cadastralSeq={tabData?.CADASTRAL_SEQ} searchData={searchData} searchDataInsert={searchDataInsert} masterData={masterData} processSeq={processSeq} /></TabPanel>
+                                            <TabPanel value="3"><Tab03 cadastralSeq={tabData?.CADASTRAL_SEQ} searchData={searchData} searchDataInsert={searchDataInsert} masterData={masterData} processSeq={processSeq} /></TabPanel>
                                         </TabContext>
                                     </Box>
                                 )

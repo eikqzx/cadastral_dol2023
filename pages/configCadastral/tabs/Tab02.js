@@ -56,40 +56,39 @@ export default function Tab02(props) {
 
     console.log(cadastralLandData, "cadastralLandData");
     React.useEffect(() => {
-        if (props.searchData.length != 0) {
-            console.log(props.searchData, "searchData_getMasterData02");
-            _createNewData(props.searchData)
+        if (props.tabData) {
+            console.log(props.tabData, "searchData_getMasterData01");
+            _createNewData(props.tabData)
         }
         else if (props.searchDataInsert.length != 0) {
-            console.log(props.searchDataInsert, "searchDataInsert_getMasterData02");
+            console.log(props.searchDataInsert, "searchDataInsert_getMasterData01");
             _createNewData(props.searchDataInsert)
         }
-    }, [props.searchData, props.searchDataInsert]);
+    }, [props.tabData, props.searchDataInsert]);
 
     const _createNewData = async (data) => {
         console.log(data, "data_createNewDataTab02");
-        setCadastralSeq(data[0].CADASTRAL_SEQ ? data[0].CADASTRAL_SEQ : null)
-        if (data.length > 0) {
-            let cadastralLandData = await getCadastralLandByCadastralSeq(data[0].CADASTRAL_SEQ)
-            // let cadastralLandData = await getCadastralLandByCadastralSeq(10000156)
-            console.log(cadastralLandData, "getMasterDatacadastralLandData");
-            cadastralLandData = filterRecordStatus(cadastralLandData.rows, "N")
-            let newData = []
-            for (let i in cadastralLandData) {
-                let dataItems = cadastralLandData[i]
-                if (dataItems.STATIC_FLAG === "0") {
-                    dataItems.STATIC_FLAG_NAME = "แปลงแยก"
-                }
-                if (dataItems.STATIC_FLAG === "1") {
-                    dataItems.STATIC_FLAG_NAME = "แปลงคง"
-                }
-                if (dataItems.STATIC_FLAG === "2") {
-                    dataItems.STATIC_FLAG_NAME = "แปลงรวม"
-                }
-                newData.push(dataItems)
+        setCadastralSeq(data.CADASTRAL_SEQ ? data.CADASTRAL_SEQ : null)
+        let cadastralLandData = await getCadastralLandByCadastralSeq(data.CADASTRAL_SEQ)
+        // let cadastralLandData = await getCadastralLandByCadastralSeq(10000156)
+        console.log(cadastralLandData, "getMasterDatacadastralLandData");
+        cadastralLandData = filterRecordStatus(cadastralLandData.rows, "N")
+        let newData = []
+        for (let i in cadastralLandData) {
+            let dataItems = cadastralLandData[i]
+            if (dataItems.STATIC_FLAG === "0") {
+                dataItems.STATIC_FLAG_NAME = "แปลงแยก"
             }
-            setCadastralLandData(newData)
+            if (dataItems.STATIC_FLAG === "1") {
+                dataItems.STATIC_FLAG_NAME = "แปลงคง"
+            }
+            if (dataItems.STATIC_FLAG === "2") {
+                dataItems.STATIC_FLAG_NAME = "แปลงรวม"
+            }
+            newData.push(dataItems)
         }
+        setCadastralLandData(newData)
+
 
     }
     const handleChange = async () => {

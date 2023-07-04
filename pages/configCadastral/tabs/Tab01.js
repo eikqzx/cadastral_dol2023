@@ -41,6 +41,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
 export default function Tab01(props) {
     console.log(props, "props_Tab01");
+    console.log(props.tabData, "propstabData_Tab01");
     const [cadastralData, setCadastralData] = React.useState([]);
     const { data } = useSession();
     const [openDialog, setOpenDialog] = React.useState(false);
@@ -60,19 +61,19 @@ export default function Tab01(props) {
 
     console.log(cadastralData, "cadastralData");
     React.useEffect(() => {
-        if (props.searchData.length != 0) {
-            console.log(props.searchData, "searchData_getMasterData01");
-            _createNewData(props.searchData)
+        if (props.tabData) {
+            console.log(props.tabData, "searchData_getMasterData01");
+            _createNewData(props.tabData)
         }
         else if (props.searchDataInsert.length != 0) {
             console.log(props.searchDataInsert, "searchDataInsert_getMasterData01");
             _createNewData(props.searchDataInsert)
         }
-    }, [props.searchData, props.searchDataInsert]);
+    }, [props.tabData, props.searchDataInsert]);
 
     const _createNewData = async (data) => {
         console.log(data, "data_createNewDataTab01");
-        let cadastralData = await getCadastralByPK(data[0].CADASTRAL_SEQ)
+        let cadastralData = await getCadastralByPK(data?.CADASTRAL_SEQ)
         // let cadastralData = await getCadastralByPK(1222222222)
         console.log(cadastralData, "getMasterDatacadastralData");
         cadastralData = filterRecordStatus(cadastralData.rows, "N")
