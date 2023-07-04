@@ -142,6 +142,21 @@ export async function insertCadastral(dataSend) {
     }
 }
 
+export async function mrgCadastral(dataSend) {
+    let url = `/api/sva/mrgCadastral`
+    AddLoading();
+    try {
+        let res = await axios.post(url, dataSend)
+        let data = res.data
+        //console.log(data)
+        RemoveLoading()
+        return data
+    } catch (err) {
+        console.log(err)
+        return false
+    }
+}
+
 export async function mrgCadastralImage(dataSend) {
     let url = `/api/sva/mrgCadastralImage`
     AddLoading();

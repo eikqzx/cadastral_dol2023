@@ -19,7 +19,7 @@ import {
 import { useSession } from 'next-auth/react';
 //SERVICE
 import { getLandOfficeByPK, getLandOffice } from "@/service/mas/landOffice";
-import { updateCadastral } from "@/service/sva";
+import { updateCadastral, mrgCadastral } from "@/service/sva";
 import { getTitleByPK } from "@/service/mas/title";
 import { getProvinceByPK } from "@/service/mas/province";
 import { getAmphurByPK } from "@/service/mas/amphur";
@@ -322,11 +322,13 @@ export default function DilogTab01Index(props) {
         setScaleRawangData(value);
     };
     const _onSubmit = async () => {
+        let seq = props?.cadastralData[0]?.CADASTRAL_SEQ
         let obj = {
+            "CADASTRAL_SEQ": seq,
             "SHEETCODE": sheetcode ? sheetcode : null,
             "BOX_NO": boxNo ? boxNo : null,
             "CADASTRAL_NO": cadastralNo ? cadastralNo : null,
-            "NUMOFSURVEY_QTY": numofsurveyQty ? numofsurveyQty : null,
+            "NUMOFSURVEY_QTY": numofsurveyQty ? numofsurveyQty : 0,
             "LANDOFFICE_SEQ": office?.LANDOFFICE_SEQ ? office?.LANDOFFICE_SEQ : null,
             "PRIVATESURVEY_FLAG": checked == true ? 1 : 0,
             "TYPEOFSURVEY_SEQ": typeofSurveyData?.TYPEOFSURVEY_SEQ ? typeofSurveyData?.TYPEOFSURVEY_SEQ : null,
@@ -374,11 +376,11 @@ export default function DilogTab01Index(props) {
             "PROCESS_SEQ_": props?.processSeq ?? 101,
         }
         console.log(obj, "obj_onSubmit_DialogTab01");
-        let seq = props?.cadastralData[0]?.CADASTRAL_SEQ
+   
         console.log(seq, "seqobj_onSubmit_Dialog02");
         try {
             // return
-            let resUpd = await updateCadastral(seq, obj);
+            let resUpd = await mrgCadastral(obj);
             console.log(resUpd, "onSave");
             if (typeof resUpd == "object") {
                 await setMessage("บันทึกสำเร็จ");
