@@ -51,7 +51,7 @@ export default function DilogTab01Index(props) {
     const [office, setOffice] = React.useState("-");
     const [sheetcode, setSheetcode] = React.useState("-");
     const [boxNo, setBoxNo] = React.useState("-");
-    const [numofsurveyQty, setNumofsurveyQty] = React.useState("-");
+    const [numofsurveyQty, setNumofsurveyQty] = React.useState("");
     const [cadastralNo, setCadastralNo] = React.useState("-");
     const [open, setOpen] = React.useState(false);
     const [message, setMessage] = React.useState("");
@@ -97,10 +97,12 @@ export default function DilogTab01Index(props) {
     const [ownerData, setOwnerData] = React.useState("")
     const [noteData, setNoteData] = React.useState("")
 
-    console.log(provinceData, "provinceData");
+    // console.log(provinceData, "provinceData");
+    // console.log(titleData, "titleData");
+    console.log(typeofSurveyAdd1Data, "typeofSurveyAdd1Data");
     React.useEffect(() => {
         if (props?.cadastralData) {
-            console.log(zoneData,"props?.cadastralData");
+            console.log(zoneData, "props?.cadastralData");
             getMasterData(props?.cadastralData)
             _checked(props?.cadastralData[0]?.PRIVATESURVEY_FLAG)
             setZoneData(props?.cadastralData[0]?.ZONE_LAND)
@@ -134,15 +136,15 @@ export default function DilogTab01Index(props) {
         setChecked(event.target.checked);
     };
     const _getTitle = async (seq) => {
-        console.log(seq,"_getTitleseq");
+        // console.log(seq, "_getTitleseq");
         let getTitle = await getTitleByPK(seq);
         getTitle = getTitle.rows
-        // console.log(getTitle, "getTitle");
-        setTitleData(getTitle)
+        console.log(getTitle, "getTitle");
+        setTitleData(getTitle[0])
     }
 
     const _checked = async (data) => {
-        console.log(data,"_checkeddata");
+        console.log(data, "_checkeddata");
         if (data?.PRIVATESURVEY_FLAG == "-" || data?.PRIVATESURVEY_FLAG == undefined) {
             return
         } else if (data?.PRIVATESURVEY_FLAG == 1) {
@@ -267,7 +269,7 @@ export default function DilogTab01Index(props) {
                 }
                 setSheetcode(data[i].SHEETCODE);
                 setBoxNo(data[i].BOX_NO.toString().padStart(2, "0"));
-                setNumofsurveyQty(data[i]?.NUMOFSURVEY_QTY > 0 ? data[i]?.NUMOFSURVEY_QTY : data[i]?.NUMOFSURVEY_QTY === 0 ? "-" : "-");
+                setNumofsurveyQty(data[i]?.NUMOFSURVEY_QTY !== null ? data[i]?.NUMOFSURVEY_QTY : 0);
                 setCadastralNo(data[i].CADASTRAL_NO);
                 console.log(landOfficeFiltered, "getLandOfficeData");
                 setOffice(landOfficeFiltered[0]);
@@ -328,9 +330,9 @@ export default function DilogTab01Index(props) {
             "LANDOFFICE_SEQ": office?.LANDOFFICE_SEQ ? office?.LANDOFFICE_SEQ : null,
             "PRIVATESURVEY_FLAG": checked == true ? 1 : 0,
             "TYPEOFSURVEY_SEQ": typeofSurveyData?.TYPEOFSURVEY_SEQ ? typeofSurveyData?.TYPEOFSURVEY_SEQ : null,
-            "TYPEOFSURVEY_ADD1_SEQ": typeofSurveyAdd1Data?.TYPEOFSURVEY_ADD1_SEQ ? typeofSurveyAdd1Data?.TYPEOFSURVEY_ADD1_SEQ : null,
-            "TYPEOFSURVEY_ADD2_SEQ": typeofSurveyAdd2Data?.TYPEOFSURVEY_ADD2_SEQ ? typeofSurveyAdd2Data?.TYPEOFSURVEY_ADD2_SEQ : null,
-            "TYPEOFSURVEY_ADD3_SEQ": typeofSurveyAdd3Data?.TYPEOFSURVEY_ADD3_SEQ ? typeofSurveyAdd3Data?.TYPEOFSURVEY_ADD3_SEQ : null,
+            "TYPEOFSURVEY_ADD1_SEQ": typeofSurveyAdd1Data?.TYPEOFSURVEY_SEQ ? typeofSurveyAdd1Data?.TYPEOFSURVEY_SEQ : null,
+            "TYPEOFSURVEY_ADD2_SEQ": typeofSurveyAdd2Data?.TYPEOFSURVEY_SEQ ? typeofSurveyAdd2Data?.TYPEOFSURVEY_SEQ : null,
+            "TYPEOFSURVEY_ADD3_SEQ": typeofSurveyAdd3Data?.TYPEOFSURVEY_SEQ ? typeofSurveyAdd3Data?.TYPEOFSURVEY_SEQ : null,
             "CADASTRAL_TAMBOL_SEQ": tambolData?.TAMBOL_SEQ ? tambolData?.TAMBOL_SEQ : null,
             "CADASTRAL_AMPHUR_SEQ": amphurData?.AMPHUR_SEQ ? amphurData?.AMPHUR_SEQ : null,
             "CADASTRAL_PROVINCE_SEQ": provinceData?.PROVINCE_SEQ ? provinceData?.PROVINCE_SEQ : null,
@@ -353,7 +355,7 @@ export default function DilogTab01Index(props) {
             "SCALE_RAWANG": scaleRawangData?.SCALE_NAME_TH ? scaleRawangData?.SCALE_NAME_TH : null,
             "BENCHMARK_SEQ": benchmarkData?.BENCHMARK_SEQ ? benchmarkData?.BENCHMARK_SEQ : null,
             "BENCHMARK_QTY": benchmarkQTY ? benchmarkQTY : null,
-            "BENCHMARK2_SEQ": benchmark2Data?.BENCHMARK2_SEQ ? benchmark2Data?.BENCHMARK2_SEQ : null,
+            "BENCHMARK2_SEQ": benchmark2Data?.BENCHMARK_SEQ ? benchmark2Data?.BENCHMARK_SEQ : null,
             "BENCHMARK2_QTY": benchmark2QTY ? benchmark2QTY : null,
             "SURVEY_DTM": surveyDate ? dayjs(surveyDate).format("YYYY-MM-DD") : null,
             "TITLE_SEQ": titleData?.TITLE_SEQ ? titleData?.TITLE_SEQ : null,
@@ -361,10 +363,10 @@ export default function DilogTab01Index(props) {
             "SURVEYOR_LNAME": lname ? lname : null,
             "SURVEYOR_POSITION": surveyorPosition ? surveyorPosition : null,
             "SURVEYOR_LEVEL": surveyorLevelData ? surveyorLevelData : null,
-            "OLD_RAI_NUM": oldRaiData ? Number(oldRaiData) : null,
-            "OLD_NGAN_NUM": oldNganData ? Number(oldNganData) : null,
-            "OLD_WA_NUM": oldWaData ? Number(oldWaData) : null,
-            "OLD_SUBWA_NUM": oldSubWaData ? Number(oldSubWaData) : null,
+            "OLD_RAI_NUM": oldRaiData ? Number(oldRaiData) : 0,
+            "OLD_NGAN_NUM": oldNganData ? Number(oldNganData) : 0,
+            "OLD_WA_NUM": oldWaData ? Number(oldWaData) : 0,
+            "OLD_SUBWA_NUM": oldSubWaData ? Number(oldSubWaData) : 0,
             "CADASTRAL_OWNER_QTY": ownerData ? ownerData : null,
             "CADASTRAL_NOTE": noteData ? noteData : null,
             "RECORD_STATUS": "N",
@@ -375,7 +377,7 @@ export default function DilogTab01Index(props) {
         let seq = props?.cadastralData[0]?.CADASTRAL_SEQ
         console.log(seq, "seqobj_onSubmit_Dialog02");
         try {
-            // return
+            return
             let resUpd = await updateCadastral(seq, obj);
             console.log(resUpd, "onSave");
             if (typeof resUpd == "object") {
@@ -454,7 +456,7 @@ export default function DilogTab01Index(props) {
                                     <Typography>ครั้งที่รังวัด:</Typography>
                                 </Grid>
                                 <Grid item>
-                                    <Typography color={"darkblue"} fontWeight={"bold"} sx={{ textDecoration: 'underline' }} display="inline">&nbsp;{numofsurveyQty}&nbsp;</Typography>
+                                    <Typography color={"darkblue"} fontWeight={"bold"} sx={{ textDecoration: 'underline' }} display="inline">&nbsp;{numofsurveyQty == 0 || numofsurveyQty == null ? "-" : numofsurveyQty}&nbsp;</Typography>
                                     {/* <IconButton size='small' disabled={numofsurveyQty == "-" || checkCanEdit} onClick={() => { setOpenEdit(props?.tabData) }}><Edit /></IconButton> */}
                                 </Grid>
                             </Grid>
