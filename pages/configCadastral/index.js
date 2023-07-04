@@ -109,6 +109,18 @@ export default function IndexConfigCadastral(props) {
             setSearchData(data)
         }
     }
+    const onResetNew = async () => {
+        await setTapData([])
+        await setSearchData([])
+        await setSearchDataInsert([])
+        await setOffice()
+        await setSheetcode()
+        await setBoxNo()
+        await setNumofsurveyQty()
+        await setCadastralNo()
+        await setMasterData([])
+    }
+
     React.useEffect(() => {
         if (tabData !== undefined && tabData.length !== 0) {
             console.log(tabData, "searchData_getMasterData");
@@ -167,7 +179,7 @@ export default function IndexConfigCadastral(props) {
                             <Typography >ค้นหารายการต้นร่าง</Typography>
                         </AccordionSummary>
                         <AccordionDetails>
-                            <Search provinceSeq={landOffice?.PROVINCE_SEQ} landOfficeSeq={landOffice?.LANDOFFICE_SEQ} disabled={['licensePage', 'fileNo', 'parcelNO', 'landNo']} onSearch={onSearchNew} onReset={setSearchData} />
+                            <Search provinceSeq={landOffice?.PROVINCE_SEQ} landOfficeSeq={landOffice?.LANDOFFICE_SEQ} disabled={['licensePage', 'fileNo', 'parcelNO', 'landNo']} onSearch={onSearchNew} onReset={onResetNew} />
                         </AccordionDetails>
                     </Accordion>
                 </Grid>
