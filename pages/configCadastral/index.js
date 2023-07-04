@@ -109,7 +109,6 @@ export default function IndexConfigCadastral(props) {
             setSearchData(data)
         }
     }
-
     React.useEffect(() => {
         if (tabData !== undefined && tabData.length !== 0) {
             console.log(tabData, "searchData_getMasterData");
@@ -136,7 +135,7 @@ export default function IndexConfigCadastral(props) {
             setCadastralNo(firstData?.CADASTRAL_NO);
             console.log(landOfficeFiltered, "getLandOfficeData");
             setOffice(landOfficeFiltered[0]?.LANDOFFICE_NAME_TH ?? "-");
-        } else if (typeof data === "object" && data !== null) {
+        } else {
             // Case: data is an object (tabData)
             let getLandOfficeData = await getLandOffice();
             let landOfficeFiltered = getLandOfficeData.rows.filter(item => item.LANDOFFICE_SEQ === data?.LANDOFFICE_SEQ);
