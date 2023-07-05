@@ -17,7 +17,8 @@ import {
     InputLabel,
     Select,
     MenuItem,
-    Chip
+    Chip,
+    Button
 } from "@mui/material";
 //SERVICES
 import { getCadastralLandByCadastralSeq } from "@/service/sva";
@@ -37,6 +38,7 @@ dayjs.locale(thDate)
 export default function Tab02(props) {
     console.log(props, "props_Tab02");
     const [cadastralLandData, setCadastralLandData] = React.useState([]);
+    const [cadastralLandSingleData, setCadastralLandSingleData] = React.useState([]);
     const [cadastralSeq, setCadastralSeq] = React.useState([]);
     const { data } = useSession();
     const [openDialog, setOpenDialog] = React.useState(false);
@@ -91,7 +93,8 @@ export default function Tab02(props) {
 
 
     }
-    const handleChange = async () => {
+    const handleChange = async (el) => {
+        setCadastralLandSingleData(el)
         setOpenDialog(true)
     }
     const handleChangeIns = async () => {
@@ -100,8 +103,28 @@ export default function Tab02(props) {
     return (
         <Grid>
             <Grid item xs={12}>
-                {openDialog && <DialogTab02 open={openDialog} close={() => (setOpenDialog(false))} onSubmit={handleChange} cadastralLandData={cadastralLandData} masterData={props?.masterData} processSeq={props?.processSeq} />}
+                {openDialog && <DialogTab02 open={openDialog} close={() => (setOpenDialog(false))} onSubmit={handleChange} cadastralLandData={cadastralLandSingleData} masterData={props?.masterData} processSeq={props?.processSeq} />}
                 {openDialogIns && <DialogTab02_Ins open={openDialogIns} close={() => (setOpenDialogIns(false))} onSubmit={handleChangeIns} cadastralSeq={cadastralSeq} masterData={props?.masterData} cadastralLandData={cadastralLandData} processSeq={props?.processSeq} />}
+                <Grid container justifyContent={'flex-end'}>
+                    <Grid item px={2} py={1}>
+                        <Button variant="contained"
+                            onClick={() => {
+                                if (cadastralSeq === null) {
+                                    confirmDialog.createDialog(
+                                        `ต้องทำการเพิ่มข้อมูลต้นร่างก่อน`,
+                                        () => { }
+                                    );
+                                } else {
+                                    confirmDialog.createDialog(
+                                        `ต้องการเพิ่มข้อมูลแปลงต้นร่าง หรือไม่ ?`,
+                                        () => { handleChangeIns() }
+                                    );
+                                }
+                            }} color="success">
+                            เพิ่มข้อมูลแปลงต้นร่าง
+                        </Button>
+                    </Grid>
+                </Grid>
                 <React.Fragment>
                     <TableContainer>
                         <Table sx={{ minWidth: 650, width: '100%', border: '1px solid ' }} size="small" stickyHeader >

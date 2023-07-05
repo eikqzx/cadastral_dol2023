@@ -70,7 +70,7 @@ export default function DilogTab02Index(props) {
     const [SubWaData, setSubWaData] = React.useState("")
     const [noteData, setNoteData] = React.useState("")
 
-    const [valueRadio, setValueRadio] = React.useState(props?.cadastralLandData?.[0]?.STATIC_FLAG || '');
+    const [valueRadio, setValueRadio] = React.useState(props?.cadastralLandData?.STATIC_FLAG || '');
 
     const handleChangeRadio = (event) => {
         setValueRadio(event.target.value);
@@ -86,25 +86,25 @@ export default function DilogTab02Index(props) {
     console.log(props?.masterData, "props?.masterData");
 
     React.useEffect(() => {
-        setOrderNo(props?.cadastralLandData[0]?.LAND_ORDER)
-        setZoneData(props?.cadastralLandData[0]?.ZONE_LAND)
-        setUTMMAP1Data(props?.cadastralLandData[0]?.CADASTRAL_LAND_UTMMAP1)
-        setUTMMAP2Data(props?.cadastralLandData[0]?.CADASTRAL_LAND_UTMMAP2)
-        setUTMMAP3Data(props?.cadastralLandData[0]?.CADASTRAL_LAND_UTMMAP3)
-        setUTMMAP4Data(props?.cadastralLandData[0]?.CADASTRAL_LAND_UTMMAP4)
-        setOriginmap1Data(props?.cadastralLandData[0]?.CADASTRAL_LAND_ORIGINMAP1)
-        setOriginmap2Data(props?.cadastralLandData[0]?.CADASTRAL_LAND_ORIGINMAP2)
-        setOriginmap3Data(props?.cadastralLandData[0]?.CADASTRAL_LAND_ORIGINMAP3)
-        setAirphotomapName(props?.cadastralLandData[0]?.AIRPHOTOMAP_NAME)
-        setAirphotomap1Data(props?.cadastralLandData[0]?.AIRPHOTOMAP1)
-        setAirphotomap2Data(props?.cadastralLandData[0]?.AIRPHOTOMAP2)
-        setAirphotomap3Data(props?.cadastralLandData[0]?.AIRPHOTOMAP3)
-        setUTMSCALENO(props?.cadastralLandData[0]?.CADASTRAL_LAND_UTMSCALE)
-        setRaiData(props?.cadastralLandData[0]?.CADASTRAL_LAND_RAI_NUM)
-        setNganData(props?.cadastralLandData[0]?.CADASTRAL_LAND_NGAN_NUM)
-        setWaData(props?.cadastralLandData[0]?.CADASTRAL_LAND_WA_NUM)
-        setSubWaData(props?.cadastralLandData[0]?.CADASTRAL_LAND_SUBWA_NUM)
-        setNoteData(props?.cadastralLandData[0]?.CADASTRAL_NOTE)
+        setOrderNo(props?.cadastralLandData?.LAND_ORDER)
+        setZoneData(props?.cadastralLandData?.ZONE_LAND)
+        setUTMMAP1Data(props?.cadastralLandData?.CADASTRAL_LAND_UTMMAP1)
+        setUTMMAP2Data(props?.cadastralLandData?.CADASTRAL_LAND_UTMMAP2)
+        setUTMMAP3Data(props?.cadastralLandData?.CADASTRAL_LAND_UTMMAP3)
+        setUTMMAP4Data(props?.cadastralLandData?.CADASTRAL_LAND_UTMMAP4)
+        setOriginmap1Data(props?.cadastralLandData?.CADASTRAL_LAND_ORIGINMAP1)
+        setOriginmap2Data(props?.cadastralLandData?.CADASTRAL_LAND_ORIGINMAP2)
+        setOriginmap3Data(props?.cadastralLandData?.CADASTRAL_LAND_ORIGINMAP3)
+        setAirphotomapName(props?.cadastralLandData?.AIRPHOTOMAP_NAME)
+        setAirphotomap1Data(props?.cadastralLandData?.AIRPHOTOMAP1)
+        setAirphotomap2Data(props?.cadastralLandData?.AIRPHOTOMAP2)
+        setAirphotomap3Data(props?.cadastralLandData?.AIRPHOTOMAP3)
+        setUTMSCALENO(props?.cadastralLandData?.CADASTRAL_LAND_UTMSCALE)
+        setRaiData(props?.cadastralLandData?.CADASTRAL_LAND_RAI_NUM)
+        setNganData(props?.cadastralLandData?.CADASTRAL_LAND_NGAN_NUM)
+        setWaData(props?.cadastralLandData?.CADASTRAL_LAND_WA_NUM)
+        setSubWaData(props?.cadastralLandData?.CADASTRAL_LAND_SUBWA_NUM)
+        setNoteData(props?.cadastralLandData?.CADASTRAL_NOTE)
     }, [props?.cadastralLandData])
 
     const getMasterData = async (data) => {
@@ -167,7 +167,7 @@ export default function DilogTab02Index(props) {
     }
 
     const _onSubmit = async () => {
-        let seq = props?.cadastralLandData[0]?.CADASTRAL_SEQ
+        let seq = props?.cadastralLandData?.CADASTRAL_SEQ
         let obj = {
             "CADASTRAL_SEQ": seq ? seq : 0,
             "LAND_ORDER": orderNo ? orderNo : null,
@@ -201,7 +201,7 @@ export default function DilogTab02Index(props) {
             "PROCESS_SEQ_": props?.processSeq ?? 101,
         }
         console.log(obj, "obj_onSubmit_Dialog02");
-        let seqUpd = props?.cadastralLandData[0]?.CADASTRAL_LAND_SEQ
+        let seqUpd = props?.cadastralLandData?.CADASTRAL_LAND_SEQ
         console.log(seq, "seqobj_onSubmit_Dialog02");
         try {
             // return

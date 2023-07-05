@@ -41,7 +41,7 @@ export default function DilogTab03Index(props) {
     const [ownerFName, setOwnerFName] = React.useState("");
     const [ownerLName, setOwnerLName] = React.useState("");
     const [ownerNote, setOwnerNote] = React.useState("");
-    const [valueRadio, setValueRadio] = React.useState(props?.cadastralOwnerData?.[0]?.OWNER_TYPE || '');
+    const [valueRadio, setValueRadio] = React.useState(props?.cadastralOwnerData?.OWNER_TYPE || '');
 
     const handleChangeRadio = (event) => {
         setValueRadio(event.target.value);
@@ -55,11 +55,11 @@ export default function DilogTab03Index(props) {
 
     React.useEffect(() => {
         if (props?.cadastralOwnerData) {
-            setOwnerOrder(props?.cadastralOwnerData[0]?.OWNER_ORDER)
-            _getTitle(props?.cadastralOwnerData[0]?.OWNER_TITLE_SEQ ?? props?.cadastralOwnerData[0]?.OWNER_TITLE_SEQ)
-            setOwnerFName(props?.cadastralOwnerData[0]?.OWNER_FNAME)
-            setOwnerLName(props?.cadastralOwnerData[0]?.OWNER_LNAME)
-            setOwnerNote(props?.cadastralOwnerData[0]?.CADASTRAL_OWNER_NOTE)
+            setOwnerOrder(props?.cadastralOwnerData?.OWNER_ORDER)
+            _getTitle(props?.cadastralOwnerData?.OWNER_TITLE_SEQ ?? props?.cadastralOwnerData?.OWNER_TITLE_SEQ)
+            setOwnerFName(props?.cadastralOwnerData?.OWNER_FNAME)
+            setOwnerLName(props?.cadastralOwnerData?.OWNER_LNAME)
+            setOwnerNote(props?.cadastralOwnerData?.CADASTRAL_OWNER_NOTE)
             // setValueRadio(props?.cadastralOwnerData[0]?.OWNER_TYPE)
         }
     }, [props?.cadastralOwnerData])
@@ -91,7 +91,7 @@ export default function DilogTab03Index(props) {
     };
 
     const _onSubmit = async () => {
-        let seq = props?.cadastralOwnerData[0]?.CADASTRAL_SEQ
+        let seq = props?.cadastralOwnerData?.CADASTRAL_SEQ
         let obj = {
             "CADASTRAL_SEQ": seq ? seq : 0,
             "OWNER_TYPE": valueRadio,
@@ -106,7 +106,7 @@ export default function DilogTab03Index(props) {
             "PROCESS_SEQ_": props?.processSeq ?? 101,
         }
         console.log(obj, "obj_onSubmit_DialogTab03");
-        let seqUpd = props?.cadastralOwnerData[0]?.CADASTRAL_OWNER_SEQ
+        let seqUpd = props?.cadastralOwnerData?.CADASTRAL_OWNER_SEQ
         try {
             // return
             let resUpd = await updCadastralOwner(seqUpd, obj);

@@ -138,12 +138,21 @@ export default function DilogTab01Index(props) {
         setChecked(event.target.checked);
     };
     const _getTitle = async (seq) => {
-        // console.log(seq, "_getTitleseq");
-        let getTitle = await getTitleByPK(seq);
-        getTitle = getTitle.rows
-        console.log(getTitle, "getTitle");
-        setTitleData(getTitle[0])
-    }
+        try {
+            let getTitle = await getTitleByPK(seq);
+            getTitle = getTitle.rows;
+
+            if (Array.isArray(getTitle) && getTitle.length > 0) {
+                getTitle = getTitle[0];
+                console.log(getTitle, "getTitle");
+                await setTitleData(getTitle);
+            } else {
+                console.log("getTitle is not a valid array or has no elements.");
+            }
+        } catch (error) {
+            console.log("An error occurred:", error);
+        }
+    };
 
     const _checked = async (data) => {
         console.log(data, "_checkeddata");
@@ -983,11 +992,11 @@ export default function DilogTab01Index(props) {
                         บันทึก
                     </Button>
                 </Grid>
-                <Grid item>
+                {/* <Grid item>
                     <Button onClick={props.close} color={"error"} variant={"contained"}>
                         ปิด
                     </Button>
-                </Grid>
+                </Grid> */}
             </Grid>
 
 

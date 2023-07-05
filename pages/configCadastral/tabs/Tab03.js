@@ -16,7 +16,8 @@ import {
     FormControl,
     InputLabel,
     Select,
-    MenuItem
+    MenuItem,
+    Button
 } from "@mui/material";
 //SERVICES
 import { getCadastralOwnerBycadastralSeq } from "@/service/sva";
@@ -33,6 +34,7 @@ import DialogTab03_Ins from "@/pages/configCadastral/dialog_ins/dialogTab03_ins"
 export default function Tab03(props) {
     console.log(props, "props_Tab03");
     const [cadastralOwnerData, setCadastralOwnerData] = React.useState([]);
+    const [cadastralOwnerSingleData, setCadastralOwnerSingleData] = React.useState([]);
     const [cadastralSeq, setCadastralSeq] = React.useState([]);
     const { data } = useSession();
     const [openDialog, setOpenDialog] = React.useState(false);
@@ -85,10 +87,13 @@ export default function Tab03(props) {
             }
             cadastralOwnerNewData.push(dataItems)
         }
+        console.log(cadastralOwnerNewData, "cadastralOwnerNewData");
         setCadastralOwnerData(cadastralOwnerNewData)
 
     }
-    const handleChange = async () => {
+    const handleChange = async (el) => {
+        console.log(el, "handleChangesetOpenDialog");
+        setCadastralOwnerSingleData(el)
         setOpenDialog(true)
     }
     const handleChangeIns = async () => {
@@ -97,8 +102,28 @@ export default function Tab03(props) {
     return (
         <Grid container>
             <Grid item xs={12}>
-                {openDialog && <DialogTab03 open={openDialog} close={() => (setOpenDialog(false))} onSubmit={handleChange} cadastralOwnerData={cadastralOwnerData} masterData={props?.masterData} processSeq={props?.processSeq} />}
+                {openDialog && <DialogTab03 open={openDialog} close={() => (setOpenDialog(false))} onSubmit={handleChange} cadastralOwnerData={cadastralOwnerSingleData} masterData={props?.masterData} processSeq={props?.processSeq} />}
                 {openDialogIns && <DialogTab03_Ins open={openDialogIns} close={() => (setOpenDialogIns(false))} onSubmit={handleChangeIns} cadastralSeq={cadastralSeq} masterData={props?.masterData} cadastralOwnerData={cadastralOwnerData} processSeq={props?.processSeq} />}
+                <Grid container justifyContent={'flex-end'}>
+                    <Grid item px={2} py={1}>
+                        <Button variant="contained"
+                            onClick={() => {
+                                if (cadastralSeq === null) {
+                                    confirmDialog.createDialog(
+                                        `ต้องทำการเพิ่มข้อมูลต้นร่างก่อน`,
+                                        () => { }
+                                    );
+                                } else {
+                                    confirmDialog.createDialog(
+                                        `ต้องการผู้ขอรังวัดต้นร่าง หรือไม่ ?`,
+                                        () => { handleChangeIns() }
+                                    );
+                                }
+                            }} color="success">
+                            เพิ่มข้อมูลแปลงต้นร่าง
+                        </Button>
+                    </Grid>
+                </Grid>
                 <React.Fragment>
                     <TableContainer>
                         <Table sx={{ minWidth: 650, width: "100%", border: '1px solid ' }} size="small" stickyHeader >
