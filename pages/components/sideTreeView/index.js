@@ -181,6 +181,29 @@ export default function SideTreeView(props) {
             console.log(masStatus, "onSearchData masStatus");
             await setTreeViewData(masStatus.sort((a, b) => b.STATUS_SEQ - a.STATUS_SEQ));
         }
+        if (props.process == 100) {
+            let statusSeq101 = onSearchData.filter(item => item.STATUS_SEQ_ == 101);
+            let statusSeq102 = onSearchData.filter(item => item.STATUS_SEQ_ == 102);
+            let statusSeq103 = onSearchData.filter(item => item.STATUS_SEQ_ == 103);
+            let statusSeq104 = onSearchData.filter(item => item.STATUS_SEQ_ == 104 || item.STATUS_SEQ_ == null);
+            masStatus.map(item => {
+                item.DATA = [];
+                if (item.STATUS_SEQ == 101 || item.STATUS_SEQ_ == 101) {
+                    item.DATA = statusSeq101
+                }
+                if (item.STATUS_SEQ == 102 || item.STATUS_SEQ_ == 102) {
+                    item.DATA = statusSeq102
+                }
+                if (item.STATUS_SEQ == 103 || item.STATUS_SEQ_ == 103) {
+                    item.DATA = statusSeq103
+                }
+                if (item.STATUS_SEQ == 104 || item.STATUS_SEQ_ == 104) {
+                    item.DATA = statusSeq104
+                }
+            })
+            console.log(masStatus, "onSearchData masStatus");
+            await setTreeViewData(masStatus.sort((a, b) => b.STATUS_SEQ - a.STATUS_SEQ));
+        }
     }
     console.log(treeViewData, "treeViewDatatreeViewData");
     return (
