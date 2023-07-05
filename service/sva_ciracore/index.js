@@ -100,3 +100,18 @@ export async function ciracoreImageByCadastralSeq(seq) {
         return false
     }
 }
+
+export async function cadastralImage_CiraCore_(dataSend) {
+    let url = `/api/sva_ciracore/cadastralImage_CiraCore_`
+    AddLoading();
+    try {
+        let res = await axios.post(url, dataSend)
+        let data = res.data
+        //console.log(data)
+        RemoveLoading()
+        return data
+    } catch (err) {
+        console.log(err)
+        return false
+    }
+}

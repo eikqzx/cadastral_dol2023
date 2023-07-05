@@ -1,6 +1,7 @@
 import axios from "axios"
 import formidable from 'formidable'
 var FormData = require('form-data');
+const path = require('path');
 const fs = require('fs');
 
 export const config = {
@@ -10,6 +11,7 @@ export const config = {
 }
 
 export default async function handler(req, res) {
+    let url = `${process.env.hostUploadAPI}/api/multi_uploadByPath`
     const form = formidable({ multiples: true });
     const data = await new Promise((resolve, reject) => {
         form.parse(req, function (err, fields, files) {
@@ -17,19 +19,14 @@ export default async function handler(req, res) {
             resolve({ fields, files });
         });
     });
-    // console.log(data,"multi_upload1");
-    // console.log(data.files,"multi_upload2");
-    res.status(200).json({ FORM_DATA: data });
-    return
-    let readFile = fs.createReadStream(data.files.scanFile[0].filepath);
     let dataFrom = new FormData();
-    let url = `${process.env.hostUploadAPI}/api/multi_uploadByPath`
-    // let {file} = req.body
     const contentType = req.headers['content-type'];
     dataFrom.append("scanFile", data.fields.scanFile[0]);
     dataFrom.append("scanFile", data.fields.scanFile[1]);
-    dataFrom.append("scanFile", readFile);
-    console.log(dataFrom,"multi_upload dataFrom");
+    dataFrom.append("scanFile", data.fields.scanFile[2]);
+    console.log(data,"multi_upload1");
+    // console.log(data.files,"multi_upload2");
+    // let dataFull = resdata.data
     try {
         let resdata = await axios.post(url, dataFrom,contentType);
         let data = resdata.data
