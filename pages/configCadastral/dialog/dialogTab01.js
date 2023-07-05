@@ -931,12 +931,13 @@ export default function DilogTab01Index(props) {
                         </Grid>
                         <Grid item xs={12} md={2} py={2}>
                             <TextField
-
-
                                 placeholder="ระดับ"
                                 value={surveyorLevelData}
                                 onChange={(e) => {
                                     setSurveyorLevelData(e.target.value);
+                                }}
+                                inputProps={{
+                                    maxLength: 3,
                                 }}
                                 style={{ width: "100%" }}
                                 size="small"
