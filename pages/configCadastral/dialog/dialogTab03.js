@@ -76,18 +76,14 @@ export default function DilogTab03Index(props) {
         // data = data.rows
         console.log(data, "getMasterData");
         // _createNewData(data.CADASTRAL_SEQ)
-        for (let i in data) {
-            if (data[i] != undefined) {
-                let getLandOfficeData = await getLandOffice();
-                let landOfficeFiltered = getLandOfficeData.rows.filter(item => item.LANDOFFICE_SEQ == data[i]?.LANDOFFICE_SEQ);
-                setSheetcode(data[i].SHEETCODE);
-                setBoxNo(data[i].BOX_NO.toString().padStart(2, "0"));
-                setNumofsurveyQty(data[i]?.NUMOFSURVEY_QTY > 0 ? data[i]?.NUMOFSURVEY_QTY : data[i]?.NUMOFSURVEY_QTY === 0 ? "-" : "-");
-                setCadastralNo(data[i].CADASTRAL_NO);
-                console.log(landOfficeFiltered, "getLandOfficeData");
-                setOffice(landOfficeFiltered[0]?.LANDOFFICE_NAME_TH ?? "-");
-            }
-        }
+        let getLandOfficeData = await getLandOffice();
+        let landOfficeFiltered = getLandOfficeData.rows.filter(item => item.LANDOFFICE_SEQ == data?.LANDOFFICE_SEQ);
+        setSheetcode(data.SHEETCODE);
+        setBoxNo(data.BOX_NO.toString().padStart(2, "0"));
+        setNumofsurveyQty(data?.NUMOFSURVEY_QTY > 0 ? data?.NUMOFSURVEY_QTY : data?.NUMOFSURVEY_QTY === 0 ? "-" : "-");
+        setCadastralNo(data.CADASTRAL_NO);
+        console.log(landOfficeFiltered, "getLandOfficeData");
+        setOffice(landOfficeFiltered[0]?.LANDOFFICE_NAME_TH ?? "-");
     }
 
     const _changeOwnerTitle = (event, value) => {

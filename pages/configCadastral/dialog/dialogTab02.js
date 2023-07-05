@@ -83,6 +83,8 @@ export default function DilogTab02Index(props) {
         }
     }, [props?.masterData])
 
+    console.log(props?.masterData, "props?.masterData");
+
     React.useEffect(() => {
         setOrderNo(props?.cadastralLandData[0]?.LAND_ORDER)
         setZoneData(props?.cadastralLandData[0]?.ZONE_LAND)
@@ -109,62 +111,59 @@ export default function DilogTab02Index(props) {
         // data = data.rows
         console.log(data, "getMasterData");
         // _createNewData(data.CADASTRAL_SEQ)
-        for (let i in data) {
-            if (data[i] != undefined) {
-                let getLandOfficeData = await getLandOffice();
-                let landOfficeFiltered = getLandOfficeData.rows.filter(item => item.LANDOFFICE_SEQ == data[i]?.LANDOFFICE_SEQ);
-                if (data[i].CADASTRAL_PROVINCE_SEQ == null) {
-                    let getProvinceData = await getProvinceByPK(landOfficeFiltered[0]?.PROVINCE_SEQ);
-                    console.log(getProvinceData, "getProvinceData");
-                    setProvinceData(getProvinceData.rows[0])
-                } else {
-                    let getProvinceData = await getProvinceByPK(data[i].CADASTRAL_PROVINCE_SEQ);
-                    console.log(getProvinceData, "getProvinceData");
-                    setProvinceData(getProvinceData.rows[0])
-                }
-                if (data[i].CADASTRAL_AMPHUR_SEQ == null) {
-                    let getAmphurData = await getAmphurByPK(landOfficeFiltered[0]?.AMPHUR_SEQ);
-                    console.log(getAmphurData, "getAmphurData");
-                    setAmphurData(getAmphurData.rows[0])
-                } else {
-                    let getAmphurData = await getAmphurByPK(data[i].CADASTRAL_AMPHUR_SEQ);
-                    console.log(getAmphurData, "getAmphurData");
-                    setAmphurData(getAmphurData.rows[0])
-                }
-                if (data[i].CADASTRAL_TAMBOL_SEQ == null) {
-                    setTambolData(null)
-                }
-                else {
-                    let getTambolData = await getTambolByPK(data[i].CADASTRAL_TAMBOL_SEQ);
-                    console.log(getTambolData, "getTambolData");
-                    setTambolData(getTambolData.rows[0])
-                }
-                //SHEETTYPE
-                if (data[i].SHEETTYPE_SEQ == null) {
-                    setSheetTypeData(null)
-                }
-                else {
-                    let sheetType = await getSheetTypeByPK(data[i].SHEETTYPE_SEQ);
-                    console.log(sheetType, "sheetType");
-                    setSheetTypeData(sheetType.rows[0])
-                }
-                //ScaleMap
-                if (data[i].SCALE_SEQ == null) {
-                    setUTMSCALENO(null)
-                }
-                else {
-                    let scalemap = await getScaleByPK(data[i].SCALE_SEQ);
-                    console.log(scalemap, "scalemap");
-                    setUTMSCALENO(scalemap.rows[0])
-                }
-                setSheetcode(data[i].SHEETCODE);
-                setBoxNo(data[i].BOX_NO.toString().padStart(2, "0"));
-                setNumofsurveyQty(data[i]?.NUMOFSURVEY_QTY !== null ? data[i]?.NUMOFSURVEY_QTY : 0);
-                setCadastralNo(data[i].CADASTRAL_NO);
-                console.log(landOfficeFiltered, "getLandOfficeData");
-                setOffice(landOfficeFiltered[0]?.LANDOFFICE_NAME_TH ?? "-");
-            }
+        let getLandOfficeData = await getLandOffice();
+        let landOfficeFiltered = getLandOfficeData.rows.filter(item => item.LANDOFFICE_SEQ == data?.LANDOFFICE_SEQ);
+        console.log(landOfficeFiltered, "landOfficeFiltered");
+        if (data.CADASTRAL_PROVINCE_SEQ == null) {
+            let getProvinceData = await getProvinceByPK(landOfficeFiltered[0]?.PROVINCE_SEQ);
+            console.log(getProvinceData, "getProvinceData_IF");
+            setProvinceData(getProvinceData.rows)
+        } else {
+            let getProvinceData = await getProvinceByPK(data.CADASTRAL_PROVINCE_SEQ);
+            console.log(getProvinceData, "getProvinceData_ELSE");
+            setProvinceData(getProvinceData.rows)
         }
+        if (data.CADASTRAL_AMPHUR_SEQ == null) {
+            let getAmphurData = await getAmphurByPK(landOfficeFiltered[0]?.AMPHUR_SEQ);
+            console.log(getAmphurData, "getAmphurData");
+            setAmphurData(getAmphurData.rows[0])
+        } else {
+            let getAmphurData = await getAmphurByPK(data.CADASTRAL_AMPHUR_SEQ);
+            console.log(getAmphurData, "getAmphurData");
+            setAmphurData(getAmphurData.rows[0])
+        }
+        if (data.CADASTRAL_TAMBOL_SEQ == null) {
+            setTambolData(null)
+        }
+        else {
+            let getTambolData = await getTambolByPK(data.CADASTRAL_TAMBOL_SEQ);
+            console.log(getTambolData, "getTambolData");
+            setTambolData(getTambolData.rows[0])
+        }
+        //SHEETTYPE
+        if (data.SHEETTYPE_SEQ == null) {
+            setSheetTypeData(null)
+        }
+        else {
+            let sheetType = await getSheetTypeByPK(data.SHEETTYPE_SEQ);
+            console.log(sheetType, "sheetType");
+            setSheetTypeData(sheetType.rows[0])
+        }
+        //ScaleMap
+        if (data.SCALE_SEQ == null) {
+            setUTMSCALENO(null)
+        }
+        else {
+            let scalemap = await getScaleByPK(data.SCALE_SEQ);
+            console.log(scalemap, "scalemap");
+            setUTMSCALENO(scalemap.rows[0])
+        }
+        setSheetcode(data.SHEETCODE);
+        setBoxNo(data.BOX_NO.toString().padStart(2, "0"));
+        setNumofsurveyQty(data?.NUMOFSURVEY_QTY !== null ? data?.NUMOFSURVEY_QTY : 0);
+        setCadastralNo(data.CADASTRAL_NO);
+        console.log(landOfficeFiltered, "getLandOfficeData");
+        setOffice(landOfficeFiltered[0]?.LANDOFFICE_NAME_TH ?? "-");
     }
 
     const _onSubmit = async () => {
