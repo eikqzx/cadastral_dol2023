@@ -156,16 +156,16 @@ export default function Tab1(props) {
         try {
             let ciracoreData = await ciracoreImageByCadastralSeq(data.CADASTRAL_SEQ);
             let ciracoreDataArr = ciracoreData.rows;
-            console.log(ciracoreDataArr, "createPageData");
+            console.log(ciracoreDataArr, "createPageData ciracoreDataArr");
             let surveydoctypeData = await getSurveyDocType();
             let surveydoctypeDataArr = surveydoctypeData.rows;
             console.log(surveydoctypeDataArr, "createPageData");
             for (let i in ciracoreDataArr) {
                 let item = ciracoreDataArr[i];
                 let link = <CopyButton text={item?.IMAGE_PATH} />
-                const filePath = item.IMAGE_PATH;
-                const fileName = filePath.substring(filePath.lastIndexOf('/') + 1);
-                const directoryPath = filePath.substring(0, filePath.lastIndexOf('/') + 1);
+                // const filePath = item.IMAGE_PATH;
+                // const fileName = filePath?.substring(filePath.lastIndexOf('/') + 1);
+                // const directoryPath = filePath.substring(0, filePath.lastIndexOf('/') + 1);
                 item['FILE_DES'] = <React.Fragment>
                     <Grid container spacing={1}>
                         <Grid item><Typography>
@@ -178,8 +178,8 @@ export default function Tab1(props) {
                     </Grid>
                 </React.Fragment>
                 item['SURVEYDOC_TYPE_NAME'] = surveydoctypeDataArr.filter(itemDoc => itemDoc.SURVEYDOCTYPE_SEQ == item.SURVEYDOCTYPE_SEQ)[0]?.SURVEYDOCTYPE_NAME_TH;
-                item['FILE_NAME'] = fileName;
-                item['DIRECTORY_PATH'] = directoryPath;
+                // item['FILE_NAME'] = fileName;
+                // item['DIRECTORY_PATH'] = directoryPath;
                 let folderNumber = String(item.LANDOFFICE_SEQ).padStart(5, '0');
                 let pathFileString = `U:\\${folderNumber}\\${item.IMAGE_FILENAME}.${item.IMAGE_EXTENSION}`;
                 let file = await getFileByPath(pathFileString);
@@ -520,8 +520,8 @@ export default function Tab1(props) {
                                                         }
                                                         <Tooltip title="แก้ไขประเภทเอกสาร"><IconButton onClick={handleButtonClick}><Edit /></IconButton></Tooltip>
                                                     </Typography>
-                                                    <Typography>ที่อยู๋ไฟล์ใหม่: {item.DIRECTORY_PATH}</Typography>
-                                                    <Typography>ชื่อไฟล์ใหม่: {item.FILE_NAME}</Typography>
+                                                    {/* <Typography>ที่อยู๋ไฟล์ใหม่: {item.DIRECTORY_PATH}</Typography>
+                                                    <Typography>ชื่อไฟล์ใหม่: {item.FILE_NAME}</Typography> */}
                                                 </Grid>
                                             </Grid>
                                         </Grid>
