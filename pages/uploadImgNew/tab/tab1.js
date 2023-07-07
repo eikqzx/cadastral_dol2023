@@ -51,6 +51,7 @@ import { cadastralImageByCadastralSeq, cadastralImagePNoByCadastralSeq, saveScan
 import ImageMui from "@mui/icons-material/Image"
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CloseIcon from '@mui/icons-material/Close';
+import DialogEditUpolad from "../components/dialogEditUpolad";
 
 export default function Tab1(props) {
     console.log(props, "uploadNewTab");
@@ -71,6 +72,7 @@ export default function Tab1(props) {
     const [open, setOpen] = React.useState(false);
     const [message, setMessage] = React.useState("");
     const [type, setType] = React.useState("success");
+    const [openEdit, setOpenEdit] = React.useState(null);
     const { data } = useSession();
 
     const _changeSurveyDocType = (event, value) => {
@@ -81,7 +83,7 @@ export default function Tab1(props) {
         setOpen(false)
     }
 
-    console.log(cadastralImageData, "cadastralImageData");
+    console.log(openEdit, "cadastralImageData openEdit");
 
     const _changeSaveEditSurveyDoc = async (dataObj) => {
         let newData = { ...dataObj };
@@ -108,10 +110,11 @@ export default function Tab1(props) {
         }
         try {
             let resUpdateCiraImg = await updCiracoreImage(newData.CIRACORE_IMAGE_SEQ, newData);
-            let mergeRes = await cadastralImage_CiraCore_(mergeObj);
-            console.log(mergeRes, "mergeRes _saveGenImage");
+            // let mergeRes = await cadastralImage_CiraCore_(mergeObj);
+            // console.log(mergeRes, "mergeRes _saveGenImage");
             console.log(resUpdateCiraImg, "_changeSaveEditSurveyDoc");
             await createPageData(props?.tabData);
+            await _req_getCadastralImage(props?.tabData?.CADASTRAL_SEQ);
             await setShowAutocomplete(!showAutocomplete);
             await setMessage("บันทึกสำเร็จ");
             await setOpen(true);
@@ -177,7 +180,7 @@ export default function Tab1(props) {
                         </Typography></Grid>
                     </Grid>
                 </React.Fragment>
-                item['SURVEYDOC_TYPE_NAME'] = surveydoctypeDataArr.filter(itemDoc => itemDoc.SURVEYDOCTYPE_SEQ == item.SURVEYDOCTYPE_SEQ)[0]?.SURVEYDOCTYPE_NAME_TH;
+                item['SURVEYDOC_TYPE_NAME'] = surveydoctypeDataArr?.filter(itemDoc => itemDoc?.SURVEYDOCTYPE_SEQ == item.SURVEYDOCTYPE_SEQ)[0]?.SURVEYDOCTYPE_NAME_TH ?? "ไม่พบข้อมูล";
                 // item['FILE_NAME'] = fileName;
                 // item['DIRECTORY_PATH'] = directoryPath;
                 let folderNumber = String(item.LANDOFFICE_SEQ).padStart(5, '0');
@@ -342,7 +345,10 @@ export default function Tab1(props) {
 
     return (
         <Box sx={{ flexGrow: 1 }}>
-            <AlertUploadDialog open={uploadAlert} close={() => { setUploadAlert(false) }} data={uploadResData} uploadData={uploadData} />
+            <AlertUploadDialog
+            createPageData={()=>{createPageData(props?.tabData)}}
+            _req_getCadastralImage={()=>{_req_getCadastralImage(props?.tabData?.CADASTRAL_SEQ)}}
+            open={uploadAlert} close={() => { setUploadAlert(false) }} data={uploadResData} uploadData={uploadData} />
             <Lightbox
                 open={openLightBox}
                 styles={{
@@ -378,6 +384,7 @@ export default function Tab1(props) {
                     {message}
                 </Alert>
             </Snackbar>}
+            {openEdit != null && <DialogEditUpolad _req_getCadastralImage={()=>{_req_getCadastralImage(props?.tabData?.CADASTRAL_SEQ)}} open={openEdit != null} close={() => (setOpenEdit(null))} data={openEdit} />}
             <Grid container>
                 <Grid p={1} spacing={1} container sx={{ height: "15vh" }}>
                     <Grid item xs={3} md={5}>

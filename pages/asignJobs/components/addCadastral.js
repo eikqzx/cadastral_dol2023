@@ -19,7 +19,7 @@ import {
 export default function AddCad(props) {
     console.log(props,"AddCad");
     const [inputPacelNo, setInputPacelNo] = React.useState("");
-    const [inputNumofsurveyQty, setInputNumofsurveyQty] = React.useState("");
+    const [inputNumofsurveyQty, setInputNumofsurveyQty] = React.useState(1);
     const [sheetcode, setSheetcode] = React.useState("");
     const [boxNo, setBoxNo] = React.useState("");
     const [isError, setIsError] = React.useState([]);
