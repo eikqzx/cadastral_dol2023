@@ -73,6 +73,8 @@ export default function Tab1(props) {
     const [message, setMessage] = React.useState("");
     const [type, setType] = React.useState("success");
     const [openEdit, setOpenEdit] = React.useState(null);
+    const [checkUpdateDoc,setCheckUpdateDoc] = React.useState(0);
+    const [canUpload,setCanUpload] = React.useState(false);
     const { data } = useSession();
 
     const _changeSurveyDocType = (event, value) => {
@@ -84,6 +86,20 @@ export default function Tab1(props) {
     }
 
     console.log(openEdit, "cadastralImageData openEdit");
+
+    const checkUpdateDocType = () =>{
+        if (checkUpdateDoc == imageArrData.length) {
+            setCanUpload(false);
+        }else{
+            setCanUpload(true);
+        }
+    }
+
+    React.useEffect(()=>{
+        checkUpdateDocType();
+    },[imageArrData]);
+
+    console.log(checkUpdateDoc,"checkUpdateDoc");
 
     const _changeSaveEditSurveyDoc = async (dataObj) => {
         let newData = { ...dataObj };
@@ -113,9 +129,12 @@ export default function Tab1(props) {
             // let mergeRes = await cadastralImage_CiraCore_(mergeObj);
             // console.log(mergeRes, "mergeRes _saveGenImage");
             console.log(resUpdateCiraImg, "_changeSaveEditSurveyDoc");
+            let checkCountUpdate = checkUpdateDoc+1
+            console.log(checkCountUpdatem,"_changeSaveEditSurveyDoc checkUpdateDoc");
             await createPageData(props?.tabData);
             await _req_getCadastralImage(props?.tabData?.CADASTRAL_SEQ);
             await setShowAutocomplete(!showAutocomplete);
+            await setCheckUpdateDoc(checkCountUpdate);
             await setMessage("บันทึกสำเร็จ");
             await setOpen(true);
             await setType("success");
@@ -252,7 +271,7 @@ export default function Tab1(props) {
         setImageObj(arr);
         setOpenLightBox(true);
     }
-
+console.log(imageArrData,"imageArrData");
     const uploadFile = async () => {
         let newData = imageArrData;
         console.log(newData, "uploadFile");
@@ -487,7 +506,7 @@ export default function Tab1(props) {
                         >
                             <Grid container style={{ textAlign: "end" }} spacing={2} p={2}>
                                 <Grid item xs={12}>
-                                    <Button color="success" variant='contained' onClick={uploadFile} disabled={imageArrData.length == 0}><span>
+                                    <Button color="success" variant='contained' onClick={uploadFile} disabled={canUpload}><span>
                                         <Typography>อัปโหลดไฟล์ทั้งหมด</Typography>
                                     </span></Button>
                                 </Grid>
