@@ -492,6 +492,11 @@ console.log(imageArrData,"imageArrData");
                         <Divider />
                     </Grid>
                 </Grid>
+            {imageArrData.length == 0 ?
+                <Grid container p={0.5} spacing={1}>
+
+                </Grid>
+                :
                 <Grid container p={0.5} spacing={1}>
                     <Grid item xs={9}>
                         <Paper
@@ -614,6 +619,7 @@ console.log(imageArrData,"imageArrData");
                         </Paper>
                     </Grid>
                 </Grid>
+            }
             </Grid>
         </Box>
     )
