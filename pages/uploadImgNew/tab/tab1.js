@@ -73,8 +73,8 @@ export default function Tab1(props) {
     const [message, setMessage] = React.useState("");
     const [type, setType] = React.useState("success");
     const [openEdit, setOpenEdit] = React.useState(null);
-    const [checkUpdateDoc,setCheckUpdateDoc] = React.useState(0);
-    const [canUpload,setCanUpload] = React.useState(false);
+    const [checkUpdateDoc, setCheckUpdateDoc] = React.useState(0);
+    const [canUpload, setCanUpload] = React.useState(false);
     const { data } = useSession();
 
     const _changeSurveyDocType = (event, value) => {
@@ -87,19 +87,19 @@ export default function Tab1(props) {
 
     console.log(openEdit, "cadastralImageData openEdit");
 
-    const checkUpdateDocType = () =>{
+    const checkUpdateDocType = () => {
         if (checkUpdateDoc == imageArrData.length) {
             setCanUpload(false);
-        }else{
+        } else {
             setCanUpload(true);
         }
     }
 
-    React.useEffect(()=>{
+    React.useEffect(() => {
         checkUpdateDocType();
-    },[imageArrData]);
+    }, [imageArrData]);
 
-    console.log(checkUpdateDoc,"checkUpdateDoc");
+    console.log(checkUpdateDoc, "checkUpdateDoc");
 
     const _changeSaveEditSurveyDoc = async (dataObj) => {
         let newData = { ...dataObj };
@@ -129,8 +129,8 @@ export default function Tab1(props) {
             // let mergeRes = await cadastralImage_CiraCore_(mergeObj);
             // console.log(mergeRes, "mergeRes _saveGenImage");
             console.log(resUpdateCiraImg, "_changeSaveEditSurveyDoc");
-            let checkCountUpdate = checkUpdateDoc+1
-            console.log(checkCountUpdatem,"_changeSaveEditSurveyDoc checkUpdateDoc");
+            let checkCountUpdate = checkUpdateDoc + 1
+            console.log(checkCountUpdatem, "_changeSaveEditSurveyDoc checkUpdateDoc");
             await createPageData(props?.tabData);
             await _req_getCadastralImage(props?.tabData?.CADASTRAL_SEQ);
             await setShowAutocomplete(!showAutocomplete);
@@ -145,6 +145,20 @@ export default function Tab1(props) {
             await setType("error");
         }
     };
+
+    React.useEffect(() => {
+        if (
+            props?.searchData.length == 0
+        ) {
+            setImageArrData([]);
+            console.log(imageArrData,"imageArrData");
+            setOffice("-");
+            setSheetcode("-");
+            setBoxNo("-");
+            setNumofsurveyQty("-");
+            setCadastralNo("-");
+        }
+    }, [props.searchData]);
 
     React.useEffect(() => {
         if (
@@ -231,7 +245,7 @@ export default function Tab1(props) {
             let item = resFilter[i];
             let newPath = `S:${item.IMAGE_PATH}`
             let pathReplace = newPath.replace(/\//g, '\\')
-            console.log(pathReplace,"pathReplace _req_getCadastralImage");
+            console.log(pathReplace, "pathReplace _req_getCadastralImage");
             let resGetFile = await getFileByPath(pathReplace);
             let docArr = arrDocData.filter((doc) => doc.SURVEYDOCTYPE_SEQ == item.SURVEYDOCTYPE_SEQ);
             item["DOC_DATA"] = docArr[0];
@@ -271,7 +285,7 @@ export default function Tab1(props) {
         setImageObj(arr);
         setOpenLightBox(true);
     }
-console.log(imageArrData,"imageArrData");
+    console.log(imageArrData, "imageArrData");
     const uploadFile = async () => {
         let newData = imageArrData;
         console.log(newData, "uploadFile");
@@ -318,7 +332,7 @@ console.log(imageArrData,"imageArrData");
                     item.STATUS_SEQ_ = 101;
                     item.LAST_UPD_USER = data?.user?.USER_LIST_PID;
                     let resUpd = await updateCadastralImage(item.CADASTRAL_IMAGE_SEQ, item);
-                    console.log(resUpd,"resUpd uploadFile");
+                    console.log(resUpd, "resUpd uploadFile");
                     if (i == (resCadastralImageDataFilter.length - 1)) {
                         createPageData(props?.tabData);
                         _req_getCadastralImage(props?.tabData?.CADASTRAL_SEQ);
@@ -365,9 +379,9 @@ console.log(imageArrData,"imageArrData");
     return (
         <Box sx={{ flexGrow: 1 }}>
             <AlertUploadDialog
-            createPageData={()=>{createPageData(props?.tabData)}}
-            _req_getCadastralImage={()=>{_req_getCadastralImage(props?.tabData?.CADASTRAL_SEQ)}}
-            open={uploadAlert} close={() => { setUploadAlert(false) }} data={uploadResData} uploadData={uploadData} />
+                createPageData={() => { createPageData(props?.tabData) }}
+                _req_getCadastralImage={() => { _req_getCadastralImage(props?.tabData?.CADASTRAL_SEQ) }}
+                open={uploadAlert} close={() => { setUploadAlert(false) }} data={uploadResData} uploadData={uploadData} />
             <Lightbox
                 open={openLightBox}
                 styles={{
@@ -403,7 +417,7 @@ console.log(imageArrData,"imageArrData");
                     {message}
                 </Alert>
             </Snackbar>}
-            {openEdit != null && <DialogEditUpolad _req_getCadastralImage={()=>{_req_getCadastralImage(props?.tabData?.CADASTRAL_SEQ)}} open={openEdit != null} close={() => (setOpenEdit(null))} data={openEdit} />}
+            {openEdit != null && <DialogEditUpolad _req_getCadastralImage={() => { _req_getCadastralImage(props?.tabData?.CADASTRAL_SEQ) }} open={openEdit != null} close={() => (setOpenEdit(null))} data={openEdit} />}
             <Grid container>
                 <Grid p={1} spacing={1} container sx={{ height: "15vh" }}>
                     <Grid item xs={3} md={5}>
@@ -492,134 +506,138 @@ console.log(imageArrData,"imageArrData");
                         <Divider />
                     </Grid>
                 </Grid>
-            {imageArrData.length == 0 ?
-                <Grid container p={0.5} spacing={1}>
-
-                </Grid>
-                :
-                <Grid container p={0.5} spacing={1}>
-                    <Grid item xs={9}>
-                        <Paper
-                            style={{ textAlign: "center" }}
-                            sx={{
-                                height: "85vh",
-                                border: 1,
-                                borderColor: "grey.500",
-                                flexGrow: 1,
-                                overflowY: "auto",
-                            }}
-                        >
-                            <Grid container style={{ textAlign: "end" }} spacing={2} p={2}>
-                                <Grid item xs={12}>
-                                    <Button color="success" variant='contained' onClick={uploadFile} disabled={canUpload}><span>
-                                        <Typography>อัปโหลดไฟล์ทั้งหมด</Typography>
-                                    </span></Button>
+                {imageArrData.length == 0 ?
+                    <Grid container p={0.5} spacing={1}>
+                        <Grid container justifyContent={'center'}>
+                            <Typography fontStyle={'italic'} color={'red'}>
+                                กรุณาค้นหาและเลือกเลขที่ต้นร่าง
+                            </Typography>
+                        </Grid>
+                    </Grid>
+                    :
+                    <Grid container p={0.5} spacing={1}>
+                        <Grid item xs={9}>
+                            <Paper
+                                style={{ textAlign: "center" }}
+                                sx={{
+                                    height: "85vh",
+                                    border: 1,
+                                    borderColor: "grey.500",
+                                    flexGrow: 1,
+                                    overflowY: "auto",
+                                }}
+                            >
+                                <Grid container style={{ textAlign: "end" }} spacing={2} p={2}>
+                                    <Grid item xs={12}>
+                                        <Button color="success" variant='contained' onClick={uploadFile} disabled={canUpload}><span>
+                                            <Typography>อัปโหลดไฟล์ทั้งหมด</Typography>
+                                        </span></Button>
+                                    </Grid>
                                 </Grid>
-                            </Grid>
-                            <Grid container spacing={2} p={1} style={{ textAlign: "center" }}>
-                                {
-                                    imageArrData.length !== 0 && imageArrData.map((item, index) =>
-                                        <Grid item key={index} xs={12}>
-                                            <Grid p={1} border={1} spacing={1} container style={{ textAlign: "center" }}>
-                                                <Grid item xs={12}>
-                                                    <Tooltip title="คลิกเพื่อแสดงรูปขยาย" followCursor>
-                                                        <IconButton
-                                                            onClick={() => { onClickImage(item) }}
-                                                        >
-                                                            <Image
-                                                                src={item.FILE_DATA}
-                                                                style={{ height: '100%' }}
-                                                                width={600}
-                                                                height={300}
-                                                                alt={item.IMAGE_FILENAME}
-                                                            />
-                                                        </IconButton>
-                                                    </Tooltip>
-                                                </Grid>
-                                                <Grid item xs={12}>
-                                                    <Typography>ประเภทเอกสาร:
-                                                        {showAutocomplete ?
-                                                            <Grid container justify="center" alignItems="center" justifyContent={"center"}>
-                                                                <Grid item xs={4} >
-                                                                    <AutoSurveyDocType valueSeq={item.SURVEYDOCTYPE_SEQ} value={surveyDocType} onChange={_changeSurveyDocType} />
+                                <Grid container spacing={2} p={1} style={{ textAlign: "center" }}>
+                                    {
+                                        imageArrData.length !== 0 && imageArrData.map((item, index) =>
+                                            <Grid item key={index} xs={12}>
+                                                <Grid p={1} border={1} spacing={1} container style={{ textAlign: "center" }}>
+                                                    <Grid item xs={12}>
+                                                        <Tooltip title="คลิกเพื่อแสดงรูปขยาย" followCursor>
+                                                            <IconButton
+                                                                onClick={() => { onClickImage(item) }}
+                                                            >
+                                                                <Image
+                                                                    src={item.FILE_DATA}
+                                                                    style={{ height: '100%' }}
+                                                                    width={600}
+                                                                    height={300}
+                                                                    alt={item.IMAGE_FILENAME}
+                                                                />
+                                                            </IconButton>
+                                                        </Tooltip>
+                                                    </Grid>
+                                                    <Grid item xs={12}>
+                                                        <Typography>ประเภทเอกสาร:
+                                                            {showAutocomplete ?
+                                                                <Grid container justify="center" alignItems="center" justifyContent={"center"}>
+                                                                    <Grid item xs={4} >
+                                                                        <AutoSurveyDocType valueSeq={item.SURVEYDOCTYPE_SEQ} value={surveyDocType} onChange={_changeSurveyDocType} />
+                                                                    </Grid>
+                                                                    <Grid item xs={1} >
+                                                                        <Tooltip title="บันทึก"><IconButton onClick={() => { _changeSaveEditSurveyDoc(item) }}><Save /></IconButton></Tooltip>
+                                                                    </Grid>
                                                                 </Grid>
-                                                                <Grid item xs={1} >
-                                                                    <Tooltip title="บันทึก"><IconButton onClick={() => { _changeSaveEditSurveyDoc(item) }}><Save /></IconButton></Tooltip>
-                                                                </Grid>
-                                                            </Grid>
-                                                            : " " + item.SURVEYDOC_TYPE_NAME
-                                                        }
-                                                        <Tooltip title="แก้ไขประเภทเอกสาร"><IconButton onClick={handleButtonClick}><Edit /></IconButton></Tooltip>
-                                                    </Typography>
-                                                    {/* <Typography>ที่อยู๋ไฟล์ใหม่: {item.DIRECTORY_PATH}</Typography>
+                                                                : " " + item.SURVEYDOC_TYPE_NAME
+                                                            }
+                                                            <Tooltip title="แก้ไขประเภทเอกสาร"><IconButton onClick={handleButtonClick}><Edit /></IconButton></Tooltip>
+                                                        </Typography>
+                                                        {/* <Typography>ที่อยู๋ไฟล์ใหม่: {item.DIRECTORY_PATH}</Typography>
                                                     <Typography>ชื่อไฟล์ใหม่: {item.FILE_NAME}</Typography> */}
+                                                    </Grid>
                                                 </Grid>
                                             </Grid>
-                                        </Grid>
-                                    )
-                                }
-                            </Grid>
-                        </Paper>
-                    </Grid>
-                    <Grid item xs={3}>
-                        <Paper
-                            sx={{
-                                height: "85vh",
-                                border: 1,
-                                borderColor: "grey.500",
-                                flexGrow: 1,
-                                overflowY: "auto",
-                                overflowX: "auto"
-                            }}
-                        >
-                            <Grid container justifyContent={"space-between"} p={1} spacing={1}>
-                                <Grid item xs={12}>
-                                    <TableContainer>
-                                        <Table size="small" >
-                                            <TableHead>
-                                                <TableRow>
-                                                    <TableCell style={{ width: "25%" }} align="left">ชื่อเอกสาร</TableCell>
-                                                    <TableCell style={{ width: "25%" }} align="left">สถานะ</TableCell>
-                                                    <TableCell style={{ width: "25%" }} align="left">จัดการ</TableCell>
-                                                </TableRow>
-                                            </TableHead>
-                                            <TableBody>
-                                                {
-                                                    cadastralImageData.map((item, index) => (
-                                                        <TableRow key={index} sx={{
-                                                            '&:last-child td, &:last-child th': { border: 0 },
-                                                            '&:hover': {
-                                                                backgroundColor: '#ECF2FF !important',
-                                                            },
-                                                        }}>
-                                                            <TableCell style={{ width: "25%" }} align="left">{`${item?.DOC_DATA?.SURVEYDOCTYPE_GROUP} - ${item.IMAGE_PNAME} (${item.IMAGE_PNO})`}</TableCell>
-                                                            <TableCell style={{ width: "25%" }} align="left">{
-                                                                (item.FILE_STATUS && item.PROCESS_SEQ_ == 103 && item.STATUS_SEQ_ == 101) ? <Chip icon={<CheckCircleIcon />} label="อัปโหลดแล้ว" color="success" /> : <Chip icon={<CloseIcon />} label="ไม่ได้อัปโหลด" color="error" />
-                                                            }</TableCell>
-                                                            <TableCell style={{ width: "40%" }} align="left">
-                                                                <Tooltip title="ดูรูปภาพ">
-                                                                    <IconButton onClick={() => { openImageUrl(item) }}>
-                                                                        <ImageMui />
-                                                                    </IconButton>
-                                                                </Tooltip>
-                                                                <Tooltip title="แก้ไขรูปภาพ">
-                                                                    <IconButton onClick={() => { setOpenEdit(item) }}>
-                                                                        <Edit />
-                                                                    </IconButton>
-                                                                </Tooltip>
-                                                            </TableCell>
-                                                        </TableRow>
-                                                    ))
-                                                }
-                                            </TableBody>
-                                        </Table>
-                                    </TableContainer>
+                                        )
+                                    }
                                 </Grid>
-                            </Grid>
-                        </Paper>
+                            </Paper>
+                        </Grid>
+                        <Grid item xs={3}>
+                            <Paper
+                                sx={{
+                                    height: "85vh",
+                                    border: 1,
+                                    borderColor: "grey.500",
+                                    flexGrow: 1,
+                                    overflowY: "auto",
+                                    overflowX: "auto"
+                                }}
+                            >
+                                <Grid container justifyContent={"space-between"} p={1} spacing={1}>
+                                    <Grid item xs={12}>
+                                        <TableContainer>
+                                            <Table size="small" >
+                                                <TableHead>
+                                                    <TableRow>
+                                                        <TableCell style={{ width: "25%" }} align="left">ชื่อเอกสาร</TableCell>
+                                                        <TableCell style={{ width: "25%" }} align="left">สถานะ</TableCell>
+                                                        <TableCell style={{ width: "25%" }} align="left">จัดการ</TableCell>
+                                                    </TableRow>
+                                                </TableHead>
+                                                <TableBody>
+                                                    {
+                                                        cadastralImageData.map((item, index) => (
+                                                            <TableRow key={index} sx={{
+                                                                '&:last-child td, &:last-child th': { border: 0 },
+                                                                '&:hover': {
+                                                                    backgroundColor: '#ECF2FF !important',
+                                                                },
+                                                            }}>
+                                                                <TableCell style={{ width: "25%" }} align="left">{`${item?.DOC_DATA?.SURVEYDOCTYPE_GROUP} - ${item.IMAGE_PNAME} (${item.IMAGE_PNO})`}</TableCell>
+                                                                <TableCell style={{ width: "25%" }} align="left">{
+                                                                    (item.FILE_STATUS && item.PROCESS_SEQ_ == 103 && item.STATUS_SEQ_ == 101) ? <Chip icon={<CheckCircleIcon />} label="อัปโหลดแล้ว" color="success" /> : <Chip icon={<CloseIcon />} label="ไม่ได้อัปโหลด" color="error" />
+                                                                }</TableCell>
+                                                                <TableCell style={{ width: "40%" }} align="left">
+                                                                    <Tooltip title="ดูรูปภาพ">
+                                                                        <IconButton onClick={() => { openImageUrl(item) }}>
+                                                                            <ImageMui />
+                                                                        </IconButton>
+                                                                    </Tooltip>
+                                                                    <Tooltip title="แก้ไขรูปภาพ">
+                                                                        <IconButton onClick={() => { setOpenEdit(item) }}>
+                                                                            <Edit />
+                                                                        </IconButton>
+                                                                    </Tooltip>
+                                                                </TableCell>
+                                                            </TableRow>
+                                                        ))
+                                                    }
+                                                </TableBody>
+                                            </Table>
+                                        </TableContainer>
+                                    </Grid>
+                                </Grid>
+                            </Paper>
+                        </Grid>
                     </Grid>
-                </Grid>
-            }
+                }
             </Grid>
         </Box>
     )

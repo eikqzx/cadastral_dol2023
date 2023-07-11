@@ -45,6 +45,12 @@ export default function IndexScanner() {
     }, [])
 
     React.useEffect(() => {
+        if (searchData.length == 0) {
+            setTapData([]);
+        }
+    }, [searchData])
+
+    React.useEffect(() => {
         setUserData(data?.user);
     }, [data])
 
@@ -95,7 +101,7 @@ export default function IndexScanner() {
                             <Typography >ค้นหารายการต้นร่าง</Typography>
                         </AccordionSummary>
                         <AccordionDetails>
-                            <Search provinceSeq={landOffice?.PROVINCE_SEQ} landOfficeSeq={landOffice?.LANDOFFICE_SEQ} disabled={['licensePage', 'fileNo', 'parcelNO', 'landNo']} onSearch={onSearchNew} onReset={setSearchData} />
+                            <Search provinceSeq={landOffice?.PROVINCE_SEQ} landOfficeSeq={landOffice?.LANDOFFICE_SEQ} disabled={['licensePage', 'fileNo', 'parcelNO', 'landNo']} onSearch={onSearchNew} onReset={setSearchData}  />
                         </AccordionDetails>
                     </Accordion>
                 </Grid>
@@ -107,7 +113,7 @@ export default function IndexScanner() {
             </Grid>
             <Grid item xs={10} md={10}>
                 <Paper sx={{ height: "100vh", flexGrow: 1, overflowY: 'auto' }}>
-                    <Tab1 tabData={tabData} searchData={searchData} onSearch={onSearchNew} pdfData={pdfData} searchParameter={searchParameter}  
+                    <Tab1 tabData={tabData} searchData={searchData} onSearch={onSearchNew} pdfData={pdfData} searchParameter={searchParameter}
                     //process={processSeq}
                     />
                 </Paper>
