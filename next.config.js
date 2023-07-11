@@ -16,7 +16,8 @@ module.exports = {
     hostUploadAPI: 'http://192.168.100.150:8099',
     privateKey :"imyourfather!!!",
     NEXTAUTH_SECRET: "imyourfather!!!",
-    hostPdf: 'http://localhost/'
+    hostPdf: 'http://localhost/',
+    hostMapServer:'http://192.168.100.150:8021/geoserver/MapLandGis4X/'
   },
   // compiler: {
   //   removeConsole: process.env.NODE_ENV === "production",
