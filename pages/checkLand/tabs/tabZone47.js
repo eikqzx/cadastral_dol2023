@@ -4,7 +4,8 @@ import {
     Paper,
     Box,
     Typography,
-    Divider
+    Divider,
+    Card
 } from "@mui/material"
 //COMPONENTS
 import CheckLandMap from "@/pages/checkLand/components/checkLandMap";
@@ -24,14 +25,20 @@ export default function TabZone47Index(props) {
     const [numofsurveyQty, setNumofsurveyQty] = React.useState("-");
     const [cadastralNo, setCadastralNo] = React.useState("-");
 
+    // React.useEffect(() => {
+    //     if (Array.isArray(props?.searchData)) {
+    //         if (props?.searchData?.length != 0) {
+    //             getMasterData(props.searchData[0])
+    //         }
+    //     }
+    // }, [props.searchData]);
     React.useEffect(() => {
-        if (Array.isArray(props?.searchData)) {
-            if (props?.searchData?.length != 0) {
-                getMasterData(props.searchData[0])
-            }
-        }
-    }, [props.searchData]);
-
+        // if (Array.isArray(props?.searchData)) {
+        //     if (props?.searchData?.length != 0) {
+        getMasterData(props.tabData)
+        //     }
+        // }
+    }, [props.tabData]);
     const getMasterData = async (data) => {
         console.log(data, "getMasterData");
         if (data != undefined) {
@@ -49,6 +56,7 @@ export default function TabZone47Index(props) {
     };
     return (
         <Grid container >
+
             <Grid item xs={12} p={1}>
                 <Grid p={1} spacing={1} container sx={{ height: "15vh" }}>
                     <Grid item xs={3} md={5}>
@@ -141,19 +149,21 @@ export default function TabZone47Index(props) {
                     </Grid>
                 </Grid>
             </Grid>
-            <Grid container columns={24}>
-                <Grid item xs={12}>
-                    <Grid sx={{ height: "50vh" }} component={Paper} elevation={2}>
-                        {/* <CheckLandMap layerSeq={layerSeq} /> */}
-                        <Map47 mapName="แผนที่รูปแปลงที่ดิน โซน 47" height={67}>
-                            <LayerPanel minZoom={10} layerSeq={layerSeq} />
-                        </Map47>
+            <Grid container columns={24} component={Paper}>
+                <Grid item xs={12} >
+                    <Grid item px={1} py={3}>
+                        <Card>
+                            {/* <CheckLandMap layerSeq={layerSeq} /> */}
+                            <Map47 mapName="แผนที่รูปแปลงที่ดิน โซน 47" height={67}>
+                                <LayerPanel minZoom={10} layerSeq={layerSeq} />
+                            </Map47>
+                        </Card>
                     </Grid>
-                    <Grid sx={{ height: "37.5vh" }} component={Paper} elevation={2}>
+                    <Grid item px={1} py={3}>
                         <CheckLandList />
                     </Grid>
                 </Grid>
-                <Grid item xs={12} px={1}>
+                <Grid item xs={12} px={1} py={3}>
                     <Grid component={Paper} elevation={2}>
                         <CheckLandImage />
                     </Grid>

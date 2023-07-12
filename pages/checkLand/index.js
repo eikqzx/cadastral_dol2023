@@ -32,7 +32,8 @@ import { decode } from "next-base64";
 
 export default function IndexScanner() {
     const [searchData, setSearchData] = React.useState([]);
-    const [tabData, setTapData] = React.useState('1');
+    const [tabChangeData, setTapChangeData] = React.useState('1');
+    const [tabData, setTapData] = React.useState([]);
     const [open, setOpen] = React.useState(false);
     const [message, setMessage] = React.useState('');
     const [type, setType] = React.useState('');
@@ -47,7 +48,7 @@ export default function IndexScanner() {
     const dataUrl = useRouter().query
 
     const handleChangeTabs = (event, newValue) => {
-        setTapData(newValue);
+        setTapChangeData(newValue);
     };
 
     React.useEffect(() => {
@@ -115,14 +116,14 @@ export default function IndexScanner() {
                     </Accordion>
                 </Grid>
             }
-            <Grid item xs={12} md={2}>
+            <Grid item xs={2} md={2}>
                 <SideTreeView data={searchData} setTapData={setTapData}
                     process={processSeq}
                 />
             </Grid>
-            <Grid item xs={12} md={10}>
+            <Grid item xs={10} md={10}>
                 <Paper sx={{ height: "100vh", flexGrow: 1, overflowY: 'auto' }}>
-                    <TabContext value={tabData}>
+                    <TabContext value={tabChangeData}>
                         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                             <TabList
                                 onChange={handleChangeTabs}
@@ -140,12 +141,12 @@ export default function IndexScanner() {
                         </Box>
                         <TabPanel value="1">
                             <Grid item xs={12}>
-                                <TabZone47Index searchData={searchData} />
+                                <TabZone47Index searchData={searchData} tabData={tabData} />
                             </Grid>
                         </TabPanel>
                         <TabPanel value="2">
                             <Grid item xs={12}>
-                                <TabZone48Index searchData={searchData} />
+                                <TabZone48Index searchData={searchData} tabData={tabData}/>
                             </Grid>
                         </TabPanel>
                     </TabContext>
