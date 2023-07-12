@@ -21,7 +21,7 @@ import TabZone48Index from "./tabs/tabZone48";
 //ICONS
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 //SERVICES
-import { ciracoreImage10XByConditionCadastralNoTo, getAllCiracoreImage } from "@/service/sva_ciracore";
+import { cadastralImage10XByConditionCadastralNoTo } from "@/service/sva";
 import { getLandOfficeByPK } from "@/service/mas/landOffice";
 //LIBRALIES
 import { useSession } from "next-auth/react";
@@ -42,21 +42,13 @@ export default function IndexScanner() {
     const [landOffice, setLandOffice] = React.useState(null);
     const [pdfData, setPdfData] = React.useState();
     const [searchParameter, setSearchParameter] = React.useState(null);
-    const [processSeq, setProcessSeq] = React.useState(133);
+    const [processSeq, setProcessSeq] = React.useState(100);
     const { data } = useSession();
     const dataUrl = useRouter().query
 
     const handleChangeTabs = (event, newValue) => {
         setTapData(newValue);
     };
-
-    React.useEffect(() => {
-        if (isNotEmpty(dataUrl)) {
-            let seq = decode(dataUrl?.PROCESS_SEQ);
-            console.log(seq, "seqseqseq");
-            setProcessSeq(seq);
-        }
-    }, [])
 
     React.useEffect(() => {
         setUserData(data?.user);
@@ -76,14 +68,23 @@ export default function IndexScanner() {
         }
     };
 
+    React.useEffect(() => {
+        if (isNotEmpty(dataUrl)) {
+            let seq = decode(dataUrl?.PROCESS_SEQ);
+            console.log(seq, "seqseqseq");
+            if (seq == 135) {
+                seq = 100
+                setProcessSeq(seq);
+            }
+        }
+    }, [])
+
     const onSearchNew = async (obj) => {
         console.log(obj, "obj_onSearch");
-        obj.PROCESS_SEQ_ = 102;
-        obj.RECORD_STATUS = "A"
-        setPdfData(obj)
-        setSearchParameter(obj);
+        obj.PROCESS_SEQ_ = Number(processSeq);
+        setSearchParameter(obj)
         let data = null;
-        data = await ciracoreImage10XByConditionCadastralNoTo(obj);
+        data = await cadastralImage10XByConditionCadastralNoTo(obj);
         // data = await getAllCiracoreImage();
         data = data.rows
         console.log(data, "onSearchNew");
@@ -139,12 +140,12 @@ export default function IndexScanner() {
                         </Box>
                         <TabPanel value="1">
                             <Grid item xs={12}>
-                                <TabZone47Index />
+                                <TabZone47Index searchData={searchData} />
                             </Grid>
                         </TabPanel>
                         <TabPanel value="2">
                             <Grid item xs={12}>
-                                <TabZone48Index />
+                                <TabZone48Index searchData={searchData} />
                             </Grid>
                         </TabPanel>
                     </TabContext>
