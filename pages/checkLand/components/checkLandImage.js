@@ -213,7 +213,7 @@ export default function CheckLandImageIndex(props) {
                                                         <TableCell style={{ width: "20%" }} align="left">
                                                             {item?.childData?.map((item2, i) => (
                                                                 <Tooltip key={i} title="ดูรูปภาพ">
-                                                                    <IconButton onClick={() => openImageUrl(item2)}>
+                                                                    <IconButton onClick={() => openImageUrl(item?.childData)}>
                                                                         <Image alt={item2.IMAGE_PNAME} src={item2.FILE_DATA} width={50} height={70.5} />
                                                                     </IconButton>
                                                                 </Tooltip>
