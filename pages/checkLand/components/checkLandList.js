@@ -14,7 +14,7 @@ import InboxIcon from '@mui/icons-material/Inbox';
 //SERVICES
 import { cadastralImageByCadastralSeq } from "@/service/sva";
 //COMPONENTS
-import CheckLandImageIndex from "./checkLandImage";
+
 export default function CheckImageListIndex(props) {
     console.log(props, "CheckImageListIndex");
     const [cadastralImageData, setCadastralImage] = React.useState([])
@@ -37,6 +37,7 @@ export default function CheckImageListIndex(props) {
     const handleClick = (el) => {
         props?.setImageData(el);
     };
+
     return (
         <Grid container>
             {/* {<CheckLandImageIndex data={imageData} />} */}
@@ -52,18 +53,17 @@ export default function CheckImageListIndex(props) {
                             cadastralImageData?.map((el, index) => (
                                 <ListItem
                                     key={index}
-                                    onClick={() => handleClick(el)}
+                                    onClick={() => handleClick({ ...el })}
 
                                 >
                                     <ListItemButton>
                                         <ListItemText
                                             primary={
-                                                <div div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                                                     <span>{el.IMAGE_PNAME}</span>
                                                     <span>{el.IMAGE_PNO + " " + 'แผ่น'}</span>
                                                 </div>
                                             }
-                                        // secondary={'จำนวนภาพ' + " " + el.IMAGE_PNO}
                                         />
                                     </ListItemButton>
                                 </ListItem>

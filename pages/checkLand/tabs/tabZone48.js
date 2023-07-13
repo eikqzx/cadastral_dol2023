@@ -22,7 +22,7 @@ export default function TabZone48Index(props) {
     const [boxNo, setBoxNo] = React.useState("-");
     const [numofsurveyQty, setNumofsurveyQty] = React.useState("-");
     const [cadastralNo, setCadastralNo] = React.useState("-");
-
+    const [imageData, setImageData] = React.useState([])
 
     // React.useEffect(() => {
     //     if (Array.isArray(props?.searchData)) {
@@ -124,12 +124,12 @@ export default function TabZone48Index(props) {
                         </Card>
                     </Grid>
                     <Grid item px={1} py={3}>
-                        <CheckLandList tabData={props?.tabData} />
+                        <CheckLandList tabData={props?.tabData} setImageData={setImageData} />
                     </Grid>
                 </Grid>
                 <Grid item xs={12} px={1} py={2}>
                     <Grid component={Paper} elevation={2}>
-                        <CheckLandImage />
+                        <CheckLandImage imageData={imageData} />
                     </Grid>
                 </Grid>
             </Grid>

@@ -25,19 +25,16 @@ export default function TabZone47Index(props) {
     const [numofsurveyQty, setNumofsurveyQty] = React.useState("-");
     const [cadastralNo, setCadastralNo] = React.useState("-");
     const [imageData, setImageData] = React.useState([])
-    // React.useEffect(() => {
-    //     if (Array.isArray(props?.searchData)) {
-    //         if (props?.searchData?.length != 0) {
-    //             getMasterData(props.searchData[0])
-    //         }
-    //     }
-    // }, [props.searchData]);
 
     React.useEffect(() => {
         if (props?.tabData) {
             getMasterData(props?.tabData)
         }
     }, [props.tabData]);
+
+    const handleClick = (el) => {
+        setImageData(el);
+    };
 
     const getMasterData = async (data) => {
         console.log(data, "getMasterData");
@@ -125,7 +122,7 @@ export default function TabZone47Index(props) {
                         </Card>
                     </Grid>
                     <Grid item px={1} py={3}>
-                        <CheckLandList tabData={props?.tabData} setImageData={setImageData} />
+                        <CheckLandList tabData={props?.tabData} setImageData={handleClick} />
                     </Grid>
                 </Grid>
                 <Grid item xs={12} px={1} py={2}>

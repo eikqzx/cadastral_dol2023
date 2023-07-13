@@ -30,14 +30,14 @@ import { useRouter } from "next/router";
 import { decode } from "next-base64";
 // import Tab1 from "./tab/tab1";
 
-export default function IndexheckLand() {
+export default function IndexcheckLand(props) {
     const [searchData, setSearchData] = React.useState([]);
     const [tabChangeData, setTapChangeData] = React.useState('1');
     const [tabData, setTapData] = React.useState([]);
     const [open, setOpen] = React.useState(false);
     const [message, setMessage] = React.useState('');
     const [type, setType] = React.useState('');
-
+    const [imageData, setImageData] = React.useState([])
     const [printplateTypeData, setPrintplateTypeData] = React.useState([]);
     const [userData, setUserData] = React.useState(null);
     const [landOffice, setLandOffice] = React.useState(null);
@@ -94,7 +94,12 @@ export default function IndexheckLand() {
 
     console.log(landOffice, "landOffice");
 
-
+    const onResetNew = async () => {
+        await setTapData([])
+        await setSearchData([])
+        await setLandOffice()
+        await setImageData([])
+    }
     return (
         <Grid container spacing={0.5} py={7.5}>
             <SnackBarDiaLog open={open} message={message} type={type} handleClose={() => setOpen(false)} />
@@ -111,7 +116,7 @@ export default function IndexheckLand() {
                             <Typography >ค้นหารายการต้นร่าง</Typography>
                         </AccordionSummary>
                         <AccordionDetails>
-                            <Search provinceSeq={landOffice?.PROVINCE_SEQ} landOfficeSeq={landOffice?.LANDOFFICE_SEQ} disabled={['licensePage', 'fileNo', 'parcelNO', 'landNo']} onSearch={onSearchNew} onReset={setSearchData} />
+                            <Search provinceSeq={landOffice?.PROVINCE_SEQ} landOfficeSeq={landOffice?.LANDOFFICE_SEQ} disabled={['licensePage', 'fileNo', 'parcelNO', 'landNo']} onSearch={onSearchNew} onReset={onResetNew} />
                         </AccordionDetails>
                     </Accordion>
                 </Grid>
@@ -141,7 +146,7 @@ export default function IndexheckLand() {
                         </Box>
                         <TabPanel value="1">
                             <Grid item xs={12}>
-                                <TabZone47Index searchData={searchData} tabData={tabData} />
+                                <TabZone47Index searchData={searchData} tabData={tabData} setImageData={setImageData} />
                             </Grid>
                         </TabPanel>
                         <TabPanel value="2">
