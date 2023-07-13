@@ -151,7 +151,7 @@ export default function Tab1(props) {
             props?.searchData.length == 0
         ) {
             setImageArrData([]);
-            console.log(imageArrData,"imageArrData");
+            console.log(imageArrData, "imageArrData");
             setOffice("-");
             setSheetcode("-");
             setBoxNo("-");
@@ -240,7 +240,7 @@ export default function Tab1(props) {
         let resFilter = res?.rows?.filter(item => item.RECORD_STATUS == "N");
         let resDocData = await getSurveyDocType();
         let arrDocData = resDocData.rows
-        console.log(resFilter, "_req_getCadastralImage");
+        console.log(resFilter, "res_req_getCadastralImage");
         for (let i in resFilter) {
             let item = resFilter[i];
             let newPath = `S:${item.IMAGE_PATH}`
@@ -555,7 +555,7 @@ export default function Tab1(props) {
                                                         </Tooltip>
                                                     </Grid>
                                                     <Grid item xs={12}>
-                                                        <Typography>ประเภทเอกสาร:
+                                                        <Typography>{`${index + 1}. `}ประเภทเอกสาร:
                                                             {showAutocomplete ?
                                                                 <Grid container justify="center" alignItems="center" justifyContent={"center"}>
                                                                     <Grid item xs={4} >
@@ -594,13 +594,13 @@ export default function Tab1(props) {
                                     <Grid item xs={12}>
                                         <TableContainer>
                                             <Table size="small" >
-                                                <TableHead>
+                                                {/* <TableHead>
                                                     <TableRow>
-                                                        <TableCell style={{ width: "25%" }} align="left">ชื่อเอกสาร</TableCell>
-                                                        <TableCell style={{ width: "25%" }} align="left">สถานะ</TableCell>
-                                                        <TableCell style={{ width: "25%" }} align="left">จัดการ</TableCell>
+                                                        <TableCell align="left">ชื่อเอกสาร</TableCell>
+                                                        <TableCell align="left">สถานะ</TableCell>
+                                                        <TableCell align="left">จัดการ</TableCell>
                                                     </TableRow>
-                                                </TableHead>
+                                                </TableHead> */}
                                                 <TableBody>
                                                     {
                                                         cadastralImageData.map((item, index) => (
@@ -610,21 +610,31 @@ export default function Tab1(props) {
                                                                     backgroundColor: '#ECF2FF !important',
                                                                 },
                                                             }}>
-                                                                <TableCell style={{ width: "25%" }} align="left">{`${item?.DOC_DATA?.SURVEYDOCTYPE_GROUP} - ${item.IMAGE_PNAME} (${item.IMAGE_PNO})`}</TableCell>
-                                                                <TableCell style={{ width: "25%" }} align="left">{
-                                                                    (item.FILE_STATUS && item.PROCESS_SEQ_ == 103 && item.STATUS_SEQ_ == 101) ? <Chip icon={<CheckCircleIcon />} label="อัปโหลดแล้ว" color="success" /> : <Chip icon={<CloseIcon />} label="ไม่ได้อัปโหลด" color="error" />
-                                                                }</TableCell>
-                                                                <TableCell style={{ width: "40%" }} align="left">
-                                                                    <Tooltip title="ดูรูปภาพ">
-                                                                        <IconButton onClick={() => { openImageUrl(item) }}>
-                                                                            <ImageMui />
-                                                                        </IconButton>
-                                                                    </Tooltip>
-                                                                    <Tooltip title="แก้ไขรูปภาพ">
-                                                                        <IconButton onClick={() => { setOpenEdit(item) }}>
-                                                                            <Edit />
-                                                                        </IconButton>
-                                                                    </Tooltip>
+                                                                <TableCell colSpan={3}>
+                                                                    <Grid container>
+                                                                        <Grid item xs={1}>
+                                                                            <Typography align="left">{index + 1}.</Typography>
+                                                                        </Grid>
+                                                                        <Grid item xs={11}>
+                                                                            <Typography align="left">{`${item?.DOC_DATA?.SURVEYDOCTYPE_GROUP} - ${item.IMAGE_PNAME} (${item.IMAGE_PNO})`}</Typography>
+                                                                        </Grid>
+                                                                        <Grid item xs={12}>
+                                                                            {
+                                                                                (item.FILE_STATUS && item.PROCESS_SEQ_ == 103 && item.STATUS_SEQ_ == 101) ? <Chip icon={<CheckCircleIcon />} label="อัปโหลดแล้ว" color="success" /> : <Chip icon={<CloseIcon />} label="ไม่ได้อัปโหลด" color="error" />
+                                                                            }
+                                                                            <Tooltip title="ดูรูปภาพ">
+                                                                                <IconButton onClick={() => { openImageUrl(item) }}>
+                                                                                    <ImageMui />
+                                                                                </IconButton>
+                                                                            </Tooltip>
+                                                                            <Tooltip title="แก้ไขรูปภาพ">
+                                                                                <IconButton onClick={() => { setOpenEdit(item) }}>
+                                                                                    <Edit />
+                                                                                </IconButton>
+                                                                            </Tooltip>
+
+                                                                        </Grid>
+                                                                    </Grid>
                                                                 </TableCell>
                                                             </TableRow>
                                                         ))
