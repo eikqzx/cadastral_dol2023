@@ -24,7 +24,7 @@ export default function TabZone47Index(props) {
     const [boxNo, setBoxNo] = React.useState("-");
     const [numofsurveyQty, setNumofsurveyQty] = React.useState("-");
     const [cadastralNo, setCadastralNo] = React.useState("-");
-
+    const [imageData, setImageData] = React.useState([])
     // React.useEffect(() => {
     //     if (Array.isArray(props?.searchData)) {
     //         if (props?.searchData?.length != 0) {
@@ -32,115 +32,80 @@ export default function TabZone47Index(props) {
     //         }
     //     }
     // }, [props.searchData]);
+
     React.useEffect(() => {
-        // if (Array.isArray(props?.searchData)) {
-        //     if (props?.searchData?.length != 0) {
-        getMasterData(props.tabData)
-        //     }
-        // }
+        if (props?.tabData) {
+            getMasterData(props?.tabData)
+        }
     }, [props.tabData]);
+
     const getMasterData = async (data) => {
         console.log(data, "getMasterData");
-        if (data != undefined) {
+        if (data != undefined && data != null) {
             let getLandOfficeData = await getLandOffice();
             let landOfficeFiltered = getLandOfficeData.rows.filter(
                 (item) => item.LANDOFFICE_SEQ == data?.LANDOFFICE_SEQ
             );
-            setSheetcode(data.SHEETCODE);
-            setBoxNo(data.BOX_NO.toString().padStart(2, "0"));
+            setSheetcode(data?.SHEETCODE);
+            setBoxNo(data?.BOX_NO?.toString().padStart(2, "0"));
             setNumofsurveyQty(data?.NUMOFSURVEY_QTY ?? "-");
-            setCadastralNo(data.CADASTRAL_NO);
+            setCadastralNo(data?.CADASTRAL_NO);
             console.log(landOfficeFiltered, "getLandOfficeData");
             setOffice(landOfficeFiltered[0]?.LANDOFFICE_NAME_TH ?? "-");
         }
     };
     return (
         <Grid container >
-
             <Grid item xs={12} p={1}>
-                <Grid p={1} spacing={1} container sx={{ height: "15vh" }}>
+                <Grid p={2} spacing={1} component={Paper} container>
                     <Grid item xs={3} md={5}>
                         <Grid container>
                             <Grid item>
                                 <Typography>สำนักงาน: </Typography>
                             </Grid>
                             <Grid item>
-                                <Typography
-                                    color={"darkblue"}
-                                    fontWeight={"bold"}
-                                    sx={{ textDecoration: "underline" }}
-                                    display="inline"
-                                >
-                                    &nbsp;{office}&nbsp;
-                                </Typography>
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                    <Grid item xs={3} md={3}>
-                        <Grid container>
-                            <Grid item>
-                                <Typography>หมายเลขรหัสแทนระวาง(เลขแฟ้ม):</Typography>
-                            </Grid>
-                            <Grid item>
-                                <Typography
-                                    color={"darkblue"}
-                                    fontWeight={"bold"}
-                                    sx={{ textDecoration: "underline" }}
-                                    display="inline"
-                                >
-                                    &nbsp;{sheetcode}&nbsp;
-                                </Typography>
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                    <Grid item xs={3} md={3}>
-                        <Grid container>
-                            <Grid item>
-                                <Typography>เลขที่กล่อง:</Typography>
-                            </Grid>
-                            <Grid item>
-                                <Typography
-                                    color={"darkblue"}
-                                    fontWeight={"bold"}
-                                    sx={{ textDecoration: "underline" }}
-                                    display="inline"
-                                >
-                                    &nbsp;{boxNo}&nbsp;
-                                </Typography>
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                    <Grid item xs={3} md={3}>
-                        <Grid container>
-                            <Grid item>
-                                <Typography>ครั้งที่รังวัด:</Typography>
-                            </Grid>
-                            <Grid item>
-                                <Typography
-                                    color={"darkblue"}
-                                    fontWeight={"bold"}
-                                    sx={{ textDecoration: "underline" }}
-                                    display="inline"
-                                >
-                                    &nbsp;{numofsurveyQty}&nbsp;
-                                </Typography>
+                                <Typography color={"darkblue"} fontWeight={"bold"} sx={{ textDecoration: 'underline' }} display="inline">&nbsp;{office == 0 || office == null ? "-" : office}&nbsp;</Typography>
                             </Grid>
                         </Grid>
                     </Grid>
                     <Grid item xs={3} md={4}>
                         <Grid container>
                             <Grid item>
+                                <Typography>หมายเลขรหัสแทนระวาง(เลขแฟ้ม):</Typography>
+                            </Grid>
+                            <Grid item>
+                                <Typography color={"darkblue"} fontWeight={"bold"} sx={{ textDecoration: 'underline' }} display="inline">&nbsp;{sheetcode == 0 || sheetcode == null ? "-" : sheetcode}&nbsp;</Typography>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                    <Grid item xs={3} md={3}>
+                        <Grid container>
+                            <Grid item >
+                                <Typography>เลขที่กล่อง:</Typography>
+                            </Grid>
+                            <Grid item>
+                                <Typography color={"darkblue"} fontWeight={"bold"} sx={{ textDecoration: 'underline' }} display="inline">&nbsp;{boxNo == 0 || boxNo == null ? "-" : boxNo}&nbsp;</Typography>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                    <Grid item xs={3} md={4}>
+                        <Grid container>
+                            <Grid item >
                                 <Typography>เลขที่ต้นร่าง:</Typography>
                             </Grid>
                             <Grid item>
-                                <Typography
-                                    color={"darkblue"}
-                                    fontWeight={"bold"}
-                                    sx={{ textDecoration: "underline" }}
-                                    display="inline"
-                                >
-                                    &nbsp;{cadastralNo}&nbsp;
-                                </Typography>
+                                <Typography color={"darkblue"} fontWeight={"bold"} sx={{ textDecoration: 'underline' }} display="inline">&nbsp;{cadastralNo == 0 || cadastralNo == null ? "-" : cadastralNo}&nbsp;</Typography>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                    <Grid item xs={3} md={3}>
+                        <Grid container>
+                            <Grid item >
+                                <Typography>ครั้งที่รังวัด:</Typography>
+                            </Grid>
+                            <Grid item>
+                                <Typography color={"darkblue"} fontWeight={"bold"} sx={{ textDecoration: 'underline' }} display="inline">&nbsp;{numofsurveyQty == 0 || numofsurveyQty == null ? "-" : numofsurveyQty}&nbsp;</Typography>
+                                {/* <IconButton size='small' disabled={numofsurveyQty == "-" || checkCanEdit} onClick={() => { setOpenEdit(props?.tabData) }}><Edit /></IconButton> */}
                             </Grid>
                         </Grid>
                     </Grid>
@@ -151,7 +116,7 @@ export default function TabZone47Index(props) {
             </Grid>
             <Grid container columns={24} component={Paper}>
                 <Grid item xs={12} >
-                    <Grid item px={1} py={3}>
+                    <Grid item px={1} py={2}>
                         <Card>
                             {/* <CheckLandMap layerSeq={layerSeq} /> */}
                             <Map47 mapName="แผนที่รูปแปลงที่ดิน โซน 47" height={67}>
@@ -160,12 +125,12 @@ export default function TabZone47Index(props) {
                         </Card>
                     </Grid>
                     <Grid item px={1} py={3}>
-                        <CheckLandList />
+                        <CheckLandList tabData={props?.tabData} setImageData={setImageData} />
                     </Grid>
                 </Grid>
-                <Grid item xs={12} px={1} py={3}>
+                <Grid item xs={12} px={1} py={2}>
                     <Grid component={Paper} elevation={2}>
-                        <CheckLandImage />
+                        <CheckLandImage imageData={imageData} />
                     </Grid>
                 </Grid>
             </Grid>

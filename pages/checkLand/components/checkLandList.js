@@ -11,9 +11,35 @@ import {
 } from "@mui/material";
 //ICONS
 import InboxIcon from '@mui/icons-material/Inbox';
-export default function CheckLandListIndex(props) {
+//SERVICES
+import { cadastralImageByCadastralSeq } from "@/service/sva";
+//COMPONENTS
+import CheckLandImageIndex from "./checkLandImage";
+export default function CheckImageListIndex(props) {
+    console.log(props, "CheckImageListIndex");
+    const [cadastralImageData, setCadastralImage] = React.useState([])
+    const [imageData, setImageData] = React.useState([])
+    const [closeComponents, setCloseComponents] = React.useState(null)
+
+    React.useEffect(() => {
+        if (props?.tabData) {
+            _createNewData(props?.tabData)
+        }
+        console.log(cadastralImageData, "cadastralImageData");
+    }, [props.tabData])
+
+    const _createNewData = async (data) => {
+        let res = await cadastralImageByCadastralSeq(data?.CADASTRAL_SEQ)
+        res = res.rows
+        setCadastralImage(res)
+    }
+
+    const handleClick = (el) => {
+        props?.setImageData(el);
+    };
     return (
         <Grid container>
+            {/* {<CheckLandImageIndex data={imageData} />} */}
             <Grid item xs={12}>
                 <Grid item xs={12}>
                     <Typography variant="h5">
@@ -21,15 +47,28 @@ export default function CheckLandListIndex(props) {
                     </Typography>
                 </Grid>
                 <Box sx={{ width: '100%', bgcolor: 'background.paper' }}>
-                    <List>
-                        <ListItem disablePadding>
-                            <ListItemButton>
-                                <ListItemIcon>
-                                    <InboxIcon />
-                                </ListItemIcon>
-                                <ListItemText primary="รายการ" />
-                            </ListItemButton>
-                        </ListItem>
+                    <List sx={{ overflow: 'auto', height: 'calc(40vh - 150px)' }}>
+                        {
+                            cadastralImageData?.map((el, index) => (
+                                <ListItem
+                                    key={index}
+                                    onClick={() => handleClick(el)}
+
+                                >
+                                    <ListItemButton>
+                                        <ListItemText
+                                            primary={
+                                                <div div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                                    <span>{el.IMAGE_PNAME}</span>
+                                                    <span>{el.IMAGE_PNO + " " + 'แผ่น'}</span>
+                                                </div>
+                                            }
+                                        // secondary={'จำนวนภาพ' + " " + el.IMAGE_PNO}
+                                        />
+                                    </ListItemButton>
+                                </ListItem>
+                            ))
+                        }
                     </List>
                 </Box>
             </Grid>

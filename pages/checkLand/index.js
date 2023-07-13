@@ -30,7 +30,7 @@ import { useRouter } from "next/router";
 import { decode } from "next-base64";
 // import Tab1 from "./tab/tab1";
 
-export default function IndexScanner() {
+export default function IndexheckLand() {
     const [searchData, setSearchData] = React.useState([]);
     const [tabChangeData, setTapChangeData] = React.useState('1');
     const [tabData, setTapData] = React.useState([]);
@@ -54,7 +54,7 @@ export default function IndexScanner() {
     React.useEffect(() => {
         setUserData(data?.user);
     }, [data])
-
+    console.log(userData, "userData");
     React.useEffect(() => {
         _reqLandOffice(userData?.LANDOFFICE_SEQ);
     }, [userData])
@@ -146,7 +146,7 @@ export default function IndexScanner() {
                         </TabPanel>
                         <TabPanel value="2">
                             <Grid item xs={12}>
-                                <TabZone48Index searchData={searchData} tabData={tabData}/>
+                                <TabZone48Index searchData={searchData} tabData={tabData} />
                             </Grid>
                         </TabPanel>
                     </TabContext>
