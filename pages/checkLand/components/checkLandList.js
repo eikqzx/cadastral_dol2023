@@ -19,7 +19,6 @@ export default function CheckImageListIndex(props) {
     console.log(props, "CheckImageListIndex");
     const [cadastralImageData, setCadastralImage] = React.useState([])
     const [imageData, setImageData] = React.useState([])
-    const [closeComponents, setCloseComponents] = React.useState(null)
 
     React.useEffect(() => {
         if (props?.tabData) {
@@ -54,7 +53,6 @@ export default function CheckImageListIndex(props) {
                                 <ListItem
                                     key={index}
                                     onClick={() => handleClick({ ...el })}
-
                                 >
                                     <ListItemButton>
                                         <ListItemText
