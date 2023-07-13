@@ -230,7 +230,7 @@ export default function CheckLandImageIndex(props) {
                                                     }}>
                                                         <TableCell colSpan={3} align="center" sx={{ borderRight: '1px solid ', borderBottom: '1px solid' }}>
                                                             <Typography fontStyle={'italic'} color={'red'}>
-                                                                "กรุณาเลือกรายการภาพ หรือ ค้นหาใหม่อีกครั้ง"
+                                                                กรุณาเลือกรายการภาพ หรือ ค้นหาใหม่อีกครั้ง
                                                             </Typography>
                                                         </TableCell>
                                                     </TableRow>
