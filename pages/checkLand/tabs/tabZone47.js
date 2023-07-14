@@ -37,6 +37,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { getSurveyDocType } from '@/service/mas/surveyDocTypeGroup';
 import { getFile } from '@/service/upload';
 import { getLandOffice } from '@/service/mas/landOffice';
+import { getCadastralLandByCadastralSeq } from "@/service/sva";
 
 export default function TabZone47Index(props) {
     console.log(props, "props_TabZone47Index");
