@@ -38,6 +38,9 @@ import { getSurveyDocType } from '@/service/mas/surveyDocTypeGroup';
 import { getFile } from '@/service/upload';
 import { getLandOffice } from '@/service/mas/landOffice';
 import { getCadastralLandByCadastralSeq } from "@/service/sva";
+import { getProvinceByPK } from "@/service/mas/province";
+import { getAmphurByPK } from "@/service/mas/amphur";
+import { getTambolByPK } from "@/service/mas/tambol";
 
 export default function TabZone47Index(props) {
     console.log(props, "props_TabZone47Index");
@@ -59,8 +62,9 @@ export default function TabZone47Index(props) {
     const [advancedExampleOpen, setAdvancedExampleOpen] = React.useState(false);
     React.useEffect(() => {
         if (props?.tabData) {
-            getMasterData(props?.tabData)
-            _cadastralLandData(props?.tabData)
+            getMasterData(props.tabData)
+
+            _cadastralLandData(props.tabData)
         }
     }, [props.tabData]);
 
@@ -94,12 +98,33 @@ export default function TabZone47Index(props) {
 
     const _cadastralLandData = async (data) => {
         console.log(data, "data_cadastralLandData");
-        let cadastralSeq = data.CADASTRAL_SEQ
-        let resCadastralLand = await getCadastralLandByCadastralSeq(cadastralSeq)
-        resCadastralLand = resCadastralLand.rows
-        console.log(resCadastralLand, "resCadastralLand");
-        setCadastralLand(resCadastralLand)
+        if (data == null || data === undefined) {
+            return;
+        }
+        if (data != undefined && data != null) {
+            let cadastralSeq = data.CADASTRAL_SEQ
+            let resCadastralLand = await getCadastralLandByCadastralSeq(cadastralSeq)
+            resCadastralLand = resCadastralLand.rows
+            console.log(resCadastralLand, "resCadastralLand");
+            setCadastralLand(resCadastralLand)
+            let getProvinceData = await getProvinceByPK(data.CADASTRAL_PROVINCE_SEQ);
+            console.log(getProvinceData, "getProvinceData");
+            if (Array.isArray(getProvinceData) && getProvinceData.length > 0) {
+                setProvinceData(getProvinceData[0]);
+            }
 
+            let getAmphurData = await getAmphurByPK(data.CADASTRAL_AMPHUR_SEQ);
+            console.log(getAmphurData, "getAmphurData");
+            if (Array.isArray(getAmphurData) && getAmphurData.length > 0) {
+                setAmphurData(getAmphurData[0]);
+            }
+
+            let getTambolData = await getTambolByPK(data.CADASTRAL_TAMBOL_SEQ);
+            console.log(getTambolData, "getTambolData");
+            if (Array.isArray(getTambolData) && getTambolData.length > 0) {
+                setTambolData(getTambolData[0]);
+            }
+        }
     };
 
     const _createData = async (data) => {
@@ -285,6 +310,60 @@ export default function TabZone47Index(props) {
                     </Grid>
                     <Grid item xs={12}>
                         <Divider />
+                    </Grid>
+                </Grid>
+            </Grid>
+            <Grid item xs={12} p={1}>
+                <Grid p={2} spacing={1} component={Paper} container>
+                    <Grid item xs={3} md={4}>
+                        <Grid container>
+                            <Grid item>
+                                <Typography>จังหวัด: </Typography>
+                            </Grid>
+                            <Grid item>
+                                <Typography color={"darkblue"} fontWeight={"bold"} sx={{ textDecoration: 'underline' }} display="inline">&nbsp;{provinceData?.PROVINCE_NAME_TH == 0 || provinceData?.PROVINCE_NAME_TH == null ? "-" : provinceData?.PROVINCE_NAME_TH}&nbsp;</Typography>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                    <Grid item xs={3} md={4}>
+                        <Grid container>
+                            <Grid item>
+                                <Typography>อำเภอ:</Typography>
+                            </Grid>
+                            <Grid item>
+                                <Typography color={"darkblue"} fontWeight={"bold"} sx={{ textDecoration: 'underline' }} display="inline">&nbsp;{amphurData?.AMPHUR_NAME_TH == 0 || amphurData?.AMPHUR_NAME_TH == null ? "-" : amphurData?.AMPHUR_NAME_TH}&nbsp;</Typography>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                    <Grid item xs={3} md={3}>
+                        <Grid container>
+                            <Grid item >
+                                <Typography>ตำบล:</Typography>
+                            </Grid>
+                            <Grid item>
+                                <Typography color={"darkblue"} fontWeight={"bold"} sx={{ textDecoration: 'underline' }} display="inline">&nbsp;{tambolData?.TAMBOL_NAME_TH == 0 || tambolData?.TAMBOL_NAME_TH == null ? "-" : tambolData?.TAMBOL_NAME_TH}&nbsp;</Typography>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                    <Grid item xs={3} md={3}>
+                        <Grid container>
+                            <Grid item >
+                                <Typography>เนื้อที่:</Typography>
+                            </Grid>
+                            <Grid item>
+                                <Typography color={"darkblue"} fontWeight={"bold"} sx={{ textDecoration: 'underline' }} display="inline">&nbsp;{cadastralLand?.CADASTRAL_LAND_RAI_NUM}&nbsp;</Typography>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                    <Grid item xs={3} md={3}>
+                        <Grid container>
+                            <Grid item >
+                                <Typography>ตำบล:</Typography>
+                            </Grid>
+                            <Grid item>
+                                <Typography color={"darkblue"} fontWeight={"bold"} sx={{ textDecoration: 'underline' }} display="inline">&nbsp;{tambolData?.TAMBOL_NAME_TH == 0 || tambolData?.TAMBOL_NAME_TH == null ? "-" : tambolData?.TAMBOL_NAME_TH}&nbsp;</Typography>
+                            </Grid>
+                        </Grid>
                     </Grid>
                 </Grid>
             </Grid>
