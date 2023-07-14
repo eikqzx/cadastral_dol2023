@@ -59,7 +59,7 @@ export default function CheckImageListIndex(props) {
                                             primary={
                                                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                                                     <span>{el.IMAGE_PNAME}</span>
-                                                    <span>{el.IMAGE_PNO + " " + 'แผ่น'}</span>
+                                                    <span>{'แผ่นที่' + " " + el.IMAGE_PNO}</span>
                                                 </div>
                                             }
                                         />
