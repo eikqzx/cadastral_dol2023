@@ -47,6 +47,11 @@ export default function TabZone47Index(props) {
     const [boxNo, setBoxNo] = React.useState("-");
     const [numofsurveyQty, setNumofsurveyQty] = React.useState("-");
     const [cadastralNo, setCadastralNo] = React.useState("-");
+    //CADASTRAL_LANDDATA
+    const [cadastralLand, setCadastralLand] = React.useState([]);
+    const [provinceData, setProvinceData] = React.useState([]);
+    const [amphurData, setAmphurData] = React.useState([]);
+    const [tambolData, setTambolData] = React.useState([]);
     //IMAGE
     const [imageData, setImageData] = React.useState([])
     const [imageObj, setImageObj] = React.useState([]);
@@ -55,6 +60,7 @@ export default function TabZone47Index(props) {
     React.useEffect(() => {
         if (props?.tabData) {
             getMasterData(props?.tabData)
+            _cadastralLandData(props?.tabData)
         }
     }, [props.tabData]);
 
@@ -83,6 +89,17 @@ export default function TabZone47Index(props) {
             console.log(landOfficeFiltered, "getLandOfficeData");
             setOffice(landOfficeFiltered[0]?.LANDOFFICE_NAME_TH ?? "-");
         }
+    };
+
+
+    const _cadastralLandData = async (data) => {
+        console.log(data, "data_cadastralLandData");
+        let cadastralSeq = data.CADASTRAL_SEQ
+        let resCadastralLand = await getCadastralLandByCadastralSeq(cadastralSeq)
+        resCadastralLand = resCadastralLand.rows
+        console.log(resCadastralLand, "resCadastralLand");
+        setCadastralLand(resCadastralLand)
+
     };
 
     const _createData = async (data) => {

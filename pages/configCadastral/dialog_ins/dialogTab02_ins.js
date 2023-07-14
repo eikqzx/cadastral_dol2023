@@ -127,6 +127,7 @@ export default function DilogTab02InsIndex(props) {
             "CADASTRAL_LAND_NGAN_NUM": NganData ? NganData : null,
             "CADASTRAL_LAND_WA_NUM": WaData ? WaData : null,
             "CADASTRAL_LAND_SUBWA_NUM": SubWaData ? SubWaData : null,
+            "CADASTRAL_PROVINCE_SEQ": provinceData?.PROVINCE_SEQ ? provinceData?.PROVINCE_SEQ : null,
             "CADASTRAL_AMPHUR_SEQ": amphurData?.AMPHUR_SEQ ? amphurData?.AMPHUR_SEQ : null,
             "CADASTRAL_TAMBOL_SEQ": tambolData?.TAMBOL_SEQ ? tambolData?.TAMBOL_SEQ : null,
             "CADASTRAL_SURVEY_NO": parcelSurveyNo ? parcelSurveyNo : null,
