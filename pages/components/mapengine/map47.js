@@ -21,6 +21,8 @@ import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
 import * as FullScreenMap from './../../../lib/fullsceenMap'
 import LocationOffIcon from '@mui/icons-material/LocationOff';
+import { createStringXY } from 'ol/coordinate';
+import MousePosition from 'ol/control/MousePosition';
 
 export var doScreenshot
 export var zoomtolocation
@@ -170,7 +172,7 @@ export default function Map47(props) {
         async function fetch() {
             const initialMap = new Map({
                 target: mapElement.current,
-                // controls: [mousePositionControl],
+                controls: [mousePositionControl],
                 interactions: defaults({ doubleClickZoom: false }),
                 layers: [
                     raster
@@ -674,12 +676,12 @@ export default function Map47(props) {
         }
     }
 
-    // const mousePositionControl = new MousePosition({
-    //     coordinateFormat: createStringXY(4),
-    //     projection: 'EPSG:4326',
-    //     // comment the following two lines to have the mouse position
-    //     // be placed within the map.
-    // });
+    const mousePositionControl = new MousePosition({
+        coordinateFormat: createStringXY(4),
+        projection: 'EPSG:4326',
+        // comment the following two lines to have the mouse position
+        // be placed within the map.
+    });
 
     const _doScreenshot = async (size = null) => {
         let setSize = [190, 160];
@@ -832,6 +834,12 @@ export default function Map47(props) {
                                 </Grid>
                             )
                         }
+                    </div>
+                    <div style={{ bottom: 1, right: 5, position: "absolute", zIndex: 2 }}>
+                        <Typography color={"white"}
+                            fontSize={12} sx={{ textShadow: "1px 1px 0 #333, -1px -1px 0 #333,  1px -1px 0 #333,-1px 1px 0 #333,1px 1px 0 #333;" }}>
+                            {`${mousePoint[0].toFixed(8)},${mousePoint[1].toFixed(8)}`}
+                        </Typography>
                     </div>
                     <div style={{ bottom: 15, right: 15, position: "absolute", zIndex: 2 }}>
                         <Stack spacing={1}>

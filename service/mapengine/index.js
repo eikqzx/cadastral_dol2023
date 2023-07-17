@@ -18,3 +18,19 @@ export async function getMap(url_api) {
         return false;
     }
 }
+export async function getMapLandGis48WKTByUTMMAP6X(dataSend) {
+    let url = `/api/mapengine/getMapLandGis48WKTByUTMMAP6X`
+    console.log(url)
+    //AddLoading()
+    try {
+        let res = await axios.post(url, dataSend)
+        let data = res.data
+        console.log(data)
+        //RemoveLoading()
+        return data
+    } catch (err) {
+        console.log(err)
+        //RemoveLoading()
+        return false
+    }
+}
