@@ -88,7 +88,7 @@ export default function Tab1(props) {
     console.log(openEdit, "cadastralImageData openEdit");
 
     const checkUpdateDocType = () => {
-        if (checkUpdateDoc == imageArrData.length) {
+        if (checkUpdateDoc >= 0) {
             setCanUpload(false);
         } else {
             setCanUpload(true);
@@ -130,7 +130,7 @@ export default function Tab1(props) {
             // console.log(mergeRes, "mergeRes _saveGenImage");
             console.log(resUpdateCiraImg, "_changeSaveEditSurveyDoc");
             let checkCountUpdate = checkUpdateDoc + 1
-            console.log(checkCountUpdatem, "_changeSaveEditSurveyDoc checkUpdateDoc");
+            console.log(checkCountUpdate, "_changeSaveEditSurveyDoc checkUpdateDoc");
             await createPageData(props?.tabData);
             await _req_getCadastralImage(props?.tabData?.CADASTRAL_SEQ);
             await setShowAutocomplete(!showAutocomplete);
@@ -157,6 +157,7 @@ export default function Tab1(props) {
             setBoxNo("-");
             setNumofsurveyQty("-");
             setCadastralNo("-");
+            setCheckUpdateDoc(0);
         }
     }, [props.searchData]);
 
@@ -169,6 +170,7 @@ export default function Tab1(props) {
             getMasterData(props?.tabData);
             createPageData(props?.tabData);
             _req_getCadastralImage(props?.tabData?.CADASTRAL_SEQ);
+            setCheckUpdateDoc(0);
         }
     }, [props?.tabData]);
 
