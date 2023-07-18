@@ -77,6 +77,8 @@ export default function Tab1(props) {
     const [canUpload, setCanUpload] = React.useState(false);
     const { data } = useSession();
 
+    console.log(checkUpdateDoc,"checkUpdateDoc");
+
     const _changeSurveyDocType = (event, value) => {
         setSurveyDocType(value);
     };
@@ -88,16 +90,16 @@ export default function Tab1(props) {
     console.log(openEdit, "cadastralImageData openEdit");
 
     const checkUpdateDocType = () => {
-        if (checkUpdateDoc >= 0) {
+        if (checkUpdateDoc > 0) {
             setCanUpload(false);
         } else {
             setCanUpload(true);
         }
     }
 
-    React.useEffect(() => {
-        checkUpdateDocType();
-    }, [imageArrData]);
+    // React.useEffect(() => {
+    //     checkUpdateDocType();
+    // }, [imageArrData]);
 
     console.log(checkUpdateDoc, "checkUpdateDoc");
 
@@ -126,6 +128,8 @@ export default function Tab1(props) {
         }
         try {
             let resUpdateCiraImg = await updCiracoreImage(newData.CIRACORE_IMAGE_SEQ, newData);
+            let mergeRes = await cadastralImage_CiraCore_(mergeObj);
+            console.log(mergeRes, "mergeRes uploadFile");
             // let mergeRes = await cadastralImage_CiraCore_(mergeObj);
             // console.log(mergeRes, "mergeRes _saveGenImage");
             console.log(resUpdateCiraImg, "_changeSaveEditSurveyDoc");
@@ -191,6 +195,7 @@ export default function Tab1(props) {
     };
 
     const createPageData = async (data) => {
+        checkUpdateDocType();
         try {
             let ciracoreData = await ciracoreImageByCadastralSeq(data.CADASTRAL_SEQ);
             let ciracoreDataArr = ciracoreData.rows;

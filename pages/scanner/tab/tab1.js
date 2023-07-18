@@ -652,7 +652,7 @@ export default function Tab1(props) {
                                                         </Button>
                                                     </Grid>
                                                     {selectedFiles?.length != 0 &&
-                                                        selectedFiles?.map((image) => (
+                                                        selectedFiles?.map((image,index) => (
                                                             <Grid item xs={12} key={image.name}>
                                                                 <Grid container>
                                                                     <Grid xs={12} p={1}>
@@ -717,6 +717,9 @@ export default function Tab1(props) {
 
                                                                             )}
                                                                         </Card>
+                                                                        <Typography>
+                                                                            {`${index+1}. ${image.name}`}
+                                                                        </Typography>
                                                                         <Button
                                                                             className="lightbox-button"
                                                                             onClick={() => openImage(image)}

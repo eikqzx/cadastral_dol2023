@@ -108,6 +108,8 @@ export default function DialogEditUpolad(props) {
         console.log(obj, "onDelete");
         confirmDialog.createDialog(`ต้องการลบรายการนี้หรือไม่ ?`,
             async () => {
+                delete obj.FILE_DATA;
+                delete newData.FILE_DES;
                 obj.RECORD_STATUS = "D";
                 obj.LAST_UPD_USER = data?.user?.USER_LIST_PID;
                 try {
