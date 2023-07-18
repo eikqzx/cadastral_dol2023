@@ -76,7 +76,7 @@ export default function Tab1(props) {
     const [openEdit, setOpenEdit] = React.useState(null);
     const [openEditNumQty, setOpenEditQty] = React.useState(null);
     const [checkCanEdit, setCheckCanEdit] = React.useState(false);
-    const [cadastraldata,setCadastraldata] = React.useState(null);
+    const [cadastraldata, setCadastraldata] = React.useState(null);
 
     const handleClose = () => {
         setOpen(false)
@@ -92,7 +92,7 @@ export default function Tab1(props) {
         for (let i in res) {
             let item = res[i];
             let resGetFile = await getFile(item.IMAGE_PATH);
-            let docArr = arrDocData.filter((doc)=>doc.SURVEYDOCTYPE_SEQ == item.SURVEYDOCTYPE_SEQ);
+            let docArr = arrDocData.filter((doc) => doc.SURVEYDOCTYPE_SEQ == item.SURVEYDOCTYPE_SEQ);
             item["DOC_DATA"] = docArr[0];
             console.log(resGetFile, "resGetFile");
             item['FILE_STATUS'] = resGetFile.status;
@@ -368,9 +368,9 @@ export default function Tab1(props) {
             if (res) {
                 await props?.onSearch(props?.searchParameter);
                 let getAllCadastral = await cadastralImage102ByConditionCadastralNoTo(props?.searchParameter);
-                console.log(getAllCadastral,"filterDataCadastral");
+                console.log(getAllCadastral, "filterDataCadastral");
                 let filterDataCadastral = getAllCadastral.rows.filter(item => item.RECORD_STATUS == "N" && item.CADASTRAL_NO == props?.tabData?.CADASTRAL_NO)
-                console.log(filterDataCadastral,"filterDataCadastral");
+                console.log(filterDataCadastral, "filterDataCadastral");
                 await setCadastraldata(filterDataCadastral[0]);
                 await getMasterData(filterDataCadastral[0]);
                 await createSurveyData()
@@ -379,7 +379,7 @@ export default function Tab1(props) {
                 await setType("success");
             }
         } catch (error) {
-            console.log(error,"filterDataCadastral error");
+            console.log(error, "filterDataCadastral error");
             await setMessage("เกิดข้อผิดพลาด");
             await setOpen(true);
             await setType("error");
@@ -414,7 +414,7 @@ export default function Tab1(props) {
         console.log(dataImage, "submit");
     }
 
-    const editImage = async (image, obj,close) => {
+    const editImage = async (image, obj, close) => {
         console.log(image, "editImage");
         console.log(obj, "editImage");
         delete obj.FILE_DATA;
@@ -481,7 +481,7 @@ export default function Tab1(props) {
                 await setType("success");
             }
         } catch (error) {
-            console.log(error,"editCad");
+            console.log(error, "editCad");
             await setMessage("เกิดข้อผิดพลาด");
             await setOpen(true);
             await setType("error");
@@ -818,13 +818,13 @@ export default function Tab1(props) {
                                             <Grid item xs={12}>
                                                 <TableContainer>
                                                     <Table size="small" >
-                                                        <TableHead>
+                                                        {/* <TableHead>
                                                             <TableRow>
                                                                 <TableCell style={{ width: "25%" }} align="left">ชื่อเอกสาร</TableCell>
                                                                 <TableCell style={{ width: "25%" }} align="left">สถานะ</TableCell>
                                                                 <TableCell style={{ width: "25%" }} align="left">จัดการ</TableCell>
                                                             </TableRow>
-                                                        </TableHead>
+                                                        </TableHead> */}
                                                         <TableBody>
                                                             {
                                                                 cadastralImageData?.map((item, index) => (
@@ -834,7 +834,7 @@ export default function Tab1(props) {
                                                                             backgroundColor: '#ECF2FF !important',
                                                                         },
                                                                     }}>
-                                                                        <TableCell style={{ width: "25%" }} align="left">{`${item?.DOC_DATA?.SURVEYDOCTYPE_GROUP} - ${item.IMAGE_PNAME} (${item.IMAGE_PNO})`}</TableCell>
+                                                                        {/* <TableCell style={{ width: "25%" }} align="left">{`${item?.DOC_DATA?.SURVEYDOCTYPE_GROUP} - ${item.IMAGE_PNAME} (${item.IMAGE_PNO})`}</TableCell>
                                                                         <TableCell style={{ width: "25%" }} align="left">{
                                                                             (item.FILE_STATUS && item.PROCESS_SEQ_ == 103 && item.STATUS_SEQ_ == 101) ? <Chip icon={<CheckCircleIcon />} label="อัปโหลดแล้ว" color="success" /> : <Chip icon={<CloseIcon />} label="ไม่ได้อัปโหลด" color="error" />
                                                                         }</TableCell>
@@ -849,6 +849,32 @@ export default function Tab1(props) {
                                                                                     <Edit />
                                                                                 </IconButton>
                                                                             </Tooltip>
+                                                                        </TableCell> */}
+                                                                        <TableCell colSpan={3}>
+                                                                            <Grid container>
+                                                                                <Grid item xs={1}>
+                                                                                    <Typography align="left">{index + 1}.</Typography>
+                                                                                </Grid>
+                                                                                <Grid item xs={11}>
+                                                                                    <Typography align="left">{`${item?.DOC_DATA?.SURVEYDOCTYPE_GROUP} - ${item.IMAGE_PNAME} (${item.IMAGE_PNO})`}</Typography>
+                                                                                </Grid>
+                                                                                <Grid item xs={12}>
+                                                                                    {
+                                                                                        (item.FILE_STATUS && item.PROCESS_SEQ_ == 103 && item.STATUS_SEQ_ == 101) ? <Chip icon={<CheckCircleIcon />} label="อัปโหลดแล้ว" color="success" /> : <Chip icon={<CloseIcon />} label="ไม่ได้อัปโหลด" color="error" />
+                                                                                    }
+                                                                                    <Tooltip title="ดูรูปภาพ">
+                                                                                        <IconButton onClick={() => { openImageUrl(item) }}>
+                                                                                            <ImageMui />
+                                                                                        </IconButton>
+                                                                                    </Tooltip>
+                                                                                    <Tooltip title="แก้ไขรูปภาพ">
+                                                                                        <IconButton onClick={() => { setOpenEdit(item) }}>
+                                                                                            <Edit />
+                                                                                        </IconButton>
+                                                                                    </Tooltip>
+
+                                                                                </Grid>
+                                                                            </Grid>
                                                                         </TableCell>
                                                                     </TableRow>
                                                                 ))
