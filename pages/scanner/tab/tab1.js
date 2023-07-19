@@ -78,6 +78,8 @@ export default function Tab1(props) {
     const [checkCanEdit, setCheckCanEdit] = React.useState(false);
     const [cadastraldata, setCadastraldata] = React.useState(null);
 
+    const fileInputRef = React.useRef();
+
     const handleClose = () => {
         setOpen(false)
     }
@@ -270,6 +272,9 @@ export default function Tab1(props) {
             getMasterData(props?.tabData);
             _req_getCadastralImage(props?.tabData?.CADASTRAL_SEQ);
             setSelectedFiles([]);
+            if (fileInputRef.current) {
+                fileInputRef.current.value = '';
+            }
             if (props?.tabData?.CADASTRAL_SEQ == null) {
                 confirmDialog.createDialog(
                     `ไม่พบข้อมูลทะเบียนของต้นร่างเลขที่ ${props?.tabData?.CADASTRAL_NO} ต้องการเพิ่มข้อมูลทะเบียน หรือไม่ ?`,
@@ -294,6 +299,7 @@ export default function Tab1(props) {
 
     const handleFileChange = (event) => {
         const files = event.target.files;
+        console.log(files,"handleFileChange");
         const jpegFiles = [];
         for (let i = 0; i < files.length; i++) {
             if (files[i].type === "image/jpeg") {
@@ -304,6 +310,7 @@ export default function Tab1(props) {
     };
 
     console.log(selectedFiles, "selectedFiles");
+    console.log(fileInputRef.current?.value,"selectedFiles Ref value");
 
     const openImage = async (file) => {
         console.log(file, "file");
@@ -643,8 +650,9 @@ export default function Tab1(props) {
                                                         <Button variant="contained" component="label">
                                                             เลือกไฟล์
                                                             <input
+                                                                ref={fileInputRef}
                                                                 hidden
-                                                                accept="image/jpeg"
+                                                                accept=".jpg, .png, .pdf"
                                                                 multiple
                                                                 type="file"
                                                                 onChange={handleFileChange}
