@@ -77,7 +77,7 @@ export default function Tab1(props) {
     const [openEditNumQty, setOpenEditQty] = React.useState(null);
     const [checkCanEdit, setCheckCanEdit] = React.useState(false);
     const [cadastraldata, setCadastraldata] = React.useState(null);
-
+    // console.log(cadastraldata,"cadastraldata");
     const fileInputRef = React.useRef();
 
     const handleClose = () => {
@@ -126,13 +126,13 @@ export default function Tab1(props) {
         console.log(image, "handleImageClick image");
         console.log(obj, "handleImageClick obj");
         let searchObj = {
-            "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ ?? cadastraldata?.CADASTRAL_SEQ,
+            "CADASTRAL_SEQ": (props?.tabData?.CADASTRAL_SEQ == null || props?.tabData?.CADASTRAL_SEQ == undefined) ? cadastraldata?.CADASTRAL_SEQ : props?.tabData?.CADASTRAL_SEQ,
             "SURVEYDOCTYPE_SEQ": obj.SURVEYDOCTYPE_SEQ,
             "PROCESS_SEQ_": 103
         }
         let resCadIngPno = await cadastralImagePNoByCadastralSeq(searchObj);
         let objInsert = {
-            "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ ?? cadastraldata?.CADASTRAL_SEQ,
+            "CADASTRAL_SEQ": (props?.tabData?.CADASTRAL_SEQ == null || props?.tabData?.CADASTRAL_SEQ == undefined) ? cadastraldata?.CADASTRAL_SEQ : props?.tabData?.CADASTRAL_SEQ,
             "SURVEYDOCTYPE_SEQ": obj.SURVEYDOCTYPE_SEQ,
             "CADASTRAL_IMAGE_PNO": resCadIngPno.rows[0].CADASTRAL_IMAGE_PNO, // http://127.0.0.1:8011/SVA_/cadastralImageDocumentPNoByCadastralSeq
             "PROCESS_SEQ_": 102,
@@ -146,7 +146,7 @@ export default function Tab1(props) {
         let resSaveList = await saveScanCadastralImage(objInsert);
         console.log(resSaveList, "resSaveList");
         let searchScanObj = {
-            "CADASTRAL_SEQ": props?.tabData?.CADASTRAL_SEQ ?? cadastraldata?.CADASTRAL_SEQ,
+            "CADASTRAL_SEQ": (props?.tabData?.CADASTRAL_SEQ == null || props?.tabData?.CADASTRAL_SEQ == undefined) ? cadastraldata?.CADASTRAL_SEQ : props?.tabData?.CADASTRAL_SEQ,
             "SURVEYDOCTYPE_SEQ": obj.SURVEYDOCTYPE_SEQ,
             "PROCESS_SEQ_": 103,
             "STATUS_SEQ_": 104
@@ -183,7 +183,8 @@ export default function Tab1(props) {
                 try {
                     let resUpd = await updateCadastralImage(resSearchPath[resSearchPath.length - 1].CADASTRAL_IMAGE_SEQ, resSearchPath[resSearchPath.length - 1]);
                     console.log(resUpd, "udate 103 uploadFile");
-                    _req_getCadastralImage(props?.tabData?.CADASTRAL_SEQ);
+                    let check_Seq = (props?.tabData?.CADASTRAL_SEQ == null || props?.tabData?.CADASTRAL_SEQ == undefined) ? cadastraldata?.CADASTRAL_SEQ : props?.tabData?.CADASTRAL_SEQ
+                    _req_getCadastralImage(check_Seq);
                     await setMessage("บันทึกสำเร็จ");
                     await setOpen(true);
                     await setType("success");
@@ -250,8 +251,10 @@ export default function Tab1(props) {
     React.useEffect(() => {
         if (Array.isArray(props?.searchData)) {
             if (props?.searchData.length != 0) {
+                let check_Seq = (props?.tabData?.CADASTRAL_SEQ == null || props?.tabData?.CADASTRAL_SEQ == undefined) ? cadastraldata?.CADASTRAL_SEQ : props?.tabData?.CADASTRAL_SEQ
                 let filterData = props?.searchData?.filter(
-                    (item) => item.CADASTRAL_SEQ == props?.tabData?.CADASTRAL_SEQ ?? cadastraldata?.CADASTRAL_SEQ
+                    (item) =>
+                    item.CADASTRAL_SEQ == check_Seq
                 );
                 console.log(filterData, "filterData");
                 if (filterData.length != 0) {
@@ -275,7 +278,7 @@ export default function Tab1(props) {
             if (fileInputRef.current) {
                 fileInputRef.current.value = '';
             }
-            if (props?.tabData?.CADASTRAL_SEQ == null) {
+            if (props?.tabData?.CADASTRAL_SEQ == null && cadastraldata == null) {
                 confirmDialog.createDialog(
                     `ไม่พบข้อมูลทะเบียนของต้นร่างเลขที่ ${props?.tabData?.CADASTRAL_NO} ต้องการเพิ่มข้อมูลทะเบียน หรือไม่ ?`,
                     () => { setOpenAddData(true) }
@@ -288,7 +291,8 @@ export default function Tab1(props) {
     const createSurveyData = async () => {
         let res = await getCadastralImage();
         res = filterRecordStatus(res.rows, "N");
-        res = res.filter(item => item.CADASTRAL_SEQ == props?.tabData?.CADASTRAL_SEQ ?? cadastraldata?.CADASTRAL_SEQ);
+        let check_seq = (props?.tabData?.CADASTRAL_SEQ == null || props?.tabData?.CADASTRAL_SEQ == undefined) ? cadastraldata?.CADASTRAL_SEQ : props?.tabData?.CADASTRAL_SEQ
+        res = res.filter(item => item.CADASTRAL_SEQ == check_seq);
         //
         console.log(res, "res createSurveyData");
         if (typeof res.find(obj => obj.PROCESS_SEQ_ == 103 && obj.STATUS_SEQ_ == 101) == "object") {
@@ -299,7 +303,7 @@ export default function Tab1(props) {
 
     const handleFileChange = (event) => {
         const files = event.target.files;
-        console.log(files,"handleFileChange");
+        console.log(files, "handleFileChange");
         const jpegFiles = [];
         for (let i = 0; i < files.length; i++) {
             if (files[i].type === "image/jpeg") {
@@ -310,7 +314,7 @@ export default function Tab1(props) {
     };
 
     console.log(selectedFiles, "selectedFiles");
-    console.log(fileInputRef.current?.value,"selectedFiles Ref value");
+    console.log(fileInputRef.current?.value, "selectedFiles Ref value");
 
     const openImage = async (file) => {
         console.log(file, "file");
@@ -660,7 +664,7 @@ export default function Tab1(props) {
                                                         </Button>
                                                     </Grid>
                                                     {selectedFiles?.length != 0 &&
-                                                        selectedFiles?.map((image,index) => (
+                                                        selectedFiles?.map((image, index) => (
                                                             <Grid item xs={12} key={image.name}>
                                                                 <Grid container>
                                                                     <Grid xs={12} p={1}>
@@ -683,17 +687,20 @@ export default function Tab1(props) {
                                                                                 }`}
                                                                         >
                                                                             <CardActionArea>
-                                                                                <CardMedia
-                                                                                    sx={{
-                                                                                        objectFit: 'cover',
-                                                                                        objectPosition: 'top',
-                                                                                        height: 200,
-                                                                                        width: '100%',
-                                                                                    }}
-                                                                                    component="img"
-                                                                                    image={URL.createObjectURL(image)}
-                                                                                    alt={image.name}
-                                                                                />
+                                                                                <Tooltip title="คลิกเพื่อแสดงรูปขยาย" followCursor>
+                                                                                    <CardMedia
+                                                                                        sx={{
+                                                                                            objectFit: 'cover',
+                                                                                            objectPosition: 'top',
+                                                                                            height: 200,
+                                                                                            width: '100%',
+                                                                                        }}
+                                                                                        component="img"
+                                                                                        image={URL.createObjectURL(image)}
+                                                                                        alt={image.name}
+                                                                                        onClick={() => openImage(image)}
+                                                                                    />
+                                                                                </Tooltip>
                                                                             </CardActionArea>
                                                                             {selectedImage.includes(image) && (
                                                                                 <React.Fragment>
@@ -722,18 +729,26 @@ export default function Tab1(props) {
                                                                                         }}
                                                                                     />
                                                                                 </React.Fragment>
-
                                                                             )}
                                                                         </Card>
-                                                                        <Typography>
-                                                                            {`${index+1}. ${image.name}`}
-                                                                        </Typography>
-                                                                        <Button
+                                                                        <Grid container justifyContent={"flex-start"}>
+                                                                            <Grid item xs={2}>
+                                                                                <Typography>
+                                                                                    {`${index + 1}.`}
+                                                                                </Typography>
+                                                                            </Grid>
+                                                                            <Grid item xs={6}>
+                                                                                <Typography>
+                                                                                    {`${image.name}`}
+                                                                                </Typography>
+                                                                            </Grid>
+                                                                        </Grid>
+                                                                        {/* <Button
                                                                             className="lightbox-button"
                                                                             onClick={() => openImage(image)}
                                                                         >
                                                                             ขยายรูป
-                                                                        </Button>
+                                                                        </Button> */}
                                                                     </Grid>
                                                                     <Grid item xs={3} md={4}>
                                                                         {(cadDoc?.length != 0 || cadDoc != null) &&
