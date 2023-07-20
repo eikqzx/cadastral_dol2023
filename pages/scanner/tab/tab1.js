@@ -260,6 +260,7 @@ export default function Tab1(props) {
                 if (filterData.length != 0) {
                     getMasterData(filterData[0]);
                 }
+                setCadastraldata(null);
             }
         }
     }, [props?.searchData]);
@@ -270,6 +271,7 @@ export default function Tab1(props) {
             props?.tabData.length !== 0 &&
             props?.tabData != undefined
         ) {
+            setCadastraldata(null);
             createSurveyData(); /***** solution 1******/
             setCheckCanEdit(false);
             getMasterData(props?.tabData);
