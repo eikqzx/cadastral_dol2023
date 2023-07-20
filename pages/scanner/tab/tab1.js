@@ -733,13 +733,13 @@ export default function Tab1(props) {
                                                                                 </React.Fragment>
                                                                             )}
                                                                         </Card>
-                                                                        <Grid container justifyContent={"flex-start"}>
-                                                                            <Grid item xs={2}>
+                                                                        <Grid container justifyContent={"space-between"}>
+                                                                            <Grid item>
                                                                                 <Typography>
                                                                                     {`${index + 1}.`}
                                                                                 </Typography>
                                                                             </Grid>
-                                                                            <Grid item xs={6}>
+                                                                            <Grid item>
                                                                                 <Typography>
                                                                                     {`${image.name}`}
                                                                                 </Typography>
