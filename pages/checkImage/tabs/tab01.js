@@ -77,6 +77,7 @@ export default function Tab01(props) {
     const { data } = useSession();
     const [currentImageIndex, setCurrentImageIndex] = React.useState(0);
     const [advancedExampleOpen, setAdvancedExampleOpen] = React.useState(false);
+    const [imgArr,setImgArr] = React.useState([]);
 
     const req_options = async () => {
         let res = await getStatus();
@@ -185,11 +186,12 @@ export default function Tab01(props) {
         let arr = [];
         let resDocData = await getSurveyDocType();
         let arrDocData = resDocData.rows
+        let imageOpjArr = [];
         // console.log(arrDocData,"arrDocData");
         for (let i in dataRows) {
             let item = dataRows[i]
             let resGetFile = await getFile(item.IMAGE_PATH);
-            let docArr = arrDocData.filter((doc)=>doc.SURVEYDOCTYPE_SEQ == item.SURVEYDOCTYPE_SEQ);
+            let docArr = arrDocData.filter((doc) => doc.SURVEYDOCTYPE_SEQ == item.SURVEYDOCTYPE_SEQ);
             item['FILE_STATUS'] = resGetFile.status;
             item["DOC_DATA"] = docArr[0];
             if (resGetFile.status) {
@@ -206,9 +208,34 @@ export default function Tab01(props) {
                         </Typography></Grid>
                     </Grid>
                 </React.Fragment>
+                let objImg = {
+                    "FILE_DATA": `data:image/*;base64,${resGetFile.fileAsBase64}`,
+                    "FILE_DES": <React.Fragment>
+                        <Grid container spacing={1}>
+                            <Grid item><Typography>
+                                {<Grid item> JPG File{<br />}
+                                    Bit depth 24{<br />}
+                                    Resolution 300 dpi{<br />}</Grid>}
+                                <Grid item>{item?.IMAGE_PATH}</Grid>
+                                <Grid>{link}</Grid>
+                            </Typography></Grid>
+                        </Grid>
+                    </React.Fragment>,
+                    "IMAGE_PNAME": item.IMAGE_PNAME,
+                    "IMAGE_PNO": item.IMAGE_PNO,
+                    "FILE_STATUS":item['FILE_STATUS']
+                }
+                imageOpjArr.push(objImg);
             } else {
                 item['FILE_DATA'] = "/img_not_found.png"
                 item['FILE_DES'] = ``
+                let objImg = {
+                    "FILE_DATA": "/img_not_found.png",
+                    "FILE_DES": ``,
+                    "IMAGE_PNAME": item.IMAGE_PNAME,
+                    "IMAGE_PNO": item.IMAGE_PNO
+                }
+                imageOpjArr.push(objImg);
             }
             arr.push(item);
             // arrNew.push(item);
@@ -243,9 +270,11 @@ export default function Tab01(props) {
                 }
             }
         }
-
+        console.log(imageOpjArr,"imageOpjArr");
         console.log(uniqueArray, "uniqueArray");
         console.log(arr, "arrarrarr");
+        setImgArr([]);
+        setImgArr(imageOpjArr);
         setImageArrData([]);
         setImageArrData(uniqueArray);
     }
@@ -278,15 +307,17 @@ export default function Tab01(props) {
         }
     }
 
-    const openImageUrl = async (file) => {
+    const openImageUrl = () => {
+        let file = imgArr;
         console.log(file, "file");
         let arr = [];
         // console.log("tesrt");
-        for(let i in file){
+        for (let i in file) {
             const element = file[i];
+            console.log(element,"element file");
             if (element.FILE_STATUS) {
                 let obj = { src: element.FILE_DATA, title: `${element.IMAGE_PNAME} (${element.IMAGE_PNO})`, description: element.FILE_DES };
-                console.log(obj, "file");
+                console.log(obj, "objfile");
                 arr.push(obj);
             }
         }
@@ -467,7 +498,7 @@ export default function Tab01(props) {
                                                                     <TableCell style={{ width: "20%" }} align="left">
                                                                         {item?.childData?.map((item2, i) => (
                                                                             <Tooltip key={i} title="ดูรูปภาพ">
-                                                                                <IconButton onClick={() => { openImageUrl(item?.childData) }}>
+                                                                                <IconButton onClick={openImageUrl}>
                                                                                     <Image alt={item2.IMAGE_PNAME} src={item2.FILE_DATA} width={50} height={70.5} />
                                                                                 </IconButton>
                                                                             </Tooltip>
