@@ -71,7 +71,8 @@ export default function IndexScanner() {
     const onSearchNew = async (obj) => {
         console.log(obj, "obj_onSearch");
         obj.PROCESS_SEQ_ = 102;
-        obj.RECORD_STATUS = "A"
+        obj.RECORD_STATUS = "N"
+        obj.NUMOFSURVEY_QTY = null
         setPdfData(obj)
         setSearchParameter(obj);
         let data = null;
