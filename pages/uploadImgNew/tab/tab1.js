@@ -224,7 +224,8 @@ export default function Tab1(props) {
                 // item['FILE_NAME'] = fileName;
                 // item['DIRECTORY_PATH'] = directoryPath;
                 let folderNumber = String(item.LANDOFFICE_SEQ).padStart(5, '0');
-                let pathFileString = `U:\\${folderNumber}\\${item.IMAGE_FILENAME}.${item.IMAGE_EXTENSION}`;
+                let pathFileString = `U:${item.IMAGE_FILENAME}`;
+                console.log(pathFileString,"pathFileString");
                 let file = await getFileByPath(pathFileString);
                 console.log(file, "createPageData file");
                 if (file.status) {
