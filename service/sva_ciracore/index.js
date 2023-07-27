@@ -115,3 +115,18 @@ export async function cadastralImage_CiraCore_(dataSend) {
         return false
     }
 }
+
+export async function ciracoreImage102ByConditionCadastralNoTo(dataSend) {
+    let url = `/api/sva_ciracore/ciracoreImage102ByConditionCadastralNoTo`
+    AddLoading();
+    try {
+        let res = await axios.post(url, dataSend)
+        let data = res.data
+        //console.log(data)
+        RemoveLoading()
+        return data
+    } catch (err) {
+        console.log(err)
+        return false
+    }
+}

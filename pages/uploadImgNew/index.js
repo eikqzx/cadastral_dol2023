@@ -14,7 +14,7 @@ import Search from "../components/search/search";
 import SnackBarDiaLog from "../components/snackbarV2";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useSession } from "next-auth/react";
-import { ciracoreImage10XByConditionCadastralNoTo, getAllCiracoreImage } from "@/service/sva_ciracore";
+import { ciracoreImage102ByConditionCadastralNoTo, ciracoreImage10XByConditionCadastralNoTo, getAllCiracoreImage } from "@/service/sva_ciracore";
 import { getLandOfficeByPK } from "@/service/mas/landOffice";
 import { isNotEmpty } from "@/lib/datacontrol";
 import { useRouter } from "next/router";
@@ -76,7 +76,7 @@ export default function IndexScanner() {
         setPdfData(obj)
         setSearchParameter(obj);
         let data = null;
-        data = await ciracoreImage10XByConditionCadastralNoTo(obj);
+        data = await ciracoreImage102ByConditionCadastralNoTo(obj);
         // data = await getAllCiracoreImage();
         data = data.rows
         console.log(data,"onSearchNew");
