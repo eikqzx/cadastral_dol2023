@@ -152,7 +152,7 @@ export default function Tab1(props) {
 
     React.useEffect(() => {
         if (
-            props?.searchData.length == 0
+            props?.searchData?.length == 0
         ) {
             // setImageArrData([]);
             console.log(imageArrData, "imageArrData");
@@ -168,7 +168,7 @@ export default function Tab1(props) {
     React.useEffect(() => {
         if (
             typeof props?.tabData == "object" &&
-            props?.tabData.length !== 0 &&
+            props?.tabData?.length !== 0 &&
             props?.tabData != undefined
         ) {
             getMasterData(props?.tabData);
@@ -341,7 +341,7 @@ export default function Tab1(props) {
                     item.LAST_UPD_USER = data?.user?.USER_LIST_PID;
                     let resUpd = await updateCadastralImage(item.CADASTRAL_IMAGE_SEQ, item);
                     console.log(resUpd, "resUpd uploadFile");
-                    if (i == (resCadastralImageDataFilter.length - 1)) {
+                    if (i == (resCadastralImageDataFilter?.length - 1)) {
                         createPageData(props?.tabData);
                         _req_getCadastralImage(props?.tabData?.CADASTRAL_SEQ);
                         await setMessage("บันทึกสำเร็จ");
@@ -514,7 +514,7 @@ export default function Tab1(props) {
                         <Divider />
                     </Grid>
                 </Grid>
-                {imageArrData.length == 0 ?
+                {imageArrData?.length == 0 ?
                     <Grid container p={0.5} spacing={1}>
                         <Grid container justifyContent={'center'}>
                             <Typography fontStyle={'italic'} color={'red'}>
@@ -544,7 +544,7 @@ export default function Tab1(props) {
                                 </Grid>
                                 <Grid container spacing={2} p={1} style={{ textAlign: "center" }}>
                                     {
-                                        imageArrData.length !== 0 && imageArrData.map((item, index) =>
+                                        imageArrData?.length !== 0 && imageArrData.map((item, index) =>
                                             <Grid item key={index} xs={12}>
                                                 <Grid p={1} border={1} spacing={1} container style={{ textAlign: "center" }}>
                                                     <Grid item xs={12}>
