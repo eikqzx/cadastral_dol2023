@@ -544,7 +544,7 @@ export default function Tab1(props) {
                                 </Grid>
                                 <Grid container spacing={2} p={1} style={{ textAlign: "center" }}>
                                     {
-                                        imageArrData?.length !== 0 && imageArrData.map((item, index) =>
+                                        imageArrData?.length !== 0 && imageArrData?.map((item, index) =>
                                             <Grid item key={index} xs={12}>
                                                 <Grid p={1} border={1} spacing={1} container style={{ textAlign: "center" }}>
                                                     <Grid item xs={12}>
@@ -611,7 +611,7 @@ export default function Tab1(props) {
                                                 </TableHead> */}
                                                 <TableBody>
                                                     {
-                                                        cadastralImageData.map((item, index) => (
+                                                        cadastralImageData?.map((item, index) => (
                                                             <TableRow key={index} sx={{
                                                                 '&:last-child td, &:last-child th': { border: 0 },
                                                                 '&:hover': {
