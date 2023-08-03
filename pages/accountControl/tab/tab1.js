@@ -32,6 +32,7 @@ import { getLandOffice } from '@/service/mas/landOffice';
 import { Save } from '@mui/icons-material';
 import ExportExcel from "@/pages/exportExcel";
 import { cadastralImageFolderSeqNextVal, mrgCadastralImage } from '@/service/evd/cadastral';
+import { cadastralByCadastralNo } from '@/service/sva';
 
 export default function Tab1(props) {
     console.log(props, "propsTab1");
@@ -127,18 +128,35 @@ export default function Tab1(props) {
             item.RECORD_STATUS = "N";
             item.PROCESS_SEQ_ = processSeq;
             item.CADASTRAL_NO_ = cadastralNo.rows[0].CADASTRAL_IMAGE_NO_
-            let res = await mrgCadastralImage(item);
-            console.log(res,"resCADASTRAL_IMAGE");
-            if (i == (dataObj.length - 1)) {
-                if (typeof res == "object") {
-                    setOpenAlert(true);
-                    setMessage("บันทึกสำเร็จ");
-                    setType("success");
-                } else {
-                    setOpenAlert(true);
-                    setMessage("เกิดข้อผิดพลาด กรุณาติดต่อเจ้าหน้าที่");
-                    setType("error");
+            try {
+                let res = await mrgCadastralImage(item);
+                let objNew = {
+                    "CADASTRAL_NO_": cadastralNo.rows[0].CADASTRAL_IMAGE_NO_,
+                    "PROCESS_SEQ_": 102,
+                    "STATUS_SEQ_": 101,
+                    "CADASTRAL_IMAGE_NOTE": null,
+                    "RECORD_STATUS": "N",
+                    "CREATE_USER": data?.user?.USER_LIST_PID
                 }
+                let rescadastralByCadastralNo = await cadastralByCadastralNo(objNew);
+                console.log(res, "resCADASTRAL_IMAGE");
+                console.log(rescadastralByCadastralNo,"rescadastralByCadastralNo");
+                if (i == (dataObj.length - 1)) {
+                    if (typeof res == "object") {
+                        setOpenAlert(true);
+                        setMessage("บันทึกสำเร็จ");
+                        setType("success");
+                    } else {
+                        setOpenAlert(true);
+                        setMessage("เกิดข้อผิดพลาด กรุณาติดต่อเจ้าหน้าที่");
+                        setType("error");
+                    }
+                }
+            } catch (error) {
+                console.log(error, "error");
+                setOpenAlert(true);
+                setMessage("เกิดข้อผิดพลาด กรุณาติดต่อเจ้าหน้าที่");
+                setType("error");
             }
         }
     }
