@@ -154,7 +154,7 @@ export default function Tab1(props) {
         if (
             props?.searchData.length == 0
         ) {
-            setImageArrData([]);
+            // setImageArrData([]);
             console.log(imageArrData, "imageArrData");
             setOffice("-");
             setSheetcode("-");
