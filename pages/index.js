@@ -13,8 +13,8 @@ export default function Home() {
   const router = useRouter()
   // React.useEffect(() => {
   //   if (data?.user?.USER_LIST_TYPE == 8) {
-      router.replace("/checkImage?PROCESS_SEQ=MTA2");
-  //   } 
+      // router.replace("/checkImage?PROCESS_SEQ=MTA2");
+  //   }
   //   else {
   //     router.replace("/accountControl?PROCESS_SEQ=MTAx");
   //   }
